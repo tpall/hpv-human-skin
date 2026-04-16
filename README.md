@@ -24,7 +24,7 @@ NCBI GEO/SRA → Metadata + FASTQ download → QC (fastp) → Kraken2 HPV screen
 - **One of:** Conda/Mamba, Singularity, or Docker
 - SLURM cluster (or local execution)
 
-Each pipeline process uses its own isolated environment (see `envs/` for conda YAMLs). No monolithic environment needed — Nextflow resolves dependencies per-process.
+Each pipeline process uses its own isolated environment (see `modules/local/*/environment.yml`). No monolithic environment needed — Nextflow resolves dependencies per-process. Standalone prep scripts have their own envs in `envs/`.
 
 ## Setup
 
@@ -33,11 +33,16 @@ Each pipeline process uses its own isolated environment (see `envs/` for conda Y
 curl -s https://get.nextflow.io | bash
 
 # 2. Build HPV reference database (PaVE + RefSeq)
-#    (requires samtools, STAR, hisat2 — run inside conda or container)
+conda env create -f envs/build_refs.yml
+conda activate build_refs
 bash bin/build_hpv_refs.sh assets/hpv_references assets/hpv_references/custom 8
+conda deactivate
 
 # 3. Build Kraken2 database (human + HPV)
+conda env create -f envs/build_kraken2_db.yml
+conda activate build_kraken2_db
 bash bin/build_kraken2_db.sh assets/kraken2_db assets/hpv_references/hpv_all.fasta 8
+conda deactivate
 ```
 
 ## Usage

@@ -1,0 +1,11 @@
+name: build_refs
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - entrez-direct>=16.2
+  - samtools>=1.17
+  - star>=2.7.10
+  - hisat2>=2.2.1
+  - seqkit>=2.5
+  - curl

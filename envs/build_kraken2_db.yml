@@ -1,0 +1,6 @@
+name: build_kraken2_db
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - kraken2>=2.1.3
