@@ -32,17 +32,8 @@ Each pipeline process uses its own isolated environment (see `modules/local/*/en
 # 1. Install Nextflow (if not already available)
 curl -s https://get.nextflow.io | bash
 
-# 2. Build HPV reference database (PaVE + RefSeq)
-conda env create -f envs/build_refs.yml
-conda activate build_refs
-bash bin/build_hpv_refs.sh assets/hpv_references assets/hpv_references/custom 8
-conda deactivate
-
-# 3. Build Kraken2 database (human + HPV)
-conda env create -f envs/build_kraken2_db.yml
-conda activate build_kraken2_db
-bash bin/build_kraken2_db.sh assets/kraken2_db assets/hpv_references/hpv_all.fasta 8
-conda deactivate
+# 2. Build reference databases (creates conda envs automatically)
+bash setup.sh 8    # argument = number of threads
 ```
 
 ## Usage
