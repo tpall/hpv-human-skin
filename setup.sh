@@ -16,7 +16,13 @@ set -euo pipefail
 #
 # Prerequisites: conda or mamba must be in PATH
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Under SLURM, BASH_SOURCE points to the spool copy of the script, not the
+# original location. Fall back to SLURM_SUBMIT_DIR in that case.
+if [[ -n "${SLURM_SUBMIT_DIR:-}" ]]; then
+    SCRIPT_DIR="${SLURM_SUBMIT_DIR}"
+else
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+fi
 THREADS="${SLURM_CPUS_PER_TASK:-${1:-8}}"
 
 # Use mamba if available, fall back to conda
@@ -36,7 +42,8 @@ echo "  Step 1/2: Building HPV reference database"
 echo "============================================"
 echo ""
 
-${CONDA_CMD} env create -f "${SCRIPT_DIR}/envs/build_refs.yml" --force -y
+${CONDA_CMD} env remove -n build_refs -y 2>/dev/null || true
+${CONDA_CMD} env create -f "${SCRIPT_DIR}/envs/build_refs.yml" -y
 conda activate build_refs
 
 bash "${SCRIPT_DIR}/bin/build_hpv_refs.sh" \
@@ -53,7 +60,8 @@ echo "  Step 2/2: Building Kraken2 database"
 echo "============================================"
 echo ""
 
-${CONDA_CMD} env create -f "${SCRIPT_DIR}/envs/build_kraken2_db.yml" --force -y
+${CONDA_CMD} env remove -n build_kraken2_db -y 2>/dev/null || true
+${CONDA_CMD} env create -f "${SCRIPT_DIR}/envs/build_kraken2_db.yml" -y
 conda activate build_kraken2_db
 
 bash "${SCRIPT_DIR}/bin/build_kraken2_db.sh" \
