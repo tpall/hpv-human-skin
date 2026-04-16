@@ -1,0 +1,11 @@
+name: report
+channels:
+  - conda-forge
+dependencies:
+  - r-base>=4.2
+  - r-tidyverse
+  - r-rmarkdown
+  - r-knitr
+  - r-optparse
+  - r-viridis
+  - pandoc>=2.19

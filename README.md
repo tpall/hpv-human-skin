@@ -1,0 +1,119 @@
+# HPV in Human Skin Pipeline
+
+Nextflow DSL2 pipeline for identifying HPV types and their prevalence across human tissues using public RNA-seq data from NCBI GEO/SRA.
+
+## Research Questions
+
+1. Millised HPV tüübid prevalveerivad terves nahas?
+2. Millised HPV tüübid prevalveerivad erinevates naha patoloogiate puhul?
+3. Millistes mittetraditsioonilistest kudedes on võimalik leida HPV transkripte?
+4. Millistes transkriptoomides esineb viiruse produktiivne nakkusfaas (hilised transkriptid)?
+
+## Pipeline Overview
+
+```
+NCBI GEO/SRA → Metadata + FASTQ download → QC (fastp) → Kraken2 HPV screen
+  → HPV+ samples: STAR alignment → HPV typing → Early/Late transcript classification
+  → HPV- samples: Calculate HPV-negative rates per tissue
+  → Report: Summary tables + figures
+```
+
+## Prerequisites
+
+- Nextflow >= 23.04
+- **One of:** Conda/Mamba, Singularity, or Docker
+- SLURM cluster (or local execution)
+
+Each pipeline process uses its own isolated environment (see `envs/` for conda YAMLs). No monolithic environment needed — Nextflow resolves dependencies per-process.
+
+## Setup
+
+```bash
+# 1. Install Nextflow (if not already available)
+curl -s https://get.nextflow.io | bash
+
+# 2. Build HPV reference database (PaVE + RefSeq)
+#    (requires samtools, STAR, hisat2 — run inside conda or container)
+bash bin/build_hpv_refs.sh assets/hpv_references assets/hpv_references/custom 8
+
+# 3. Build Kraken2 database (human + HPV)
+bash bin/build_kraken2_db.sh assets/kraken2_db assets/hpv_references/hpv_all.fasta 8
+```
+
+## Usage
+
+Combine one **software profile** (`conda`, `singularity`, or `docker`) with an optional **executor profile** (`slurm` or `local`):
+
+```bash
+# --- SLURM cluster ---
+# Conda environments (created per-process automatically)
+nextflow run main.nf -profile conda,slurm --outdir results
+
+# Singularity containers (recommended for HPC — no root needed)
+nextflow run main.nf -profile singularity,slurm --outdir results
+
+# --- Local machine ---
+# Docker containers
+nextflow run main.nf -profile docker --samplesheet my_samples.csv --outdir results
+
+# Conda environments locally
+nextflow run main.nf -profile conda --samplesheet my_samples.csv --outdir results
+
+# --- Test run (small dataset) ---
+nextflow run main.nf -profile test,conda,slurm
+
+# --- Dry run (preview) ---
+nextflow run main.nf -profile conda,slurm -preview
+```
+
+## Samplesheet Format
+
+CSV with columns: `srr_id, srx_id, study, tissue_category, diagnosis, layout`
+
+```csv
+srr_id,srx_id,study,tissue_category,diagnosis,layout
+SRR1234567,SRX123456,SRP123456,nahk,normal,PAIRED
+SRR2345678,SRX234567,SRP234567,nahk,wart,SINGLE
+```
+
+Tissue categories: `nahk` (skin), `anogenitaal`, `suuoos` (oral), `muu` (other)
+
+## Key Parameters
+
+| Parameter | Default | Description |
+|---|---|---|
+| `--samplesheet` | null | Pre-built samplesheet (skip discovery) |
+| `--sra_query_terms` | "skin RNA-seq Homo sapiens" | Search terms for SRA discovery |
+| `--hpv_min_reads` | 10 | Min Kraken2 HPV reads for HPV+ call |
+| `--hpv_min_coverage` | 0.10 | Min coverage breadth for type assignment |
+| `--hpv_min_depth` | 2 | Min mean depth for type assignment |
+| `--late_transcript_min_reads` | 3 | Min L1/L2 reads for productive infection |
+| `--max_samples` | 0 | Limit number of samples (0 = all) |
+| `--outdir` | results | Output directory |
+
+## Output
+
+```
+results/
+├── metadata/                  # Samplesheet and metadata
+├── qc/fastp/                  # QC reports
+├── kraken2/                   # Kraken2 classification reports
+├── alignments/                # HPV-aligned BAMs
+├── hpv_typing/                # Per-sample HPV type assignments
+├── transcript_classification/ # Early/late transcript counts
+├── report/
+│   ├── hpv_skin_report.html   # Main HTML report
+│   └── summary_tables/
+│       ├── table1_hpv_healthy_skin.tsv
+│       ├── table2_hpv_skin_pathology.tsv
+│       ├── table3_hpv_nontraditional_tissues.tsv
+│       ├── table4_productive_infection.tsv
+│       ├── table5_hpv_negative_rates.tsv
+│       ├── heatmap_hpv_tissue.png
+│       └── barplot_hpv_status.png
+└── pipeline_info/             # Nextflow execution reports
+```
+
+## Original Description
+
+Meil oleks vaja teada millised HPV tüübid tegelikult millise sagedusega inimese nahas on. Probleem on vist selles, et enamustest transkriptoomidest visatakse mitte inimese transkriptid juba alguses välja ja tuleb minna tagasi raw data juurde.

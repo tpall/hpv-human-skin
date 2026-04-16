@@ -1,0 +1,21 @@
+# Nextflow
+.nextflow/
+.nextflow.log*
+work/
+results/
+test_results/
+
+# Singularity cache
+singularity_cache/
+
+# Large reference files (build locally)
+assets/hpv_references/*.fasta
+assets/hpv_references/*.fai
+assets/hpv_references/star_index/
+assets/hpv_references/hisat2_index/
+assets/kraken2_db/*.k2d
+assets/kraken2_db/*.kmer_distrib
+
+# OS
+.DS_Store
+Thumbs.db
