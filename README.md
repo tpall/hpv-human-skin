@@ -33,7 +33,8 @@ Each pipeline process uses its own isolated environment (see `modules/local/*/en
 curl -s https://get.nextflow.io | bash
 
 # 2. Build reference databases (creates conda envs automatically)
-bash setup.sh 8    # argument = number of threads
+sbatch setup.sh          # submit to SLURM (8 CPUs, 64GB, 24h)
+# or: bash setup.sh 8    # run interactively
 ```
 
 ## Usage

@@ -1,16 +1,23 @@
 #!/usr/bin/env bash
+#SBATCH --job-name=hpv-setup
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=64G
+#SBATCH --time=24:00:00
+#SBATCH --output=setup_%j.log
 set -euo pipefail
 
 # HPV in Human Skin Pipeline — Setup
 #
 # Creates conda environments and builds all reference databases.
 #
-# Usage: bash setup.sh [threads]
+# Usage:
+#   sbatch setup.sh           # submit to SLURM (uses #SBATCH defaults)
+#   bash setup.sh [threads]   # run interactively
 #
 # Prerequisites: conda or mamba must be in PATH
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-THREADS="${1:-8}"
+THREADS="${SLURM_CPUS_PER_TASK:-${1:-8}}"
 
 # Use mamba if available, fall back to conda
 CONDA_CMD="conda"
