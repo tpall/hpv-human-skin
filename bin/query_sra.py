@@ -13,6 +13,7 @@ import argparse
 import csv
 import sys
 import time
+import xml.etree.ElementTree as ET
 from typing import Optional
 
 try:
@@ -69,8 +70,73 @@ def search_sra(query: str, max_results: int = 10000) -> list[str]:
     return uid_list
 
 
+def _text(elem, path, default=""):
+    """Safely extract text from an XML subelement, or return default."""
+    if elem is None:
+        return default
+    child = elem.find(path)
+    if child is None or child.text is None:
+        return default
+    return child.text.strip()
+
+
+def _parse_experiment_package(pkg) -> list[dict]:
+    """Extract one sample row per RUN inside an <EXPERIMENT_PACKAGE>."""
+    out = []
+    exp = pkg.find("EXPERIMENT")
+    sample = pkg.find("SAMPLE")
+    study = pkg.find("STUDY")
+    run_set = pkg.find("RUN_SET")
+    if exp is None or run_set is None:
+        return out
+
+    srx = exp.get("accession", "")
+    study_acc = study.get("accession", "") if study is not None else ""
+
+    # Platform: the <PLATFORM> child has a single tagged child like <ILLUMINA>
+    platform = ""
+    plat_elem = exp.find("PLATFORM")
+    if plat_elem is not None and len(plat_elem) > 0:
+        platform = plat_elem[0].tag
+
+    # Library layout: <LIBRARY_LAYOUT> contains either <PAIRED/> or <SINGLE/>
+    layout = "SINGLE"
+    lib_layout = exp.find("DESIGN/LIBRARY_DESCRIPTOR/LIBRARY_LAYOUT")
+    if lib_layout is not None and lib_layout.find("PAIRED") is not None:
+        layout = "PAIRED"
+
+    # Sample title + tissue-ish attribute
+    title = _text(sample, "TITLE")
+    source = ""
+    if sample is not None:
+        for attr in sample.findall("SAMPLE_ATTRIBUTES/SAMPLE_ATTRIBUTE"):
+            tag = (_text(attr, "TAG") or "").lower()
+            if tag in ("tissue", "cell_type", "source_name", "sample_type"):
+                source = _text(attr, "VALUE")
+                break
+
+    for run in run_set.findall("RUN"):
+        srr = run.get("accession", "")
+        if not srr:
+            continue
+        out.append({
+            "srr_id": srr,
+            "srx_id": srx,
+            "study": study_acc,
+            "title": title,
+            "tissue_source": source,
+            "platform": platform,
+            "layout": layout,
+        })
+    return out
+
+
 def fetch_sra_metadata(uid_list: list[str], batch_size: int = 200) -> list[dict]:
-    """Fetch metadata for SRA UIDs in batches."""
+    """Fetch metadata for SRA UIDs in batches.
+
+    Uses Entrez.efetch for XML retrieval but parses with ElementTree —
+    recent Biopython versions refuse SRA XML because it lacks a DTD.
+    """
     samples = []
 
     for i in range(0, len(uid_list), batch_size):
@@ -79,80 +145,19 @@ def fetch_sra_metadata(uid_list: list[str], batch_size: int = 200) -> list[dict]
               f"({len(batch)} records)...", file=sys.stderr)
 
         handle = Entrez.efetch(db="sra", id=",".join(batch), rettype="full", retmode="xml")
-        records = Entrez.read(handle)
+        try:
+            root = ET.parse(handle).getroot()
+        except ET.ParseError as e:
+            print(f"  Warning: failed to parse batch XML: {e}", file=sys.stderr)
+            handle.close()
+            time.sleep(0.4)
+            continue
         handle.close()
 
-        for pkg in records:
+        for pkg in root.findall("EXPERIMENT_PACKAGE"):
             try:
-                exp = pkg["EXPERIMENT_PACKAGE"]["EXPERIMENT"]
-                run_set = pkg["EXPERIMENT_PACKAGE"].get("RUN_SET", {})
-                sample = pkg["EXPERIMENT_PACKAGE"].get("SAMPLE", {})
-
-                # Extract run accessions
-                runs = run_set.get("RUN", []) if isinstance(run_set, dict) else []
-                if not isinstance(runs, list):
-                    runs = [runs]
-
-                for run in runs:
-                    srr = run.get("@accession", "")
-                    if not srr:
-                        continue
-
-                    # Extract metadata
-                    srx = exp.get("@accession", "")
-                    platform = ""
-                    try:
-                        platform = exp["PLATFORM"]
-                        if isinstance(platform, dict):
-                            platform = list(platform.keys())[0]
-                    except (KeyError, IndexError):
-                        pass
-
-                    # Library layout
-                    layout = "SINGLE"
-                    try:
-                        lib_desc = exp["DESIGN"]["LIBRARY_DESCRIPTOR"]
-                        layout_info = lib_desc.get("LIBRARY_LAYOUT", {})
-                        if "PAIRED" in layout_info:
-                            layout = "PAIRED"
-                    except (KeyError, TypeError):
-                        pass
-
-                    # Sample attributes
-                    title = ""
-                    source = ""
-                    try:
-                        title = sample.get("TITLE", "")
-                        attrs = sample.get("SAMPLE_ATTRIBUTES", {}).get("SAMPLE_ATTRIBUTE", [])
-                        if not isinstance(attrs, list):
-                            attrs = [attrs]
-                        for attr in attrs:
-                            tag = attr.get("TAG", "").lower()
-                            val = attr.get("VALUE", "")
-                            if tag in ("tissue", "cell_type", "source_name", "sample_type"):
-                                source = val
-                                break
-                    except (KeyError, TypeError):
-                        pass
-
-                    # Study accession
-                    study = ""
-                    try:
-                        study = pkg["EXPERIMENT_PACKAGE"]["STUDY"]["@accession"]
-                    except (KeyError, TypeError):
-                        pass
-
-                    samples.append({
-                        "srr_id": srr,
-                        "srx_id": srx,
-                        "study": study,
-                        "title": title,
-                        "tissue_source": source,
-                        "platform": platform,
-                        "layout": layout,
-                    })
-
-            except (KeyError, TypeError, IndexError) as e:
+                samples.extend(_parse_experiment_package(pkg))
+            except Exception as e:
                 print(f"  Warning: Failed to parse record: {e}", file=sys.stderr)
                 continue
 
