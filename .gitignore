@@ -19,3 +19,7 @@ assets/kraken2_db/*.kmer_distrib
 # OS
 .DS_Store
 Thumbs.db
+
+# Claude Code
+CLAUDE.md
+.claude/
