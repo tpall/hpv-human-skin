@@ -36,7 +36,7 @@ echo "  Step 1/2: Building HPV reference database"
 echo "============================================"
 echo ""
 
-${CONDA_CMD} env create -f "${SCRIPT_DIR}/envs/build_refs.yml" --force -y
+${CONDA_CMD} env create -f "${SCRIPT_DIR}/envs/build_refs.yml" -y
 conda activate build_refs
 
 bash "${SCRIPT_DIR}/bin/build_hpv_refs.sh" \
@@ -53,7 +53,7 @@ echo "  Step 2/2: Building Kraken2 database"
 echo "============================================"
 echo ""
 
-${CONDA_CMD} env create -f "${SCRIPT_DIR}/envs/build_kraken2_db.yml" --force -y
+${CONDA_CMD} env create -f "${SCRIPT_DIR}/envs/build_kraken2_db.yml" -y
 conda activate build_kraken2_db
 
 bash "${SCRIPT_DIR}/bin/build_kraken2_db.sh" \
