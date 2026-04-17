@@ -36,10 +36,45 @@ log.info """
     """.stripIndent()
 
 // Include the main workflow
-include { HPV_SKIN } from './workflows/hpv_skin'
+include { HPV_SKIN      } from './workflows/hpv_skin'
+include { REPORT        } from './modules/local/report/main'
+include { SRA_DISCOVERY } from './modules/local/sra_discovery/main'
 
 workflow {
     HPV_SKIN()
+}
+
+/*
+ * SRA_DISCOVERY_ONLY — run only the SRA query / samplesheet build step,
+ * so the chunked driver can split the resulting CSV before running the
+ * full pipeline.
+ *
+ *   nextflow run main.nf -entry SRA_DISCOVERY_ONLY \
+ *     --sra_query_terms "..." --outdir results
+ */
+workflow SRA_DISCOVERY_ONLY {
+    SRA_DISCOVERY(params.sra_query_terms)
+}
+
+/*
+ * REPORT_ONLY — final aggregation step for chunked runs.
+ *
+ * The driver (bin/run_chunked.sh) collects per-chunk summary TSVs into
+ * params.agg_dir and invokes this entry with:
+ *   nextflow run main.nf -entry REPORT_ONLY \
+ *     --samplesheet <path> --agg_dir <path> --outdir <path>
+ */
+workflow REPORT_ONLY {
+    if (!params.agg_dir) {
+        error "REPORT_ONLY requires --agg_dir pointing at aggregated per-chunk TSVs"
+    }
+    ch_samplesheet = Channel.fromPath(params.samplesheet, checkIfExists: true)
+    ch_hpv_types   = Channel.fromPath("${params.agg_dir}/*_hpv_types.tsv").collect()
+    ch_tx_classes  = Channel.fromPath("${params.agg_dir}/*_transcript_classes.tsv").collect()
+    ch_kraken      = Channel.fromPath("${params.agg_dir}/*_kraken2_report.txt").collect()
+    ch_hpv_status  = Channel.fromPath("${params.agg_dir}/hpv_status.tsv", checkIfExists: true)
+
+    REPORT(ch_samplesheet, ch_hpv_types, ch_tx_classes, ch_kraken, ch_hpv_status)
 }
 
 workflow.onComplete {

@@ -69,6 +69,7 @@ workflow HPV_SKIN {
             "${meta.srr_id}\t${meta.tissue_category}\t${meta.diagnosis}\t${status}\t${count}"
         }
         .collectFile(name: 'hpv_status.tsv', newLine: true,
+                     storeDir: "${params.outdir}/metadata",
                      seed: "srr_id\ttissue_category\tdiagnosis\thpv_status\thpv_read_count")
 
     // Only HPV+ samples proceed to alignment
@@ -105,11 +106,13 @@ workflow HPV_SKIN {
 
     ch_all_kraken = KRAKEN2_SCREEN.out.report.collect()
 
-    REPORT(
-        ch_samplesheet,
-        ch_all_types,
-        ch_all_classes,
-        ch_all_kraken,
-        ch_hpv_status
-    )
+    if (!params.skip_report) {
+        REPORT(
+            ch_samplesheet,
+            ch_all_types,
+            ch_all_classes,
+            ch_all_kraken,
+            ch_hpv_status
+        )
+    }
 }

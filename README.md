@@ -63,6 +63,20 @@ nextflow run main.nf -profile test,conda,slurm
 nextflow run main.nf -profile conda,slurm -preview
 ```
 
+## Large runs (chunked execution)
+
+For sample counts in the thousands (e.g. the full SRA query), a single Nextflow run is a poor fit — intermediate FASTQs in `work/` can reach tens of TB. Use the chunked driver instead, which processes the samplesheet in fixed-size batches, wipes each chunk's work dir once summaries are aggregated, and emits one combined report at the end.
+
+```bash
+# 1. Build the samplesheet once (no downloads yet)
+nextflow run main.nf -profile conda,slurm -entry SRA_DISCOVERY_ONLY --outdir results_full
+
+# 2. Run chunked (default: 100 samples per chunk)
+sbatch bin/run_chunked.sh results_full/metadata/samplesheet_enriched.csv 100 results_full work_full
+```
+
+A failed chunk is not rerun automatically — its work dir is left in place for inspection, and a rerun of the driver will resume at that chunk. Per-sample failures within a chunk (withdrawn SRR, network blip) are tolerated by fail-soft `errorStrategy` on `SRA_DOWNLOAD` / `FASTP` / `KRAKEN2_SCREEN`.
+
 ## Samplesheet Format
 
 CSV with columns: `srr_id, srx_id, study, tissue_category, diagnosis, layout`
