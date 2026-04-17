@@ -75,7 +75,34 @@ nextflow run main.nf -profile conda,slurm -entry SRA_DISCOVERY_ONLY --outdir res
 sbatch bin/run_chunked.sh results_full/metadata/samplesheet_enriched.csv 100 results_full work_full
 ```
 
+Driver signature:
+```
+sbatch bin/run_chunked.sh <samplesheet.csv> [chunk_size=100] [outdir=./results] [workdir=./work]
+```
+
 A failed chunk is not rerun automatically — its work dir is left in place for inspection, and a rerun of the driver will resume at that chunk. Per-sample failures within a chunk (withdrawn SRR, network blip) are tolerated by fail-soft `errorStrategy` on `SRA_DOWNLOAD` / `FASTP` / `KRAKEN2_SCREEN`.
+
+### Small batch first
+
+Before committing to a thousand-sample run, validate the pipeline end-to-end on a small slice — confirms the Kraken2 DB is wired up, that the SRRs in your samplesheet actually yield HPV-classifiable reads, and that the typing thresholds behave as expected. The chunked driver works fine for this since chunk-level `.done` sentinels let you scale up later without redoing the smoke slice.
+
+```bash
+# 1. Smoke slice — first 10 samples, chunk size 10 (single chunk)
+head -n 11 results_full/metadata/samplesheet_enriched.csv > samples_smoke.csv   # header + 10
+sbatch bin/run_chunked.sh samples_smoke.csv 10 results_smoke work_smoke
+
+# 2. Inspect — look for non-zero Kraken2 HPV classifications
+column -t -s $'\t' results_smoke/aggregated/hpv_status.tsv
+ls results_smoke/aggregated/*.kraken2.report.txt
+
+# 3. If the smoke slice looks healthy, scale up with the full sheet
+sbatch bin/run_chunked.sh results_full/metadata/samplesheet_enriched.csv 100 results_full work_full
+```
+
+If the smoke slice produces zero HPV reads across all samples, don't scale up — check in order:
+1. `assets/kraken2_db/` exists and `setup.sh` ran to completion
+2. Raw Kraken2 counts in `results_smoke/aggregated/*.kraken2.report.txt` — are HPV taxa present at all, or is the threshold (`--hpv_min_reads`, default 10) masking low-level hits?
+3. Library type of the SRRs — poly-A-selected libraries retain HPV mRNA; total-RNA with only rRNA depletion may work too, but some capture/targeted protocols strip viral reads before deposition.
 
 ## Samplesheet Format
 
