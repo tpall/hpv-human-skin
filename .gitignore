@@ -11,6 +11,7 @@ singularity_cache/
 # Large reference files (build locally)
 assets/hpv_references/*.fasta
 assets/hpv_references/*.fai
+assets/hpv_references/*.gff
 assets/hpv_references/star_index/
 assets/hpv_references/hisat2_index/
 assets/kraken2_db/*.k2d

@@ -15,18 +15,24 @@ THREADS="${3:-8}"
 mkdir -p "${OUTPUT_DIR}"
 cd "${OUTPUT_DIR}"
 
-echo "=== Downloading HPV genomes from PaVE ==="
-# PaVE 2.0 no longer exposes a bulk FASTA endpoint. Instead we enumerate all
-# human-host papillomavirus genomes via /api/genome and fetch each one from
-# /api/genome/{id}, assembling the FASTA ourselves.
+echo "=== Downloading HPV genomes and gene annotations from PaVE ==="
+# PaVE 2.0 no longer exposes a bulk FASTA endpoint. Enumerate all human-host
+# papillomavirus genomes via /api/genome and fetch each from /api/genome/{id},
+# emitting both the FASTA and a GFF3 of gene locations (used by
+# TRANSCRIPT_CLASSIFY to count early E1-E7 vs late L1/L2 transcripts).
 PAVE_API="https://pave.niaid.nih.gov/api"
-python3 - "${PAVE_API}" > pave_all_pv.fasta <<'PY'
+python3 - "${PAVE_API}" pave_all_pv.fasta hpv_gene_annotations.gff <<'PY'
 import json
 import sys
 import time
 import urllib.request
 
 api = sys.argv[1].rstrip("/")
+fasta_path, gff_path = sys.argv[2], sys.argv[3]
+
+# Canonical HPV genes we care about (drops spliced products like E1^E4
+# and non-coding features like URR, E1BS, E2BS).
+GENES_OF_INTEREST = {"E1", "E2", "E4", "E5", "E6", "E7", "L1", "L2"}
 
 def fetch_json(url, retries=3):
     last = None
@@ -45,21 +51,39 @@ genomes = [g for g in listing.get("data", [])
            if (g.get("host_common_name") or "").lower() == "human"]
 print(f"Found {len(genomes)} human papillomavirus genomes", file=sys.stderr)
 
-out = sys.stdout
-for i, meta in enumerate(genomes, 1):
-    gid = meta["locus_id"]
-    if i % 25 == 0 or i == len(genomes):
-        print(f"  [{i}/{len(genomes)}] {gid}", file=sys.stderr)
-    rec = fetch_json(f"{api}/genome/{gid}")
-    seq = (rec.get("itemSequence") or {}).get("sequence")
-    if not seq:
-        print(f"  warning: no sequence for {gid}", file=sys.stderr)
-        continue
-    accession = (rec.get("genome") or {}).get("accession", "")
-    desc = (rec.get("genome") or {}).get("description", meta.get("virus_name", ""))
-    out.write(f">{gid} {accession} {desc}\n")
-    for j in range(0, len(seq), 70):
-        out.write(seq[j:j+70] + "\n")
+with open(fasta_path, "w") as fasta_out, open(gff_path, "w") as gff_out:
+    gff_out.write("##gff-version 3\n")
+    for i, meta in enumerate(genomes, 1):
+        gid = meta["locus_id"]
+        if i % 25 == 0 or i == len(genomes):
+            print(f"  [{i}/{len(genomes)}] {gid}", file=sys.stderr)
+        rec = fetch_json(f"{api}/genome/{gid}")
+        seq = (rec.get("itemSequence") or {}).get("sequence")
+        if not seq:
+            print(f"  warning: no sequence for {gid}", file=sys.stderr)
+            continue
+        accession = (rec.get("genome") or {}).get("accession", "")
+        desc = (rec.get("genome") or {}).get("description", meta.get("virus_name", ""))
+        fasta_out.write(f">{gid} {accession} {desc}\n")
+        for j in range(0, len(seq), 70):
+            fasta_out.write(seq[j:j+70] + "\n")
+
+        for feat in rec.get("features") or []:
+            name = feat.get("featureName")
+            if name not in GENES_OF_INTEREST:
+                continue
+            locs = feat.get("featureLocations") or []
+            if not locs:
+                continue
+            # Collapse multi-segment (spliced) features into a single gene
+            # span; sufficient for featureCounts gene-level counts on short
+            # HPV genomes.
+            start = min(l["start"] for l in locs)
+            end = max(l["end"] for l in locs)
+            gff_out.write(
+                f"{gid}\tPaVE\tgene\t{start}\t{end}\t.\t+\t.\t"
+                f"ID={gid}_{name};gene_name={name}\n"
+            )
 PY
 
 echo "=== Downloading HPV genomes from NCBI RefSeq ==="
