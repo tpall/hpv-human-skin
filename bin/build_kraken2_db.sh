@@ -18,6 +18,11 @@ echo "Threads:      ${THREADS}"
 
 mkdir -p "${DB_DIR}"
 
+# NCBI retired the 'pub' and 'genomes' rsync modules, so kraken2's default
+# rsync downloads fail with "Unknown module 'pub'". Switch to FTP/wget, which
+# kraken2's download scripts support via this env var.
+export KRAKEN2_USE_FTP=1
+
 echo "=== Downloading NCBI taxonomy ==="
 kraken2-build --download-taxonomy --db "${DB_DIR}"
 
