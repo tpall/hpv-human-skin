@@ -106,7 +106,7 @@ workflow HPV_SKIN {
     ch_all_kraken = KRAKEN2_SCREEN.out.report.collect()
 
     REPORT(
-        ch_samplesheet.first(),
+        ch_samplesheet,
         ch_all_types,
         ch_all_classes,
         ch_all_kraken,
