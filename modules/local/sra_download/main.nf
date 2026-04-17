@@ -18,14 +18,23 @@ process SRA_DOWNLOAD {
 
     script:
     """
-    # Download FASTQ
+    set -euo pipefail
+
+    # Two-step download: prefetch is resumable and handles retries itself;
+    # fasterq-dump then extracts from the local .sra with no network in the
+    # decompress path. Use the task workdir for temp — /tmp is too small on
+    # many SLURM compute nodes for fasterq-dump scratch (2-3x output size).
+    prefetch --max-size 100g --output-directory . ${meta.srr_id}
+
     fasterq-dump \\
         --split-3 \\
         --threads ${task.cpus} \\
-        --temp /tmp \\
-        ${meta.srr_id}
+        --temp . \\
+        ./${meta.srr_id}
 
-    # Compress
     pigz -p ${task.cpus} *.fastq
+
+    # Drop the .sra cache dir to keep publish footprint small
+    rm -rf ./${meta.srr_id}
     """
 }
