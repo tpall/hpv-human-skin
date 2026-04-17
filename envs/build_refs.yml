@@ -9,3 +9,5 @@ dependencies:
   - hisat2>=2.2.1
   - seqkit>=2.5
   - curl
+  - python>=3.10
+  - jq

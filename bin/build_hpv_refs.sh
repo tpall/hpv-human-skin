@@ -16,13 +16,51 @@ mkdir -p "${OUTPUT_DIR}"
 cd "${OUTPUT_DIR}"
 
 echo "=== Downloading HPV genomes from PaVE ==="
-# PaVE provides a bulk download of all papillomavirus reference genomes
-PAVE_URL="https://pave.niaid.nih.gov/api/genomesequences/fasta"
-curl -fsSL "${PAVE_URL}" -o pave_all_pv.fasta || {
-    echo "Warning: PaVE bulk download failed, trying individual download..."
-    # Fallback: download via the reference genomes page
-    curl -fsSL "https://pave.niaid.nih.gov/api/hpv_ref_genomes/fasta" -o pave_all_pv.fasta
-}
+# PaVE 2.0 no longer exposes a bulk FASTA endpoint. Instead we enumerate all
+# human-host papillomavirus genomes via /api/genome and fetch each one from
+# /api/genome/{id}, assembling the FASTA ourselves.
+PAVE_API="https://pave.niaid.nih.gov/api"
+python3 - "${PAVE_API}" > pave_all_pv.fasta <<'PY'
+import json
+import sys
+import time
+import urllib.request
+
+api = sys.argv[1].rstrip("/")
+
+def fetch_json(url, retries=3):
+    last = None
+    for attempt in range(retries):
+        try:
+            with urllib.request.urlopen(url, timeout=60) as r:
+                return json.load(r)
+        except Exception as e:
+            last = e
+            time.sleep(2 ** attempt)
+    raise RuntimeError(f"GET {url} failed after {retries} attempts: {last}")
+
+print(f"Listing genomes from {api}/genome ...", file=sys.stderr)
+listing = fetch_json(f"{api}/genome?limit=9999&includeNonRef=true")
+genomes = [g for g in listing.get("data", [])
+           if (g.get("host_common_name") or "").lower() == "human"]
+print(f"Found {len(genomes)} human papillomavirus genomes", file=sys.stderr)
+
+out = sys.stdout
+for i, meta in enumerate(genomes, 1):
+    gid = meta["locus_id"]
+    if i % 25 == 0 or i == len(genomes):
+        print(f"  [{i}/{len(genomes)}] {gid}", file=sys.stderr)
+    rec = fetch_json(f"{api}/genome/{gid}")
+    seq = (rec.get("itemSequence") or {}).get("sequence")
+    if not seq:
+        print(f"  warning: no sequence for {gid}", file=sys.stderr)
+        continue
+    accession = (rec.get("genome") or {}).get("accession", "")
+    desc = (rec.get("genome") or {}).get("description", meta.get("virus_name", ""))
+    out.write(f">{gid} {accession} {desc}\n")
+    for j in range(0, len(seq), 70):
+        out.write(seq[j:j+70] + "\n")
+PY
 
 echo "=== Downloading HPV genomes from NCBI RefSeq ==="
 # Search for Human papillomavirus complete genomes in RefSeq
