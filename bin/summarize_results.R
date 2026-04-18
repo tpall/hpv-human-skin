@@ -102,6 +102,10 @@ table3 <- hpv_full %>%
     samples_raw %>% select(any_of(c("srr_id", "title", "tissue_source"))),
     by = c("sample_id" = "srr_id")
   ) %>%
+  # Raw samplesheet may be slim in chunked-aggregation mode; materialise
+  # the display columns as NA so the final select() always succeeds.
+  mutate(title = if ("title" %in% names(.)) title else NA_character_,
+         tissue_source = if ("tissue_source" %in% names(.)) tissue_source else NA_character_) %>%
   select(sample_id, tissue_source, title, hpv_reference, coverage_breadth, mean_depth) %>%
   arrange(desc(coverage_breadth))
 

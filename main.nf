@@ -74,7 +74,10 @@ workflow REPORT_ONLY {
     ch_kraken      = Channel.fromPath("${params.agg_dir}/*_kraken2_report.txt").collect()
     ch_hpv_status  = Channel.fromPath("${params.agg_dir}/hpv_status.tsv", checkIfExists: true)
 
-    REPORT(ch_samplesheet, ch_hpv_types, ch_tx_classes, ch_kraken, ch_hpv_status)
+    // No separate raw samplesheet in chunked-aggregation mode; reuse the
+    // slim one. The R report uses any_of() so missing free-text columns
+    // (title/tissue_source) are tolerated — Table 3 just skips them.
+    REPORT(ch_samplesheet, ch_samplesheet, ch_hpv_types, ch_tx_classes, ch_kraken, ch_hpv_status)
 }
 
 workflow.onComplete {
