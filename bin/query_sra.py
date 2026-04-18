@@ -11,6 +11,7 @@ Usage:
 
 import argparse
 import csv
+import re
 import sys
 import time
 import xml.etree.ElementTree as ET
@@ -70,6 +71,25 @@ def search_sra(query: str, max_results: int = 10000) -> list[str]:
     return uid_list
 
 
+_WS_RE = re.compile(r"\s+")
+_CTRL_RE = re.compile(r"[\x00-\x1f\x7f]")
+
+
+def _clean(s: str) -> str:
+    """Flatten whitespace and drop control chars so the value survives any CSV parser.
+
+    SRA TITLE/attribute fields can contain embedded newlines, tabs, and stray
+    quote characters; Nextflow's splitCsv tokenizes line-by-line and mis-aligns
+    columns when a quoted field spans physical lines.
+    """
+    if not s:
+        return ""
+    s = _CTRL_RE.sub(" ", s)
+    s = s.replace('"', "'")
+    s = _WS_RE.sub(" ", s)
+    return s.strip()
+
+
 def _text(elem, path, default=""):
     """Safely extract text from an XML subelement, or return default."""
     if elem is None:
@@ -77,7 +97,7 @@ def _text(elem, path, default=""):
     child = elem.find(path)
     if child is None or child.text is None:
         return default
-    return child.text.strip()
+    return _clean(child.text)
 
 
 def _parse_experiment_package(pkg) -> list[dict]:
