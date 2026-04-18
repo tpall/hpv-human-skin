@@ -23,6 +23,8 @@ suppressPackageStartupMessages({
 # ── Parse arguments ─────────────────────────────────────────────────────
 option_list <- list(
   make_option("--samplesheet", type = "character", help = "Enriched samplesheet CSV"),
+  make_option("--raw-samplesheet", type = "character", default = NULL,
+              help = "Raw samplesheet CSV (with title/tissue_source free-text columns)"),
   make_option("--hpv-types", type = "character", help = "Merged HPV types TSV"),
   make_option("--transcript-classes", type = "character", help = "Merged transcript classes TSV"),
   make_option("--hpv-status", type = "character", help = "HPV status TSV (all samples)"),
@@ -35,6 +37,15 @@ dir.create(outdir, recursive = TRUE, showWarnings = FALSE)
 
 # ── Load data ───────────────────────────────────────────────────────────
 samples <- read_csv(opts$samplesheet, show_col_types = FALSE)
+# Raw samplesheet holds comma-prone free-text columns (title, tissue_source)
+# kept out of the slim samplesheet so Nextflow's splitCsv can't mis-split.
+raw_path <- opts$`raw-samplesheet`
+if (!is.null(raw_path) && file.exists(raw_path)) {
+  samples_raw <- read_csv(raw_path, show_col_types = FALSE)
+} else {
+  samples_raw <- tibble(srr_id = character(), title = character(),
+                        tissue_source = character())
+}
 hpv_types <- read_tsv(opts$`hpv-types`, show_col_types = FALSE)
 transcripts <- read_tsv(opts$`transcript-classes`, show_col_types = FALSE)
 hpv_status <- read_tsv(opts$`hpv-status`, show_col_types = FALSE)
@@ -88,7 +99,7 @@ table3 <- hpv_full %>%
   slice_max(coverage_breadth, n = 1) %>%
   ungroup() %>%
   left_join(
-    samples %>% select(srr_id, title, tissue_source = tissue_source),
+    samples_raw %>% select(any_of(c("srr_id", "title", "tissue_source"))),
     by = c("sample_id" = "srr_id")
   ) %>%
   select(sample_id, tissue_source, title, hpv_reference, coverage_breadth, mean_depth) %>%

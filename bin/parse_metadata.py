@@ -126,9 +126,14 @@ def main():
         print("No samples to process.", file=sys.stderr)
         sys.exit(0)
 
-    fieldnames = list(enriched[0].keys())
+    # Slim fieldset consumed by Nextflow's splitCsv — title/tissue_source/
+    # platform are dropped because they contain commas that column-shift
+    # the CSV when splitCsv doesn't honour RFC 4180 quoting. Free-text
+    # columns live in the raw samplesheet, read separately by the R report.
+    fieldnames = ["srr_id", "srx_id", "study", "layout",
+                  "tissue_category", "diagnosis", "needs_curation"]
     with open(args.output, "w", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
         writer.writeheader()
         writer.writerows(enriched)
 

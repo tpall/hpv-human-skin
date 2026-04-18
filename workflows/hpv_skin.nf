@@ -18,39 +18,29 @@ workflow HPV_SKIN {
 
     // ── Step 1: Get samplesheet ────────────────────────────────────────
     if (params.samplesheet) {
-        // Use pre-built samplesheet
+        // Use pre-built samplesheet — no raw/free-text companion, so reuse
+        // the same file for the R report's Table 3 join.
         ch_samplesheet = Channel.fromPath(params.samplesheet, checkIfExists: true)
-        ch_samples = ch_samplesheet
-            .splitCsv(header: true)
-            .map { row ->
-                def meta = [
-                    srr_id:          row.srr_id,
-                    srx_id:          row.srx_id ?: '',
-                    study:           row.study ?: '',
-                    tissue_category: row.tissue_category ?: 'muu',
-                    diagnosis:       row.diagnosis ?: 'unspecified',
-                    layout:          row.layout ?: 'SINGLE',
-                ]
-                meta
-            }
+        ch_raw_samplesheet = ch_samplesheet
     } else {
         // Discover datasets from SRA
         SRA_DISCOVERY(params.sra_query_terms)
         ch_samplesheet = SRA_DISCOVERY.out.samplesheet
-        ch_samples = ch_samplesheet
-            .splitCsv(header: true)
-            .map { row ->
-                def meta = [
-                    srr_id:          row.srr_id,
-                    srx_id:          row.srx_id ?: '',
-                    study:           row.study ?: '',
-                    tissue_category: row.tissue_category ?: 'muu',
-                    diagnosis:       row.diagnosis ?: 'unspecified',
-                    layout:          row.layout ?: 'SINGLE',
-                ]
-                meta
-            }
+        ch_raw_samplesheet = SRA_DISCOVERY.out.raw_samplesheet
     }
+    ch_samples = ch_samplesheet
+        .splitCsv(header: true)
+        .map { row ->
+            def meta = [
+                srr_id:          row.srr_id,
+                srx_id:          row.srx_id ?: '',
+                study:           row.study ?: '',
+                tissue_category: row.tissue_category ?: 'muu',
+                diagnosis:       row.diagnosis ?: 'unspecified',
+                layout:          row.layout ?: 'SINGLE',
+            ]
+            meta
+        }
 
     // ── Step 2: Download FASTQ ─────────────────────────────────────────
     SRA_DOWNLOAD(ch_samples)
@@ -109,6 +99,7 @@ workflow HPV_SKIN {
     if (!params.skip_report) {
         REPORT(
             ch_samplesheet,
+            ch_raw_samplesheet,
             ch_all_types,
             ch_all_classes,
             ch_all_kraken,

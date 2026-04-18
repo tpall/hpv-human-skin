@@ -12,6 +12,7 @@ process REPORT {
 
     input:
     path samplesheet
+    path raw_samplesheet
     path hpv_types_files
     path transcript_class_files
     path kraken_reports
@@ -40,6 +41,7 @@ process REPORT {
     # Generate report
     summarize_results.R \\
         --samplesheet ${samplesheet} \\
+        --raw-samplesheet ${raw_samplesheet} \\
         --hpv-types all_hpv_types.tsv \\
         --transcript-classes all_transcript_classes.tsv \\
         --hpv-status ${hpv_status_csv} \\
