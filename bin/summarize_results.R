@@ -136,9 +136,17 @@ table4 <- productive %>%
       select(sample_id, top_hpv_type = hpv_reference),
     by = "sample_id"
   ) %>%
+  # When there are zero HPV+ samples the pivot_wider and hpv_types joins
+  # yield no reads_L1 / reads_L2 / top_hpv_type columns; materialise them
+  # as NA so the final select() always succeeds.
+  mutate(
+    reads_L1     = if ("reads_L1"     %in% names(.)) reads_L1     else NA_character_,
+    reads_L2     = if ("reads_L2"     %in% names(.)) reads_L2     else NA_character_,
+    top_hpv_type = if ("top_hpv_type" %in% names(.)) top_hpv_type else NA_character_
+  ) %>%
   select(sample_id, tissue_category, diagnosis, top_hpv_type,
          reads_L1, reads_L2) %>%
-  arrange(tissue_category, desc(as.numeric(reads_L1)))
+  arrange(tissue_category, desc(suppressWarnings(as.numeric(reads_L1))))
 
 write_tsv(table4, file.path(outdir, "table4_productive_infection.tsv"))
 cat(sprintf("Table 4: %d samples with productive infection\n", nrow(table4)))
