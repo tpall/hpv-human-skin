@@ -86,15 +86,21 @@ workflow HPV_SKIN {
     TRANSCRIPT_CLASSIFY(STAR_ALIGN.out.bam, ch_gene_gff.first())
 
     // ── Step 9: Generate report ────────────────────────────────────────
+    // ifEmpty([]) lets REPORT fire even when no sample is HPV+ (and thus
+    // HPV_TYPING / TRANSCRIPT_CLASSIFY never run). Without a default value
+    // an empty collect() leaves the process waiting forever and the report
+    // is silently skipped.
     ch_all_types = HPV_TYPING.out.types
         .map { meta, tsv -> tsv }
         .collect()
+        .ifEmpty([])
 
     ch_all_classes = TRANSCRIPT_CLASSIFY.out.classes
         .map { meta, tsv -> tsv }
         .collect()
+        .ifEmpty([])
 
-    ch_all_kraken = KRAKEN2_SCREEN.out.report.collect()
+    ch_all_kraken = KRAKEN2_SCREEN.out.report.collect().ifEmpty([])
 
     if (!params.skip_report) {
         REPORT(

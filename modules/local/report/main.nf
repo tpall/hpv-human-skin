@@ -24,19 +24,30 @@ process REPORT {
 
     script:
     """
+    shopt -s nullglob
     mkdir -p summary_tables
 
-    # Merge all HPV type results
-    head -1 \$(ls *_hpv_types.tsv | head -1) > all_hpv_types.tsv 2>/dev/null || echo "sample_id\thpv_reference\tref_length\tread_count\tcovered_bases\tcoverage_breadth\tmean_depth" > all_hpv_types.tsv
-    for f in *_hpv_types.tsv; do
-        tail -n +2 "\$f" >> all_hpv_types.tsv
-    done
+    # Merge all HPV type results (0 files when no sample was HPV+).
+    types_files=( *_hpv_types.tsv )
+    if (( \${#types_files[@]} > 0 )); then
+        head -1 "\${types_files[0]}" > all_hpv_types.tsv
+        for f in "\${types_files[@]}"; do
+            tail -n +2 "\$f" >> all_hpv_types.tsv
+        done
+    else
+        printf 'sample_id\\thpv_reference\\tref_length\\tread_count\\tcovered_bases\\tcoverage_breadth\\tmean_depth\\n' > all_hpv_types.tsv
+    fi
 
-    # Merge all transcript classification results
-    head -1 \$(ls *_transcript_classes.tsv | head -1) > all_transcript_classes.tsv 2>/dev/null || echo "sample_id\tgene\tread_count\tclass" > all_transcript_classes.tsv
-    for f in *_transcript_classes.tsv; do
-        tail -n +2 "\$f" >> all_transcript_classes.tsv
-    done
+    # Merge all transcript classification results.
+    tx_files=( *_transcript_classes.tsv )
+    if (( \${#tx_files[@]} > 0 )); then
+        head -1 "\${tx_files[0]}" > all_transcript_classes.tsv
+        for f in "\${tx_files[@]}"; do
+            tail -n +2 "\$f" >> all_transcript_classes.tsv
+        done
+    else
+        printf 'sample_id\\tgene\\tread_count\\tclass\\n' > all_transcript_classes.tsv
+    fi
 
     # Generate report
     summarize_results.R \\

@@ -69,9 +69,13 @@ workflow REPORT_ONLY {
         error "REPORT_ONLY requires --agg_dir pointing at aggregated per-chunk TSVs"
     }
     ch_samplesheet = Channel.fromPath(params.samplesheet, checkIfExists: true)
-    ch_hpv_types   = Channel.fromPath("${params.agg_dir}/*_hpv_types.tsv").collect()
-    ch_tx_classes  = Channel.fromPath("${params.agg_dir}/*_transcript_classes.tsv").collect()
-    ch_kraken      = Channel.fromPath("${params.agg_dir}/*_kraken2_report.txt").collect()
+    // ifEmpty([]) keeps REPORT firing when the smoke/subset run has zero
+    // HPV+ samples (and therefore no *_hpv_types.tsv / *_transcript_classes.tsv
+    // to aggregate). Without it the process input channel never emits and
+    // REPORT is silently skipped.
+    ch_hpv_types   = Channel.fromPath("${params.agg_dir}/*_hpv_types.tsv").collect().ifEmpty([])
+    ch_tx_classes  = Channel.fromPath("${params.agg_dir}/*_transcript_classes.tsv").collect().ifEmpty([])
+    ch_kraken      = Channel.fromPath("${params.agg_dir}/*_kraken2_report.txt").collect().ifEmpty([])
     ch_hpv_status  = Channel.fromPath("${params.agg_dir}/hpv_status.tsv", checkIfExists: true)
 
     // No separate raw samplesheet in chunked-aggregation mode; reuse the
