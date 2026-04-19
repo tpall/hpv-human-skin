@@ -11,8 +11,11 @@ process REPORT {
     publishDir "${params.outdir}/report", mode: params.publish_dir_mode
 
     input:
-    path samplesheet
-    path raw_samplesheet
+    // stageAs keeps the in-workdir filenames stable and distinct even when
+    // both inputs resolve to the same path (as in REPORT_ONLY's chunked
+    // aggregation mode, where no separate raw samplesheet exists).
+    path samplesheet,     stageAs: 'samplesheet_slim.csv'
+    path raw_samplesheet, stageAs: 'samplesheet_raw.csv'
     path hpv_types_files
     path transcript_class_files
     path kraken_reports
@@ -51,8 +54,8 @@ process REPORT {
 
     # Generate report
     summarize_results.R \\
-        --samplesheet ${samplesheet} \\
-        --raw-samplesheet ${raw_samplesheet} \\
+        --samplesheet samplesheet_slim.csv \\
+        --raw-samplesheet samplesheet_raw.csv \\
         --hpv-types all_hpv_types.tsv \\
         --transcript-classes all_transcript_classes.tsv \\
         --hpv-status ${hpv_status_csv} \\
