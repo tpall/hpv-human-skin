@@ -53,11 +53,29 @@ echo "Workdir:     ${WORKDIR}"
 echo ""
 
 # ── Split samplesheet (idempotent) ──────────────────────────────────────
-HEADER="$(head -n 1 "${SAMPLESHEET}")"
+# Slim the samplesheet to the 7 columns Nextflow's splitCsv consumes,
+# dropping free-text fields (title, tissue_source, platform) whose embedded
+# commas get column-shifted because splitCsv does not honour RFC 4180
+# quoting. The original wide file stays intact for REPORT_ONLY, where
+# R's readr parses it correctly.
+SLIM_SHEET="${CHUNKS_DIR}/samplesheet_slim.csv"
+python3 - "${SAMPLESHEET}" "${SLIM_SHEET}" <<'PY'
+import csv, sys
+src, dst = sys.argv[1], sys.argv[2]
+cols = ["srr_id", "srx_id", "study", "layout",
+        "tissue_category", "diagnosis", "needs_curation"]
+with open(src, newline="") as fi, open(dst, "w", newline="") as fo:
+    r = csv.DictReader(fi)
+    w = csv.DictWriter(fo, fieldnames=cols, extrasaction="ignore")
+    w.writeheader()
+    for row in r:
+        w.writerow(row)
+PY
+HEADER="$(head -n 1 "${SLIM_SHEET}")"
 SPLIT_MARKER="${CHUNKS_DIR}/.split_done"
 if [[ ! -e "${SPLIT_MARKER}" ]]; then
     echo "Splitting samplesheet into chunks of ${CHUNK_SIZE} …"
-    tail -n +2 "${SAMPLESHEET}" \
+    tail -n +2 "${SLIM_SHEET}" \
         | split -l "${CHUNK_SIZE}" --numeric-suffixes=1 --suffix-length=4 \
                 --additional-suffix=.body - "${CHUNKS_DIR}/chunk_"
     for body in "${CHUNKS_DIR}"/chunk_*.body; do
