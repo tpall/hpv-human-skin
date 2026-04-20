@@ -21,8 +21,18 @@ process TRANSCRIPT_CLASSIFY {
     tuple val(meta), env(HAS_LATE_TRANSCRIPTS),                     emit: late_status
 
     script:
-    def paired_flag = meta.layout == "PAIRED" ? "-p --countReadPairs" : ""
     """
+    # featureCounts is strict: it errors if the declared mode doesn't match
+    # the BAM flags. meta.layout can disagree with the aligned output (e.g.
+    # when one mate is dropped in Kraken2/seqtk filtering), so detect from
+    # the BAM itself via flag 0x1 (paired).
+    N_PAIRED=\$(samtools view -c -f 1 ${bam})
+    if [ "\$N_PAIRED" -gt 0 ]; then
+        PAIRED_FLAG="-p --countReadPairs"
+    else
+        PAIRED_FLAG=""
+    fi
+
     # Count reads per gene region using featureCounts
     featureCounts \\
         -a ${hpv_gene_gff} \\
@@ -33,7 +43,7 @@ process TRANSCRIPT_CLASSIFY {
         -T ${task.cpus} \\
         --minOverlap 20 \\
         -Q 10 \\
-        ${paired_flag} \\
+        \$PAIRED_FLAG \\
         ${bam}
 
     # Parse featureCounts output and classify early vs late
