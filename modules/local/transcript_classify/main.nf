@@ -21,6 +21,7 @@ process TRANSCRIPT_CLASSIFY {
     tuple val(meta), env(HAS_LATE_TRANSCRIPTS),                     emit: late_status
 
     script:
+    def paired_flag = meta.layout == "PAIRED" ? "-p --countReadPairs" : ""
     """
     # Count reads per gene region using featureCounts
     featureCounts \\
@@ -32,6 +33,7 @@ process TRANSCRIPT_CLASSIFY {
         -T ${task.cpus} \\
         --minOverlap 20 \\
         -Q 10 \\
+        ${paired_flag} \\
         ${bam}
 
     # Parse featureCounts output and classify early vs late
