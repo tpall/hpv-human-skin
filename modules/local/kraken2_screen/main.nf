@@ -49,35 +49,45 @@ process KRAKEN2_SCREEN {
         HPV_STATUS="HPV-"
     fi
 
-    # Extract HPV reads from FASTQ and drop malformed records (seq_len != qual_len).
-    # SRA-downloaded FASTQs occasionally contain such records and STAR aborts on them.
+    # Extract HPV reads and sanitise. STAR aborts on any malformed record
+    # (seq_len != qual_len, missing/extra lines, truncated tail). Parse each
+    # mate independently with a resyncing awk that only starts a record at
+    # a line beginning with '@', then intersect read IDs across mates so
+    # the emitted pair files stay in lockstep. A line-counted (NR%4) filter
+    # is unsafe here: one missing line anywhere frame-shifts the rest of
+    # the file and lets garbage through.
     if [ "\$HPV_READ_COUNT" -gt 0 ]; then
+        cat > sanitise.awk <<'AWK'
+state==0 && substr(\$0,1,1)=="@" { h=\$0; state=1; next }
+state==1 { s=\$0; state=2; next }
+state==2 { p=\$0; state=3; next }
+state==3 {
+    if (substr(p,1,1)=="+" && length(s)==length(\$0)) {
+        print h; print s; print p; print \$0
+    }
+    state=0
+    next
+}
+AWK
+
         if [ "${meta.layout}" = "PAIRED" ]; then
-            seqtk subseq ${reads[0]} hpv_read_ids.txt > r1.raw.fq
-            seqtk subseq ${reads[1]} hpv_read_ids.txt > r2.raw.fq
-            : > r1.clean.fq
-            : > r2.clean.fq
-            # Lockstep both mates through paste; drop the whole pair if either mate is malformed.
-            paste r1.raw.fq r2.raw.fq | awk -F'\\t' '
-                NR%4==1 { h1=\$1; h2=\$2 }
-                NR%4==2 { s1=\$1; s2=\$2 }
-                NR%4==3 { p1=\$1; p2=\$2 }
-                NR%4==0 && length(s1)==length(\$1) && length(s2)==length(\$2) {
-                    print h1"\\n"s1"\\n"p1"\\n"\$1 > "r1.clean.fq"
-                    print h2"\\n"s2"\\n"p2"\\n"\$2 > "r2.clean.fq"
-                }'
-            gzip -c r1.clean.fq > ${meta.srr_id}_hpv_reads_R1.fastq.gz
-            gzip -c r2.clean.fq > ${meta.srr_id}_hpv_reads_R2.fastq.gz
-            rm -f r1.raw.fq r2.raw.fq r1.clean.fq r2.clean.fq
+            seqtk subseq ${reads[0]} hpv_read_ids.txt | awk -f sanitise.awk > r1.valid.fq
+            seqtk subseq ${reads[1]} hpv_read_ids.txt | awk -f sanitise.awk > r2.valid.fq
+
+            # Intersect IDs (first whitespace token after '@') so mates stay paired.
+            awk 'NR%4==1 { sub(/^@/,""); print \$1 }' r1.valid.fq | sort -u > r1.ids
+            awk 'NR%4==1 { sub(/^@/,""); print \$1 }' r2.valid.fq | sort -u > r2.ids
+            comm -12 r1.ids r2.ids > common.ids
+
+            seqtk subseq r1.valid.fq common.ids | gzip -c > ${meta.srr_id}_hpv_reads_R1.fastq.gz
+            seqtk subseq r2.valid.fq common.ids | gzip -c > ${meta.srr_id}_hpv_reads_R2.fastq.gz
+            rm -f r1.valid.fq r2.valid.fq r1.ids r2.ids common.ids
         else
-            seqtk subseq ${reads[0]} hpv_read_ids.txt | awk '
-                NR%4==1 { h=\$0 }
-                NR%4==2 { s=\$0 }
-                NR%4==3 { p=\$0 }
-                NR%4==0 && length(s)==length(\$0) {
-                    print h"\\n"s"\\n"p"\\n"\$0
-                }' | gzip > ${meta.srr_id}_hpv_reads.fastq.gz
+            seqtk subseq ${reads[0]} hpv_read_ids.txt \\
+                | awk -f sanitise.awk \\
+                | gzip -c > ${meta.srr_id}_hpv_reads.fastq.gz
         fi
+        rm -f sanitise.awk
     else
         # Create empty files
         if [ "${meta.layout}" = "PAIRED" ]; then
