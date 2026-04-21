@@ -152,6 +152,10 @@ results/
 └── pipeline_info/             # Nextflow execution reports
 ```
 
+## Interpretation caveats
+
+**HeLa cross-contamination (HPV18).** HeLa cells contain integrated HPV18 and are widely documented to contaminate public SRA datasets via shared reagents, aerosolization, index hopping, or library spike-ins (see Cantalupo et al., Salzberg lab publications). A non-trivial fraction of RNA-seq runs in SRA — including samples with no biological reason to carry HPV — show low-to-moderate HPV18 signal from this source. Treat HPV18 calls on cell-line datasets (and low-breadth HPV18 calls generally) as suspect until cross-checked against the study's wet-lab context. The pipeline does not filter these out; it reports the signal faithfully, and downstream analysis should flag them.
+
 ## Original Description
 
 Meil oleks vaja teada millised HPV tüübid tegelikult millise sagedusega inimese nahas on. Probleem on vist selles, et enamustest transkriptoomidest visatakse mitte inimese transkriptid juba alguses välja ja tuleb minna tagasi raw data juurde.
