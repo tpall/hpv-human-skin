@@ -49,13 +49,34 @@ process KRAKEN2_SCREEN {
         HPV_STATUS="HPV-"
     fi
 
-    # Extract HPV reads from FASTQ
+    # Extract HPV reads from FASTQ and drop malformed records (seq_len != qual_len).
+    # SRA-downloaded FASTQs occasionally contain such records and STAR aborts on them.
     if [ "\$HPV_READ_COUNT" -gt 0 ]; then
         if [ "${meta.layout}" = "PAIRED" ]; then
-            seqtk subseq ${reads[0]} hpv_read_ids.txt | gzip > ${meta.srr_id}_hpv_reads_R1.fastq.gz
-            seqtk subseq ${reads[1]} hpv_read_ids.txt | gzip > ${meta.srr_id}_hpv_reads_R2.fastq.gz
+            seqtk subseq ${reads[0]} hpv_read_ids.txt > r1.raw.fq
+            seqtk subseq ${reads[1]} hpv_read_ids.txt > r2.raw.fq
+            : > r1.clean.fq
+            : > r2.clean.fq
+            # Lockstep both mates through paste; drop the whole pair if either mate is malformed.
+            paste r1.raw.fq r2.raw.fq | awk -F'\\t' '
+                NR%4==1 { h1=\$1; h2=\$2 }
+                NR%4==2 { s1=\$1; s2=\$2 }
+                NR%4==3 { p1=\$1; p2=\$2 }
+                NR%4==0 && length(s1)==length(\$1) && length(s2)==length(\$2) {
+                    print h1"\\n"s1"\\n"p1"\\n"\$1 > "r1.clean.fq"
+                    print h2"\\n"s2"\\n"p2"\\n"\$2 > "r2.clean.fq"
+                }'
+            gzip -c r1.clean.fq > ${meta.srr_id}_hpv_reads_R1.fastq.gz
+            gzip -c r2.clean.fq > ${meta.srr_id}_hpv_reads_R2.fastq.gz
+            rm -f r1.raw.fq r2.raw.fq r1.clean.fq r2.clean.fq
         else
-            seqtk subseq ${reads[0]} hpv_read_ids.txt | gzip > ${meta.srr_id}_hpv_reads.fastq.gz
+            seqtk subseq ${reads[0]} hpv_read_ids.txt | awk '
+                NR%4==1 { h=\$0 }
+                NR%4==2 { s=\$0 }
+                NR%4==3 { p=\$0 }
+                NR%4==0 && length(s)==length(\$0) {
+                    print h"\\n"s"\\n"p"\\n"\$0
+                }' | gzip > ${meta.srr_id}_hpv_reads.fastq.gz
         fi
     else
         # Create empty files
