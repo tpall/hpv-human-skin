@@ -13,6 +13,10 @@ import argparse
 import csv
 import re
 import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent))
+from cell_line_patterns import classify_cell_line, has_explicit_cell_line_field
 
 
 def load_tissue_categories(categories_file: str) -> dict[str, str]:
@@ -96,6 +100,7 @@ def main():
     enriched = []
     stats = {"nahk": 0, "anogenitaal": 0, "suuoos": 0, "muu": 0}
     flagged_count = 0
+    cell_line_count = 0
 
     with open(args.input) as f:
         reader = csv.DictReader(f)
@@ -114,6 +119,15 @@ def main():
                 row.get("tissue_source", "")
             )
 
+            # Cell-line detection: trust the explicit SRA cell_line attribute
+            # when present; otherwise fall back to keyword heuristic on
+            # title + tissue_source.
+            explicit = has_explicit_cell_line_field(row.get("cell_line", ""))
+            heuristic, _ = classify_cell_line(combined_text)
+            row["is_cell_line"] = "true" if (explicit or heuristic) else "false"
+            if row["is_cell_line"] == "true":
+                cell_line_count += 1
+
             # Flag for manual curation
             row["needs_curation"] = flag_for_curation(row)
             if row["needs_curation"]:
@@ -131,7 +145,8 @@ def main():
     # the CSV when splitCsv doesn't honour RFC 4180 quoting. Free-text
     # columns live in the raw samplesheet, read separately by the R report.
     fieldnames = ["srr_id", "srx_id", "study", "layout",
-                  "tissue_category", "diagnosis", "needs_curation"]
+                  "tissue_category", "diagnosis", "is_cell_line",
+                  "needs_curation"]
     with open(args.output, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
         writer.writeheader()
@@ -144,6 +159,7 @@ def main():
         pct = 100 * count / total if total else 0
         print(f"  {cat:15s}: {count:5d} ({pct:.1f}%)", file=sys.stderr)
     print(f"  {'flagged':15s}: {flagged_count:5d} ({100 * flagged_count / total:.1f}%)", file=sys.stderr)
+    print(f"  {'cell_line':15s}: {cell_line_count:5d} ({100 * cell_line_count / total:.1f}%)", file=sys.stderr)
     print(f"\nOutput: {args.output}", file=sys.stderr)
 
 

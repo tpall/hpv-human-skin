@@ -125,15 +125,25 @@ def _parse_experiment_package(pkg) -> list[dict]:
     if lib_layout is not None and lib_layout.find("PAIRED") is not None:
         layout = "PAIRED"
 
-    # Sample title + tissue-ish attribute
+    # Sample title + tissue-ish attributes. Collect *all* relevant
+    # SAMPLE_ATTRIBUTEs (don't break on first match) so a record with both
+    # tissue=cervix and cell_type=HeLa surfaces both signals — needed for
+    # cell-line vs. primary-tissue classification downstream.
     title = _text(sample, "TITLE")
-    source = ""
+    source_parts: list[str] = []
+    cell_line = ""
     if sample is not None:
         for attr in sample.findall("SAMPLE_ATTRIBUTES/SAMPLE_ATTRIBUTE"):
-            tag = (_text(attr, "TAG") or "").lower()
-            if tag in ("tissue", "cell_type", "source_name", "sample_type"):
-                source = _text(attr, "VALUE")
-                break
+            tag = (_text(attr, "TAG") or "").lower().replace(" ", "_")
+            value = _text(attr, "VALUE")
+            if not value:
+                continue
+            if tag in ("tissue", "cell_type", "source_name",
+                       "sample_type", "isolation_source"):
+                source_parts.append(f"{tag}={value}")
+            if tag == "cell_line" and not cell_line:
+                cell_line = value
+    source = " | ".join(source_parts)
 
     for run in run_set.findall("RUN"):
         srr = run.get("accession", "")
@@ -145,6 +155,7 @@ def _parse_experiment_package(pkg) -> list[dict]:
             "study": study_acc,
             "title": title,
             "tissue_source": source,
+            "cell_line": cell_line,
             "platform": platform,
             "layout": layout,
         })
@@ -278,7 +289,8 @@ def main():
         unique_samples = unique_samples[:args.max_samples]
 
     # Write samplesheet
-    fieldnames = ["srr_id", "srx_id", "study", "title", "tissue_source", "platform", "layout"]
+    fieldnames = ["srr_id", "srx_id", "study", "title",
+                  "tissue_source", "cell_line", "platform", "layout"]
     with open(args.output, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
