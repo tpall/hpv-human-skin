@@ -37,6 +37,13 @@ dir.create(outdir, recursive = TRUE, showWarnings = FALSE)
 
 # ── Load data ───────────────────────────────────────────────────────────
 samples <- read_csv(opts$samplesheet, show_col_types = FALSE)
+# Slim samplesheets written before commit db18557 lack is_cell_line; default
+# to "false" so older runs still render (every sample treated as non-line).
+if (!"is_cell_line" %in% names(samples)) {
+  samples$is_cell_line <- "false"
+}
+samples <- samples %>%
+  mutate(is_cell_line = tolower(as.character(is_cell_line)) == "true")
 # Raw samplesheet holds comma-prone free-text columns (title, tissue_source)
 # kept out of the slim samplesheet so Nextflow's splitCsv can't mis-split.
 raw_path <- opts$`raw-samplesheet`
@@ -54,16 +61,19 @@ cat(sprintf("Loaded: %d samples, %d HPV type assignments, %d transcript records\
             nrow(samples), nrow(hpv_types), nrow(transcripts)))
 
 # ── Merge metadata with results ─────────────────────────────────────────
-# Join tissue category and diagnosis to HPV results
+# Join tissue category, diagnosis, and is_cell_line to HPV results.
+# Tables 1-2 deliberately exclude cell lines so prevalence reflects
+# real tissue; Tables 3-4 keep them visible since they're useful as
+# positive controls.
 hpv_full <- hpv_types %>%
   left_join(
-    samples %>% select(srr_id, tissue_category, diagnosis),
+    samples %>% select(srr_id, tissue_category, diagnosis, is_cell_line),
     by = c("sample_id" = "srr_id")
   )
 
-# ── Table 1: HPV type prevalence in healthy skin ────────────────────────
+# ── Table 1: HPV type prevalence in healthy skin (tissue only) ─────────
 table1 <- hpv_full %>%
-  filter(tissue_category == "nahk") %>%
+  filter(tissue_category == "nahk", !is_cell_line) %>%
   filter(str_detect(tolower(diagnosis), "normal|healthy|control") |
          diagnosis == "unspecified") %>%
   group_by(hpv_reference) %>%
@@ -78,9 +88,9 @@ table1 <- hpv_full %>%
 write_tsv(table1, file.path(outdir, "table1_hpv_healthy_skin.tsv"))
 cat(sprintf("Table 1: %d HPV types in healthy skin\n", nrow(table1)))
 
-# ── Table 2: HPV type prevalence by skin pathology ──────────────────────
+# ── Table 2: HPV type prevalence by skin pathology (tissue only) ───────
 table2 <- hpv_full %>%
-  filter(tissue_category == "nahk") %>%
+  filter(tissue_category == "nahk", !is_cell_line) %>%
   group_by(diagnosis, hpv_reference) %>%
   summarise(
     n_samples = n_distinct(sample_id),
@@ -106,7 +116,8 @@ table3 <- hpv_full %>%
   # the display columns as NA so the final select() always succeeds.
   mutate(title = if ("title" %in% names(.)) title else NA_character_,
          tissue_source = if ("tissue_source" %in% names(.)) tissue_source else NA_character_) %>%
-  select(sample_id, tissue_source, title, hpv_reference, coverage_breadth, mean_depth) %>%
+  select(sample_id, is_cell_line, tissue_source, title,
+         hpv_reference, coverage_breadth, mean_depth) %>%
   arrange(desc(coverage_breadth))
 
 write_tsv(table3, file.path(outdir, "table3_hpv_nontraditional_tissues.tsv"))
@@ -118,7 +129,7 @@ productive <- transcripts %>%
 
 table4 <- productive %>%
   left_join(
-    samples %>% select(srr_id, tissue_category, diagnosis),
+    samples %>% select(srr_id, tissue_category, diagnosis, is_cell_line),
     by = c("sample_id" = "srr_id")
   ) %>%
   left_join(
@@ -144,15 +155,24 @@ table4 <- productive %>%
     reads_L2     = if ("reads_L2"     %in% names(.)) reads_L2     else NA_character_,
     top_hpv_type = if ("top_hpv_type" %in% names(.)) top_hpv_type else NA_character_
   ) %>%
-  select(sample_id, tissue_category, diagnosis, top_hpv_type,
-         reads_L1, reads_L2) %>%
-  arrange(tissue_category, desc(suppressWarnings(as.numeric(reads_L1))))
+  select(sample_id, tissue_category, is_cell_line, diagnosis,
+         top_hpv_type, reads_L1, reads_L2) %>%
+  arrange(tissue_category, is_cell_line,
+          desc(suppressWarnings(as.numeric(reads_L1))))
 
 write_tsv(table4, file.path(outdir, "table4_productive_infection.tsv"))
 cat(sprintf("Table 4: %d samples with productive infection\n", nrow(table4)))
 
 # ── Table 5: HPV-negative rates per tissue category ────────────────────
-table5 <- hpv_status %>%
+# hpv_status.tsv carries srr_id/tissue_category/diagnosis/hpv_status/count
+# but no is_cell_line column — join from the slim samplesheet so the rates
+# can be split below.
+hpv_status_enriched <- hpv_status %>%
+  left_join(samples %>% select(srr_id, is_cell_line),
+            by = c("srr_id" = "srr_id")) %>%
+  mutate(is_cell_line = ifelse(is.na(is_cell_line), FALSE, is_cell_line))
+
+table5 <- hpv_status_enriched %>%
   group_by(tissue_category) %>%
   summarise(
     total_samples = n(),
@@ -166,6 +186,26 @@ table5 <- hpv_status %>%
 
 write_tsv(table5, file.path(outdir, "table5_hpv_negative_rates.tsv"))
 cat(sprintf("Table 5: HPV rates across %d tissue categories\n", nrow(table5)))
+
+# ── Table 6: HPV rates stratified by cell-line vs primary tissue ───────
+# Cell lines often dominate the HPV+ count; this split shows whether the
+# rate in real tissue is meaningfully different from the cell-line subset
+# (positive controls).
+table6 <- hpv_status_enriched %>%
+  mutate(sample_class = ifelse(is_cell_line, "cell_line", "tissue")) %>%
+  group_by(tissue_category, sample_class) %>%
+  summarise(
+    total_samples = n(),
+    hpv_positive = sum(hpv_status == "HPV+"),
+    hpv_negative = sum(hpv_status == "HPV-"),
+    pct_positive = round(100 * hpv_positive / total_samples, 1),
+    .groups = "drop"
+  ) %>%
+  arrange(tissue_category, sample_class)
+
+write_tsv(table6, file.path(outdir, "table6_hpv_rates_by_cellline.tsv"))
+cat(sprintf("Table 6: HPV rates split by cell-line vs tissue (%d rows)\n",
+            nrow(table6)))
 
 # ── Figures ─────────────────────────────────────────────────────────────
 
@@ -204,6 +244,26 @@ if (nrow(table5) > 0) {
 
   ggsave(file.path(outdir, "barplot_hpv_status.pdf"), p_bar, width = 8, height = 5)
   ggsave(file.path(outdir, "barplot_hpv_status.png"), p_bar, width = 8, height = 5, dpi = 150)
+}
+
+# Stratified bar plot: HPV+/- per tissue category, faceted by cell-line vs tissue
+if (nrow(table6) > 0) {
+  p_bar_strat <- table6 %>%
+    pivot_longer(cols = c(hpv_positive, hpv_negative),
+                 names_to = "status", values_to = "count") %>%
+    mutate(status = ifelse(status == "hpv_positive", "HPV+", "HPV-")) %>%
+    ggplot(aes(x = tissue_category, y = count, fill = status)) +
+    geom_col(position = "stack") +
+    facet_wrap(~ sample_class, scales = "free_y") +
+    scale_fill_manual(values = c("HPV+" = "#e63946", "HPV-" = "#457b9d")) +
+    labs(title = "HPV Status by Tissue Category — Cell Lines vs. Primary Tissue",
+         x = "Tissue Category", y = "Number of Samples", fill = "HPV Status") +
+    theme_minimal()
+
+  ggsave(file.path(outdir, "barplot_hpv_status_by_cellline.pdf"),
+         p_bar_strat, width = 10, height = 5)
+  ggsave(file.path(outdir, "barplot_hpv_status_by_cellline.png"),
+         p_bar_strat, width = 10, height = 5, dpi = 150)
 }
 
 # ── HTML Report ─────────────────────────────────────────────────────────
@@ -261,6 +321,14 @@ kable(read_tsv("%s/table4_productive_infection.tsv", show_col_types = FALSE))
 kable(read_tsv("%s/table5_hpv_negative_rates.tsv", show_col_types = FALSE))
 ```
 
+## 6. HPV Rates: Cell Lines vs. Primary Tissue
+
+Cell lines (HeLa, SiHa, CaSki, TIGK, HaCaT, etc.) are kept in the analysis as positive controls. This table separates the HPV+/- rate within cell-line samples from primary tissue so the latter can be interpreted on its own.
+
+```{r}
+kable(read_tsv("%s/table6_hpv_rates_by_cellline.tsv", show_col_types = FALSE))
+```
+
 ## Figures
 
 ### HPV Type x Tissue Heatmap
@@ -268,9 +336,12 @@ kable(read_tsv("%s/table5_hpv_negative_rates.tsv", show_col_types = FALSE))
 
 ### HPV Status by Tissue
 ![](summary_tables/barplot_hpv_status.png)
+
+### HPV Status — Cell Lines vs. Primary Tissue
+![](summary_tables/barplot_hpv_status_by_cellline.png)
 ',
   opts$`hpv-status`, opts$`hpv-status`,
-  outdir, outdir, outdir, outdir, outdir
+  outdir, outdir, outdir, outdir, outdir, outdir
 )
 
 rmd_file <- "hpv_skin_report.Rmd"
