@@ -15,32 +15,32 @@
 
 nextflow.enable.dsl = 2
 
-// Validate essential parameters
-if (!params.samplesheet && !params.sra_query_terms) {
-    error "Either --samplesheet or --sra_query_terms must be provided"
-}
-
-// Log pipeline info
-log.info """
-    ╔═══════════════════════════════════════════╗
-    ║     HPV in Human Skin Pipeline v0.1.0     ║
-    ╚═══════════════════════════════════════════╝
-
-    Samplesheet     : ${params.samplesheet ?: 'Auto-discovery via SRA'}
-    SRA query terms  : ${params.sra_query_terms}
-    HPV references   : ${params.hpv_ref_dir}
-    Kraken2 DB       : ${params.kraken2_db}
-    HPV min reads    : ${params.hpv_min_reads}
-    HPV min coverage : ${params.hpv_min_coverage}
-    Output dir       : ${params.outdir}
-    """.stripIndent()
-
 // Include the main workflow
 include { HPV_SKIN      } from './workflows/hpv_skin'
 include { REPORT        } from './modules/local/report/main'
 include { SRA_DISCOVERY } from './modules/local/sra_discovery/main'
 
 workflow {
+    // Nextflow 26.x strict-syntax: top-level statements aren't allowed
+    // alongside script declarations, so validation + banner live here.
+    if (!params.samplesheet && !params.sra_query_terms) {
+        error "Either --samplesheet or --sra_query_terms must be provided"
+    }
+
+    log.info """
+        ╔═══════════════════════════════════════════╗
+        ║     HPV in Human Skin Pipeline v0.1.0     ║
+        ╚═══════════════════════════════════════════╝
+
+        Samplesheet      : ${params.samplesheet ?: 'Auto-discovery via SRA'}
+        SRA query terms  : ${params.sra_query_terms}
+        HPV references   : ${params.hpv_ref_dir}
+        Kraken2 DB       : ${params.kraken2_db}
+        HPV min reads    : ${params.hpv_min_reads}
+        HPV min coverage : ${params.hpv_min_coverage}
+        Output dir       : ${params.outdir}
+        """.stripIndent()
+
     HPV_SKIN()
 }
 
