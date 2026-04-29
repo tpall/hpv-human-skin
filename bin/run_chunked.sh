@@ -155,10 +155,10 @@ done
 echo ""
 echo "==== All chunks done — running REPORT_ONLY ===="
 nextflow run "${PROJECT_DIR}/main.nf" \
-    -entry REPORT_ONLY \
     -profile conda,slurm \
     -w "${WORKDIR}/report" \
     -ansi-log false \
+    --entry REPORT_ONLY \
     --samplesheet "${SAMPLESHEET}" \
     --agg_dir "${AGG_DIR}" \
     --outdir "${REPORT_DIR}"

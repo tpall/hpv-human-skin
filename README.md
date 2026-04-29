@@ -69,7 +69,7 @@ For sample counts in the thousands (e.g. the full SRA query), a single Nextflow 
 
 ```bash
 # 1. Build the samplesheet once (no downloads yet)
-nextflow run main.nf -profile conda,slurm -entry SRA_DISCOVERY_ONLY --outdir results_full
+nextflow run main.nf -profile conda,slurm --entry SRA_DISCOVERY_ONLY --outdir results_full
 
 # 2. Run chunked (default: 100 samples per chunk)
 sbatch bin/run_chunked.sh results_full/metadata/samplesheet_enriched.csv 100 results_full work_full

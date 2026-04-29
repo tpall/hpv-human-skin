@@ -18,7 +18,7 @@ process KRAKEN2_SCREEN {
 
     output:
     tuple val(meta), path("*_hpv_reads*.fastq.gz"), path("${meta.srr_id}_kraken2_report.txt"), emit: hpv_reads
-    tuple val(meta), env(HPV_STATUS), env(HPV_READ_COUNT),                                     emit: hpv_status
+    tuple val(meta), env('HPV_STATUS'), env('HPV_READ_COUNT'),                                 emit: hpv_status
     path "${meta.srr_id}_kraken2_report.txt",                                                  emit: report
 
     script:

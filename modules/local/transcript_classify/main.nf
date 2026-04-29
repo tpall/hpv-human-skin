@@ -18,7 +18,7 @@ process TRANSCRIPT_CLASSIFY {
 
     output:
     tuple val(meta), path("${meta.srr_id}_transcript_classes.tsv"), emit: classes
-    tuple val(meta), env(HAS_LATE_TRANSCRIPTS),                     emit: late_status
+    tuple val(meta), env('HAS_LATE_TRANSCRIPTS'),                   emit: late_status
 
     script:
     """
