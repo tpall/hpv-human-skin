@@ -24,3 +24,7 @@ Thumbs.db
 # Claude Code
 CLAUDE.md
 .claude/
+.Rproj.user
+
+# Rendered reports (re-generated from .md)
+reports/*.html
