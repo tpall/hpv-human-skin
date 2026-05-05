@@ -38,13 +38,14 @@ NAMED_CELL_LINES = [
     r"detroit[\s-]?562",
     r"scc[\s-]?(?:4|9|13|25)\b",
     r"cal[\s-]?(?:27|33)",
-    # Skin / keratinocyte
+    # Skin / keratinocyte / melanoma
     r"hacat",
     r"n[/\s-]?tert(?:[\s-]?1)?",
     r"niks",
     r"a431",
     r"tigk",        # telomerase-immortalized gingival keratinocyte
     r"hok[\s-]?16b",
+    r"mnt[\s-]?1",  # melanoma line, used in melanocyte / pigmentation studies
     # Common producer / engineered backgrounds (often used as HPV VLP / model hosts)
     r"hek[\s-]?293(?:t|ft)?",
     r"293t",
@@ -72,21 +73,52 @@ GENERIC_PATTERNS = [
 
 
 def _build_compiled(patterns: list[str]) -> list[tuple[re.Pattern, str]]:
-    """Compile each pattern with word boundaries; keep label = pattern source."""
+    """Compile each pattern with alphanumeric-only boundaries.
+
+    Plain ``\\b`` treats ``_`` as a word char, so ``\\bmnt-?1\\b`` won't match
+    inside ``MNT-1_WT1``. We strip any author-supplied outer ``\\b`` and wrap
+    with ``(?<![A-Za-z0-9])...(?![A-Za-z0-9])`` so the pattern terminates on
+    underscores, hyphens, whitespace, punctuation, and string boundaries alike.
+    """
     compiled = []
     for p in patterns:
-        # Add word boundaries to named lines that don't already have them.
-        # Generic patterns supply their own \b where needed.
-        if not p.startswith(r"\b") and not p.endswith(r"\b"):
-            wrapped = rf"\b{p}\b"
-        else:
-            wrapped = p
+        core = p
+        if core.startswith(r"\b"):
+            core = core[2:]
+        if core.endswith(r"\b"):
+            core = core[:-2]
+        wrapped = rf"(?<![A-Za-z0-9]){core}(?![A-Za-z0-9])"
         compiled.append((re.compile(wrapped, re.IGNORECASE), p))
     return compiled
 
 
+# Engineered / experimentally-manipulated cells: transduction, transfection,
+# CRISPR / shRNA / siRNA knockdowns. Not strictly cell lines (the starting
+# material may be primary), but also not naive clinical tissue — used to
+# stratify in-vitro experiments from clinical signal in HPV reports.
+#
+# Gene-knockdown labels follow a lowercase-prefix + uppercase-target convention
+# (shTFPI2, siSIRT7, shNC, siControl); (?-i:...) disables IGNORECASE locally so
+# we don't match "shape", "side", "Skin", etc.
+ENGINEERED_PATTERNS = [
+    r"\bshRNA\b",
+    r"\bsiRNA\b",
+    r"\bsgRNA\b",
+    r"\bknock[\s-]?(?:down|out)\b",
+    r"\bcrispr\b",
+    r"\bd?cas9\b",
+    r"\btransduc(?:e|ed|ing|tion)\b",
+    r"\btransfect(?:ed|ion|ing)\b",
+    r"\blentivir(?:al|us)?\b",
+    r"\bstably[\s-]?(?:expressing|transfected)\b",
+    r"\b(?-i:sh[A-Z]\w*)\b",
+    r"\b(?-i:si[A-Z]\w*)\b",
+    r"\b(?-i:LV-[A-Z]\w*)\b",
+]
+
 _NAMED = _build_compiled(NAMED_CELL_LINES)
 _GENERIC = _build_compiled(GENERIC_PATTERNS)
+_ENGINEERED = _build_compiled(ENGINEERED_PATTERNS)
 
 
 def classify_cell_line(text: str) -> tuple[bool, str]:
@@ -101,6 +133,16 @@ def classify_cell_line(text: str) -> tuple[bool, str]:
         if rx.search(text):
             return (True, label)
     for rx, label in _GENERIC:
+        if rx.search(text):
+            return (True, label)
+    return (False, "")
+
+
+def classify_engineered(text: str) -> tuple[bool, str]:
+    """Return (is_engineered, matched_pattern_label) for transduced/edited cells."""
+    if not text:
+        return (False, "")
+    for rx, label in _ENGINEERED:
         if rx.search(text):
             return (True, label)
     return (False, "")

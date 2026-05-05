@@ -16,7 +16,11 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-from cell_line_patterns import classify_cell_line, has_explicit_cell_line_field
+from cell_line_patterns import (
+    classify_cell_line,
+    classify_engineered,
+    has_explicit_cell_line_field,
+)
 
 
 def load_tissue_categories(categories_file: str) -> dict[str, str]:
@@ -101,6 +105,7 @@ def main():
     stats = {"nahk": 0, "anogenitaal": 0, "suuoos": 0, "muu": 0}
     flagged_count = 0
     cell_line_count = 0
+    engineered_count = 0
 
     with open(args.input) as f:
         reader = csv.DictReader(f)
@@ -128,6 +133,14 @@ def main():
             if row["is_cell_line"] == "true":
                 cell_line_count += 1
 
+            # Engineered cells (transduced / shRNA / siRNA / CRISPR). Flagged
+            # separately so reports can split clinical signal from in-vitro
+            # experiments without conflating with naming-based cell-line hits.
+            is_eng, _ = classify_engineered(combined_text)
+            row["is_engineered"] = "true" if is_eng else "false"
+            if is_eng:
+                engineered_count += 1
+
             # Flag for manual curation
             row["needs_curation"] = flag_for_curation(row)
             if row["needs_curation"]:
@@ -146,7 +159,7 @@ def main():
     # columns live in the raw samplesheet, read separately by the R report.
     fieldnames = ["srr_id", "srx_id", "study", "layout",
                   "tissue_category", "diagnosis", "is_cell_line",
-                  "needs_curation"]
+                  "is_engineered", "needs_curation"]
     with open(args.output, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
         writer.writeheader()
@@ -160,6 +173,7 @@ def main():
         print(f"  {cat:15s}: {count:5d} ({pct:.1f}%)", file=sys.stderr)
     print(f"  {'flagged':15s}: {flagged_count:5d} ({100 * flagged_count / total:.1f}%)", file=sys.stderr)
     print(f"  {'cell_line':15s}: {cell_line_count:5d} ({100 * cell_line_count / total:.1f}%)", file=sys.stderr)
+    print(f"  {'engineered':15s}: {engineered_count:5d} ({100 * engineered_count / total:.1f}%)", file=sys.stderr)
     print(f"\nOutput: {args.output}", file=sys.stderr)
 
 

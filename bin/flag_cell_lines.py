@@ -20,7 +20,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-from cell_line_patterns import classify_cell_line
+from cell_line_patterns import classify_cell_line, classify_engineered
 
 
 def main() -> None:
@@ -32,36 +32,57 @@ def main() -> None:
     args = p.parse_args()
 
     n_total = 0
-    n_flagged = 0
-    label_counts: dict[str, int] = {}
+    n_cell_line = 0
+    n_engineered = 0
+    cl_counts: dict[str, int] = {}
+    eng_counts: dict[str, int] = {}
 
     with args.input.open() as fin, args.output.open("w", newline="") as fout:
         reader = csv.DictReader(fin)
         writer = csv.writer(fout, delimiter="\t")
-        writer.writerow(["srr_id", "is_cell_line", "matched_pattern", "source_text"])
+        writer.writerow([
+            "srr_id", "is_cell_line", "cell_line_pattern",
+            "is_engineered", "engineered_pattern", "source_text",
+        ])
 
         for row in reader:
             n_total += 1
             title = row.get("title", "")
             tissue_source = row.get("tissue_source", "")
             combined = f"{title} {tissue_source}".strip()
-            is_line, matched = classify_cell_line(combined)
+            is_line, cl_match = classify_cell_line(combined)
+            is_eng, eng_match = classify_engineered(combined)
             if is_line:
-                n_flagged += 1
-                label_counts[matched] = label_counts.get(matched, 0) + 1
+                n_cell_line += 1
+                cl_counts[cl_match] = cl_counts.get(cl_match, 0) + 1
+            if is_eng:
+                n_engineered += 1
+                eng_counts[eng_match] = eng_counts.get(eng_match, 0) + 1
             writer.writerow([
                 row.get("srr_id", ""),
                 "true" if is_line else "false",
-                matched,
+                cl_match,
+                "true" if is_eng else "false",
+                eng_match,
                 combined[:200],
             ])
 
-    print(f"Scanned {n_total} samples; flagged {n_flagged} as cell-line "
-          f"({100 * n_flagged / n_total:.1f}%)" if n_total else "No rows.",
-          file=sys.stderr)
-    if label_counts:
-        print("Top matches:", file=sys.stderr)
-        for label, n in sorted(label_counts.items(), key=lambda kv: -kv[1])[:15]:
+    if n_total:
+        print(
+            f"Scanned {n_total} samples; "
+            f"{n_cell_line} cell-line ({100 * n_cell_line / n_total:.1f}%), "
+            f"{n_engineered} engineered ({100 * n_engineered / n_total:.1f}%)",
+            file=sys.stderr,
+        )
+    else:
+        print("No rows.", file=sys.stderr)
+    if cl_counts:
+        print("Top cell-line matches:", file=sys.stderr)
+        for label, n in sorted(cl_counts.items(), key=lambda kv: -kv[1])[:10]:
+            print(f"  {label:40s} {n}", file=sys.stderr)
+    if eng_counts:
+        print("Top engineered matches:", file=sys.stderr)
+        for label, n in sorted(eng_counts.items(), key=lambda kv: -kv[1])[:10]:
             print(f"  {label:40s} {n}", file=sys.stderr)
     print(f"Wrote {args.output}", file=sys.stderr)
 
