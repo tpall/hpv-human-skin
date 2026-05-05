@@ -1,0 +1,107 @@
+# HPV in human skin RNA-seq — intermediate progress report
+
+**Date:** 2026-05-05
+**Status:** ~29 % through a 12,200-sample screen of public RNA-seq data.
+
+## 1. Aim
+
+Survey publicly available human RNA-seq for HPV transcripts to characterise the diversity, prevalence, and tissue context of papillomavirus signal in skin and adjacent tissues, separating genuine clinical signal from in-vitro experimental material.
+
+## 2. Approach
+
+Samples are pulled from NCBI SRA via a query targeting human RNA-seq with skin / cutaneous / oral / anogenital tissue annotations (12,200 runs in the current cohort). Each sample is processed through:
+
+1. **Quality control.** Adapter and quality trimming with `fastp`.
+2. **Sensitive HPV screen.** `Kraken2` against a custom database covering 455 human-host HPV reference genomes (PaVE 2.0) plus the human genome as background. A sample is called **HPV-positive** if it has ≥ 10 reads classified to any HPV taxon.
+3. **Type assignment.** HPV-positive samples are aligned with `STAR` against the concatenated HPV reference panel. For every reference we compute coverage breadth (fraction of the genome with ≥ 1 read) and mean depth, and assign a type when the sample passes both thresholds.
+4. **Sample provenance classification.** Each SRA run is classified into one of three categories from its metadata (sample title, tissue source field, explicit cell-line attribute):
+   - **Cell-line** — named immortalised lines used in HPV / cancer / skin research (e.g. HeLa, SiHa, HaCaT, TIGK, MNT-1) and generic indicators of an established line ("cell line", "passage *N*", culture-collection IDs).
+   - **Engineered** — primary-derived cells experimentally manipulated by transduction, transfection, RNAi, or CRISPR (lentiviral constructs, sh/si/sg-RNA knockdowns, stable transfectants).
+   - **Clinical** — neither of the above; treated as fresh-tissue signal.
+
+The three categories are mutually exclusive and reported separately throughout. Classification is text-based and so necessarily imperfect; ambiguous samples (uninformative titles, in-vitro signatures using non-standard nomenclature) are flagged in §5.
+
+## 3. Cohort overview
+
+3,532 of the 12,200 samples (29 %) have completed the screening step. **Table 1** summarises the cohort processed so far.
+
+**Table 1.** Samples processed and HPV+ rate by provenance category (Kraken2 screening stage; ≥ 10 HPV-classified reads = positive).
+
+| Category   | n screened | HPV+ | HPV− | HPV+ rate |
+|------------|-----------:|-----:|-----:|----------:|
+| Cell-line  |        136 |   11 |  125 | **8.1 %** |
+| Engineered |         73 |    9 |   64 | **12.3 %**|
+| Clinical   |      3,323 |   70 |3,253 | **2.1 %** |
+| **Total**  |  **3,532** | **90** | **3,442** | 2.55 % |
+
+Three observations:
+
+- **HPV+ rate stratifies cleanly by category.** Engineered samples are most likely to carry HPV signal — even more than named cell lines — consistent with many transduced-keratinocyte and HeLa-derived constructs containing integrated HPV genomes by design.
+- **Without separating engineered samples, in-vitro signal would inflate the clinical rate** by roughly 0.3 percentage points (2.1 % → 2.4 %).
+- The 2.1 % clinical rate is in line with prior surveys of cutaneous HPV in skin transcriptomes — most cutaneous infections are low-titre and asymptomatic.
+
+## 4. Type assignment results
+
+### 4.1 Sensitivity to typing thresholds
+
+The default thresholds (coverage breadth ≥ 0.10, mean depth ≥ 2) were chosen for confidence. To understand how many low-titre infections might be hidden, we swept across more permissive cutoffs (**Figure 1**).
+
+![Figure 1. Sensitivity sweep: number of samples receiving an HPV type assignment as a function of coverage breadth (y-axis) and mean depth (x-axis) thresholds. The default operating point (0.10, 2.0) yields 14 typed samples; at the most permissive cutoff (0.01, 0.25) 31 samples are typed.](figures/sweep_heatmap.png)
+
+**Table 2.** Typing yield at four operating points.
+
+| Coverage breadth ≥ | Mean depth ≥ | Samples typed | Note |
+|-------------------:|-------------:|--------------:|------|
+| 0.10 | 2.0 | 14 | pipeline default |
+| 0.05 | 1.0 | 20 | |
+| 0.02 | 0.5 | 25 | |
+| 0.01 | 0.25 | 31 | most permissive |
+
+Mean depth is the dominant constraint: relaxing depth from 2 → 0.5 alone (at fixed breadth = 0.10) raises typed-sample count from 14 to 25. This is expected for cutaneous β/γ HPVs, which characteristically produce few transcripts per infected cell.
+
+### 4.2 Type distribution by provenance
+
+At the most permissive cutoff (breadth ≥ 0.01, depth ≥ 0.25), 31 samples receive an assignment across 12 distinct HPV references (**Figure 2**, **Table 3**).
+
+![Figure 2. Number of samples assigned to each HPV reference at the most permissive cutoff (n = 31 samples, 12 references). HPV18 and HPV16 dominate but are concentrated in cell-line and engineered material; the remaining references are single-sample clinical hits across cutaneous β and γ types.](figures/best_hits_refs.png)
+
+**Table 3.** Per-reference type assignments stratified by sample category.
+
+| HPV reference          | HPV genus | Cell-line | Engineered | Clinical | Total |
+|------------------------|-----------|----------:|-----------:|---------:|------:|
+| HPV16                  | α (mucosal/oncogenic) | 6 | 0 | 2 | 8 |
+| HPV18                  | α (mucosal/oncogenic) | 4 | 7 | 2 | 13 |
+| HPV65                  | γ (cutaneous)         | 0 | 0 | 1 | 1 |
+| HPV80                  | β (cutaneous)         | 0 | 0 | 1 | 1 |
+| HPV134                 | γ (cutaneous)         | 0 | 0 | 1 | 1 |
+| HPV150                 | β (cutaneous)         | 0 | 0 | 1 | 1 |
+| HPV182                 | γ (cutaneous)         | 0 | 0 | 1 | 1 |
+| HPV190                 | γ (cutaneous)         | 0 | 0 | 1 | 1 |
+| HPV195                 | γ (cutaneous)         | 0 | 0 | 1 | 1 |
+| HPV208                 | γ (cutaneous)         | 0 | 0 | 1 | 1 |
+| HPV-mTVMBSFc09nr       | non-reference (β/γ-like) | 0 | 0 | 1 | 1 |
+| HPV-mw20c10anr         | non-reference (β/γ-like) | 0 | 0 | 1 | 1 |
+| **Total**              |           | **10** | **7** | **14** | **31** |
+
+The headline finding from the type distribution:
+
+- **Alpha-type signal is essentially confined to in-vitro material.** Of 21 HPV16/18 hits, 17 are cell-line or engineered. Of the 4 nominally-clinical alpha hits, 2 are from a study with uninformative sample titles (cannot be confirmed as fresh tissue) and the other 2 are from a study using shRNA constructs that the heuristic missed (see §5). Effectively zero confirmed alpha-type HPV is detected in fresh skin tissue in this cohort.
+- **Beta and gamma diversity in clinical samples matches expectation for cutaneous HPV.** The 10 non-alpha references each detected in a single clinical sample span exactly the genera (β, γ) and types (HPV80, 134, 150, 182, 190, 195, 208 plus two non-reference cutaneous-like genomes) that prior studies report as the resident skin HPV virome.
+
+### 4.3 Coverage profile
+
+**Figure 3** plots coverage breadth against mean depth for every typed sample, coloured by category. Most clinical hits cluster near the lower-left quadrant — real but low-titre — while the high-depth high-breadth corner is occupied entirely by cell-line / engineered samples.
+
+![Figure 3. Per-sample best HPV hit, coverage breadth versus mean depth (log scale). Each point is one sample, coloured by provenance category. Dashed lines mark the default thresholds (breadth = 0.10, depth = 2). Cell-line and engineered samples dominate the high-depth region; clinical samples cluster near the threshold corner.](figures/best_hits_scatter.png)
+
+## 5. Caveats
+
+1. **The remaining 71 % of the cohort has not yet been processed.** The HPV+ rate has been stable across the run so far, so material change to the headline rate is unlikely; the more interesting open question is whether β/γ type diversity continues to grow.
+2. **Sample-provenance classification is text-based.** It works well for established cell lines and explicitly-named experimental constructs, but cannot recover information that simply isn't in the SRA metadata. Two known false-negatives in this snapshot (Table 3 — the 2 "clinical" HPV18 hits): a study using numbered shRNA constructs (`sh2`, `sh3`) where the engineered-sample heuristic deliberately doesn't match short numeric suffixes to avoid false positives on protein-domain names. A study-level manual curation pass on the studies producing alpha-type clinical hits would close this gap more reliably than further pattern tuning.
+3. **Threshold choice for clinical reporting is a real trade-off.** Strict thresholds risk missing genuine low-titre cutaneous infections; permissive thresholds risk false positives from index-hopping or low-level cross-mapping. A breadth-only criterion (≥ 0.10 with no depth requirement) might be a better fit for cutaneous β/γ types, which are biologically low-titre — this is worth discussion before the final analysis.
+
+## 6. Next steps
+
+- Continue processing the remaining ~8,700 samples.
+- Manual curation of the studies contributing alpha-type clinical hits to confirm or rule out unflagged in-vitro material.
+- Decide on final reporting thresholds (default vs breadth-only) ahead of the final analysis.
