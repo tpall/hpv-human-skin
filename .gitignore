@@ -28,3 +28,7 @@ CLAUDE.md
 
 # Rendered reports (re-generated from .md)
 reports/*.html
+
+# Curation workbooks (generated; commit explicitly with `git add -f` if a
+# specific snapshot needs versioning).
+reports/*.xlsx
