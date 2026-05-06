@@ -114,6 +114,9 @@ ENGINEERED_PATTERNS = [
     r"\b(?-i:sh[A-Z]\w*)\b",
     r"\b(?-i:si[A-Z]\w*)\b",
     r"\b(?-i:LV-[A-Z]\w*)\b",
+    # Common Addgene retro/lentiviral backbone vector families. Alphanumeric
+    # boundary keeps these from matching gene names like PCDH9.
+    r"\bp(?:LVX|LKO|BABE|CDH)\b",
 ]
 
 _NAMED = _build_compiled(NAMED_CELL_LINES)
