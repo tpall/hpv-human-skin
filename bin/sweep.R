@@ -32,8 +32,16 @@ message(sprintf("Coverage table: %d samples x %d refs (%d rows)",
 # Samplesheet join: enriched samplesheet from the pipeline + post-hoc
 # cell-line flags. Older runs of parse_metadata.py didn't write is_cell_line
 # inline, so we always pull it from cell_line_flags.tsv when available.
-ss_path    <- here("results_full_v2", "metadata", "samplesheet_enriched.csv")
-flags_path <- here("results_full_v2", "metadata", "cell_line_flags.tsv")
+# If apply_curation.R has been run, prefer the curated overrides.
+ss_path           <- here("results_full_v2", "metadata", "samplesheet_enriched.csv")
+flags_heur_path   <- here("results_full_v2", "metadata", "cell_line_flags.tsv")
+flags_curated_path <- here("results_full_v2", "metadata", "cell_line_flags_curated.tsv")
+flags_path <- if (file.exists(flags_curated_path)) {
+  message("Using curated flags: ", flags_curated_path)
+  flags_curated_path
+} else {
+  flags_heur_path
+}
 
 samples <- if (file.exists(ss_path)) {
   ss <- read_csv(ss_path, show_col_types = FALSE) |>
