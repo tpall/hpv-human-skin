@@ -114,9 +114,22 @@ ENGINEERED_PATTERNS = [
     r"\b(?-i:sh[A-Z]\w*)\b",
     r"\b(?-i:si[A-Z]\w*)\b",
     r"\b(?-i:LV-[A-Z]\w*)\b",
-    # Common Addgene retro/lentiviral backbone vector families. Alphanumeric
-    # boundary keeps these from matching gene names like PCDH9.
-    r"\bp(?:LVX|LKO|BABE|CDH)\b",
+    # Plasmid backbone vectors — strict lowercase p + 3+ uppercase letters,
+    # optionally followed by digits or more uppercase chars. Matches pLVX /
+    # pLKO / pBABE / pCDH / pCAGGS / pEGFP / pCMV3 etc.
+    #
+    # The case-sensitive p (via (?-i:)) is what makes this safe in skin /
+    # immunology metadata: case-insensitive matching false-positives heavily
+    # on uppercase abbreviations like PBMC, PATIENTS, POST, PURPL, and on
+    # gene names PARP1 / POLE / PRDM1 / PCDH9 (all P + 3+ uppers). Mangled
+    # all-uppercase plasmid names (e.g. PLVX in FB_PLVX_80_Rep1) are missed
+    # by this pattern; rely on study-level curation for those.
+    #
+    # 3+ uppercase letters (not 2+) excludes pDC (plasmacytoid dendritic
+    # cells, 25 samples in current cohort) and similar 2-letter cell-type
+    # abbreviations. Trade-off: pET / pUC / pBR bacterial cloning vectors
+    # would also be missed, but they don't appear in mammalian RNA-seq.
+    r"\b(?-i:p[A-Z]{3,}[A-Z0-9]*)\b",
 ]
 
 _NAMED = _build_compiled(NAMED_CELL_LINES)
