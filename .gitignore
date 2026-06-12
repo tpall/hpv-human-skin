@@ -8,6 +8,9 @@ test_results/
 # Singularity cache
 singularity_cache/
 
+# Conda env cache
+conda_cache/
+
 # Large reference files (build locally)
 assets/hpv_references/*.fasta
 assets/hpv_references/*.fai
