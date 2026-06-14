@@ -1,10 +1,16 @@
 #!/usr/bin/env bash
 #SBATCH --job-name=hpv-chunked
-#SBATCH --cpus-per-task=2
-#SBATCH --mem=8G
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=24G
 #SBATCH --time=7-00:00:00
 #SBATCH --output=chunked_%j.log
 set -euo pipefail
+
+# Nextflow creates conda envs in this driver process (not in SLURM task
+# allocations), and builds several distinct envs concurrently. An 8G/2-CPU
+# driver could OOM-kill a mamba extraction mid-flight, leaving a partial env
+# directory that Nextflow then reuses — surfacing much later as a spurious
+# "ModuleNotFoundError" in a task. 24G/4-CPU gives the concurrent builds room.
 
 # Chunked driver for the HPV-in-skin pipeline.
 #
