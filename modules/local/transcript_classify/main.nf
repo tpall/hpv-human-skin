@@ -22,6 +22,9 @@ process TRANSCRIPT_CLASSIFY {
 
     script:
     """
+    # Prefer the conda env's binaries over the cluster's spack stack on PATH.
+    export PATH="\${CONDA_PREFIX:+\$CONDA_PREFIX/bin:}\$PATH"
+
     # featureCounts is strict: it errors if the declared mode doesn't match
     # the BAM flags. meta.layout can disagree with the aligned output (e.g.
     # when one mate is dropped in Kraken2/seqtk filtering), so detect from

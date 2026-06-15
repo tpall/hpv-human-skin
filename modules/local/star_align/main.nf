@@ -26,6 +26,9 @@ process STAR_ALIGN {
         ? "${hpv_reads[0]} ${hpv_reads[1]}"
         : "${hpv_reads[0]}"
     """
+    # Prefer the conda env's binaries over the cluster's spack stack on PATH.
+    export PATH="\${CONDA_PREFIX:+\$CONDA_PREFIX/bin:}\$PATH"
+
     STAR \\
         --runThreadN ${task.cpus} \\
         --genomeDir ${star_index} \\

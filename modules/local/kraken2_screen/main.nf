@@ -26,6 +26,9 @@ process KRAKEN2_SCREEN {
         ? "--paired ${reads[0]} ${reads[1]}"
         : "${reads[0]}"
     """
+    # Prefer the conda env's binaries over the cluster's spack stack on PATH.
+    export PATH="\${CONDA_PREFIX:+\$CONDA_PREFIX/bin:}\$PATH"
+
     # Run Kraken2 classification
     kraken2 \\
         --db ${kraken2_db} \\

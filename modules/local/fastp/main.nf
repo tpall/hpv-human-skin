@@ -22,6 +22,9 @@ process FASTP {
     script:
     if (meta.layout == "PAIRED") {
         """
+        # Prefer the conda env's binaries over the cluster's spack stack on PATH.
+        export PATH="\${CONDA_PREFIX:+\$CONDA_PREFIX/bin:}\$PATH"
+
         fastp \\
             --in1 ${reads[0]} \\
             --in2 ${reads[1]} \\
@@ -36,6 +39,9 @@ process FASTP {
         """
     } else {
         """
+        # Prefer the conda env's binaries over the cluster's spack stack on PATH.
+        export PATH="\${CONDA_PREFIX:+\$CONDA_PREFIX/bin:}\$PATH"
+
         fastp \\
             --in1 ${reads[0]} \\
             --out1 ${meta.srr_id}_trimmed.fastq.gz \\

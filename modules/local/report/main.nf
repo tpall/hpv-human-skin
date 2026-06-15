@@ -27,6 +27,9 @@ process REPORT {
 
     script:
     """
+    # Prefer the conda env's binaries over the cluster's spack stack on PATH.
+    export PATH="\${CONDA_PREFIX:+\$CONDA_PREFIX/bin:}\$PATH"
+
     shopt -s nullglob
     mkdir -p summary_tables
 

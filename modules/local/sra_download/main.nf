@@ -20,6 +20,9 @@ process SRA_DOWNLOAD {
     """
     set -euo pipefail
 
+    # Prefer the conda env's binaries over the cluster's spack stack on PATH.
+    export PATH="\${CONDA_PREFIX:+\$CONDA_PREFIX/bin:}\$PATH"
+
     # Two-step download: prefetch is resumable and handles retries itself;
     # fasterq-dump then extracts from the local .sra with no network in the
     # decompress path. Use the task workdir for temp — /tmp is too small on

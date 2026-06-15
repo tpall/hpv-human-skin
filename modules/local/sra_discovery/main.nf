@@ -21,6 +21,9 @@ process SRA_DISCOVERY {
     script:
     def max_samples = params.max_samples > 0 ? "--max-samples ${params.max_samples}" : ""
     """
+    # Prefer the conda env's binaries over the cluster's spack stack on PATH.
+    export PATH="\${CONDA_PREFIX:+\$CONDA_PREFIX/bin:}\$PATH"
+
     query_sra.py \\
         --query "${query_terms}" \\
         --output samplesheet_raw.csv \\
