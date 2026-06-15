@@ -3,13 +3,18 @@
  *
  * Determines HPV type(s) per sample based on alignment coverage
  * breadth and depth against the HPV reference panel.
+ *
+ * Coverage metrics come from `samtools coverage` (per-reference numreads,
+ * covbases, coverage%, meandepth). This deliberately avoids pysam, whose
+ * conda build proved unreliable on the cluster; samtools is the same package
+ * the STAR step already depends on.
  */
 
 process HPV_TYPING {
     tag "${meta.srr_id}"
     label 'process_low'
     conda "${moduleDir}/environment.yml"
-    container 'quay.io/biocontainers/pysam:0.22.1--py312hcfdcdd7_2'
+    container 'quay.io/biocontainers/samtools:1.21--h50ea8bc_0'
     publishDir "${params.outdir}/hpv_typing", mode: params.publish_dir_mode
 
     input:
@@ -22,83 +27,42 @@ process HPV_TYPING {
     path "${meta.srr_id}_hpv_coverage.tsv",                emit: coverage
 
     script:
+    def header = 'sample_id\\thpv_reference\\tref_length\\tread_count\\tcovered_bases\\tcoverage_breadth\\tmean_depth'
     """
-    #!/usr/bin/env python3
-    import pysam
-    import csv
-    import sys
+    # This cluster prepends a large spack software stack (incl. its own python)
+    # to PATH in every SLURM task, ahead of the activated conda env's bin. So a
+    # bare \`samtools\` would resolve to the spack build, not the pinned conda
+    # one. CONDA_PREFIX is set reliably by activation, so call the env binary by
+    # absolute path; under singularity/docker (CONDA_PREFIX unset) it falls back
+    # to the container's samtools.
+    SAMTOOLS="\${CONDA_PREFIX:+\$CONDA_PREFIX/bin/}samtools"
 
-    bam_file = "${bam}"
-    ref_fai = "${hpv_ref_fai}"
-    sample_id = "${meta.srr_id}"
-    min_coverage = ${params.hpv_min_coverage}
-    min_depth = ${params.hpv_min_depth}
+    # Per-reference coverage; -q 10 mirrors the previous MAPQ>=10 filter.
+    # samtools coverage lists every reference in the BAM header, including
+    # zero-read ones, so the full panel is reported.
+    "\$SAMTOOLS" coverage -q 10 ${bam} > coverage_raw.tsv
 
-    # Load reference lengths
-    ref_lengths = {}
-    with open(ref_fai) as f:
-        for line in f:
-            parts = line.strip().split("\\t")
-            ref_lengths[parts[0]] = int(parts[1])
+    # Full coverage report (all references).
+    {
+        printf '${header}\\n'
+        awk -v s="${meta.srr_id}" 'BEGIN{FS="\\t";OFS="\\t"} !/^#/ {
+            printf "%s\\t%s\\t%s\\t%s\\t%s\\t%.4f\\t%.2f\\n", s, \$1, \$3, \$4, \$5, \$6/100.0, \$7
+        }' coverage_raw.tsv
+    } > ${meta.srr_id}_hpv_coverage.tsv
 
-    # Calculate coverage per reference
-    results = []
-    bam = pysam.AlignmentFile(bam_file, "rb")
+    # Assigned types: breadth >= min_coverage AND depth >= min_depth,
+    # sorted by coverage breadth (column 6) descending.
+    {
+        printf '${header}\\n'
+        awk -v s="${meta.srr_id}" -v mc=${params.hpv_min_coverage} -v md=${params.hpv_min_depth} \\
+            'BEGIN{FS="\\t";OFS="\\t"} !/^#/ {
+                breadth = \$6/100.0
+                if (breadth >= mc && \$7 >= md)
+                    printf "%s\\t%s\\t%s\\t%s\\t%s\\t%.4f\\t%.2f\\n", s, \$1, \$3, \$4, \$5, breadth, \$7
+            }' coverage_raw.tsv | sort -t\$'\\t' -k6,6gr
+    } > ${meta.srr_id}_hpv_types.tsv
 
-    for ref_name, ref_len in ref_lengths.items():
-        # Count aligned reads and coverage
-        read_count = 0
-        covered_positions = set()
-        total_depth = 0
-
-        for pileup_col in bam.pileup(ref_name, min_mapping_quality=10):
-            covered_positions.add(pileup_col.pos)
-            total_depth += pileup_col.n
-
-        for read in bam.fetch(ref_name):
-            if not read.is_unmapped and read.mapping_quality >= 10:
-                read_count += 1
-
-        coverage_breadth = len(covered_positions) / ref_len if ref_len > 0 else 0
-        mean_depth = total_depth / ref_len if ref_len > 0 else 0
-
-        results.append({
-            "sample_id": sample_id,
-            "hpv_reference": ref_name,
-            "ref_length": ref_len,
-            "read_count": read_count,
-            "covered_bases": len(covered_positions),
-            "coverage_breadth": round(coverage_breadth, 4),
-            "mean_depth": round(mean_depth, 2),
-        })
-
-    bam.close()
-
-    # Write full coverage report
-    with open(f"{sample_id}_hpv_coverage.tsv", "w", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=results[0].keys(), delimiter="\\t")
-        writer.writeheader()
-        writer.writerows(results)
-
-    # Filter to assigned types
-    assigned = [r for r in results
-                if r["coverage_breadth"] >= min_coverage and r["mean_depth"] >= min_depth]
-
-    # Sort by coverage breadth descending
-    assigned.sort(key=lambda x: x["coverage_breadth"], reverse=True)
-
-    with open(f"{sample_id}_hpv_types.tsv", "w", newline="") as f:
-        if assigned:
-            writer = csv.DictWriter(f, fieldnames=assigned[0].keys(), delimiter="\\t")
-            writer.writeheader()
-            writer.writerows(assigned)
-        else:
-            f.write("sample_id\\thpv_reference\\tref_length\\tread_count\\tcovered_bases\\tcoverage_breadth\\tmean_depth\\n")
-
-    n_types = len(assigned)
-    print(f"{sample_id}: {n_types} HPV type(s) assigned", file=sys.stderr)
-    if assigned:
-        for a in assigned[:5]:
-            print(f"  {a['hpv_reference']}: breadth={a['coverage_breadth']}, depth={a['mean_depth']}", file=sys.stderr)
+    n_types=\$(( \$(wc -l < ${meta.srr_id}_hpv_types.tsv) - 1 ))
+    echo "${meta.srr_id}: \${n_types} HPV type(s) assigned" >&2
     """
 }
