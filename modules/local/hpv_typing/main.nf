@@ -31,7 +31,7 @@ process HPV_TYPING {
     """
     # This cluster prepends a large spack software stack (incl. its own python)
     # to PATH in every SLURM task, ahead of the activated conda env's bin. So a
-    # bare \`samtools\` would resolve to the spack build, not the pinned conda
+    # bare 'samtools' would resolve to the spack build, not the pinned conda
     # one. CONDA_PREFIX is set reliably by activation, so call the env binary by
     # absolute path; under singularity/docker (CONDA_PREFIX unset) it falls back
     # to the container's samtools.
