@@ -133,9 +133,47 @@ ENGINEERED_PATTERNS = [
     r"\b(?-i:p[A-Z]{3,}[A-Z0-9]*)\b",
 ]
 
+# In-vitro cultured material that is NOT an immortalized cell line and NOT
+# (necessarily) genetically engineered: primary-cell cultures, organotypic /
+# raft / air-liquid-interface skin models, organoids, differentiation
+# time-courses. These are routinely mislabeled tissue="skin" yet are not
+# clinical tissue — so a separate axis lets the skin analysis require genuine
+# biopsies without violating "primary cells aren't cell lines".
+#
+# HIGH PRECISION by design: patterns must not fire on clinical biopsies.
+# Notably we never match a bare "differentiated" (that collides with tumour
+# grading: "well/poorly-differentiated carcinoma") — only "differentiated day N"
+# and explicit culture vocabulary.
+IN_VITRO_PATTERNS = [
+    # cultured primary cells (the main gap): "primary keratinocyte",
+    # "primary dermal fibroblast", "primary human melanocytes", "primary cells".
+    r"primary[\s-]+(?:(?:human|epidermal|dermal|neonatal|adult|oral|gingival|foreskin)[\s-]+)*"
+    r"(?:keratinocytes?|melanocytes?|fibroblasts?|cells?|cultures?)",
+    # primary-keratinocyte product abbreviations (all primary cultures)
+    r"\bn[/\s-]?heka?\b",        # NHEK / NHEKa normal human epidermal keratinocytes
+    r"\bhek[\s-]?[an]\b",        # HEKn / HEKa
+    # in-vitro skin / epithelial models
+    r"\borganotypic\b",
+    r"\braft[\s-]?culture",
+    r"\bair[\s-]?liquid[\s-]?interface\b",
+    r"\b3[\s-]?d[\s-]?culture",
+    r"\bspheroids?\b",
+    r"\borganoids?\b",
+    # explicit culture vocabulary
+    r"\bin[\s-]?vitro\b",
+    r"\bcell[\s-]?culture\b",
+    r"\bmonolayer\b",
+    r"\bcultured\b",
+    # differentiation/treatment time-course in culture (requires the "day N"
+    # so it can't match "well-differentiated <tumour>")
+    r"\bdifferentiat\w*[\s-]?day[\s-]?\d+",
+    r"\bday[\s-]?\d+[\s-]?(?:post[\s-]?)?(?:differentiat|treatment|induction|culture)",
+]
+
 _NAMED = _build_compiled(NAMED_CELL_LINES)
 _GENERIC = _build_compiled(GENERIC_PATTERNS)
 _ENGINEERED = _build_compiled(ENGINEERED_PATTERNS)
+_IN_VITRO = _build_compiled(IN_VITRO_PATTERNS)
 
 
 def classify_cell_line(text: str) -> tuple[bool, str]:
@@ -160,6 +198,21 @@ def classify_engineered(text: str) -> tuple[bool, str]:
     if not text:
         return (False, "")
     for rx, label in _ENGINEERED:
+        if rx.search(text):
+            return (True, label)
+    return (False, "")
+
+
+def classify_in_vitro(text: str) -> tuple[bool, str]:
+    """Return (is_in_vitro, matched_pattern_label) for cultured/in-vitro material.
+
+    Catches primary-cell cultures and in-vitro skin models that are not
+    immortalized lines — distinct from classify_cell_line so the skin analysis
+    can exclude cultured material without mislabeling primary cells as lines.
+    """
+    if not text:
+        return (False, "")
+    for rx, label in _IN_VITRO:
         if rx.search(text):
             return (True, label)
     return (False, "")

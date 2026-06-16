@@ -79,13 +79,14 @@ if (!is.na(opts$samplesheet) && file.exists(opts$samplesheet)) {
 }
 norm_bool <- function(x) if (is.null(x)) FALSE else tolower(as.character(x)) %in% c("true", "1", "yes")
 # Tolerate older samplesheets lacking the flag columns (treat as not-a-line).
-for (col in c("is_cell_line", "is_engineered")) if (!col %in% names(ss)) ss[[col]] <- "false"
+for (col in c("is_cell_line", "is_engineered", "is_in_vitro")) if (!col %in% names(ss)) ss[[col]] <- "false"
 for (col in c("study", "tissue_category", "diagnosis")) if (!col %in% names(ss)) ss[[col]] <- NA
 ss_keep <- ss[, c("srr_id", "study", "tissue_category", "diagnosis",
-                  "is_cell_line", "is_engineered")]
+                  "is_cell_line", "is_engineered", "is_in_vitro")]
 calls <- merge(calls, ss_keep, by.x = "sample_id", by.y = "srr_id", all.x = TRUE)
 calls$is_cell_line  <- vapply(calls$is_cell_line, norm_bool, logical(1))
 calls$is_engineered <- vapply(calls$is_engineered, norm_bool, logical(1))
+calls$is_in_vitro   <- vapply(calls$is_in_vitro, norm_bool, logical(1))
 
 # ── ASCII histogram helper ──────────────────────────────────────────────
 ascii_hist <- function(x, label, width = 50) {
@@ -125,9 +126,11 @@ calls$flag_low_breadth   <- calls$coverage_breadth < breadth_thr
 calls$flag_hpv16_suspect <- calls$is_hpv16 & calls$flag_low_breadth
 calls$flag_hpv18_suspect <- calls$is_hpv18 & calls$flag_low_breadth
 calls$flag_alpha_suspect <- calls$is_alpha & calls$flag_low_breadth
-# suspect_any: floor-cluster artifact OR known cell-line / engineered culture.
-calls$suspect_any <- calls$flag_low_breadth | calls$is_cell_line | calls$is_engineered
-# "clean" = survives breadth AND not a cultured/engineered sample.
+# suspect_any: floor-cluster artifact OR any non-clinical material (named line,
+# engineered culture, or in-vitro cultured/primary-cell / organotypic model).
+calls$suspect_any <- calls$flag_low_breadth | calls$is_cell_line |
+  calls$is_engineered | calls$is_in_vitro
+# "clean" = survives breadth AND is genuine clinical tissue.
 calls$is_clean <- !calls$suspect_any
 
 write.table(calls, file.path(opts$outdir, "hpv_calls_flagged.tsv"),
@@ -135,10 +138,11 @@ write.table(calls, file.path(opts$outdir, "hpv_calls_flagged.tsv"),
 
 # flag_summary
 summ <- data.frame(
-  metric = c("total_calls", "low_breadth", "cell_line", "engineered",
+  metric = c("total_calls", "low_breadth", "cell_line", "engineered", "in_vitro",
              "suspect_any", "clean", "hpv16_suspect", "hpv18_suspect", "alpha_suspect"),
   n = c(nrow(calls), sum(calls$flag_low_breadth), sum(calls$is_cell_line),
-        sum(calls$is_engineered), sum(calls$suspect_any), sum(calls$is_clean),
+        sum(calls$is_engineered), sum(calls$is_in_vitro),
+        sum(calls$suspect_any), sum(calls$is_clean),
         sum(calls$flag_hpv16_suspect), sum(calls$flag_hpv18_suspect),
         sum(calls$flag_alpha_suspect))
 )
@@ -190,6 +194,7 @@ cat(sprintf("  HPV calls in skin:            %d (across %d samples)\n",
             nrow(skin), length(unique(skin$sample_id))))
 cat(sprintf("  cell-line / engineered:       %d\n",
             sum(skin$is_cell_line | skin$is_engineered)))
+cat(sprintf("  in-vitro (cultured/primary):  %d\n", sum(skin$is_in_vitro)))
 cat(sprintf("  low-breadth (floor artifact): %d\n", sum(skin$flag_low_breadth)))
 cat(sprintf("  CLEAN skin calls remaining:   %d (across %d samples)\n",
             nrow(skin_clean), length(unique(skin_clean$sample_id))))

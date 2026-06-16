@@ -19,6 +19,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from cell_line_patterns import (
     classify_cell_line,
     classify_engineered,
+    classify_in_vitro,
     has_explicit_cell_line_field,
 )
 
@@ -106,6 +107,7 @@ def main():
     flagged_count = 0
     cell_line_count = 0
     engineered_count = 0
+    in_vitro_count = 0
 
     with open(args.input) as f:
         reader = csv.DictReader(f)
@@ -157,6 +159,15 @@ def main():
             if is_eng:
                 engineered_count += 1
 
+            # In-vitro cultured material that is neither an immortalized line
+            # nor engineered: primary-cell cultures, organotypic/raft models,
+            # organoids. A distinct axis so the skin analysis can require
+            # genuine clinical tissue (primary cells aren't cell lines).
+            is_ivt, _ = classify_in_vitro(detect_text)
+            row["is_in_vitro"] = "true" if is_ivt else "false"
+            if is_ivt:
+                in_vitro_count += 1
+
             # Flag for manual curation
             row["needs_curation"] = flag_for_curation(row)
             if row["needs_curation"]:
@@ -175,7 +186,7 @@ def main():
     # columns live in the raw samplesheet, read separately by the R report.
     fieldnames = ["srr_id", "srx_id", "study", "layout",
                   "tissue_category", "diagnosis", "is_cell_line",
-                  "is_engineered", "needs_curation"]
+                  "is_engineered", "is_in_vitro", "needs_curation"]
     with open(args.output, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
         writer.writeheader()
@@ -190,6 +201,7 @@ def main():
     print(f"  {'flagged':15s}: {flagged_count:5d} ({100 * flagged_count / total:.1f}%)", file=sys.stderr)
     print(f"  {'cell_line':15s}: {cell_line_count:5d} ({100 * cell_line_count / total:.1f}%)", file=sys.stderr)
     print(f"  {'engineered':15s}: {engineered_count:5d} ({100 * engineered_count / total:.1f}%)", file=sys.stderr)
+    print(f"  {'in_vitro':15s}: {in_vitro_count:5d} ({100 * in_vitro_count / total:.1f}%)", file=sys.stderr)
     print(f"\nOutput: {args.output}", file=sys.stderr)
 
 
