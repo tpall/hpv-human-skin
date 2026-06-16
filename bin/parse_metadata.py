@@ -49,16 +49,22 @@ def classify_tissue(text: str, mapping: dict[str, str]) -> str:
     return "muu"
 
 
-def extract_diagnosis(title: str, tissue_source: str) -> str:
-    """Extract disease/diagnosis information from sample metadata."""
-    combined = f"{title} {tissue_source}".lower()
+def extract_diagnosis(title: str, tissue_source: str, characteristics: str = "") -> str:
+    """Extract disease/diagnosis information from sample metadata.
+
+    Scans the full `characteristics` blob too (when present), so a diagnosis
+    misfiled into an off-spec attribute — common for HPV lesions — is still
+    surfaced rather than left "unspecified".
+    """
+    combined = f"{title} {tissue_source} {characteristics}".lower()
 
     # Common pathology patterns
     pathology_terms = [
         "carcinoma", "cancer", "tumor", "tumour", "malignant",
         "squamous cell carcinoma", "scc", "basal cell carcinoma", "bcc",
         "melanoma", "keratosis", "actinic keratosis",
-        "wart", "verruca", "papilloma", "condyloma",
+        "wart", "verruca vulgaris", "verruca", "plantar wart", "papilloma",
+        "condyloma", "epidermodysplasia verruciformis", "epidermodysplasia",
         "dysplasia", "cin", "neoplasia", "intraepithelial",
         "psoriasis", "eczema", "dermatitis", "lichen",
         "normal", "healthy", "control",
@@ -120,10 +126,11 @@ def main():
             row["tissue_category"] = category
             stats[category] += 1
 
-            # Extract diagnosis
+            # Extract diagnosis (scans characteristics too, when present)
             row["diagnosis"] = extract_diagnosis(
                 row.get("title", ""),
-                row.get("tissue_source", "")
+                row.get("tissue_source", ""),
+                row.get("characteristics", "")
             )
 
             # Detection text for cell-line / engineered heuristics: title +

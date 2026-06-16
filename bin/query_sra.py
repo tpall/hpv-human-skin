@@ -39,6 +39,12 @@ TISSUE_QUERIES = {
         '("skin"[MeSH Terms] OR "epidermis" OR "keratinocyte" OR "cutaneous")',
         '("wart" OR "verruca" OR "papilloma" OR "actinic keratosis")',
         '("basal cell carcinoma" OR "squamous cell carcinoma skin")',
+        # Productive cutaneous-HPV lesions — these actively transcribe HPV
+        # (incl. capsid genes) and are the most likely source of genuine skin
+        # HPV signal. Epidermodysplasia verruciformis (beta-HPV, HPV5/8) is
+        # the key target and is missed by the generic terms above.
+        '("epidermodysplasia verruciformis" OR "verruca vulgaris" '
+        'OR "plantar wart" OR "common wart")',
     ],
     "anogenital": [
         '("cervix"[MeSH Terms] OR "cervical" OR "vaginal" OR "vulvar")',
