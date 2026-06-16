@@ -6,9 +6,12 @@
 #SBATCH --output=lesions_%j.log
 set -euo pipefail
 
-# Targeted discovery of productive cutaneous-HPV lesions (epidermodysplasia
-# verruciformis + warts) — the samples most likely to carry genuine L1+
-# productive skin HPV, which the broad cohort under-samples.
+# Targeted discovery of cutaneous-HPV lesions, two axes the broad cohort
+# under-samples: (1) productive lesions (epidermodysplasia verruciformis,
+# warts, condyloma) carrying genuine L1+ productive HPV; (2) beta-HPV
+# skin-oncogenesis (actinic keratosis, cutaneous SCC, Bowen disease) where
+# beta-papillomavirus is hypothesised to act as a UV cofactor. Query terms
+# were derived/refined by mining the metadata of an earlier broad pull.
 #
 # Steps (this job, lightweight):
 #   1. query SRA for EV / wart RNA-seq accessions
@@ -45,7 +48,7 @@ MAIN_COHORT="${MAIN_COHORT:-${SCRIPT_DIR}/results_full_v2/metadata/samplesheet_e
 NCBI_EMAIL="${NCBI_EMAIL:-tapa741@gmail.com}"
 CHUNK_SIZE="${CHUNK_SIZE:-100}"
 AUTO_TYPE="${AUTO_TYPE:-1}"
-QUERY="${QUERY:-\"epidermodysplasia verruciformis\" OR verruca OR \"verruca plana\" OR \"flat wart\" OR wart OR condyloma OR papilloma OR \"cutaneous papillomavirus\" OR \"beta-papillomavirus\" OR betapapillomavirus OR \"skin papilloma\" OR \"Lewandowsky-Lutz\"}"
+QUERY="${QUERY:-\"epidermodysplasia verruciformis\" OR verruca OR \"verruca plana\" OR \"flat wart\" OR wart OR condyloma OR papilloma OR \"cutaneous papillomavirus\" OR \"beta-papillomavirus\" OR betapapillomavirus OR \"skin papilloma\" OR \"Lewandowsky-Lutz\" OR \"cutaneous squamous cell carcinoma\" OR \"actinic keratosis\" OR \"Bowen disease\"}"
 
 RAW="${OUTDIR}/lesions_raw.csv"
 FULL="${OUTDIR}/lesions_samplesheet_full.csv"
