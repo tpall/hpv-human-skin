@@ -1,0 +1,9 @@
+name: contamination
+channels:
+  - conda-forge
+dependencies:
+  # build_genus_lookup.py is stdlib-only (needs outbound PaVE access);
+  # flag_contamination.R is BASE R only — no tidyverse, which segfaults on
+  # this cluster's module stack. r-base alone keeps the env tiny and stable.
+  - python>=3.10
+  - r-base>=4.2
