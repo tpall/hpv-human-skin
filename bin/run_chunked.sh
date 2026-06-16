@@ -62,6 +62,13 @@ AGG_DIR="${OUTDIR}/aggregated"
 REPORT_DIR="${OUTDIR}/report"
 mkdir -p "${CHUNKS_DIR}" "${AGG_DIR}" "${REPORT_DIR}" "${WORKDIR}"
 
+# Nextflow keeps its session cache/history/locks in <launchDir>/.nextflow.
+# Launch from OUTDIR (not the repo root) so each pipeline gets its OWN .nextflow
+# — otherwise two chunked runs sharing one tree (e.g. the main cohort and a
+# lesion run) collide on session locks and -resume history. All paths below are
+# absolute, so changing the working directory here is safe.
+cd "${OUTDIR}"
+
 [[ -f "${SAMPLESHEET}" ]] || { echo "ERROR: samplesheet not found: ${SAMPLESHEET}" >&2; exit 1; }
 
 echo "Project:     ${PROJECT_DIR}"
