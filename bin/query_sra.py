@@ -190,15 +190,21 @@ def fetch_sra_metadata(uid_list: list[str], batch_size: int = 200) -> list[dict]
         print(f"  Fetching metadata batch {i // batch_size + 1} "
               f"({len(batch)} records)...", file=sys.stderr)
 
-        handle = Entrez.efetch(db="sra", id=",".join(batch), rettype="full", retmode="xml")
+        # A single invalid/withdrawn accession makes efetch return HTTP 400 for
+        # the whole batch, and recent Biopython rejects DTD-less SRA XML with a
+        # parse error — either way, skip the batch rather than crash the run.
+        # Missing runs are recovered by the retry pass (and finally carried
+        # through), so a lost batch is not fatal.
         try:
+            handle = Entrez.efetch(db="sra", id=",".join(batch),
+                                   rettype="full", retmode="xml")
             root = ET.parse(handle).getroot()
-        except ET.ParseError as e:
-            print(f"  Warning: failed to parse batch XML: {e}", file=sys.stderr)
             handle.close()
+        except Exception as e:  # noqa: BLE001 — HTTPError / ParseError / network
+            print(f"  Warning: batch {i // batch_size + 1} failed ({e}); skipping",
+                  file=sys.stderr)
             time.sleep(0.4)
             continue
-        handle.close()
 
         for pkg in root.findall("EXPERIMENT_PACKAGE"):
             try:
@@ -246,15 +252,18 @@ def search_geo_datasets(query: str, max_results: int = 500) -> list[str]:
     return sra_uids
 
 
-def load_accessions(path: str) -> tuple[list[str], set[str]]:
-    """Read an existing samplesheet → (unique SRX ids to fetch, wanted SRR set).
+def load_accessions(path: str) -> tuple[list[str], set[str], dict]:
+    """Read an existing samplesheet → (unique SRX ids, wanted SRR set, input rows).
 
     Rows lacking an srx_id fall back to fetching by their srr_id, so every
     requested run is reachable. efetch(db=sra) resolves both accession types.
+    The original rows (keyed by srr_id) are returned too, so runs that efetch
+    never returns can be carried through rather than silently dropped.
     """
     srx_ids: list[str] = []
     seen_srx: set[str] = set()
     want_srr: set[str] = set()
+    rows_by_srr: dict = {}
     with open(path, newline="") as f:
         reader = csv.DictReader(f)
         for row in reader:
@@ -262,11 +271,12 @@ def load_accessions(path: str) -> tuple[list[str], set[str]]:
             srx = (row.get("srx_id") or "").strip()
             if srr:
                 want_srr.add(srr)
+                rows_by_srr[srr] = row
             key = srx or srr
             if key and key not in seen_srx:
                 seen_srx.add(key)
                 srx_ids.append(key)
-    return srx_ids, want_srr
+    return srx_ids, want_srr, rows_by_srr
 
 
 def main():
@@ -298,15 +308,48 @@ def main():
     # return a different cohort. efetch resolves SRA accessions directly, so we
     # fetch whole experiments by SRX and keep only the runs we started with.
     if args.accessions:
-        srx_ids, want_srr = load_accessions(args.accessions)
+        srx_ids, want_srr, input_rows = load_accessions(args.accessions)
         print(f"Re-fetching {len(srx_ids)} experiments "
               f"({len(want_srr)} runs) from {args.accessions}", file=sys.stderr)
-        samples = fetch_sra_metadata(srx_ids)
-        samples = [s for s in samples if s["srr_id"] in want_srr]
+        samples = [s for s in fetch_sra_metadata(srx_ids) if s["srr_id"] in want_srr]
         missing = want_srr - {s["srr_id"] for s in samples}
+
+        # Retry still-missing runs BY RUN ACCESSION. efetch skips an entire
+        # batch on a single XML parse error, so a transient hiccup can drop
+        # ~200 runs at once; re-querying just the missing ones (smaller batches,
+        # different grouping) recovers them.
+        for attempt in range(1, 3):
+            if not missing:
+                break
+            print(f"  retry {attempt}: re-fetching {len(missing)} missing runs "
+                  f"by accession", file=sys.stderr)
+            recovered = [s for s in fetch_sra_metadata(sorted(missing), batch_size=20)
+                         if s["srr_id"] in missing]
+            samples.extend(recovered)
+            missing -= {s["srr_id"] for s in recovered}
+
+        # Carry through anything efetch still won't return, using the input
+        # row's fields (title/tissue_source survive for coarse classification;
+        # genotype/characteristics stay blank). Keeps the cohort complete so
+        # no typed sample is silently absent from the downstream join.
         if missing:
-            print(f"  WARNING: {len(missing)} requested runs not returned "
-                  f"(e.g. {', '.join(sorted(missing)[:5])})", file=sys.stderr)
+            print(f"  WARNING: {len(missing)} runs unreachable via efetch — "
+                  f"carrying through from input (e.g. {', '.join(sorted(missing)[:5])})",
+                  file=sys.stderr)
+            for srr in sorted(missing):
+                row = input_rows.get(srr, {})
+                samples.append({
+                    "srr_id": srr,
+                    "srx_id": (row.get("srx_id") or "").strip(),
+                    "study": (row.get("study") or "").strip(),
+                    "title": (row.get("title") or "").strip(),
+                    "tissue_source": (row.get("tissue_source") or "").strip(),
+                    "cell_line": (row.get("cell_line") or "").strip(),
+                    "genotype": (row.get("genotype") or "").strip(),
+                    "characteristics": (row.get("characteristics") or "").strip(),
+                    "platform": (row.get("platform") or "").strip(),
+                    "layout": (row.get("layout") or "SINGLE").strip(),
+                })
     else:
         all_uids = set()
         if args.query:
