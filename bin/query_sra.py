@@ -131,19 +131,32 @@ def _parse_experiment_package(pkg) -> list[dict]:
     # cell-line vs. primary-tissue classification downstream.
     title = _text(sample, "TITLE")
     source_parts: list[str] = []
+    all_attrs: list[str] = []
     cell_line = ""
+    genotype = ""
     if sample is not None:
         for attr in sample.findall("SAMPLE_ATTRIBUTES/SAMPLE_ATTRIBUTE"):
             tag = (_text(attr, "TAG") or "").lower().replace(" ", "_")
             value = _text(attr, "VALUE")
             if not value:
                 continue
+            # Keep EVERY attribute in `characteristics`: cell-line / culture
+            # hints are routinely misfiled into off-spec tags (e.g.
+            # genotype="TOP2A knockdown", note="HeLa-derived"), so downstream
+            # detection scans the whole blob rather than a fixed whitelist.
+            all_attrs.append(f"{tag}={value}")
             if tag in ("tissue", "cell_type", "source_name",
                        "sample_type", "isolation_source"):
                 source_parts.append(f"{tag}={value}")
             if tag == "cell_line" and not cell_line:
                 cell_line = value
+            # genotype carries the strongest in-vitro-manipulation signals
+            # ("TOP2A knockdown", "shNC", CRISPR edits) — kept as its own
+            # column too so it stays visible in reports.
+            if tag == "genotype" and not genotype:
+                genotype = value
     source = " | ".join(source_parts)
+    characteristics = " | ".join(all_attrs)
 
     for run in run_set.findall("RUN"):
         srr = run.get("accession", "")
@@ -156,6 +169,8 @@ def _parse_experiment_package(pkg) -> list[dict]:
             "title": title,
             "tissue_source": source,
             "cell_line": cell_line,
+            "genotype": genotype,
+            "characteristics": characteristics,
             "platform": platform,
             "layout": layout,
         })
@@ -231,10 +246,37 @@ def search_geo_datasets(query: str, max_results: int = 500) -> list[str]:
     return sra_uids
 
 
+def load_accessions(path: str) -> tuple[list[str], set[str]]:
+    """Read an existing samplesheet → (unique SRX ids to fetch, wanted SRR set).
+
+    Rows lacking an srx_id fall back to fetching by their srr_id, so every
+    requested run is reachable. efetch(db=sra) resolves both accession types.
+    """
+    srx_ids: list[str] = []
+    seen_srx: set[str] = set()
+    want_srr: set[str] = set()
+    with open(path, newline="") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            srr = (row.get("srr_id") or "").strip()
+            srx = (row.get("srx_id") or "").strip()
+            if srr:
+                want_srr.add(srr)
+            key = srx or srr
+            if key and key not in seen_srx:
+                seen_srx.add(key)
+                srx_ids.append(key)
+    return srx_ids, want_srr
+
+
 def main():
     parser = argparse.ArgumentParser(description="Query NCBI SRA for HPV-relevant RNA-seq datasets")
     parser.add_argument("--query", type=str, default=None,
                         help="Custom search query (overrides built-in tissue queries)")
+    parser.add_argument("--accessions", type=str, default=None,
+                        help="CSV with srx_id (and srr_id) columns. Re-fetch metadata "
+                             "for exactly these accessions instead of running a search "
+                             "— reproduces an existing sample set with richer attributes.")
     parser.add_argument("--output", "-o", type=str, default="samplesheet.csv",
                         help="Output CSV file path")
     parser.add_argument("--max-samples", type=int, default=0,
@@ -250,31 +292,46 @@ def main():
     if args.api_key:
         Entrez.api_key = args.api_key
 
-    all_uids = set()
-
-    if args.query:
-        # Custom query mode
-        print(f"Running custom query...", file=sys.stderr)
-        uids = search_sra(args.query)
-        all_uids.update(uids)
+    # --- Accession re-fetch mode -------------------------------------------
+    # Re-pull metadata for an existing sample set (e.g. samplesheet_enriched.csv)
+    # so it gains the full attribute blob without a fresh search that would
+    # return a different cohort. efetch resolves SRA accessions directly, so we
+    # fetch whole experiments by SRX and keep only the runs we started with.
+    if args.accessions:
+        srx_ids, want_srr = load_accessions(args.accessions)
+        print(f"Re-fetching {len(srx_ids)} experiments "
+              f"({len(want_srr)} runs) from {args.accessions}", file=sys.stderr)
+        samples = fetch_sra_metadata(srx_ids)
+        samples = [s for s in samples if s["srr_id"] in want_srr]
+        missing = want_srr - {s["srr_id"] for s in samples}
+        if missing:
+            print(f"  WARNING: {len(missing)} requested runs not returned "
+                  f"(e.g. {', '.join(sorted(missing)[:5])})", file=sys.stderr)
     else:
-        # Search across all tissue categories
-        for category, queries in TISSUE_QUERIES.items():
-            print(f"\n=== Searching {category} datasets ===", file=sys.stderr)
-            for q in queries:
-                uids = search_sra(q)
-                all_uids.update(uids)
-                time.sleep(0.5)
+        all_uids = set()
+        if args.query:
+            # Custom query mode
+            print(f"Running custom query...", file=sys.stderr)
+            uids = search_sra(args.query)
+            all_uids.update(uids)
+        else:
+            # Search across all tissue categories
+            for category, queries in TISSUE_QUERIES.items():
+                print(f"\n=== Searching {category} datasets ===", file=sys.stderr)
+                for q in queries:
+                    uids = search_sra(q)
+                    all_uids.update(uids)
+                    time.sleep(0.5)
 
-    print(f"\nTotal unique SRA UIDs: {len(all_uids)}", file=sys.stderr)
+        print(f"\nTotal unique SRA UIDs: {len(all_uids)}", file=sys.stderr)
 
-    if not all_uids:
-        print("No datasets found.", file=sys.stderr)
-        sys.exit(0)
+        if not all_uids:
+            print("No datasets found.", file=sys.stderr)
+            sys.exit(0)
 
-    # Fetch metadata
-    print("\n=== Fetching metadata ===", file=sys.stderr)
-    samples = fetch_sra_metadata(list(all_uids))
+        # Fetch metadata
+        print("\n=== Fetching metadata ===", file=sys.stderr)
+        samples = fetch_sra_metadata(list(all_uids))
 
     # Deduplicate by SRR
     seen = set()
@@ -289,8 +346,8 @@ def main():
         unique_samples = unique_samples[:args.max_samples]
 
     # Write samplesheet
-    fieldnames = ["srr_id", "srx_id", "study", "title",
-                  "tissue_source", "cell_line", "platform", "layout"]
+    fieldnames = ["srr_id", "srx_id", "study", "title", "tissue_source",
+                  "cell_line", "genotype", "characteristics", "platform", "layout"]
     with open(args.output, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()

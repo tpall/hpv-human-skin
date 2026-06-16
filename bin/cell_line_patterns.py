@@ -46,6 +46,7 @@ NAMED_CELL_LINES = [
     r"tigk",        # telomerase-immortalized gingival keratinocyte
     r"hok[\s-]?16b",
     r"mnt[\s-]?1",  # melanoma line, used in melanocyte / pigmentation studies
+    r"a375",        # melanoma line (often mislabeled "skin" in public RNA-seq)
     # Common producer / engineered backgrounds (often used as HPV VLP / model hosts)
     r"hek[\s-]?293(?:t|ft)?",
     r"293t",

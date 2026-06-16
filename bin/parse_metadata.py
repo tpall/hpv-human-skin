@@ -124,11 +124,27 @@ def main():
                 row.get("tissue_source", "")
             )
 
+            # Detection text for cell-line / engineered heuristics: title +
+            # the FULL attribute blob (`characteristics`) plus cell_line /
+            # genotype. Culture hints are routinely misfiled into arbitrary
+            # tags (genotype="TOP2A knockdown", note="HeLa-derived"), so we
+            # scan everything — not the tissue-classification whitelist. This
+            # blob is deliberately kept out of tissue-category classification
+            # above so off-spec values can't skew nahk/muu assignment.
+            # `characteristics` is absent in pre-genotype samplesheets; the
+            # cell_line/genotype/tissue_source fallbacks keep older inputs working.
+            detect_text = " ".join(filter(None, (
+                combined_text,
+                row.get("characteristics", ""),
+                row.get("cell_line", ""),
+                row.get("genotype", ""),
+            )))
+
             # Cell-line detection: trust the explicit SRA cell_line attribute
             # when present; otherwise fall back to keyword heuristic on
-            # title + tissue_source.
+            # title + tissue_source + cell_line + genotype.
             explicit = has_explicit_cell_line_field(row.get("cell_line", ""))
-            heuristic, _ = classify_cell_line(combined_text)
+            heuristic, _ = classify_cell_line(detect_text)
             row["is_cell_line"] = "true" if (explicit or heuristic) else "false"
             if row["is_cell_line"] == "true":
                 cell_line_count += 1
@@ -136,7 +152,7 @@ def main():
             # Engineered cells (transduced / shRNA / siRNA / CRISPR). Flagged
             # separately so reports can split clinical signal from in-vitro
             # experiments without conflating with naming-based cell-line hits.
-            is_eng, _ = classify_engineered(combined_text)
+            is_eng, _ = classify_engineered(detect_text)
             row["is_engineered"] = "true" if is_eng else "false"
             if is_eng:
                 engineered_count += 1
