@@ -76,7 +76,11 @@ late_total = sum(gene_counts.get(g, 0) for g in late_genes)
 l1_count = gene_counts.get("L1", 0)
 l2_count = gene_counts.get("L2", 0)
 
-has_late = late_total >= min_late_reads
+# Productive infection requires the MAJOR capsid L1: virion assembly cannot
+# proceed on L2 (minor capsid) alone. L2-only signal — common from low-level
+# commensal beta/gamma transcription or cross-mapping — is NOT productive, so
+# gate specifically on L1 rather than the L1+L2 total.
+has_late = l1_count >= min_late_reads
 
 # Write results
 with open(f"{sample_id}_transcript_classes.tsv", "w", newline="") as f:
@@ -93,12 +97,7 @@ with open(f"{sample_id}_transcript_classes.tsv", "w", newline="") as f:
 print(f"{sample_id}: early={early_total}, late={late_total} (L1={l1_count}, L2={l2_count}), productive={'yes' if has_late else 'no'}", file=sys.stderr)
 PYEOF
 
-    # Set environment variable for Nextflow
-    LATE_TOTAL=\$(grep "LATE_TOTAL" ${meta.srr_id}_transcript_classes.tsv | cut -f3)
-    if [ "\$LATE_TOTAL" -ge "${params.late_transcript_min_reads}" ]; then
-        HAS_LATE_TRANSCRIPTS="yes"
-    else
-        HAS_LATE_TRANSCRIPTS="no"
-    fi
+    # Mirror the Python productive call (L1-gated) — single source of truth.
+    HAS_LATE_TRANSCRIPTS=\$(grep "PRODUCTIVE_INFECTION" ${meta.srr_id}_transcript_classes.tsv | cut -f3)
     """
 }
