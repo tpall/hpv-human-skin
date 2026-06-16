@@ -28,11 +28,9 @@ set -euo pipefail
 #   QUERY=...            override the lesion search query
 #   MAIN_COHORT=results_full_v2/metadata/samplesheet_enriched_v2.csv
 #   CHUNK_SIZE=100
-#   AUTO_TYPE=0          default: stop after discovery and print the typing
-#                        command (submit run_chunked.sh yourself so it inherits
-#                        your Java-17 login env). Set AUTO_TYPE=1 to auto-submit,
-#                        but ONLY if this job's environment already has Java 17
-#                        (Nextflow needs 17+; the spack default is openjdk-11).
+#   AUTO_TYPE=1          submit the typing run (set 0 to stop after discovery).
+#                        run_chunked.sh self-activates the conda 'java' env, so
+#                        the submitted job gets Java 17 regardless of this env.
 
 if [[ -n "${SLURM_SUBMIT_DIR:-}" ]]; then
     SCRIPT_DIR="${SLURM_SUBMIT_DIR}"
@@ -46,7 +44,7 @@ ENV_YML="${SCRIPT_DIR}/modules/local/sra_discovery/environment.yml"
 MAIN_COHORT="${MAIN_COHORT:-${SCRIPT_DIR}/results_full_v2/metadata/samplesheet_enriched_v2.csv}"
 NCBI_EMAIL="${NCBI_EMAIL:-tapa741@gmail.com}"
 CHUNK_SIZE="${CHUNK_SIZE:-100}"
-AUTO_TYPE="${AUTO_TYPE:-0}"
+AUTO_TYPE="${AUTO_TYPE:-1}"
 QUERY="${QUERY:-\"epidermodysplasia verruciformis\" OR \"verruca vulgaris\" OR \"plantar wart\" OR \"common wart\" OR \"wart\"}"
 
 RAW="${OUTDIR}/lesions_raw.csv"
@@ -121,17 +119,10 @@ if [[ "${AUTO_TYPE}" != "1" ]]; then
     echo "  sbatch ${SCRIPT_DIR}/bin/run_chunked.sh ${NEW} ${CHUNK_SIZE} ${OUTDIR} ${OUTDIR}/work"
     exit 0
 fi
-# Nextflow needs Java 17+; the spack default is openjdk-11. Refuse to submit
-# with the wrong Java rather than fail 53 samples deep into a chunk.
-jver=$(java -version 2>&1 | head -1 | grep -oE '"[0-9]+' | tr -d '"' || echo 0)
-if [[ "${jver:-0}" -lt 17 ]]; then
-    echo "ERROR: Java ${jver:-?} on PATH but Nextflow needs 17+." >&2
-    echo "Load your Java 17 env, then submit yourself:" >&2
-    echo "  sbatch ${SCRIPT_DIR}/bin/run_chunked.sh ${NEW} ${CHUNK_SIZE} ${OUTDIR} ${OUTDIR}/work" >&2
-    exit 1
-fi
 echo ""
-echo "=== Submitting typing run on ${n_new} new lesion samples (Java ${jver}) ==="
+echo "=== Submitting typing run on ${n_new} new lesion samples ==="
+# run_chunked.sh activates the conda 'java' env itself, so the submitted job
+# gets Java 17 regardless of this helper's environment.
 sbatch "${SCRIPT_DIR}/bin/run_chunked.sh" "${NEW}" "${CHUNK_SIZE}" "${OUTDIR}" "${OUTDIR}/work"
 echo "Submitted. After it finishes, flag with:"
 echo "  INDIR=${OUTDIR}/aggregated SAMPLESHEET=${FULL} OUTDIR=${OUTDIR}/contamination \\"

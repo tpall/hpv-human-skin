@@ -44,6 +44,19 @@ else
     PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 fi
 
+# Nextflow needs Java 17+; this cluster's spack default is openjdk-11, which it
+# rejects. Activate the conda 'java' env (openjdk 17) so the driver finds the
+# right JVM regardless of the submit-time environment (e.g. when another batch
+# job sbatch-submits this one), pinning JAVA_HOME/JAVA_CMD past any spack values.
+eval "$(conda shell.bash hook)"
+if conda env list | awk 'NF && $1 !~ /^#/ {print $1}' | grep -qx java; then
+    conda activate java
+    export JAVA_HOME="${CONDA_PREFIX}"
+    export JAVA_CMD="${CONDA_PREFIX}/bin/java"
+else
+    echo "WARN: conda env 'java' not found — relying on ambient Java (need 17+)" >&2
+fi
+
 CHUNKS_DIR="${OUTDIR}/chunks"
 AGG_DIR="${OUTDIR}/aggregated"
 REPORT_DIR="${OUTDIR}/report"
