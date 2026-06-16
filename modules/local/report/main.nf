@@ -62,6 +62,7 @@ process REPORT {
         --hpv-types all_hpv_types.tsv \\
         --transcript-classes all_transcript_classes.tsv \\
         --hpv-status ${hpv_status_csv} \\
+        --late-min-reads ${params.late_transcript_min_reads} \\
         --outdir summary_tables
     """
 }

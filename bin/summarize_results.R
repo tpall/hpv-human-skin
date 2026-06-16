@@ -28,6 +28,8 @@ option_list <- list(
   make_option("--hpv-types", type = "character", help = "Merged HPV types TSV"),
   make_option("--transcript-classes", type = "character", help = "Merged transcript classes TSV"),
   make_option("--hpv-status", type = "character", help = "HPV status TSV (all samples)"),
+  make_option("--late-min-reads", type = "integer", default = 3,
+              help = "Min L1 (major capsid) reads to call productive infection"),
   make_option("--outdir", type = "character", default = "summary_tables", help = "Output directory")
 )
 opts <- parse_args(OptionParser(option_list = option_list))
@@ -123,9 +125,19 @@ table3 <- hpv_full %>%
 write_tsv(table3, file.path(outdir, "table3_hpv_nontraditional_tissues.tsv"))
 cat(sprintf("Table 3: %d HPV+ samples in non-traditional tissues\n", nrow(table3)))
 
-# ── Table 4: Productive infection (L1/L2 positive) ─────────────────────
+# ── Table 4: Productive infection (L1 major-capsid positive) ───────────
+# Derive the productive call from the L1 read count rather than trusting the
+# pipeline's PRODUCTIVE_INFECTION summary row: (a) older chunks wrote that row
+# under an L1+L2 rule that over-calls (L2-only signal isn't productive — virion
+# assembly needs the major capsid L1), so recomputing here keeps the whole
+# dataset uniform regardless of which module version produced each chunk.
+late_min <- opts$`late-min-reads`
 productive <- transcripts %>%
-  filter(class == "summary", gene == "PRODUCTIVE_INFECTION", read_count == "yes")
+  filter(gene == "L1") %>%
+  mutate(l1_reads = suppressWarnings(as.numeric(read_count))) %>%
+  filter(!is.na(l1_reads) & l1_reads >= late_min) %>%
+  distinct(sample_id)
+cat(sprintf("Productive (L1 >= %d reads): %d samples\n", late_min, nrow(productive)))
 
 table4 <- productive %>%
   left_join(
