@@ -30,6 +30,10 @@ set -euo pipefail
 #   NCBI_EMAIL=...       Entrez email (default tapa741@gmail.com)
 #   QUERY=...            override the lesion search query
 #   MAIN_COHORT=results_full_v2/metadata/samplesheet_enriched_v2.csv
+#   EXCLUDE_COHORTS=...  extra already-typed samplesheets (comma/space list)
+#                        whose srr_ids are ALSO excluded, on top of MAIN_COHORT
+#                        — e.g. a prior lesions batch so it is not re-typed:
+#                          EXCLUDE_COHORTS=results_lesions_wide/lesions_samplesheet_new.csv
 #   CHUNK_SIZE=100
 #   AUTO_TYPE=1          submit the typing run (set 0 to stop after discovery).
 #                        run_chunked.sh self-activates the conda 'java' env, so
@@ -46,6 +50,19 @@ CATEGORIES="${SCRIPT_DIR}/assets/tissue_categories.csv"
 ENV_YML="${SCRIPT_DIR}/modules/local/sra_discovery/environment.yml"
 MAIN_COHORT="${MAIN_COHORT:-${SCRIPT_DIR}/results_full_v2/metadata/samplesheet_enriched_v2.csv}"
 NCBI_EMAIL="${NCBI_EMAIL:-tapa741@gmail.com}"
+
+# Cohorts whose srr_ids (column 1) are excluded from the "new" samplesheet so
+# they are not re-typed: MAIN_COHORT plus any files in EXCLUDE_COHORTS.
+EXCLUDE_FILES=()
+[[ -f "${MAIN_COHORT}" ]] && EXCLUDE_FILES+=("${MAIN_COHORT}")
+if [[ -n "${EXCLUDE_COHORTS:-}" ]]; then
+    IFS=', ' read -r -a _extra_cohorts <<< "${EXCLUDE_COHORTS}"
+    for _f in "${_extra_cohorts[@]}"; do
+        [[ -z "${_f}" ]] && continue
+        if [[ -f "${_f}" ]]; then EXCLUDE_FILES+=("${_f}")
+        else echo "WARN: EXCLUDE_COHORTS entry not found, skipping: ${_f}" >&2; fi
+    done
+fi
 CHUNK_SIZE="${CHUNK_SIZE:-100}"
 AUTO_TYPE="${AUTO_TYPE:-1}"
 QUERY="${QUERY:-\"epidermodysplasia verruciformis\" OR verruca OR \"verruca plana\" OR \"flat wart\" OR wart OR condyloma OR papilloma OR \"cutaneous papillomavirus\" OR \"beta-papillomavirus\" OR betapapillomavirus OR \"skin papilloma\" OR \"Lewandowsky-Lutz\" OR \"cutaneous squamous cell carcinoma\" OR \"actinic keratosis\" OR \"Bowen disease\"}"
@@ -59,7 +76,7 @@ mkdir -p "${OUTDIR}"
 
 echo "Project:     ${SCRIPT_DIR}"
 echo "Outdir:      ${OUTDIR}"
-echo "Main cohort: ${MAIN_COHORT}"
+echo "Exclude:     ${EXCLUDE_FILES[*]:-(none found)}"
 echo "Query:       ${QUERY}"
 echo ""
 
@@ -95,21 +112,26 @@ python "${SCRIPT_DIR}/bin/parse_metadata.py" \
 
 conda deactivate
 
-# ── Step 3: keep only samples NOT already in the main cohort ────────────
+# ── Step 3: keep only samples NOT already in an excluded cohort ─────────
 echo ""
-echo "=== Filtering to samples new vs the main cohort ==="
+echo "=== Filtering to samples new vs already-typed cohorts ==="
 head -1 "${FULL}" > "${NEW}"
-if [[ -f "${MAIN_COHORT}" ]]; then
-    awk -F, 'NR==FNR { if (FNR>1) seen[$1]=1; next }
-             FNR>1 && !($1 in seen)' \
-        "${MAIN_COHORT}" "${FULL}" >> "${NEW}"
+if [[ ${#EXCLUDE_FILES[@]} -gt 0 ]]; then
+    echo "  excluding srr_ids already in: ${EXCLUDE_FILES[*]}"
+    # Read every exclude file first (accumulate seen srr_ids from column 1),
+    # then emit rows of FULL whose srr_id was not seen. FULL is passed last and
+    # identified by FILENAME so the number of exclude files does not matter.
+    awk -F, -v target="${FULL}" '
+        FILENAME==target { if (FNR>1 && !($1 in seen)) print; next }
+        FNR>1 { seen[$1]=1 }
+    ' "${EXCLUDE_FILES[@]}" "${FULL}" >> "${NEW}"
 else
-    echo "  (main cohort ${MAIN_COHORT} not found — treating all as new)" >&2
+    echo "  (no exclude cohorts found — treating all as new)" >&2
     tail -n +2 "${FULL}" >> "${NEW}"
 fi
 n_total=$(( $(wc -l < "${FULL}") - 1 ))
 n_new=$(( $(wc -l < "${NEW}") - 1 ))
-echo "  lesion samples found: ${n_total}   new (not in main cohort): ${n_new}"
+echo "  lesion samples found: ${n_total}   new (not in excluded cohorts): ${n_new}"
 
 # ── Step 4: type the new samples ────────────────────────────────────────
 if [[ "${n_new}" -le 0 ]]; then
