@@ -35,6 +35,10 @@ format:
 library(tidyverse); library(here); library(knitr)
 invisible(capture.output(source(here("manuscript/results_models.R"))))
 source(here("manuscript/_helpers.R"))
+# Bayesian posterior summaries are precomputed by manuscript/bayesian_models.R
+# (MCMC, ~40s) and read here, so the render itself stays fast/deterministic.
+bayes <- readRDS(here("manuscript/bayes_summary.rds"))
+bget  <- function(m) as.list(bayes[bayes$model == m, ])
 ```
 
 {{< include _abstract.qmd >}}

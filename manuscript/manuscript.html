@@ -3311,7 +3311,7 @@ window.Quarto = {
 </section>
 <section id="cohort-framing-and-depth-normalised-burden-analysis" class="level3">
 <h3 class="anchored" data-anchor-id="cohort-framing-and-depth-normalised-burden-analysis">Cohort framing and depth-normalised burden analysis</h3>
-<p>Because lesional libraries may simply be sequenced more deeply than unselected skin, raw HPV read counts confound infection burden with sequencing depth. To neutralise this, every Kraken2-screened library, including HPV-negative ones, was scored as papillomavirus reads per million (RPM), computed from the Kraken2 report as the Papillomaviridae clade read count divided by the sum of unclassified and root-level clade reads, times 10⁶. Samples were assigned to mutually exclusive population tiers in fixed precedence: <code>cell_line</code> (any cell-line flag), <code>EV</code> (epidermodysplasia verruciformis diagnosis), <code>control_productive</code> (wart/condyloma), <code>neoplasia</code> (squamous/carcinoma/SCC/keratosis/Bowen), <code>contamination_study</code> (pre-specified contaminated studies), <code>unselected_skin</code> (skin tissue, <code>nahk</code>), and <code>other</code>. A control-calibrated detection floor was defined as the 5th-percentile RPM of non-cell-line productive controls (warts/condyloma); libraries below this floor were considered “not detected at control level”. To show that any tier difference was not an artefact of depth, the fraction of libraries at or above the detection floor was additionally computed within matched total-read bins (&lt;5M, 5–10M, 10–20M, 20–40M, &gt;40M). The same per-sample table also yielded an HPV-type × tier catalogue. This analysis pooled the lesion cohorts against the prevalence-sweep null and used the curated cell-line flags. Logistic-regression models (positivity by sample class; productive-level detection by tier with a log<sub>10</sub> sequencing-depth covariate) and Fisher exact tests were fitted in R; Wilson intervals are reported for proportions.</p>
+<p>Because lesional libraries may simply be sequenced more deeply than unselected skin, raw HPV read counts confound infection burden with sequencing depth. To neutralise this, every Kraken2-screened library, including HPV-negative ones, was scored as papillomavirus reads per million (RPM), computed from the Kraken2 report as the Papillomaviridae clade read count divided by the sum of unclassified and root-level clade reads, times 10⁶. Samples were assigned to mutually exclusive population tiers in fixed precedence: <code>cell_line</code> (any cell-line flag), <code>EV</code> (epidermodysplasia verruciformis diagnosis), <code>control_productive</code> (wart/condyloma), <code>neoplasia</code> (squamous/carcinoma/SCC/keratosis/Bowen), <code>contamination_study</code> (pre-specified contaminated studies), <code>unselected_skin</code> (skin tissue, <code>nahk</code>), and <code>other</code>. A control-calibrated detection floor was defined as the 5th-percentile RPM of non-cell-line productive controls (warts/condyloma); libraries below this floor were considered “not detected at control level”. To show that any tier difference was not an artefact of depth, the fraction of libraries at or above the detection floor was additionally computed within matched total-read bins (&lt;5M, 5–10M, 10–20M, 20–40M, &gt;40M). The same per-sample table also yielded an HPV-type × tier catalogue. This analysis pooled the lesion cohorts against the prevalence-sweep null and used the curated cell-line flags. Logistic-regression models (positivity by sample class; productive-level detection by tier with a log<sub>10</sub> sequencing-depth covariate) and Fisher exact tests were fitted in R; Wilson intervals are reported for proportions. As a robustness check, the positivity, depth-controlled detection and productivity models were additionally refitted as Bayesian logistic regressions with explicit weakly-informative priors, namely Normal(0, 2.5) on the log-odds coefficients and Normal(0, 5) on the intercept, applied directly to the log-odds scale rather than as flat or improper defaults, using rstanarm <span class="citation" data-cites="rstanarm">(<a href="#ref-rstanarm" role="doc-biblioref">Goodrich et al. 2024</a>)</span> (four Markov chains of 2,000 iterations; convergence confirmed by <span class="math inline">\(\hat{R} \le 1.003\)</span> with no divergent transitions). Effects are summarised by the posterior median odds ratio, its 95% credible interval, and the posterior probability of a positive effect; the near-separated productive-controls-versus-skin contrast was additionally checked under a heavier-tailed Student-<em>t</em>(3) prior (<a href="#supptbl-bayes" class="quarto-xref">Table S3</a>).</p>
 </section>
 <section id="execution-at-scale" class="level3">
 <h3 class="anchored" data-anchor-id="execution-at-scale">Execution at scale</h3>
@@ -3408,6 +3408,10 @@ Figure 1: Depth-normalised HPV transcript burden distinguishes productive warts
 <h3 class="anchored" data-anchor-id="the-hpv-type-landscape-is-partitioned-by-population">The HPV type landscape is partitioned by population</h3>
 <p>The HPV-type-by-tier catalogue (<a href="#supptbl-types" class="quarto-xref">Table S1</a>) recapitulates these conclusions in a single descriptive view: the high-risk mucosal types HPV16/HPV18 are confined almost entirely to cell-line and engineered material; productive controls are dominated by cutaneous wart and low-risk types (HPV57, HPV2, HPV27, HPV6/11, plus diverse beta/gamma types); unselected skin shows a sparse, low-burden scatter of beta/gamma types; and the genuine neoplasia-associated productive infections are the gamma/alpha types noted above (HPV12, HPV16, HPV96, HPV182). The epidemiological reservoir of cutaneous beta/gamma HPV in healthy skin is therefore real but transcriptionally quiet, productive disease is the property of warts/EV, and HPV-associated cutaneous neoplasia carries the virus, when at all, as a trace, non-productive footprint.</p>
 </section>
+<section id="a-bayesian-re-analysis-under-weakly-informative-priors-confirms-the-contrasts" class="level3">
+<h3 class="anchored" data-anchor-id="a-bayesian-re-analysis-under-weakly-informative-priors-confirms-the-contrasts">A Bayesian re-analysis under weakly-informative priors confirms the contrasts</h3>
+<p>To confirm these conclusions are not artefacts of the frequentist framework or of the near-complete separation in the strongest contrast, we refitted the positivity, depth-controlled detection and productivity models as Bayesian logistic regressions under weakly-informative priors (Normal(0, 2.5) on the log-odds coefficients; Methods), summarising each effect by its posterior median odds ratio, 95% credible interval (CrI) and posterior probability of direction (<a href="#supptbl-bayes" class="quarto-xref">Table S3</a>). The contamination enrichment and the trace excess were reproduced essentially unchanged and with near-certainty (cell-line OR 4.4 [3.0, 6.3], engineered OR 5.2 [3.1, 8.1], neoplasia trace OR 1.7 [1.4, 2.1]; each with P(OR &gt; 1) &gt; 0.999). Crucially, the productive-controls-versus-skin contrast, whose frequentist odds ratio (2,526) is inflated and unstable under separation, regularised to a finite but still enormous posterior OR of 1,865 [701, 5,991] (2,496 [862, 10,470] under a heavier-tailed Student-<em>t</em> prior): the productive gap between warts/EV and skin is real, not a separation artefact. Deeper sequencing within neoplasia again bought no productive-level detection (OR 1.6 [0.2, 18]), and the warts/EV-versus-neoplasia productivity contrast held (OR 3.7 [1.3, 11], P(OR &gt; 1) = 0.991). The only effect the posterior nuances is the depth-adjusted neoplasia-versus-skin comparison at productive level, whose credible interval includes no difference (OR 1.9 [0.7, 4.3], consistent with the frequentist <em>P</em> = 0.13) but which places 0.895 posterior probability on a <em>small</em> elevation; even if genuine, such a footprint is negligible beside the three-orders-of-magnitude productive-control effect and does not alter the trace-not-productive conclusion.</p>
+</section>
 </section>
 <section id="discussion" class="level2">
 <h2 class="anchored" data-anchor-id="discussion">Discussion</h2>
@@ -3488,6 +3492,9 @@ Egawa, Nagayasu, and John Doorbar. 2017. <span>“The Low-Risk Papillomaviruses.
 </div>
 <div id="ref-foulongne2012" class="csl-entry" role="listitem">
 Foulongne, Vincent et al. 2012. <span>“Human Skin Microbiota: High Diversity of <span>DNA</span> Viruses Identified on the Human Skin by High-Throughput Sequencing.”</span> <em>PLoS ONE</em> 7 (6): e38499.
+</div>
+<div id="ref-rstanarm" class="csl-entry" role="listitem">
+Goodrich, Ben, Jonah Gabry, Imad Ali, and Sam Brilleman. 2024. <em><span class="nocase">rstanarm</span>: <span>Bayesian</span> Applied Regression Modeling via <span>Stan</span></em>. <a href="https://mc-stan.org/rstanarm/">https://mc-stan.org/rstanarm/</a>.
 </div>
 <div id="ref-graham2017" class="csl-entry" role="listitem">
 Graham, Sheila V. 2017. <span>“The Human Papillomavirus Replication Cycle, and Its Links to Cancer Progression: A Comprehensive Review.”</span> <em>Clinical Science</em> 131 (17): 2201–21.
@@ -3923,6 +3930,81 @@ Table S1: Number of libraries assigned to each HPV reference type across populat
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-supptbl" id="supptbl-productive-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table S2: Genuine, non-cell-line productive HPV infections detected in primary skin and skin-associated tissue. Each library met the productive criterion (≥3 L1 major-capsid reads) and was flagged as primary tissue rather than cell line or engineered material. Coverage breadth is the maximum across assigned references for that sample. In the two “other-tissue” co-infections (ERR2274877, ERR1971044) the co-infecting gamma-type HPV182 reached 98–99% genome coverage at 243–245× mean depth. These cases show that bona fide productive cutaneous beta- and gamma-HPV infection does occur in primary tissue, but against the population-scale null they are the exception (see main text and <a href="#fig-rpm" class="quarto-xref">Figure 1</a>).
+</figcaption>
+</figure>
+</div>
+<div id="supptbl-bayes" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-supptbl figure">
+<div aria-describedby="supptbl-bayes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 49%">
+<col style="width: 18%">
+<col style="width: 22%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Contrast (model)</th>
+<th style="text-align: left;">Frequentist OR (P)</th>
+<th style="text-align: left;">Posterior OR [95% CrI]</th>
+<th style="text-align: right;">P(OR &gt; 1)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Cell-line vs clinical positivity (M1)</td>
+<td style="text-align: left;">4.4 (3.5×10⁻¹⁵)</td>
+<td style="text-align: left;">4.4 [3.0, 6.3]</td>
+<td style="text-align: right;">&gt;0.999</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Engineered vs clinical positivity (M1)</td>
+<td style="text-align: left;">5.4 (7.7×10⁻¹²)</td>
+<td style="text-align: left;">5.2 [3.1, 8.1]</td>
+<td style="text-align: right;">&gt;0.999</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Productive controls vs unselected skin, floor (M2)</td>
+<td style="text-align: left;">2,526 (8.1×10⁻⁸¹)</td>
+<td style="text-align: left;">1,865 [701, 5,991]</td>
+<td style="text-align: right;">&gt;0.999</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Neoplasia vs unselected skin, floor (M2)</td>
+<td style="text-align: left;">2.0 (0.13)</td>
+<td style="text-align: left;">1.9 [0.7, 4.3]</td>
+<td style="text-align: right;">0.895</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Sequencing depth, per 10× reads, floor (M2)</td>
+<td style="text-align: left;">3.1 (0.0023)</td>
+<td style="text-align: left;">3.0 [1.5, 6.1]</td>
+<td style="text-align: right;">&gt;0.999</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Sequencing depth within neoplasia, floor (M2)</td>
+<td style="text-align: left;">1.7 (0.68)</td>
+<td style="text-align: left;">1.6 [0.2, 18]</td>
+<td style="text-align: right;">0.676</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Neoplasia vs unselected skin, any-HPV / trace (M2)</td>
+<td style="text-align: left;">1.7 (5.7×10⁻⁷)</td>
+<td style="text-align: left;">1.7 [1.4, 2.1]</td>
+<td style="text-align: right;">&gt;0.999</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Productive controls vs neoplasia, productive (M3)</td>
+<td style="text-align: left;">3.8 (0.013)</td>
+<td style="text-align: left;">3.7 [1.3, 11]</td>
+<td style="text-align: right;">0.991</td>
+</tr>
+</tbody>
+</table>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-supptbl" id="supptbl-bayes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table S3: Bayesian re-analysis of the principal contrasts under weakly-informative priors. Each frequentist model (M1–M3; Methods, <a href="#tbl-positivity" class="quarto-xref">Table 1</a>, <a href="#fig-rpm" class="quarto-xref">Figure 1</a>) was refitted as a Bayesian logistic regression with a Normal(0, 2.5) prior on the log-odds coefficients and a Normal(0, 5) prior on the intercept (<code>rstanarm</code>; four chains, all R-hat ≤ 1.003, no divergent transitions). Odds ratios are posterior medians with 95% credible intervals; P(OR &gt; 1) is the posterior probability of a positive effect. Frequentist odds ratios (with <em>P</em> values) are shown for comparison; the productive-controls-versus-skin row is a Fisher exact estimate inflated by near-complete separation, whose Bayesian counterpart is regularised by the prior (a heavier-tailed Student-<em>t</em>(3) prior gives an even larger posterior OR, 2,496 [862, 10,470], confirming robustness). Sequencing depth is modelled per 10-fold (log₁₀) change in library size.
 </figcaption>
 </figure>
 </div>

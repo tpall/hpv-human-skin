@@ -116,7 +116,8 @@ tc <- read_tsv(here("results_reframe_csc/type_catalogue_by_tier.tsv"), show_col_
 .oe <- as.list(o1[o1$term=="sample_classengineered",]);   .ol <- as.list(o1[o1$term=="sample_classcell_line",])
 .tc_ctrl<-as.list(tiersum[tiersum$tier=="control_productive",]); .tc_neo<-as.list(tiersum[tiersum$tier=="neoplasia",])
 .tc_uns <-as.list(tiersum[tiersum$tier=="unselected_skin",]);    .tc_cl <-as.list(tiersum[tiersum$tier=="cell_line",]); .tc_oth<-as.list(tiersum[tiersum$tier=="other",])
-.a_neo<-as.list(o2a[o2a$term=="tierneoplasia",]); .a_l10<-as.list(o2a[o2a$term=="l10",]); .b_neo<-as.list(o2b[o2b$term=="tierneoplasia",])
+.a_neo<-as.list(o2a[o2a$term=="tierneoplasia",]); .a_l10<-as.list(o2a[o2a$term=="l10",])
+.b_neo<-as.list(o2b[o2b$term=="tierneoplasia",]); .b_l10<-as.list(o2b[o2b$term=="l10",])
 .mn_l10<-as.list(mn_o[mn_o$term=="l10",])
 .m3c<-as.list(psum[psum$grp=="productive_controls (targeted warts/EV)",]); .m3n<-as.list(psum[psum$grp=="neoplasia (cSCC/AK)",])
 
@@ -136,6 +137,7 @@ stats <- lapply(list(
   m2a_or=.a_neo$OR, m2a_lo=.a_neo$lo, m2a_hi=.a_neo$hi, m2a_p=.a_neo$p,
   m2a_l10_or=.a_l10$OR, m2a_l10_lo=.a_l10$lo, m2a_l10_hi=.a_l10$hi, m2a_l10_p=.a_l10$p,
   m2b_or=.b_neo$OR, m2b_lo=.b_neo$lo, m2b_hi=.b_neo$hi, m2b_p=.b_neo$p,
+  m2b_l10_or=.b_l10$OR, m2b_l10_lo=.b_l10$lo, m2b_l10_hi=.b_l10$hi, m2b_l10_p=.b_l10$p,
   fish_or=ft$estimate, fish_lo=ft$conf.int[1], fish_hi=ft$conf.int[2], fish_p=ft$p.value,
   neo_depth_or=.mn_l10$OR, neo_depth_lo=.mn_l10$lo, neo_depth_hi=.mn_l10$hi, neo_depth_p=.mn_l10$p,
   m3_ctrl_pct=.m3c$pct, m3_ctrl_prod=.m3c$prod, m3_ctrl_n=.m3c$n,

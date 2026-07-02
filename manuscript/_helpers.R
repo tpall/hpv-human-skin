@@ -35,6 +35,34 @@ p1  <- function(x) formatC(x, format = "f", digits = 1)      # always 1 decimal 
 comma <- function(x) formatC(round(x), format = "d", big.mark = ",")
 mreads <- function(x) paste0(p1(x), "M")                     # x already in millions
 
+## ── Bayesian posterior formatting ───────────────────────────────────────────
+# Posterior OR with 95% credible interval, e.g. "1.9 [0.7, 4.3]".
+bor <- function(b) paste0(fo(b$OR), " [", fo(b$lo), ", ", fo(b$hi), "]")
+# Posterior probability of direction; report ">0.999" instead of a rounded 1.00.
+pdir <- function(p) if (p >= 0.9995) ">0.999" else formatC(p, format = "f", digits = 3)
+
+## ── Table S3: Bayesian re-analysis of the main contrasts (weakly-inf. priors) ─
+# Frequentist estimate from `stats`, posterior summary from `bayes` (bget()).
+build_bayes_table <- function(stats, bget){
+  rows <- tibble::tribble(
+    ~contrast, ~freqor, ~freqp, ~bmodel,
+    "Cell-line vs clinical positivity (M1)",                 stats$cl_or,        stats$cl_or_p,      "M1_cell_line",
+    "Engineered vs clinical positivity (M1)",                stats$eng_or,       stats$eng_or_p,     "M1_engineered",
+    "Productive controls vs unselected skin, floor (M2)",    stats$fish_or,      stats$fish_p,       "M2c_controls_vs_skin_floor",
+    "Neoplasia vs unselected skin, floor (M2)",              stats$m2b_or,       stats$m2b_p,        "M2b_neoplasia_vs_skin_floor",
+    "Sequencing depth, per 10× reads, floor (M2)",           stats$m2b_l10_or,   stats$m2b_l10_p,    "M2b_depth",
+    "Sequencing depth within neoplasia, floor (M2)",         stats$neo_depth_or, stats$neo_depth_p,  "M2d_depth_within_neoplasia",
+    "Neoplasia vs unselected skin, any-HPV / trace (M2)",    stats$m2a_or,       stats$m2a_p,        "M2a_neoplasia_vs_skin_any",
+    "Productive controls vs neoplasia, productive (M3)",     stats$m3_or,        stats$m3_p,         "M3_controls_vs_neoplasia")
+  purrr::pmap_dfr(rows, function(contrast, freqor, freqp, bmodel){
+    b <- bget(bmodel)
+    tibble(`Contrast (model)` = contrast,
+           `Frequentist OR (P)` = paste0(fo(freqor), " (", fp(freqp), ")"),
+           `Posterior OR [95% CrI]` = bor(b),
+           `P(OR > 1)` = pdir(b$p_gt1))
+  })
+}
+
 ## ── Table S1: HPV type-by-tier catalogue (types with >=2 assigned libraries) ─
 build_type_table <- function(){
   read_tsv(here("results_reframe_csc/type_catalogue_by_tier.tsv"), show_col_types = FALSE) %>%

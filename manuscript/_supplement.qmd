@@ -25,3 +25,13 @@ cat(knitr::kable(build_prod_table(), format = "pipe", align = c("l", "l", "l", "
 
 Genuine, non-cell-line productive HPV infections detected in primary skin and skin-associated tissue. Each library met the productive criterion (≥3 L1 major-capsid reads) and was flagged as primary tissue rather than cell line or engineered material. Coverage breadth is the maximum across assigned references for that sample. In the two "other-tissue" co-infections (ERR2274877, ERR1971044) the co-infecting gamma-type HPV182 reached 98–99% genome coverage at 243–245× mean depth. These cases show that bona fide productive cutaneous beta- and gamma-HPV infection does occur in primary tissue, but against the population-scale null they are the exception (see main text and @fig-rpm).
 :::
+
+::: {#supptbl-bayes}
+```{r}
+#| echo: false
+#| output: asis
+cat(knitr::kable(build_bayes_table(stats, bget), format = "pipe", align = c("l", "l", "l", "r")), sep = "\n")
+```
+
+Bayesian re-analysis of the principal contrasts under weakly-informative priors. Each frequentist model (M1–M3; Methods, @tbl-positivity, @fig-rpm) was refitted as a Bayesian logistic regression with a Normal(0, 2.5) prior on the log-odds coefficients and a Normal(0, 5) prior on the intercept (`rstanarm`; four chains, all R-hat ≤ 1.003, no divergent transitions). Odds ratios are posterior medians with 95% credible intervals; P(OR > 1) is the posterior probability of a positive effect. Frequentist odds ratios (with *P* values) are shown for comparison; the productive-controls-versus-skin row is a Fisher exact estimate inflated by near-complete separation, whose Bayesian counterpart is regularised by the prior (a heavier-tailed Student-*t*(3) prior gives an even larger posterior OR, `r bor(bget("M2c_controls_vs_skin_floor_studentt"))`, confirming robustness). Sequencing depth is modelled per 10-fold (log₁₀) change in library size.
+:::
