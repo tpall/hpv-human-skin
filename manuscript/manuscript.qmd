@@ -1,0 +1,55 @@
+---
+title: "Cutaneous HPV is transcriptionally quiet in skin and carcinoma but productive in warts: a depth-controlled re-mining of public RNA-seq"
+author: "[Authors to be added]"
+date: last-modified
+bibliography: references.bib
+crossref:
+  custom:
+    - kind: float
+      key: suppfig
+      reference-prefix: "Figure S"
+      space-before-numbering: false
+      latex-env: suppfig
+    - kind: float
+      key: supptbl
+      reference-prefix: "Table S"
+      space-before-numbering: false
+      latex-env: supptbl
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    number-sections: false
+    embed-resources: true
+    theme: cosmo
+    fig-cap-location: bottom
+    tbl-cap-location: top
+---
+
+```{r}
+#| label: setup
+#| include: false
+# Reproducible numbers: results_models.R re-fits M1/M2/M3 from the pipeline
+# outputs and builds `stats`; _helpers.R adds formatters + table builders.
+# Every quoted figure below is rendered inline (`r ...`) from these.
+library(tidyverse); library(here); library(knitr)
+invisible(capture.output(source(here("manuscript/results_models.R"))))
+source(here("manuscript/_helpers.R"))
+```
+
+{{< include _abstract.qmd >}}
+
+{{< include _introduction.qmd >}}
+
+{{< include _methods.qmd >}}
+
+{{< include _results.qmd >}}
+
+{{< include _discussion.qmd >}}
+
+## References {.unnumbered}
+
+::: {#refs}
+:::
+
+{{< include _supplement.qmd >}}

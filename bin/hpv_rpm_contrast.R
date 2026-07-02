@@ -138,6 +138,16 @@ tier_summary <- dat %>% group_by(tier) %>% summarise(
 write_tsv(tier_summary, file.path(opt$outdir, "rpm_by_tier.tsv"))
 
 # Depth-normalised contrast plot
+# Human-readable tier labels (match the manuscript wording); str_wrap keeps the
+# longer ones to a few short lines so they sit horizontally under each box.
+tier_display <- c(
+  unselected_skin     = "Unselected skin",
+  contamination_study = "Contamination studies",
+  cell_line           = "Cell line",
+  control_productive  = "Productive controls (warts/condyloma)",
+  EV                  = "Epidermodysplasia verruciformis",
+  neoplasia           = "Neoplasia (cSCC/AK)",
+  other               = "Other tissues")
 pdat <- dat %>% filter(!is.na(tier)) %>%
   mutate(rpm_plot = pmax(rpm, 0) + 0.05)
 p <- ggplot(pdat, aes(tier, rpm_plot)) +
@@ -146,11 +156,12 @@ p <- ggplot(pdat, aes(tier, rpm_plot)) +
   { if (!is.na(floor_rpm)) geom_hline(yintercept = floor_rpm + 0.05,
         linetype = "dashed", colour = "red") } +
   scale_y_log10() +
+  scale_x_discrete(labels = function(lv) str_wrap(tier_display[lv], width = 16)) +
   labs(title = "Depth-normalised HPV transcript burden by population",
        subtitle = sprintf("Papillomaviridae reads/M; red = control-calibrated detection floor (%.1f RPM)", floor_rpm),
        x = NULL, y = "HPV reads per million (log10, +0.05)") +
   theme_minimal() + theme(legend.position = "none",
-        axis.text.x = element_text(angle = 30, hjust = 1))
+        axis.text.x = element_text(angle = 0, hjust = 0.5))
 ggsave(file.path(opt$outdir, "hpv_rpm_contrast.pdf"), p, width = 9, height = 5.5)
 ggsave(file.path(opt$outdir, "hpv_rpm_contrast.png"), p, width = 9, height = 5.5, dpi = 150)
 
