@@ -156,6 +156,22 @@ results/
 
 **HeLa cross-contamination (HPV18).** HeLa cells contain integrated HPV18 and are widely documented to contaminate public SRA datasets via shared reagents, aerosolization, index hopping, or library spike-ins (see Cantalupo et al., Salzberg lab publications). A non-trivial fraction of RNA-seq runs in SRA — including samples with no biological reason to carry HPV — show low-to-moderate HPV18 signal from this source. Treat HPV18 calls on cell-line datasets (and low-breadth HPV18 calls generally) as suspect until cross-checked against the study's wet-lab context. The pipeline does not filter these out; it reports the signal faithfully, and downstream analysis should flag them.
 
+## Design notes
+
+### Host genome in the screening database
+
+This pipeline builds the Kraken2 screen against **human (GRCh38) + the HPV panel** (`bin/build_kraken2_db.sh`), not HPV alone. The human genome is present as a *competitive decoy*, not because human reads are of interest. Kraken2 assigns each read to its best-supported taxon (ties fall to the lowest common ancestor), so a human read that happens to share k-mers with an HPV reference — low-complexity/repeat stretches, conserved motifs, or host sequence contaminating a reference deposit — is pulled to human instead of leaking into the HPV count.
+
+This matters because the **HPV+/− call is Kraken2-only** (`--hpv_min_reads`, default 10), with no other filter guarding it. Against a true positive rate of only ~2–3%, even a low rate of host k-mer bleed would inflate positivity, so the decoy does its most important work exactly where the positivity rate is most exposed.
+
+What host inclusion does **not** change: the depth-normalisation denominator (`total = unclassified + root` reads, which equals library size regardless of what is in the DB — dropping the host just moves human reads from the classified subtree into the unclassified bucket), and the typed/productive results, which pass a second specificity gate (STAR coverage breadth ≥ `hpv_min_coverage` **and** mean depth ≥ `hpv_min_depth`) that spurious host reads cannot clear.
+
+**The efficiency price is almost entirely the host genome.** The HPV panel is a few MB; GRCh38 is what drives the multi-hour, 64 GB `setup.sh` build, the multi-GB `.k2d`, and the per-task RAM that forces the `process_high` label and caps how many screens run in parallel. A leaner design is two-stage: a cheap host-free pre-filter to flag candidate viral reads, then pay the host-decoy cost only on that small candidate set.
+
+### Sibling surveillance screens run host-free (influenza A, HDV)
+
+Related One Health surveillance screens (influenza A, HDV) are deliberately run **without host removal**, trading the decoy's specificity for throughput at scale. That is a sound choice *provided* a downstream alignment/coverage step supplies the second specificity filter, as the HPV typing stage does here. The consequence to keep in mind: a host-free screen's raw positivity and read counts are **not** host-protected and should be read as a *candidate set to be confirmed by alignment*, not as final positivity calls. Where a screen lacks such a downstream gate, reintroduce the host decoy (or the two-stage pre-filter above) before trusting the counts.
+
 ## Original Description
 
 We need to know which HPV types are actually present in human skin, and at what frequency. The problem is that in most transcriptome datasets the non-human transcripts are discarded from the outset, so one has to go back to the raw data.
