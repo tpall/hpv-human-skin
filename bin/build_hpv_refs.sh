@@ -12,6 +12,9 @@ OUTPUT_DIR="${1:?Usage: build_hpv_refs.sh <output_dir> [custom_fasta_dir]}"
 CUSTOM_DIR="${2:-}"
 THREADS="${3:-8}"
 
+# Resolve the bin/ dir before we cd, so we can call sibling scripts afterwards.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 mkdir -p "${OUTPUT_DIR}"
 cd "${OUTPUT_DIR}"
 
@@ -117,6 +120,14 @@ fi
 
 echo "=== Creating samtools index ==="
 samtools faidx hpv_all.fasta
+
+echo "=== Building reference -> genus lookup from PaVE taxonomy ==="
+# Complete lookup, one row per panel reference (keyed on locus_id). Regenerated
+# here so it stays consistent with the panel instead of going stale.
+python3 "${SCRIPT_DIR}/build_genus_lookup.py" \
+    --fai hpv_all.fasta.fai \
+    --out type_genus.csv \
+    --save-json pave_genomes.json
 
 echo "=== Building STAR genome index ==="
 mkdir -p star_index
