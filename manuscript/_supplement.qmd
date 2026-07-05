@@ -45,3 +45,13 @@ cat(knitr::kable(cin_tbl, format = "pipe", align = c("l", "l", "l", "l", "l", "r
 
 High-risk mucosal HPV16 cases captured by the broadened cutaneous-neoplasia query and conservatively retained in the neoplasia tier. All `r stats$cin_n` are typed as the mucosal high-risk type HPV16 (dominant assigned reference) with cervical/CIN or unspecified-site diagnoses, and all exceed the control-calibrated detection floor (`r p1(stats$floor_rpm)` RPM), so they account for a disproportionate share of the neoplasia tier's above-floor detections. Excluding them lowers cutaneous-neoplasia floor-level detection from `r pp(stats$neo_pctfloor)`% to `r pp(stats$neo_pctfloor_cut)`% (indistinguishable from unselected skin: OR `r fo(stats$m2b_or_cut)`, *P* = `r fp(stats$m2b_p_cut)`) and strengthens the warts/EV-versus-neoplasia productivity contrast from OR `r fo(stats$m3_or)` to OR `r fo(stats$m3_or_cut)` (*P* = `r fp(stats$m3_p_cut)`). Retaining them is therefore the conservative analytical choice.
 :::
+
+::: {#supptbl-trace}
+```{r}
+#| echo: false
+#| output: asis
+cat(knitr::kable(build_trace_table(), format = "pipe", align = c("l","l","r","r","r","r","r","r")), sep = "\n")
+```
+
+Detection-tier HPV type catalogue. For the `r stats$trace_n` HPV-positive libraries that fell below the breadth ≥ 0.10 and depth ≥ 2 assignment threshold, the best-hit reference was taken from unique STAR primary alignments (MAPQ 255) in the retained alignments; `r stats$trace_resolved` resolved to a confident low-coverage type spanning `r stats$trace_ntypes` types (those with ≥ 2 resolved calls shown), with genus from the complete PaVE lookup. These are low-coverage, non-productive detections: the type is confidently identified but genome coverage is below the assignment breadth, so they extend the descriptive type catalogue without bearing on productivity. Healthy skin is dominated by cutaneous beta/gamma/nu types (`r stats$trace_skin_cut` of `r stats$trace_skin_n` resolved skin calls), whereas the mucosal types HPV16 and HPV18 concentrate in cell-line and other material, reproducing the contamination pattern of @supptbl-types at the sensitivity floor.
+:::

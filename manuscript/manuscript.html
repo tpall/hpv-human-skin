@@ -3407,6 +3407,7 @@ Figure 1: Depth-normalised HPV transcript burden distinguishes productive warts
 <section id="the-hpv-type-landscape-is-partitioned-by-population" class="level3">
 <h3 class="anchored" data-anchor-id="the-hpv-type-landscape-is-partitioned-by-population">The HPV type landscape is partitioned by population</h3>
 <p>The HPV-type-by-tier catalogue (<a href="#supptbl-types" class="quarto-xref">Table S1</a>) recapitulates these conclusions in a single descriptive view: the high-risk mucosal types HPV16/HPV18 are confined almost entirely to cell-line and engineered material; productive controls are dominated by cutaneous wart and low-risk types (HPV57, HPV2, HPV27, HPV6/11, plus diverse beta/gamma types); unselected skin shows a sparse, low-burden scatter of beta/gamma types; and the genuine neoplasia-associated productive infections are the gamma/alpha types noted above (HPV12, HPV16, HPV96, HPV182). The epidemiological reservoir of cutaneous beta/gamma HPV in healthy skin is therefore real but transcriptionally quiet, productive disease is the property of warts/EV, and HPV-associated cutaneous neoplasia carries the virus, when at all, as a trace, non-productive footprint.</p>
+<p>Extending this catalogue below the assignment threshold answers the descriptive question of <em>which</em> types make up the trace. A detection-tier re-map of the HPV-positive but untyped libraries, taking the best-hit reference from unique alignments at sub-threshold coverage, resolved a confident low-coverage type for 137 of 325 such libraries across 42 types (<a href="#supptbl-trace" class="quarto-xref">Table S5</a>). This recovers the expected commensal signal at the sensitivity floor: healthy skin carried a diverse cutaneous reservoir (39 of 56 resolved skin calls were beta-, gamma- or nu-types, including HPV12/HPV20, HPV4/HPV65/HPV134 and candidate skin-virome types), cutaneous neoplasia the carcinoma-associated beta and gamma types (HPV5, HPV12, HPV182, HPV222), while the mucosal HPV16/HPV18 signal stayed confined to cell-line material and a low-level contamination overlay. These are low-coverage, non-productive detections that identify the type without bearing on productivity, and so extend the type catalogue rather than qualify the trace-not-productive conclusion.</p>
 </section>
 <section id="a-bayesian-re-analysis-under-weakly-informative-priors-confirms-the-contrasts" class="level3">
 <h3 class="anchored" data-anchor-id="a-bayesian-re-analysis-under-weakly-informative-priors-confirms-the-contrasts">A Bayesian re-analysis under weakly-informative priors confirms the contrasts</h3>
@@ -4052,6 +4053,241 @@ Table S3: Bayesian re-analysis of the principal contrasts under weakly-informati
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-supptbl" id="supptbl-cin-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table S4: High-risk mucosal HPV16 cases captured by the broadened cutaneous-neoplasia query and conservatively retained in the neoplasia tier. All 3 are typed as the mucosal high-risk type HPV16 (dominant assigned reference) with cervical/CIN or unspecified-site diagnoses, and all exceed the control-calibrated detection floor (13.1 RPM), so they account for a disproportionate share of the neoplasia tier’s above-floor detections. Excluding them lowers cutaneous-neoplasia floor-level detection from 1.4% to 0.7% (indistinguishable from unselected skin: OR 1.0, <em>P</em> = 0.98) and strengthens the warts/EV-versus-neoplasia productivity contrast from OR 3.8 to OR 5.2 (<em>P</em> = 0.0038). Retaining them is therefore the conservative analytical choice.
+</figcaption>
+</figure>
+</div>
+<div id="supptbl-trace" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-supptbl figure">
+<div aria-describedby="supptbl-trace-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 6%">
+<col style="width: 18%">
+<col style="width: 11%">
+<col style="width: 22%">
+<col style="width: 6%">
+<col style="width: 11%">
+<col style="width: 6%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">HPV type</th>
+<th style="text-align: left;">Genus</th>
+<th style="text-align: right;">Unselected skin</th>
+<th style="text-align: right;">Neoplasia</th>
+<th style="text-align: right;">Productive controls</th>
+<th style="text-align: right;">Other</th>
+<th style="text-align: right;">Cell line</th>
+<th style="text-align: right;">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">HPV16</td>
+<td style="text-align: left;">Alpha</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">27</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">HPV18</td>
+<td style="text-align: left;">Alpha</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">21</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">HPV6</td>
+<td style="text-align: left;">Alpha</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">HPV-mDysk6</td>
+<td style="text-align: left;">Gamma</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">HPV12</td>
+<td style="text-align: left;">Beta</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">HPV-mw34c11a</td>
+<td style="text-align: left;">Gamma</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">HPV134</td>
+<td style="text-align: left;">Gamma</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">HPV-mw20c10a</td>
+<td style="text-align: left;">Gamma</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">HPV107</td>
+<td style="text-align: left;">Beta</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">HPV20</td>
+<td style="text-align: left;">Beta</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">HPV11</td>
+<td style="text-align: left;">Alpha</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">HPV4</td>
+<td style="text-align: left;">Gamma</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">HPV41</td>
+<td style="text-align: left;">Nu</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">HPV65</td>
+<td style="text-align: left;">Gamma</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">HPV66</td>
+<td style="text-align: left;">Alpha</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">HPV-mDysk2</td>
+<td style="text-align: left;">Gamma</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">HPV-mw18c25</td>
+<td style="text-align: left;">Gamma</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">HPV38</td>
+<td style="text-align: left;">Beta</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">HPV49</td>
+<td style="text-align: left;">Beta</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">HPV182</td>
+<td style="text-align: left;">Beta</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+</tr>
+</tbody>
+</table>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-supptbl" id="supptbl-trace-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table S5: Detection-tier HPV type catalogue. For the 325 HPV-positive libraries that fell below the breadth ≥ 0.10 and depth ≥ 2 assignment threshold, the best-hit reference was taken from unique STAR primary alignments (MAPQ 255) in the retained alignments; 137 resolved to a confident low-coverage type spanning 42 types (those with ≥ 2 resolved calls shown), with genus from the complete PaVE lookup. These are low-coverage, non-productive detections: the type is confidently identified but genome coverage is below the assignment breadth, so they extend the descriptive type catalogue without bearing on productivity. Healthy skin is dominated by cutaneous beta/gamma/nu types (39 of 56 resolved skin calls), whereas the mucosal types HPV16 and HPV18 concentrate in cell-line and other material, reproducing the contamination pattern of <a href="#supptbl-types" class="quarto-xref">Table S1</a> at the sensitivity floor.
 </figcaption>
 </figure>
 </div>

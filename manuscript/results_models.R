@@ -132,6 +132,18 @@ cat(sprintf("\nCIN check: %d mucosal-HR neoplasia cases (%s); neo floor -> %.2f%
     nrow(.cin), paste(.cin$srr_id,collapse=","), .neo_floor_cut, .bcut$OR, .bcut$p,
     .m3nc$pct, .m3nc$prod, .m3nc$n, .f3c$estimate, .f3c$p.value))
 
+## ── Trace-type detection catalogue summary (Table S5) ───────────────────────
+.tt <- read_tsv(here("manuscript/trace_types.tsv"), show_col_types=FALSE) %>%
+  mutate(trace_ok = !top_ref %in% c("NONE","NO_BAM") & top_reads>=5 & max_mapq>=20 &
+                    top_reads/pmax(n_primary,1)>=0.5)
+.tgen <- read_csv(here("manuscript/type_genus.csv"), show_col_types=FALSE) %>% select(hpv_reference, genus_short)
+.tres <- .tt %>% filter(trace_ok) %>% left_join(rp %>% select(srr_id,tier), by="srr_id") %>%
+  left_join(.tgen, by=c("top_ref"="hpv_reference"))
+.tskin <- .tres %>% filter(tier=="unselected_skin")
+cat(sprintf("\nTrace catalogue: %d/%d HPV+ untyped re-mapped to a confident type; %d distinct types; skin cutaneous(beta/gamma/nu) %d/%d\n",
+    sum(.tt$trace_ok), nrow(.tt), n_distinct(.tres$top_ref),
+    sum(.tskin$genus_short %in% c("beta","gamma","nu")), nrow(.tskin)))
+
 ## ── Reference panel size (built on the HPC; .fai not committed) ──────────────
 .fai <- here("assets/hpv_references/hpv_all.fasta.fai")
 panel_n <- if (file.exists(.fai)) length(readLines(.fai)) else 455L
@@ -179,7 +191,9 @@ stats <- lapply(list(
   cin_n=nrow(.cin), neo_pctfloor_cut=round(.neo_floor_cut,2),
   m2b_or_cut=.bcut$OR, m2b_lo_cut=.bcut$lo, m2b_hi_cut=.bcut$hi, m2b_p_cut=.bcut$p,
   m3_neo_pct_cut=round(.m3nc$pct,1), m3_neo_n_cut=.m3nc$n, m3_neo_prod_cut=.m3nc$prod,
-  m3_or_cut=.f3c$estimate, m3_lo_cut=.f3c$conf.int[1], m3_hi_cut=.f3c$conf.int[2], m3_p_cut=.f3c$p.value
+  m3_or_cut=.f3c$estimate, m3_lo_cut=.f3c$conf.int[1], m3_hi_cut=.f3c$conf.int[2], m3_p_cut=.f3c$p.value,
+  trace_n=nrow(.tt), trace_resolved=sum(.tt$trace_ok), trace_ntypes=n_distinct(.tres$top_ref),
+  trace_skin_n=nrow(.tskin), trace_skin_cut=sum(.tskin$genus_short %in% c("beta","gamma","nu"))
 ), unname)
 
 saveRDS(stats, here("manuscript/stats.rds"))

@@ -103,3 +103,34 @@ build_prod_table <- function(){
            `L2 reads` = formatC(l2, format = "d", big.mark = ","))
   })
 }
+
+## ── Table S5: detection-tier (trace) HPV type catalogue ─────────────────────
+# Best-hit type from STAR primary alignments (unique, MAPQ 255) for HPV-positive
+# but sub-threshold samples, i.e. below the breadth>=0.10 & depth>=2 assignment
+# cutoff. `trace_types.tsv` is a one-time BAM re-map; genus from the complete
+# PaVE lookup (`type_genus.csv`). Detection-tier, low-coverage, not productive.
+.trace_tiers <- c("unselected_skin","neoplasia","control_productive","other","cell_line")
+build_trace_table <- function(){
+  tt  <- read_tsv(here("manuscript/trace_types.tsv"), show_col_types = FALSE)
+  rp  <- read_tsv(here("results_reframe_csc/hpv_rpm_per_sample.tsv"), show_col_types = FALSE) %>%
+    select(srr_id, tier)
+  gen <- read_csv(here("manuscript/type_genus.csv"), show_col_types = FALSE) %>%
+    select(hpv_reference, genus_short)
+  x <- tt %>%
+    filter(!top_ref %in% c("NONE","NO_BAM"), top_reads >= 5, max_mapq >= 20,
+           top_reads / pmax(n_primary, 1) >= 0.5) %>%
+    left_join(rp, by = "srr_id") %>% left_join(gen, by = c("top_ref" = "hpv_reference")) %>%
+    mutate(type  = gsub("(REF|nr)$", "", top_ref),
+           Genus = tools::toTitleCase(coalesce(genus_short, "unclassified")),
+           tier  = factor(tier, levels = .trace_tiers)) %>%
+    count(type, Genus, tier, .drop = FALSE) %>%
+    pivot_wider(names_from = tier, values_from = n, values_fill = 0)
+  for (col in .trace_tiers) if (!col %in% names(x)) x[[col]] <- 0L
+  x %>% mutate(Total = rowSums(across(all_of(.trace_tiers)))) %>%
+    filter(Total >= 2) %>%
+    transmute(`HPV type` = type, Genus,
+              `Unselected skin` = unselected_skin, Neoplasia = neoplasia,
+              `Productive controls` = control_productive, Other = other,
+              `Cell line` = cell_line, Total) %>%
+    arrange(desc(Total), desc(`Unselected skin`))
+}

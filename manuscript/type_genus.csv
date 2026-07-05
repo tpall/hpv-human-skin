@@ -1,0 +1,456 @@
+hpv_reference,type,genus,genus_short,species
+HPV1REF,1,Mupapillomavirus,mu,Mupapillomavirus 1
+HPV2REF,2,Alphapapillomavirus,alpha,Alphapapillomavirus 4
+HPV3REF,3,Alphapapillomavirus,alpha,Alphapapillomavirus 2
+HPV4REF,4,Gammapapillomavirus,gamma,Gammapapillomavirus 1
+HPV5REF,5,Betapapillomavirus,beta,Betapapillomavirus 1
+HPV6REF,6,Alphapapillomavirus,alpha,Alphapapillomavirus 10
+HPV7REF,7,Alphapapillomavirus,alpha,Alphapapillomavirus 8
+HPV8REF,8,Betapapillomavirus,beta,Betapapillomavirus 1
+HPV9REF,9,Betapapillomavirus,beta,Betapapillomavirus 2
+HPV10REF,10,Alphapapillomavirus,alpha,Alphapapillomavirus 2
+HPV11REF,11,Alphapapillomavirus,alpha,Alphapapillomavirus 10
+HPV12REF,12,Betapapillomavirus,beta,Betapapillomavirus 1
+HPV13REF,13,Alphapapillomavirus,alpha,Alphapapillomavirus 10
+HPV14REF,14,Betapapillomavirus,beta,Betapapillomavirus 1
+HPV15REF,15,Betapapillomavirus,beta,Betapapillomavirus 2
+HPV16REF,16,Alphapapillomavirus,alpha,Alphapapillomavirus 9
+HPV17REF,17,Betapapillomavirus,beta,Betapapillomavirus 2
+HPV18REF,18,Alphapapillomavirus,alpha,Alphapapillomavirus 7
+HPV19REF,19,Betapapillomavirus,beta,Betapapillomavirus 1
+HPV20REF,20,Betapapillomavirus,beta,Betapapillomavirus 1
+HPV21REF,21,Betapapillomavirus,beta,Betapapillomavirus 1
+HPV22REF,22,Betapapillomavirus,beta,Betapapillomavirus 2
+HPV23REF,23,Betapapillomavirus,beta,Betapapillomavirus 2
+HPV24REF,24,Betapapillomavirus,beta,Betapapillomavirus 1
+HPV25REF,25,Betapapillomavirus,beta,Betapapillomavirus 1
+HPV26REF,26,Alphapapillomavirus,alpha,Alphapapillomavirus 5
+HPV27REF,27,Alphapapillomavirus,alpha,Alphapapillomavirus 4
+HPV28REF,28,Alphapapillomavirus,alpha,Alphapapillomavirus 2
+HPV29REF,29,Alphapapillomavirus,alpha,Alphapapillomavirus 2
+HPV30REF,30,Alphapapillomavirus,alpha,Alphapapillomavirus 6
+HPV31REF,31,Alphapapillomavirus,alpha,Alphapapillomavirus 9
+HPV32REF,32,Alphapapillomavirus,alpha,Alphapapillomavirus 1
+HPV33REF,33,Alphapapillomavirus,alpha,Alphapapillomavirus 9
+HPV34REF,34,Alphapapillomavirus,alpha,Alphapapillomavirus 11
+HPV35REF,35,Alphapapillomavirus,alpha,Alphapapillomavirus 9
+HPV36REF,36,Betapapillomavirus,beta,Betapapillomavirus 1
+HPV37REF,37,Betapapillomavirus,beta,Betapapillomavirus 2
+HPV38REF,38,Betapapillomavirus,beta,Betapapillomavirus 2
+HPV39REF,39,Alphapapillomavirus,alpha,Alphapapillomavirus 7
+HPV40REF,40,Alphapapillomavirus,alpha,Alphapapillomavirus 8
+HPV41REF,41,Nupapillomavirus,nu,Nupapillomavirus 1
+HPV42REF,42,Alphapapillomavirus,alpha,Alphapapillomavirus 1
+HPV43REF,43,Alphapapillomavirus,alpha,Alphapapillomavirus 8
+HPV44REF,44,Alphapapillomavirus,alpha,Alphapapillomavirus 10
+HPV45REF,45,Alphapapillomavirus,alpha,Alphapapillomavirus 7
+HPV47REF,47,Betapapillomavirus,beta,Betapapillomavirus 1
+HPV48REF,48,Gammapapillomavirus,gamma,Gammapapillomavirus 2
+HPV49REF,49,Betapapillomavirus,beta,Betapapillomavirus 3
+HPV50REF,50,Gammapapillomavirus,gamma,Gammapapillomavirus 3
+HPV51REF,51,Alphapapillomavirus,alpha,Alphapapillomavirus 5
+HPV52REF,52,Alphapapillomavirus,alpha,Alphapapillomavirus 9
+HPV53REF,53,Alphapapillomavirus,alpha,Alphapapillomavirus 6
+HPV54REF,54,Alphapapillomavirus,alpha,Alphapapillomavirus 13
+HPV56REF,56,Alphapapillomavirus,alpha,Alphapapillomavirus 6
+HPV57REF,57,Alphapapillomavirus,alpha,Alphapapillomavirus 4
+HPV58REF,58,Alphapapillomavirus,alpha,Alphapapillomavirus 9
+HPV59REF,59,Alphapapillomavirus,alpha,Alphapapillomavirus 7
+HPV60REF,60,Gammapapillomavirus,gamma,Gammapapillomavirus 4
+HPV61REF,61,Alphapapillomavirus,alpha,Alphapapillomavirus 3
+HPV62REF,62,Alphapapillomavirus,alpha,Alphapapillomavirus 3
+HPV63REF,63,Mupapillomavirus,mu,Mupapillomavirus 2
+HPV65REF,65,Gammapapillomavirus,gamma,Gammapapillomavirus 1
+HPV66REF,66,Alphapapillomavirus,alpha,Alphapapillomavirus 6
+HPV67REF,67,Alphapapillomavirus,alpha,Alphapapillomavirus 9
+HPV68REF,68,Alphapapillomavirus,alpha,Alphapapillomavirus 7
+HPV69REF,69,Alphapapillomavirus,alpha,Alphapapillomavirus 5
+HPV70REF,70,Alphapapillomavirus,alpha,Alphapapillomavirus 7
+HPV71REF,71,Alphapapillomavirus,alpha,Alphapapillomavirus 14
+HPV72REF,72,Alphapapillomavirus,alpha,Alphapapillomavirus 3
+HPV73REF,73,Alphapapillomavirus,alpha,Alphapapillomavirus 11
+HPV74REF,74,Alphapapillomavirus,alpha,Alphapapillomavirus 10
+HPV75REF,75,Betapapillomavirus,beta,Betapapillomavirus 3
+HPV76REF,76,Betapapillomavirus,beta,Betapapillomavirus 3
+HPV77REF,77,Alphapapillomavirus,alpha,Alphapapillomavirus 2
+HPV78REF,78,Alphapapillomavirus,alpha,Alphapapillomavirus 2
+HPV80REF,80,Betapapillomavirus,beta,Betapapillomavirus 2
+HPV81REF,81,Alphapapillomavirus,alpha,Alphapapillomavirus 3
+HPV82REF,82,Alphapapillomavirus,alpha,Alphapapillomavirus 5
+HPV83REF,83,Alphapapillomavirus,alpha,Alphapapillomavirus 3
+HPV84REF,84,Alphapapillomavirus,alpha,Alphapapillomavirus 3
+HPV85REF,85,Alphapapillomavirus,alpha,Alphapapillomavirus 7
+HPV86REF,86,Alphapapillomavirus,alpha,Alphapapillomavirus 3
+HPV87REF,87,Alphapapillomavirus,alpha,Alphapapillomavirus 3
+HPV88REF,88,Gammapapillomavirus,gamma,Gammapapillomavirus 5
+HPV89REF,89,Alphapapillomavirus,alpha,Alphapapillomavirus 3
+HPV90REF,90,Alphapapillomavirus,alpha,Alphapapillomavirus 14
+HPV91REF,91,Alphapapillomavirus,alpha,Alphapapillomavirus 8
+HPV92REF,92,Betapapillomavirus,beta,Betapapillomavirus 4
+HPV93REF,93,Betapapillomavirus,beta,Betapapillomavirus 1
+HPV94REF,94,Alphapapillomavirus,alpha,Alphapapillomavirus 2
+HPV95REF,95,Gammapapillomavirus,gamma,Gammapapillomavirus 1
+HPV96REF,96,Betapapillomavirus,beta,Betapapillomavirus 5
+HPV97REF,97,Alphapapillomavirus,alpha,Alphapapillomavirus 7
+HPV98REF,98,Betapapillomavirus,beta,Betapapillomavirus 1
+HPV99REF,99,Betapapillomavirus,beta,Betapapillomavirus 1
+HPV100REF,100,Betapapillomavirus,beta,Betapapillomavirus 2
+HPV101REF,101,Gammapapillomavirus,gamma,Gammapapillomavirus 6
+HPV102REF,102,Alphapapillomavirus,alpha,Alphapapillomavirus 3
+HPV103REF,103,Gammapapillomavirus,gamma,Gammapapillomavirus 6
+HPV104REF,104,Betapapillomavirus,beta,Betapapillomavirus 2
+HPV105REF,105,Betapapillomavirus,beta,Betapapillomavirus 1
+HPV106REF,106,Alphapapillomavirus,alpha,Alphapapillomavirus 14
+HPV107REF,107,Betapapillomavirus,beta,Betapapillomavirus 2
+HPV108REF,108,Gammapapillomavirus,gamma,Gammapapillomavirus 6
+HPV109REF,109,Gammapapillomavirus,gamma,Gammapapillomavirus 7
+HPV110REF,110,Betapapillomavirus,beta,Betapapillomavirus 2
+HPV111REF,111,Betapapillomavirus,beta,Betapapillomavirus 2
+HPV112REF,112,Gammapapillomavirus,gamma,Gammapapillomavirus 8
+HPV113REF,113,Betapapillomavirus,beta,Betapapillomavirus 2
+HPV114REF,114,Alphapapillomavirus,alpha,Alphapapillomavirus 3
+HPV115REF,115,Betapapillomavirus,beta,Betapapillomavirus 3
+HPV116REF,116,Gammapapillomavirus,gamma,Gammapapillomavirus 9
+HPV117REF,117,Alphapapillomavirus,alpha,Alphapapillomavirus 2
+HPV118REF,118,Betapapillomavirus,beta,Betapapillomavirus 1
+HPV119REF,119,Gammapapillomavirus,gamma,Gammapapillomavirus 8
+HPV120REF,120,Betapapillomavirus,beta,Betapapillomavirus 2
+HPV121REF,121,Gammapapillomavirus,gamma,Gammapapillomavirus 10
+HPV122REF,122,Betapapillomavirus,beta,Betapapillomavirus 2
+HPV123REF,123,Gammapapillomavirus,gamma,Gammapapillomavirus 7
+HPV124REF,124,Betapapillomavirus,beta,Betapapillomavirus 1
+HPV125REF,125,Alphapapillomavirus,alpha,Alphapapillomavirus 2
+HPV126REF,126,Gammapapillomavirus,gamma,Gammapapillomavirus 11
+HPV127REF,127,Gammapapillomavirus,gamma,Gammapapillomavirus 12
+HPV128REF,128,Gammapapillomavirus,gamma,Gammapapillomavirus 13
+HPV129REF,129,Gammapapillomavirus,gamma,Gammapapillomavirus 9
+HPV130REF,130,Gammapapillomavirus,gamma,Gammapapillomavirus 10
+HPV131REF,131,Gammapapillomavirus,gamma,Gammapapillomavirus 14
+HPV132REF,132,Gammapapillomavirus,gamma,Gammapapillomavirus 12
+HPV133REF,133,Gammapapillomavirus,gamma,Gammapapillomavirus 10
+HPV134REF,134,Gammapapillomavirus,gamma,Gammapapillomavirus 7
+HPV135REF,135,Gammapapillomavirus,gamma,Gammapapillomavirus 15
+HPV136REF,136,Gammapapillomavirus,gamma,Gammapapillomavirus 11
+HPV137REF,137,Gammapapillomavirus,gamma,Gammapapillomavirus 16
+HPV138REF,138,Gammapapillomavirus,gamma,Gammapapillomavirus 7
+HPV139REF,139,Gammapapillomavirus,gamma,Gammapapillomavirus 7
+HPV140REF,140,Gammapapillomavirus,gamma,Gammapapillomavirus 11
+HPV141REF,141,Gammapapillomavirus,gamma,Gammapapillomavirus 11
+HPV142REF,142,Gammapapillomavirus,gamma,Gammapapillomavirus 10
+HPV143REF,143,Betapapillomavirus,beta,Betapapillomavirus 1
+HPV144REF,144,Gammapapillomavirus,gamma,Gammapapillomavirus 17
+HPV145REF,145,Betapapillomavirus,beta,Betapapillomavirus 2
+HPV146REF,146,Gammapapillomavirus,gamma,Gammapapillomavirus 15
+HPV147REF,147,Gammapapillomavirus,gamma,Gammapapillomavirus 8
+HPV148REF,148,Gammapapillomavirus,gamma,Gammapapillomavirus 12
+HPV149REF,149,Gammapapillomavirus,gamma,Gammapapillomavirus 7
+HPV150REF,150,Betapapillomavirus,beta,Betapapillomavirus 5
+HPV151REF,151,Betapapillomavirus,beta,Betapapillomavirus 2
+HPV152REF,152,Betapapillomavirus,beta,Betapapillomavirus 1
+HPV153REF,153,Gammapapillomavirus,gamma,Gammapapillomavirus 13
+HPV154REF,154,Gammapapillomavirus,gamma,Gammapapillomavirus 11
+HPV155REF,155,Gammapapillomavirus,gamma,Gammapapillomavirus 7
+HPV156REF,156,Gammapapillomavirus,gamma,Gammapapillomavirus 18
+HPV157REF,157,Gammapapillomavirus,gamma,
+HPV158REF,158,Gammapapillomavirus,gamma,
+HPV159REF,159,Betapapillomavirus,beta,Betapapillomavirus 2
+HPV160REF,160,Alphapapillomavirus,alpha,Alphapapillomavirus 2
+HPV161REF,161,Gammapapillomavirus,gamma,Gammapapillomavirus 19
+HPV162REF,162,Gammapapillomavirus,gamma,Gammapapillomavirus 19
+HPV163REF,163,Gammapapillomavirus,gamma,Gammapapillomavirus 20
+HPV164REF,164,Gammapapillomavirus,gamma,Gammapapillomavirus 8
+HPV165REF,165,Gammapapillomavirus,gamma,Gammapapillomavirus 12
+HPV166REF,166,Gammapapillomavirus,gamma,Gammapapillomavirus 19
+HPV167REF,167,Gammapapillomavirus,gamma,Gammapapillomavirus 21
+HPV168REF,168,Gammapapillomavirus,gamma,Gammapapillomavirus 8
+HPV169REF,169,Gammapapillomavirus,gamma,Gammapapillomavirus 11
+HPV170REF,170,Gammapapillomavirus,gamma,Gammapapillomavirus 7
+HPV171REF,171,Gammapapillomavirus,gamma,Gammapapillomavirus 11
+HPV172REF,172,Gammapapillomavirus,gamma,Gammapapillomavirus 22
+HPV173REF,173,Gammapapillomavirus,gamma,Gammapapillomavirus 1
+HPV174REF,174,Betapapillomavirus,beta,Betapapillomavirus 2
+HPV175REF,175,Gammapapillomavirus,gamma,Gammapapillomavirus 23
+HPV176REF,176,Gammapapillomavirus,gamma,Gammapapillomavirus 8
+HPV177REF,177,Alphapapillomavirus,alpha,Alphapapillomavirus 11
+HPV178REF,178,Gammapapillomavirus,gamma,Gammapapillomavirus 24
+HPV179REF,179,Gammapapillomavirus,gamma,Gammapapillomavirus 15
+HPV180REF,180,Gammapapillomavirus,gamma,Gammapapillomavirus 10
+HPV181REF,181,Gammapapillomavirus,gamma,Gammapapillomavirus 11
+HPV182REF,182,Betapapillomavirus,beta,Betapapillomavirus 2
+HPV183REF,183,Gammapapillomavirus,gamma,Gammapapillomavirus 20
+HPV184REF,184,Gammapapillomavirus,gamma,Gammapapillomavirus 25
+HPV185REF,185,Betapapillomavirus,beta,Betapapillomavirus 5
+HPV186REF,186,Gammapapillomavirus,gamma,Gammapapillomavirus 7
+HPV187REF,187,Gammapapillomavirus,gamma,Gammapapillomavirus 26
+HPV188REF,188,Gammapapillomavirus,gamma,Gammapapillomavirus 3
+HPV189REF,189,Gammapapillomavirus,gamma,Gammapapillomavirus 7
+HPV190REF,190,Gammapapillomavirus,gamma,Gammapapillomavirus 24
+HPV191REF,191,Gammapapillomavirus,gamma,Gammapapillomavirus 10
+HPV192REF,192,Gammapapillomavirus,gamma,Gammapapillomavirus 15
+HPV193REF,193,Gammapapillomavirus,gamma,Gammapapillomavirus 7
+HPV194REF,194,Gammapapillomavirus,gamma,Gammapapillomavirus 20
+HPV195REF,195,Betapapillomavirus,beta,Betapapillomavirus 1
+HPV196REF,196,Betapapillomavirus,beta,Betapapillomavirus 1
+HPV197REF,197,Gammapapillomavirus,gamma,Gammapapillomavirus 24
+HPV199REF,199,Gammapapillomavirus,gamma,Gammapapillomavirus 12
+HPV200REF,200,Gammapapillomavirus,gamma,Gammapapillomavirus 2
+HPV201REF,201,Gammapapillomavirus,gamma,Gammapapillomavirus 27
+HPV202REF,202,Gammapapillomavirus,gamma,Gammapapillomavirus 11
+HPV203REF,203,Gammapapillomavirus,gamma,
+HPV204REF,204,Mupapillomavirus,mu,Mupapillomavirus 3
+HPV205REF,205,Gammapapillomavirus,gamma,
+HPV206REF,206,Betapapillomavirus,beta,
+HPV207REF,207,Gammapapillomavirus,gamma,
+HPV208REF,208,Gammapapillomavirus,gamma,
+HPV209REF,209,Betapapillomavirus,beta,
+HPV210REF,210,Gammapapillomavirus,gamma,
+HPV211REF,211,Gammapapillomavirus,gamma,
+HPV212REF,212,Gammapapillomavirus,gamma,
+HPV213REF,213,Gammapapillomavirus,gamma,
+HPV214REF,214,Gammapapillomavirus,gamma,
+HPV215REF,215,Gammapapillomavirus,gamma,
+HPV216REF,216,Gammapapillomavirus,gamma,
+HPV219REF,219,Gammapapillomavirus,gamma,
+HPV220REF,220,Gammapapillomavirus,gamma,
+HPV221REF,221,Gammapapillomavirus,gamma,
+HPV222REF,222,Gammapapillomavirus,gamma,
+HPV223REF,223,Gammapapillomavirus,gamma,
+HPV224REF,224,Gammapapillomavirus,gamma,
+HPV225REF,225,Gammapapillomavirus,gamma,
+HPV226REF,226,Gammapapillomavirus,gamma,
+HPV227REF,227,Betapapillomavirus,beta,
+HPV228REF,228,Gammapapillomavirus,gamma,Gammapapillomavirus 27
+HPV229REF,229,Gammapapillomavirus,gamma,Gammapapillomavirus 7
+HPV230REF,230,Gammapapillomavirus,gamma,
+HPV231REF,231,Gammapapillomavirus,gamma,
+HPV-m7221nr,m7221nr,Gammapapillomavirus,gamma,
+HPV-m7269nr,m7269nr,Gammapapillomavirus,gamma,
+HPV-m7299nr,m7299nr,Gammapapillomavirus,gamma,
+HPV-m7334nr,m7334nr,Gammapapillomavirus,gamma,
+HPV-m7350nr,m7350nr,Gammapapillomavirus,gamma,
+HPV-m7372nr,m7372nr,Unclassified,unclassified,
+HPV-m7424nr,m7424nr,Unclassified,unclassified,
+HPV-m7570nr,m7570nr,Gammapapillomavirus,gamma,
+HPV-m8923nr,m8923nr,Gammapapillomavirus,gamma,
+HPV-mCG2nr,mCG2nr,Gammapapillomavirus,gamma,
+HPV-mCG3nr,mCG3nr,Gammapapillomavirus,gamma,
+HPV-mCGG5nr,mCGG5nr,Gammapapillomavirus,gamma,
+HPV-mCH2nr,mCH2nr,Gammapapillomavirus,gamma,
+HPV-mDysk1nr,mDysk1nr,Gammapapillomavirus,gamma,
+HPV-mDysk2nr,mDysk2nr,Gammapapillomavirus,gamma,
+HPV-mDysk3nr,mDysk3nr,Gammapapillomavirus,gamma,
+HPV-mDysk5nr,mDysk5nr,Gammapapillomavirus,gamma,
+HPV-mDysk6nr,mDysk6nr,Gammapapillomavirus,gamma,
+HPV-mEV03c05nr,mEV03c05nr,Gammapapillomavirus,gamma,
+HPV-mEV03c09nr,mEV03c09nr,Betapapillomavirus,beta,
+HPV-mEV03c40nr,mEV03c40nr,Gammapapillomavirus,gamma,
+HPV-mEV03c45nr,mEV03c45nr,Gammapapillomavirus,gamma,
+HPV-mEV03c104nr,mEV03c104nr,Gammapapillomavirus,gamma,
+HPV-mEV03c188nr,mEV03c188nr,Gammapapillomavirus,gamma,
+HPV-mEV03c212nr,mEV03c212nr,Gammapapillomavirus,gamma,
+HPV-mEV03c434nr,mEV03c434nr,Gammapapillomavirus,gamma,
+HPV-mEV06c12bnr,mEV06c12bnr,Alphapapillomavirus,alpha,
+HPV-mEV06c107nr,mEV06c107nr,Gammapapillomavirus,gamma,
+HPV-mEV06c118nr,mEV06c118nr,Gammapapillomavirus,gamma,
+HPV-mEV07c367nr,mEV07c367nr,Gammapapillomavirus,gamma,
+HPV-mEV07c382nr,mEV07c382nr,Gammapapillomavirus,gamma,
+HPV-mEV07c390nr,mEV07c390nr,Gammapapillomavirus,gamma,
+HPV-mFD1nr,mFD1nr,Gammapapillomavirus,gamma,
+HPV-mFD2nr,mFD2nr,Gammapapillomavirus,gamma,
+HPV-mFS1nr,mFS1nr,Gammapapillomavirus,gamma,
+HPV-mFi864nr,mFi864nr,Gammapapillomavirus,gamma,
+HPV-mHIVGc36nr,mHIVGc36nr,Betapapillomavirus,beta,
+HPV-mJDFY01nr,mJDFY01nr,Gammapapillomavirus,gamma,
+HPV-mKC5nr,mKC5nr,Gammapapillomavirus,gamma,
+HPV-mKN1nr,mKN1nr,Gammapapillomavirus,gamma,
+HPV-mKN2nr,mKN2nr,Gammapapillomavirus,gamma,
+HPV-mKN3nr,mKN3nr,Gammapapillomavirus,gamma,
+HPV-mL55nr,mL55nr,Gammapapillomavirus,gamma,
+HPV-mLCOSOc196nr,mLCOSOc196nr,Gammapapillomavirus,gamma,
+HPV-mSE379nr,mSE379nr,Gammapapillomavirus,gamma,
+HPV-mSE383nr,mSE383nr,Gammapapillomavirus,gamma,
+HPV-mSK001nr,mSK001nr,Gammapapillomavirus,gamma,
+HPV-mSK008nr,mSK008nr,Gammapapillomavirus,gamma,
+HPV-mSK010nr,mSK010nr,Gammapapillomavirus,gamma,
+HPV-mSK011nr,mSK011nr,Gammapapillomavirus,gamma,
+HPV-mSK012nr,mSK012nr,Gammapapillomavirus,gamma,
+HPV-mSK013nr,mSK013nr,Gammapapillomavirus,gamma,
+HPV-mSK014nr,mSK014nr,Gammapapillomavirus,gamma,
+HPV-mSK015nr,mSK015nr,Gammapapillomavirus,gamma,
+HPV-mSK019nr,mSK019nr,Gammapapillomavirus,gamma,
+HPV-mSK020nr,mSK020nr,Gammapapillomavirus,gamma,
+HPV-mSK022nr,mSK022nr,Gammapapillomavirus,gamma,
+HPV-mSK023nr,mSK023nr,Gammapapillomavirus,gamma,
+HPV-mSK025nr,mSK025nr,Mupapillomavirus,mu,
+HPV-mSK027nr,mSK027nr,Betapapillomavirus,beta,
+HPV-mSK028nr,mSK028nr,Gammapapillomavirus,gamma,
+HPV-mSK029nr,mSK029nr,Gammapapillomavirus,gamma,
+HPV-mSK030nr,mSK030nr,Gammapapillomavirus,gamma,
+HPV-mSK034nr,mSK034nr,Gammapapillomavirus,gamma,
+HPV-mSK037nr,mSK037nr,Gammapapillomavirus,gamma,
+HPV-mSK038nr,mSK038nr,Gammapapillomavirus,gamma,
+HPV-mSK039nr,mSK039nr,Gammapapillomavirus,gamma,
+HPV-mSK040nr,mSK040nr,Gammapapillomavirus,gamma,
+HPV-mSK041nr,mSK041nr,Gammapapillomavirus,gamma,
+HPV-mSK043nr,mSK043nr,Betapapillomavirus,beta,
+HPV-mSK045nr,mSK045nr,Gammapapillomavirus,gamma,
+HPV-mSK046nr,mSK046nr,Gammapapillomavirus,gamma,
+HPV-mSK049nr,mSK049nr,Gammapapillomavirus,gamma,
+HPV-mSK050nr,mSK050nr,Gammapapillomavirus,gamma,
+HPV-mSK051nr,mSK051nr,Gammapapillomavirus,gamma,
+HPV-mSK054nr,mSK054nr,Gammapapillomavirus,gamma,
+HPV-mSK055nr,mSK055nr,Gammapapillomavirus,gamma,
+HPV-mSK056nr,mSK056nr,Gammapapillomavirus,gamma,
+HPV-mSK057nr,mSK057nr,Gammapapillomavirus,gamma,
+HPV-mSK058nr,mSK058nr,Gammapapillomavirus,gamma,
+HPV-mSK061nr,mSK061nr,Gammapapillomavirus,gamma,
+HPV-mSK062nr,mSK062nr,Gammapapillomavirus,gamma,
+HPV-mSK063nr,mSK063nr,Gammapapillomavirus,gamma,
+HPV-mSK064nr,mSK064nr,Gammapapillomavirus,gamma,
+HPV-mSK065nr,mSK065nr,Gammapapillomavirus,gamma,
+HPV-mSK067nr,mSK067nr,Gammapapillomavirus,gamma,
+HPV-mSK075nr,mSK075nr,Gammapapillomavirus,gamma,
+HPV-mSK076nr,mSK076nr,Gammapapillomavirus,gamma,
+HPV-mSK078nr,mSK078nr,Gammapapillomavirus,gamma,
+HPV-mSK081nr,mSK081nr,Gammapapillomavirus,gamma,
+HPV-mSK083nr,mSK083nr,Gammapapillomavirus,gamma,
+HPV-mSK085nr,mSK085nr,Gammapapillomavirus,gamma,
+HPV-mSK086nr,mSK086nr,Gammapapillomavirus,gamma,
+HPV-mSK087nr,mSK087nr,Gammapapillomavirus,gamma,
+HPV-mSK089nr,mSK089nr,Gammapapillomavirus,gamma,
+HPV-mSK090nr,mSK090nr,Gammapapillomavirus,gamma,
+HPV-mSK091nr,mSK091nr,Gammapapillomavirus,gamma,
+HPV-mSK093nr,mSK093nr,Gammapapillomavirus,gamma,
+HPV-mSK094nr,mSK094nr,Gammapapillomavirus,gamma,
+HPV-mSK095nr,mSK095nr,Gammapapillomavirus,gamma,
+HPV-mSK096nr,mSK096nr,Gammapapillomavirus,gamma,
+HPV-mSK098nr,mSK098nr,Gammapapillomavirus,gamma,
+HPV-mSK100nr,mSK100nr,Gammapapillomavirus,gamma,
+HPV-mSK101nr,mSK101nr,Gammapapillomavirus,gamma,
+HPV-mSK102nr,mSK102nr,Gammapapillomavirus,gamma,
+HPV-mSK103nr,mSK103nr,Gammapapillomavirus,gamma,
+HPV-mSK107nr,mSK107nr,Gammapapillomavirus,gamma,
+HPV-mSK109nr,mSK109nr,Gammapapillomavirus,gamma,
+HPV-mSK111nr,mSK111nr,Betapapillomavirus,beta,
+HPV-mSK115nr,mSK115nr,Gammapapillomavirus,gamma,
+HPV-mSK116nr,mSK116nr,Gammapapillomavirus,gamma,
+HPV-mSK117nr,mSK117nr,Gammapapillomavirus,gamma,
+HPV-mSK118nr,mSK118nr,Gammapapillomavirus,gamma,
+HPV-mSK119nr,mSK119nr,Gammapapillomavirus,gamma,
+HPV-mSK120nr,mSK120nr,Gammapapillomavirus,gamma,
+HPV-mSK121nr,mSK121nr,Gammapapillomavirus,gamma,
+HPV-mSK126nr,mSK126nr,Gammapapillomavirus,gamma,
+HPV-mSK128nr,mSK128nr,Gammapapillomavirus,gamma,
+HPV-mSK131nr,mSK131nr,Gammapapillomavirus,gamma,
+HPV-mSK132nr,mSK132nr,Gammapapillomavirus,gamma,
+HPV-mSK138nr,mSK138nr,Gammapapillomavirus,gamma,
+HPV-mSK139nr,mSK139nr,Gammapapillomavirus,gamma,
+HPV-mSK146nr,mSK146nr,Gammapapillomavirus,gamma,
+HPV-mSK147nr,mSK147nr,Gammapapillomavirus,gamma,
+HPV-mSK150nr,mSK150nr,Gammapapillomavirus,gamma,
+HPV-mSK152nr,mSK152nr,Gammapapillomavirus,gamma,
+HPV-mSK155nr,mSK155nr,Gammapapillomavirus,gamma,
+HPV-mSK156nr,mSK156nr,Gammapapillomavirus,gamma,
+HPV-mSK160nr,mSK160nr,Gammapapillomavirus,gamma,
+HPV-mSK164nr,mSK164nr,Betapapillomavirus,beta,
+HPV-mSK165nr,mSK165nr,Gammapapillomavirus,gamma,
+HPV-mSK166nr,mSK166nr,Gammapapillomavirus,gamma,
+HPV-mSK167nr,mSK167nr,Gammapapillomavirus,gamma,
+HPV-mSK168nr,mSK168nr,Gammapapillomavirus,gamma,
+HPV-mSK169nr,mSK169nr,Gammapapillomavirus,gamma,
+HPV-mSK170nr,mSK170nr,Gammapapillomavirus,gamma,
+HPV-mSK171nr,mSK171nr,Gammapapillomavirus,gamma,
+HPV-mSK173nr,mSK173nr,Gammapapillomavirus,gamma,
+HPV-mSK174nr,mSK174nr,Gammapapillomavirus,gamma,
+HPV-mSK176nr,mSK176nr,Gammapapillomavirus,gamma,
+HPV-mSK183nr,mSK183nr,Gammapapillomavirus,gamma,
+HPV-mSK185nr,mSK185nr,Gammapapillomavirus,gamma,
+HPV-mSK186nr,mSK186nr,Gammapapillomavirus,gamma,
+HPV-mSK189nr,mSK189nr,Gammapapillomavirus,gamma,
+HPV-mSK190nr,mSK190nr,Gammapapillomavirus,gamma,
+HPV-mSK191nr,mSK191nr,Gammapapillomavirus,gamma,
+HPV-mSK192nr,mSK192nr,Gammapapillomavirus,gamma,
+HPV-mSK197nr,mSK197nr,Gammapapillomavirus,gamma,
+HPV-mSK199nr,mSK199nr,Gammapapillomavirus,gamma,
+HPV-mSK202nr,mSK202nr,Gammapapillomavirus,gamma,
+HPV-mSK204nr,mSK204nr,Gammapapillomavirus,gamma,
+HPV-mSK205nr,mSK205nr,Gammapapillomavirus,gamma,
+HPV-mSK206nr,mSK206nr,Gammapapillomavirus,gamma,
+HPV-mSK209nr,mSK209nr,Betapapillomavirus,beta,
+HPV-mSK210nr,mSK210nr,Gammapapillomavirus,gamma,
+HPV-mSK211nr,mSK211nr,Gammapapillomavirus,gamma,
+HPV-mSK216nr,mSK216nr,Gammapapillomavirus,gamma,
+HPV-mSK217nr,mSK217nr,Gammapapillomavirus,gamma,
+HPV-mSK218nr,mSK218nr,Gammapapillomavirus,gamma,
+HPV-mSK219nr,mSK219nr,Betapapillomavirus,beta,
+HPV-mSK227nr,mSK227nr,Gammapapillomavirus,gamma,
+HPV-mSK229nr,mSK229nr,Gammapapillomavirus,gamma,
+HPV-mSK231nr,mSK231nr,Gammapapillomavirus,gamma,
+HPV-mSK238nr,mSK238nr,Gammapapillomavirus,gamma,
+HPV-mSK239nr,mSK239nr,Gammapapillomavirus,gamma,
+HPV-mSK240nr,mSK240nr,Gammapapillomavirus,gamma,
+HPV-mSK241nr,mSK241nr,Gammapapillomavirus,gamma,
+HPV-mSK242nr,mSK242nr,Gammapapillomavirus,gamma,
+HPV-mSK244nr,mSK244nr,Gammapapillomavirus,gamma,
+HPV-mSK245nr,mSK245nr,Gammapapillomavirus,gamma,
+HPV-mSK246nr,mSK246nr,Gammapapillomavirus,gamma,
+HPV-mSK249nr,mSK249nr,Gammapapillomavirus,gamma,
+HPV-mSK250nr,mSK250nr,Gammapapillomavirus,gamma,
+HPV-mTG550nr,mTG550nr,Gammapapillomavirus,gamma,
+HPV-mTVMBSFc09nr,mTVMBSFc09nr,Betapapillomavirus,beta,
+HPV-mTVMBSGc529nr,mTVMBSGc529nr,Gammapapillomavirus,gamma,
+HPV-mTVMBSGc2024nr,mTVMBSGc2024nr,Betapapillomavirus,beta,
+HPV-mTVMBSGc2450nr,mTVMBSGc2450nr,Gammapapillomavirus,gamma,
+HPV-mTVMBSHc13nr,mTVMBSHc13nr,Gammapapillomavirus,gamma,
+HPV-mTVMBSHc33nr,mTVMBSHc33nr,Gammapapillomavirus,gamma,
+HPV-mTVMBSWc141nr,mTVMBSWc141nr,Gammapapillomavirus,gamma,
+HPV-mZJ01nr,mZJ01nr,Gammapapillomavirus,gamma,
+HPV-md01c06nr,md01c06nr,Mupapillomavirus,mu,
+HPV-mdo1c02nr,mdo1c02nr,Gammapapillomavirus,gamma,
+HPV-mdo1c232nr,mdo1c232nr,Gammapapillomavirus,gamma,
+HPV-mga2c01nr,mga2c01nr,Gammapapillomavirus,gamma,
+HPV-mga2c70nr,mga2c70nr,Gammapapillomavirus,gamma,
+HPV-mm090c09nr,mm090c09nr,Betapapillomavirus,beta,
+HPV-mm090c10nr,mm090c10nr,Gammapapillomavirus,gamma,
+HPV-mm090c66nr,mm090c66nr,Gammapapillomavirus,gamma,
+HPV-mm090c145nr,mm090c145nr,Gammapapillomavirus,gamma,
+HPV-mm292c14nr,mm292c14nr,Betapapillomavirus,beta,
+HPV-mm292c88nr,mm292c88nr,Betapapillomavirus,beta,
+HPV-mm292c100nr,mm292c100nr,Betapapillomavirus,beta,
+HPV-mw02c24anr,mw02c24anr,Gammapapillomavirus,gamma,
+HPV-mw07c34dnr,mw07c34dnr,Gammapapillomavirus,gamma,
+HPV-mw07c68bnr,mw07c68bnr,Gammapapillomavirus,gamma,
+HPV-mw11C24nr,mw11C24nr,Gammapapillomavirus,gamma,
+HPV-mw11C39nr,mw11C39nr,Gammapapillomavirus,gamma,
+HPV-mw11C51nr,mw11C51nr,Gammapapillomavirus,gamma,
+HPV-mw11c13nr,mw11c13nr,Gammapapillomavirus,gamma,
+HPV-mw18c07nr,mw18c07nr,Gammapapillomavirus,gamma,
+HPV-mw18c11dnr,mw18c11dnr,Gammapapillomavirus,gamma,
+HPV-mw18c25nr,mw18c25nr,Gammapapillomavirus,gamma,
+HPV-mw18c39nr,mw18c39nr,Gammapapillomavirus,gamma,
+HPV-mw18c134nr,mw18c134nr,Gammapapillomavirus,gamma,
+HPV-mw20c01anr,mw20c01anr,Gammapapillomavirus,gamma,
+HPV-mw20c01bnr,mw20c01bnr,Gammapapillomavirus,gamma,
+HPV-mw20c02cnr,mw20c02cnr,Gammapapillomavirus,gamma,
+HPV-mw20c03anr,mw20c03anr,Gammapapillomavirus,gamma,
+HPV-mw20c04nr,mw20c04nr,Gammapapillomavirus,gamma,
+HPV-mw20c08anr,mw20c08anr,Gammapapillomavirus,gamma,
+HPV-mw20c09nr,mw20c09nr,Gammapapillomavirus,gamma,
+HPV-mw20c10anr,mw20c10anr,Gammapapillomavirus,gamma,
+HPV-mw21c693nr,mw21c693nr,Gammapapillomavirus,gamma,
+HPV-mw22c09nr,mw22c09nr,Gammapapillomavirus,gamma,
+HPV-mw23c08cnr,mw23c08cnr,Gammapapillomavirus,gamma,
+HPV-mw23c77nr,mw23c77nr,Gammapapillomavirus,gamma,
+HPV-mw23c101cnr,mw23c101cnr,Gammapapillomavirus,gamma,
+HPV-mw27c03anr,mw27c03anr,Gammapapillomavirus,gamma,
+HPV-mw27c04cnr,mw27c04cnr,Gammapapillomavirus,gamma,
+HPV-mw27c39cnr,mw27c39cnr,Gammapapillomavirus,gamma,
+HPV-mw27c157cnr,mw27c157cnr,Gammapapillomavirus,gamma,
+HPV-mw34c04anr,mw34c04anr,Gammapapillomavirus,gamma,
+HPV-mw34c11anr,mw34c11anr,Gammapapillomavirus,gamma,
+HPV-mw34c14anr,mw34c14anr,Gammapapillomavirus,gamma,
+HPV-mw34c28anr,mw34c28anr,Gammapapillomavirus,gamma,
+HPV-mw34c34anr,mw34c34anr,Gammapapillomavirus,gamma,
+HPV-mwg1c05nr,mwg1c05nr,Gammapapillomavirus,gamma,
+HPV-mwg1c09nr,mwg1c09nr,Gammapapillomavirus,gamma,
+NC_027779.1,NC_027779.1,unknown,unknown,
