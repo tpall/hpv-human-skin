@@ -99,6 +99,39 @@ if(n_distinct(pc$grp)==2){
        f3$estimate, f3$conf.int[1], f3$conf.int[2], f3$p.value))
 }
 
+## ── CIN data-hygiene sensitivity (Table S4) ─────────────────────────────────
+## The broadened SCC/CIN query captured a few high-risk *mucosal* alpha (HPV16/18..)
+## cases into the cutaneous neoplasia tier. Flag them by dominant assigned type and
+## show that removing them only sharpens the trace-not-productive conclusion.
+.HRTYPES <- c(16,18,31,33,35,39,45,51,52,56,58,59,68,26,53,66,67,69,70,73,82)
+.domtype <- function(dirs){
+  fs <- unlist(lapply(dirs, function(d) list.files(here(d,"aggregated"),"_hpv_types\\.tsv$",full.names=TRUE)))
+  map_dfr(fs, ~ suppressMessages(read_tsv(.x, show_col_types=FALSE, col_types=cols(.default="c")))) %>%
+    mutate(coverage_breadth=as.numeric(coverage_breadth), mean_depth=as.numeric(mean_depth)) %>%
+    filter(coverage_breadth>=0.10, mean_depth>=2) %>%
+    group_by(sample_id) %>% slice_max(mean_depth, n=1, with_ties=FALSE) %>% ungroup() %>%
+    transmute(srr_id=sample_id, dom_type=hpv_reference,
+              mucosal_hr = suppressWarnings(as.integer(str_match(dom_type,"HPV[-]?(\\d+)")[,2])) %in% .HRTYPES)
+}
+.dt  <- .domtype(c("results_full_v2","results_lesions","results_lesions_csc","results_lesions_wide"))
+.rp2 <- rp %>% left_join(.dt, by="srr_id") %>% mutate(mucosal_hr=coalesce(mucosal_hr,FALSE))
+.cin <- .rp2 %>% filter(tier=="neoplasia", mucosal_hr) %>% arrange(desc(rpm))
+cin_tbl <- .cin %>% transmute(Accession=srr_id, Study=study, Type=sub("REF$","",dom_type),
+                              Tissue=tissue_category, Diagnosis=diagnosis, RPM=round(rpm,1))
+.rpc  <- .rp2 %>% filter(!(tier=="neoplasia" & mucosal_hr))
+.neo_floor_cut <- .rpc %>% filter(tier=="neoplasia") %>% summarise(p=100*mean(detect)) %>% pull(p)
+.subc <- .rpc %>% filter(tier %in% c("unselected_skin","neoplasia")) %>%
+  mutate(tier=relevel(factor(as.character(tier)),"unselected_skin"))
+.bcut <- as.list(ortab(glm(detect ~ tier + l10, binomial, .subc)) %>% filter(term=="tierneoplasia"))
+.prodc <- prod %>% left_join(.dt %>% select(srr_id,mucosal_hr), by="srr_id") %>%
+  mutate(mucosal_hr=coalesce(mucosal_hr,FALSE)) %>% filter(!(grp=="neoplasia (cSCC/AK)" & mucosal_hr))
+.pcc  <- .prodc %>% filter(grp %in% c("productive_controls (targeted warts/EV)","neoplasia (cSCC/AK)"))
+.m3nc <- .pcc %>% filter(grp=="neoplasia (cSCC/AK)") %>% summarise(n=n(), prod=sum(productive), pct=100*mean(productive))
+.f3c  <- fisher.test(table(grp=.pcc$grp, productive=.pcc$productive))
+cat(sprintf("\nCIN check: %d mucosal-HR neoplasia cases (%s); neo floor -> %.2f%%, M2b OR %.2f p=%.3g; M3 neo %.1f%% (%d/%d), OR %.2f p=%.4g\n",
+    nrow(.cin), paste(.cin$srr_id,collapse=","), .neo_floor_cut, .bcut$OR, .bcut$p,
+    .m3nc$pct, .m3nc$prod, .m3nc$n, .f3c$estimate, .f3c$p.value))
+
 ## ── Reference panel size (built on the HPC; .fai not committed) ──────────────
 .fai <- here("assets/hpv_references/hpv_all.fasta.fai")
 panel_n <- if (file.exists(.fai)) length(readLines(.fai)) else 455L
@@ -142,7 +175,11 @@ stats <- lapply(list(
   neo_depth_or=.mn_l10$OR, neo_depth_lo=.mn_l10$lo, neo_depth_hi=.mn_l10$hi, neo_depth_p=.mn_l10$p,
   m3_ctrl_pct=.m3c$pct, m3_ctrl_prod=.m3c$prod, m3_ctrl_n=.m3c$n,
   m3_neo_pct=.m3n$pct,  m3_neo_prod=.m3n$prod,  m3_neo_n=.m3n$n,
-  m3_or=f3$estimate, m3_lo=f3$conf.int[1], m3_hi=f3$conf.int[2], m3_p=f3$p.value
+  m3_or=f3$estimate, m3_lo=f3$conf.int[1], m3_hi=f3$conf.int[2], m3_p=f3$p.value,
+  cin_n=nrow(.cin), neo_pctfloor_cut=round(.neo_floor_cut,2),
+  m2b_or_cut=.bcut$OR, m2b_lo_cut=.bcut$lo, m2b_hi_cut=.bcut$hi, m2b_p_cut=.bcut$p,
+  m3_neo_pct_cut=round(.m3nc$pct,1), m3_neo_n_cut=.m3nc$n, m3_neo_prod_cut=.m3nc$prod,
+  m3_or_cut=.f3c$estimate, m3_lo_cut=.f3c$conf.int[1], m3_hi_cut=.f3c$conf.int[2], m3_p_cut=.f3c$p.value
 ), unname)
 
 saveRDS(stats, here("manuscript/stats.rds"))

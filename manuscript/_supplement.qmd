@@ -35,3 +35,13 @@ cat(knitr::kable(build_bayes_table(stats, bget), format = "pipe", align = c("l",
 
 Bayesian re-analysis of the principal contrasts under weakly-informative priors. Each frequentist model (M1–M3; Methods, @tbl-positivity, @fig-rpm) was refitted as a Bayesian logistic regression with a Normal(0, 2.5) prior on the log-odds coefficients and a Normal(0, 5) prior on the intercept (`rstanarm`; four chains, all R-hat ≤ 1.004, no divergent transitions). Odds ratios are posterior medians with 95% credible intervals; P(OR > 1) is the posterior probability of a positive effect. Frequentist odds ratios (with *P* values) are shown for comparison; the productive-controls-versus-skin row is a Fisher exact estimate inflated by near-complete separation, whose Bayesian counterpart is regularised by the prior (a heavier-tailed Student-*t*(3) prior gives an even larger posterior OR, `r bor(bget("M2c_controls_vs_skin_floor_studentt"))`, confirming robustness). Sequencing depth is modelled per 10-fold (log₁₀) change in library size.
 :::
+
+::: {#supptbl-cin}
+```{r}
+#| echo: false
+#| output: asis
+cat(knitr::kable(cin_tbl, format = "pipe", align = c("l", "l", "l", "l", "l", "r")), sep = "\n")
+```
+
+High-risk mucosal HPV16 cases captured by the broadened cutaneous-neoplasia query and conservatively retained in the neoplasia tier. All `r stats$cin_n` are typed as the mucosal high-risk type HPV16 (dominant assigned reference) with cervical/CIN or unspecified-site diagnoses, and all exceed the control-calibrated detection floor (`r p1(stats$floor_rpm)` RPM), so they account for a disproportionate share of the neoplasia tier's above-floor detections. Excluding them lowers cutaneous-neoplasia floor-level detection from `r pp(stats$neo_pctfloor)`% to `r pp(stats$neo_pctfloor_cut)`% (indistinguishable from unselected skin: OR `r fo(stats$m2b_or_cut)`, *P* = `r fp(stats$m2b_p_cut)`) and strengthens the warts/EV-versus-neoplasia productivity contrast from OR `r fo(stats$m3_or)` to OR `r fo(stats$m3_or_cut)` (*P* = `r fp(stats$m3_p_cut)`). Retaining them is therefore the conservative analytical choice.
+:::

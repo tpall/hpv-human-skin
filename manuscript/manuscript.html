@@ -3397,7 +3397,7 @@ Figure 1: Depth-normalised HPV transcript burden distinguishes productive warts
 </figcaption>
 </figure>
 </div>
-<p>This gap is not explained by sequencing depth. Modelling productive-level detection (RPM ≥ floor) as a function of population tier and log sequencing depth, neoplasia did not significantly differ from unselected skin after depth adjustment (OR 2.0, 95% CI 0.8–4.7, <em>P</em> = 0.14), whereas productive controls exceeded unselected skin by three orders of magnitude (Fisher exact OR 2,515, 95% CI 754–16,384, <em>P</em> = 4.9×10⁻⁸¹). Sequencing depth did raise the odds of detecting <em>any</em> HPV read (OR per log₁₀ reads 4.6, 4.1–5.3, <em>P</em> = 2.7×10⁻¹¹⁸), but within the neoplasia tier alone deeper sequencing bought no additional productive-level detection (OR 1.7, 95% CI 0.1–23, <em>P</em> = 0.68). Even the deepest cSCC/AK libraries did not cross the productive floor. Consistent with a residual hit-and-run footprint rather than active infection, neoplasia showed a modest excess of <em>trace</em> HPV (any read; OR 1.7, 95% CI 1.4–2.0, <em>P</em> = 7.9×10⁻⁷ vs unselected skin), but this trace signal never amounted to productive burden. The depth-matched detection profile confirms the same pattern non-parametrically: across every sequencing-depth bin, productive controls detect at 90–100% while neoplasia and unselected skin stay near zero (<a href="#suppfig-depth" class="quarto-xref">Figure S1</a>). At population scale, then, HPV in cutaneous neoplasia is a low-level, transcriptionally inactive trace, the signature predicted by the hit-and-run model, and not the productive infection seen in warts.</p>
+<p>This gap is not explained by sequencing depth. Modelling productive-level detection (RPM ≥ floor) as a function of population tier and log sequencing depth, neoplasia did not significantly differ from unselected skin after depth adjustment (OR 2.0, 95% CI 0.8–4.7, <em>P</em> = 0.14), whereas productive controls exceeded unselected skin by three orders of magnitude (Fisher exact OR 2,515, 95% CI 754–16,384, <em>P</em> = 4.9×10⁻⁸¹). Sequencing depth did raise the odds of detecting <em>any</em> HPV read (OR per log₁₀ reads 4.6, 4.1–5.3, <em>P</em> = 2.7×10⁻¹¹⁸), but within the neoplasia tier alone deeper sequencing bought no additional productive-level detection (OR 1.7, 95% CI 0.1–23, <em>P</em> = 0.68). Even the deepest cSCC/AK libraries did not cross the productive floor. Consistent with a residual hit-and-run footprint rather than active infection, neoplasia showed a modest excess of <em>trace</em> HPV (any read; OR 1.7, 95% CI 1.4–2.0, <em>P</em> = 7.9×10⁻⁷ vs unselected skin), but this trace signal never amounted to productive burden. The depth-matched detection profile confirms the same pattern non-parametrically: across every sequencing-depth bin, productive controls detect at 90–100% while neoplasia and unselected skin stay near zero (<a href="#suppfig-depth" class="quarto-xref">Figure S1</a>). At population scale, then, HPV in cutaneous neoplasia is a low-level, transcriptionally inactive trace, the signature predicted by the hit-and-run model, and not the productive infection seen in warts. As a data-hygiene safeguard, the 3 high-risk <em>mucosal</em> HPV16 cases (CIN/SCC) that the broadened SCC/CIN query captured were conservatively retained in the neoplasia tier (<a href="#supptbl-cin" class="quarto-xref">Table S4</a>); excluding them only sharpens the result, lowering cutaneous-neoplasia productive-level detection to 0.7% (indistinguishable from unselected skin: OR 1.0, <em>P</em> = 0.98) and strengthening the productivity contrast against warts/EV (OR 5.2, <em>P</em> = 0.0038), so the retained tier represents the conservative choice.</p>
 </section>
 <section id="the-assay-detects-bona-fide-productive-cutaneous-hpv-including-genuine-infections-in-primary-skin" class="level3">
 <h3 class="anchored" data-anchor-id="the-assay-detects-bona-fide-productive-cutaneous-hpv-including-genuine-infections-in-primary-skin">The assay detects bona fide productive cutaneous HPV, including genuine infections in primary skin</h3>
@@ -4005,6 +4005,53 @@ Table S2: Genuine, non-cell-line productive HPV infections detected in primary s
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-supptbl" id="supptbl-bayes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table S3: Bayesian re-analysis of the principal contrasts under weakly-informative priors. Each frequentist model (M1–M3; Methods, <a href="#tbl-positivity" class="quarto-xref">Table 1</a>, <a href="#fig-rpm" class="quarto-xref">Figure 1</a>) was refitted as a Bayesian logistic regression with a Normal(0, 2.5) prior on the log-odds coefficients and a Normal(0, 5) prior on the intercept (<code>rstanarm</code>; four chains, all R-hat ≤ 1.004, no divergent transitions). Odds ratios are posterior medians with 95% credible intervals; P(OR &gt; 1) is the posterior probability of a positive effect. Frequentist odds ratios (with <em>P</em> values) are shown for comparison; the productive-controls-versus-skin row is a Fisher exact estimate inflated by near-complete separation, whose Bayesian counterpart is regularised by the prior (a heavier-tailed Student-<em>t</em>(3) prior gives an even larger posterior OR, 2,527 [873, 10,576], confirming robustness). Sequencing depth is modelled per 10-fold (log₁₀) change in library size.
+</figcaption>
+</figure>
+</div>
+<div id="supptbl-cin" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-supptbl figure">
+<div aria-describedby="supptbl-cin-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Accession</th>
+<th style="text-align: left;">Study</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Tissue</th>
+<th style="text-align: left;">Diagnosis</th>
+<th style="text-align: right;">RPM</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">SRR19520029</td>
+<td style="text-align: left;">SRP378129</td>
+<td style="text-align: left;">HPV16</td>
+<td style="text-align: left;">nahk</td>
+<td style="text-align: left;">cin; scc</td>
+<td style="text-align: right;">765.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SRR19520060</td>
+<td style="text-align: left;">SRP378129</td>
+<td style="text-align: left;">HPV16</td>
+<td style="text-align: left;">nahk</td>
+<td style="text-align: left;">cin; scc</td>
+<td style="text-align: right;">263.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SRR35133829</td>
+<td style="text-align: left;">SRP612624</td>
+<td style="text-align: left;">HPV16</td>
+<td style="text-align: left;">muu</td>
+<td style="text-align: left;">scc</td>
+<td style="text-align: right;">175.8</td>
+</tr>
+</tbody>
+</table>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-supptbl" id="supptbl-cin-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table S4: High-risk mucosal HPV16 cases captured by the broadened cutaneous-neoplasia query and conservatively retained in the neoplasia tier. All 3 are typed as the mucosal high-risk type HPV16 (dominant assigned reference) with cervical/CIN or unspecified-site diagnoses, and all exceed the control-calibrated detection floor (13.1 RPM), so they account for a disproportionate share of the neoplasia tier’s above-floor detections. Excluding them lowers cutaneous-neoplasia floor-level detection from 1.4% to 0.7% (indistinguishable from unselected skin: OR 1.0, <em>P</em> = 0.98) and strengthens the warts/EV-versus-neoplasia productivity contrast from OR 3.8 to OR 5.2 (<em>P</em> = 0.0038). Retaining them is therefore the conservative analytical choice.
 </figcaption>
 </figure>
 </div>
