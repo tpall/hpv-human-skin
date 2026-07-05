@@ -4,10 +4,10 @@ Nextflow DSL2 pipeline for identifying HPV types and their prevalence across hum
 
 ## Research Questions
 
-1. Millised HPV tüübid prevalveerivad terves nahas?
-2. Millised HPV tüübid prevalveerivad erinevates naha patoloogiate puhul?
-3. Millistes mittetraditsioonilistest kudedes on võimalik leida HPV transkripte?
-4. Millistes transkriptoomides esineb viiruse produktiivne nakkusfaas (hilised transkriptid)?
+1. Which HPV types are prevalent in healthy skin?
+2. Which HPV types are prevalent in the various skin pathologies?
+3. In which non-traditional tissues can HPV transcripts be found?
+4. In which transcriptomes does the virus's productive infection phase (late transcripts) occur?
 
 ## Pipeline Overview
 
@@ -114,7 +114,7 @@ SRR1234567,SRX123456,SRP123456,nahk,normal,PAIRED
 SRR2345678,SRX234567,SRP234567,nahk,wart,SINGLE
 ```
 
-Tissue categories: `nahk` (skin), `anogenitaal`, `suuoos` (oral), `muu` (other)
+Tissue categories (pipeline labels are Estonian keyword-table strings): `nahk` (skin), `anogenitaal` (anogenital), `suuoos` (oral), `muu` (other, the default)
 
 ## Key Parameters
 
@@ -158,4 +158,4 @@ results/
 
 ## Original Description
 
-Meil oleks vaja teada millised HPV tüübid tegelikult millise sagedusega inimese nahas on. Probleem on vist selles, et enamustest transkriptoomidest visatakse mitte inimese transkriptid juba alguses välja ja tuleb minna tagasi raw data juurde.
+We need to know which HPV types are actually present in human skin, and at what frequency. The problem is that in most transcriptome datasets the non-human transcripts are discarded from the outset, so one has to go back to the raw data.
