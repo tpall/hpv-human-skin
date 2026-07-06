@@ -85,11 +85,11 @@ cat("\n================================================================\n")
 cat("BAYESIAN PREMISE CHECKS  (weakly-informative Normal(0,2.5) coef priors)\n")
 cat("================================================================\n")
 
-cat("\nPREMISE 1 — Cell-line / engineered libraries are enriched for HPV positivity:\n")
+cat("\nPREMISE 1: Cell-line / engineered libraries are enriched for HPV positivity:\n")
 line("engineered vs clinical", "5.7", or_summ(b1, "sample_classengineered"))
 line("cell_line vs clinical",  "4.5", or_summ(b1, "sample_classcell_line"))
 
-cat("\nPREMISE 2 — After depth adjustment, neoplasia is NOT elevated at productive level,\n")
+cat("\nPREMISE 2: After depth adjustment, neoplasia is NOT elevated at productive level,\n")
 cat("            but productive controls hugely exceed skin (the trace-not-productive story):\n")
 line("neoplasia vs skin (floor)", "2.0", or_summ(b2b, "tierneoplasia"))
 line("depth /10x reads (floor)",  "-",   or_summ(b2b, "l10c"))
@@ -97,11 +97,11 @@ line("controls vs skin (floor)",  "2,515", or_summ(b2c, "tiercontrol_productive"
 line("  ^ student-t(3) prior",    "2,515", or_summ(b2c_t, "tiercontrol_productive"))
 line("depth within neoplasia",    "1.7", or_summ(b2d, "l10c"))
 
-cat("\nPREMISE 2b — Neoplasia carries a modest TRACE (any-HPV) excess:\n")
+cat("\nPREMISE 2b: Neoplasia carries a modest TRACE (any-HPV) excess:\n")
 line("neoplasia vs skin (any)",  "1.7", or_summ(b2a, "tierneoplasia"))
 line("depth /10x reads (any)",   "4.6", or_summ(b2a, "l10c"))
 
-cat("\nPREMISE 3 — Productive infection is more frequent in warts/EV than in neoplasia:\n")
+cat("\nPREMISE 3: Productive infection is more frequent in warts/EV than in neoplasia:\n")
 line("controls vs neoplasia",    "3.8", or_summ(b3, "grpproductive_controls"))
 
 ## ── Persist posterior OR summaries (so a robustness paragraph can cite them) ──
@@ -119,4 +119,4 @@ bayes_summary <- bind_rows(
 saveRDS(bayes_summary, here("manuscript/bayes_summary.rds"))
 readr::write_tsv(bayes_summary %>% mutate(across(where(is.numeric), ~round(.x, 4))),
                  here("manuscript/bayes_summary.tsv"))
-cat("\nDONE — posterior summaries saved to manuscript/bayes_summary.{rds,tsv}\n")
+cat("\nDONE: posterior summaries saved to manuscript/bayes_summary.{rds,tsv}\n")

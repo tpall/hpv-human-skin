@@ -63,14 +63,57 @@ build_bayes_table <- function(stats, bget){
   })
 }
 
+## ── Per-tier prevalence for the type catalogues (Tables S1 & S5) ─────────────
+# Raw counts across tiers are NOT comparable: tier sizes differ >100-fold, so 14
+# skin vs 14 control libraries mean utterly different prevalences. Each catalogue
+# cell therefore also carries the prevalence *within* its tier (count / tier N).
+# Prevalence is a Beta-Binomial posterior under a weakly-informative Jeffreys
+# Beta(0.5, 0.5) prior: conjugate, hence exact (no MCMC): posterior mean
+# (k+0.5)/(N+1), 95% credible interval from qbeta(). N = libraries screened in
+# the tier (from the per-sample RPM table); shown in each column header.
+.tier_N <- local({
+  read_tsv(here("results_reframe_csc/hpv_rpm_per_sample.tsv"), show_col_types = FALSE) %>%
+    count(tier) %>% { setNames(.$n, .$tier) }
+})
+.type_cat <- read_tsv(here("results_reframe_csc/type_catalogue_by_tier.tsv"), show_col_types = FALSE)
+.tier_lab <- c(unselected_skin = "Unselected skin", control_productive = "Productive controls",
+               neoplasia = "Neoplasia", cell_line = "Cell line", other = "Other")
+.hdr_N <- function(tc) paste0(.tier_lab[[tc]], " (N=", comma(.tier_N[[tc]]), ")")
+
+# Prevalence % formatting: ~2 sig figs, decimals scaled by magnitude.
+fpct <- function(p){
+  if (is.na(p)) return("NA")
+  if (p >= 10) formatC(p, format = "f", digits = 0)
+  else if (p >= 1) formatC(p, format = "f", digits = 1)
+  else formatC(p, format = "f", digits = 2)
+}
+.post <- function(k, N){ a <- k + 0.5; b <- N - k + 0.5
+  list(mean = 100 * a / (a + b), lo = 100 * qbeta(0.025, a, b), hi = 100 * qbeta(0.975, a, b)) }
+# Catalogue cell "n (p%)": count plus posterior prevalence within the tier. Empty
+# cells stay a bare "0": the posterior mean of a zero count is a small non-zero
+# number, so printing it in every empty cell is noise (and "0 (1.1%)" reads as a
+# contradiction); the caption gives credible intervals where absence is the point.
+.np <- function(counts, tc){ N <- .tier_N[[tc]]
+  vapply(counts, function(k)
+    if (k == 0) "0" else paste0(k, " (", fpct(.post(k, N)$mean), "%)"), character(1)) }
+# Caption helper "p% [lo–hi]": posterior prevalence + 95% CrI for a count in a tier.
+prev_ci <- function(k, tc){ p <- .post(k, .tier_N[[tc]])
+  paste0(fpct(p$mean), "% [", fpct(p$lo), "–", fpct(p$hi), "]") }
+# Assigned-count lookup (Table S1 source) for caption CrIs.
+kA  <- function(type, tc){ v <- .type_cat[[tc]][gsub("(REF|nr)$", "", .type_cat$hpv_reference) == type]
+  if (length(v)) as.integer(v[1]) else 0L }
+ciA <- function(type, tc) prev_ci(kA(type, tc), tc)
+
 ## ── Table S1: HPV type-by-tier catalogue (types with >=2 assigned libraries) ─
 build_type_table <- function(){
-  read_tsv(here("results_reframe_csc/type_catalogue_by_tier.tsv"), show_col_types = FALSE) %>%
-    filter(total >= 2) %>%
-    transmute(`HPV type` = gsub("(REF|nr)$", "", hpv_reference),
-              `Unselected skin` = unselected_skin, `Productive controls` = control_productive,
-              `Neoplasia` = neoplasia, `Cell line` = cell_line, `Other` = other, `Total` = total) %>%
-    arrange(desc(Total), desc(`Unselected skin`))
+  raw <- .type_cat %>% filter(total >= 2) %>% arrange(desc(total), desc(unselected_skin))
+  tibble(`HPV type` = gsub("(REF|nr)$", "", raw$hpv_reference)) %>%
+    mutate(!!.hdr_N("unselected_skin")    := .np(raw$unselected_skin,    "unselected_skin"),
+           !!.hdr_N("control_productive") := .np(raw$control_productive, "control_productive"),
+           !!.hdr_N("neoplasia")          := .np(raw$neoplasia,          "neoplasia"),
+           !!.hdr_N("cell_line")          := .np(raw$cell_line,          "cell_line"),
+           !!.hdr_N("other")              := .np(raw$other,              "other"),
+           Total = raw$total)
 }
 
 ## ── Table S2: genuine non-cell-line productive infections ───────────────────
@@ -110,7 +153,9 @@ build_prod_table <- function(){
 # cutoff. `trace_types.tsv` is a one-time BAM re-map; genus from the complete
 # PaVE lookup (`type_genus.csv`). Detection-tier, low-coverage, not productive.
 .trace_tiers <- c("unselected_skin","neoplasia","control_productive","other","cell_line")
-build_trace_table <- function(){
+# Raw trace count matrix (type × tier), filtered to Total >= 2. Shared by the
+# display builder and the caption CrI lookups so both see identical counts.
+.trace_counts <- function(){
   tt  <- read_tsv(here("manuscript/trace_types.tsv"), show_col_types = FALSE)
   rp  <- read_tsv(here("results_reframe_csc/hpv_rpm_per_sample.tsv"), show_col_types = FALSE) %>%
     select(srr_id, tier)
@@ -127,10 +172,19 @@ build_trace_table <- function(){
     pivot_wider(names_from = tier, values_from = n, values_fill = 0)
   for (col in .trace_tiers) if (!col %in% names(x)) x[[col]] <- 0L
   x %>% mutate(Total = rowSums(across(all_of(.trace_tiers)))) %>%
-    filter(Total >= 2) %>%
-    transmute(`HPV type` = type, Genus,
-              `Unselected skin` = unselected_skin, Neoplasia = neoplasia,
-              `Productive controls` = control_productive, Other = other,
-              `Cell line` = cell_line, Total) %>%
-    arrange(desc(Total), desc(`Unselected skin`))
+    filter(Total >= 2) %>% arrange(desc(Total), desc(unselected_skin))
 }
+build_trace_table <- function(){
+  x <- .trace_counts()
+  tibble(`HPV type` = x$type, Genus = x$Genus) %>%
+    mutate(!!.hdr_N("unselected_skin")    := .np(x$unselected_skin,    "unselected_skin"),
+           !!.hdr_N("neoplasia")          := .np(x$neoplasia,          "neoplasia"),
+           !!.hdr_N("control_productive") := .np(x$control_productive, "control_productive"),
+           !!.hdr_N("other")              := .np(x$other,              "other"),
+           !!.hdr_N("cell_line")          := .np(x$cell_line,          "cell_line"),
+           Total = x$Total)
+}
+# Trace-count lookup for caption CrIs.
+kT  <- function(type, tc){ x <- .trace_counts(); v <- x[[tc]][x$type == type]
+  if (length(v)) as.integer(v[1]) else 0L }
+ciT <- function(type, tc) prev_ci(kT(type, tc), tc)

@@ -24,6 +24,12 @@ format:
     theme: cosmo
     fig-cap-location: bottom
     tbl-cap-location: top
+  docx:
+    reference-doc: reference.docx
+    toc: false
+    number-sections: false
+    fig-cap-location: bottom
+    tbl-cap-location: top
 ---
 
 ```{r}

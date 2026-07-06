@@ -13,7 +13,7 @@ ortab <- function(m){ s<-summary(m)$coefficients
              lo=exp(s[,1]-1.96*s[,2]), hi=exp(s[,1]+1.96*s[,2]), p=s[,4], row.names=NULL)}
 
 cat("######################################################################\n")
-cat("# MODEL 1 — Cell-line / engineered enrichment of HPV positivity (full_v2 unbiased sweep)\n")
+cat("# MODEL 1: Cell-line / engineered enrichment of HPV positivity (full_v2 unbiased sweep)\n")
 cat("######################################################################\n")
 st <- read_tsv(here("results_full_v2/metadata/hpv_status.tsv"), show_col_types=FALSE)
 fl <- read_tsv(here("results_full_v2/metadata/cell_line_flags_curated.tsv"), show_col_types=FALSE) %>%
@@ -36,7 +36,7 @@ lr_p <- anova(m1, test="Chisq")$`Pr(>Chi)`[2]
 cat(sprintf("LR test vs null: p = %.3g\n", lr_p))
 
 cat("\n######################################################################\n")
-cat("# MODEL 2 — Depth-controlled HPV detection across population tiers (pooled reframe)\n")
+cat("# MODEL 2: Depth-controlled HPV detection across population tiers (pooled reframe)\n")
 cat("######################################################################\n")
 rp <- read_tsv(here("results_reframe_csc/hpv_rpm_per_sample.tsv"), show_col_types=FALSE) %>%
   filter(!is.na(total_reads), total_reads>0)
@@ -70,7 +70,7 @@ cat("\nWithin neoplasia: detect ~ log10(reads):\n")
 mn <- glm(detect ~ l10, binomial, rp %>% filter(tier=="neoplasia")); mn_o <- ortab(mn); print(mn_o, digits=3)
 
 cat("\n######################################################################\n")
-cat("# MODEL 3 — Productive infection (L1>=3) among HPV+ typed samples\n")
+cat("# MODEL 3: Productive infection (L1>=3) among HPV+ typed samples\n")
 cat("######################################################################\n")
 get_prod <- function(dir){
   fs <- list.files(here(dir,"aggregated"), "_transcript_classes\\.tsv$", full.names=TRUE)
@@ -116,8 +116,11 @@ if(n_distinct(pc$grp)==2){
 .dt  <- .domtype(c("results_full_v2","results_lesions","results_lesions_csc","results_lesions_wide"))
 .rp2 <- rp %>% left_join(.dt, by="srr_id") %>% mutate(mucosal_hr=coalesce(mucosal_hr,FALSE))
 .cin <- .rp2 %>% filter(tier=="neoplasia", mucosal_hr) %>% arrange(desc(rpm))
+# Estonian tissue categories -> English for display only (pipeline keeps Estonian).
+.tissue_en <- c(nahk="Skin", anogenitaal="Anogenital", suuoos="Oral", muu="Other")
 cin_tbl <- .cin %>% transmute(Accession=srr_id, Study=study, Type=sub("REF$","",dom_type),
-                              Tissue=tissue_category, Diagnosis=diagnosis, RPM=round(rpm,1))
+                              Tissue=coalesce(.tissue_en[tissue_category], str_to_sentence(tissue_category)),
+                              Diagnosis=diagnosis, RPM=round(rpm,1))
 .rpc  <- .rp2 %>% filter(!(tier=="neoplasia" & mucosal_hr))
 .neo_floor_cut <- .rpc %>% filter(tier=="neoplasia") %>% summarise(p=100*mean(detect)) %>% pull(p)
 .subc <- .rpc %>% filter(tier %in% c("unselected_skin","neoplasia")) %>%
@@ -197,4 +200,4 @@ stats <- lapply(list(
 ), unname)
 
 saveRDS(stats, here("manuscript/stats.rds"))
-cat("\nDONE — stats saved to manuscript/stats.rds\n")
+cat("\nDONE: stats saved to manuscript/stats.rds\n")

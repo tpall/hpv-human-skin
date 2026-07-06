@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="[Authors to be added]">
-<meta name="dcterms.date" content="2026-07-05">
+<meta name="dcterms.date" content="2026-07-06">
 
 <title>Cutaneous HPV is transcriptionally quiet in skin and carcinoma but productive in warts: a depth-controlled re-mining of public RNA-seq</title>
 <style>
@@ -3222,7 +3222,7 @@ window.Quarto = {
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   <li><a href="#supplementary-material" id="toc-supplementary-material" class="nav-link" data-scroll-target="#supplementary-material">Supplementary Material</a></li>
   </ul>
-</nav>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="manuscript.docx"><i class="bi bi-file-word"></i>MS Word</a></li></ul></div></nav>
 </div>
 <main class="content" id="quarto-document-content">
 
@@ -3245,7 +3245,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">July 5, 2026</p>
+      <p class="date">July 6, 2026</p>
     </div>
   </div>
   
@@ -3259,7 +3259,7 @@ window.Quarto = {
 
 <section id="abstract" class="level2">
 <h2 class="anchored" data-anchor-id="abstract">Abstract</h2>
-<p>Most human papillomaviruses (HPVs) are cutaneous beta- and gamma-types that reside on skin as a largely commensal, subclinical reservoir, yet their role in cutaneous squamous cell carcinoma (cSCC) remains contested between a “hit-and-run” oncogenic model and a protective-immunity model. These viruses are poorly characterised in part because standard transcriptomic pipelines discard the non-human reads that carry HPV signal. We systematically re-mined public human RNA-seq across skin and related tissues with a uniform pipeline that screens every library for papillomavirus reads, types the positives against the full reference panel, and classifies infections as productive from late (L1 major-capsid) transcript expression. To separate genuine infection from the two dominant confounders, we annotated and partitioned cell-line and engineered material and scored every library as papillomavirus reads-per-million, which neutralises sequencing depth. HPV signal in archived data was concentrated in non-primary material: cell-line and engineered libraries were about four- to five-fold enriched for positivity (OR 4.5–5.7, <em>P</em> &lt; 10⁻¹¹) and dominated by integrated HPV16/HPV18, whereas primary skin carried HPV at only 2–4%. Productive infection was abundant in warts and epidermodysplasia verruciformis (64% of libraries). After depth adjustment, however, HPV in cSCC and actinic keratosis did not significantly differ from unselected skin at productive level (OR 2.0, <em>P</em> = 0.14) despite this being the most deeply sequenced tissue, and persisted only as a trace footprint (any-read OR 1.7, <em>P</em> = 7.9×10⁻⁷). A minority of genuine lesions nonetheless harboured bona fide productive gamma- and alpha-HPV infection (HPV12, HPV96, HPV182, HPV16). Cutaneous HPV is therefore productive in warts and epidermodysplasia verruciformis but transcriptionally quiet in healthy skin and in carcinoma, where it is a trace, non-productive footprint. This is the phenomenology that both the hit-and-run and the protective-immunity models must accommodate. Beyond HPV, the contamination-aware, depth-normalised framework offers a scalable way to mine the discarded fraction of public transcriptomes.</p>
+<p>Most human papillomaviruses (HPVs) are cutaneous beta- and gamma-types that reside on skin as a commensal reservoir, yet their role in cutaneous squamous cell carcinoma (cSCC) remains contested between a “hit-and-run” oncogenic model and a protective-immunity model. Because standard pipelines discard the non-human reads that carry HPV signal, we re-mined public human RNA-seq across skin and related tissues with a uniform pipeline that screens each library for papillomavirus reads, types positives against the full reference panel, and scores productive infection from late (L1 major-capsid) transcript expression. To control the two dominant confounders, we flagged cell-line and engineered material and scored each library as papillomavirus reads-per-million, neutralising sequencing depth. HPV signal was concentrated in non-primary material: cell-line and engineered libraries were four- to five-fold enriched for positivity (OR 4.5–5.7, <em>P</em> &lt; 10⁻¹¹) and dominated by integrated HPV16/HPV18, whereas primary skin carried HPV at only 2–4%. Productive infection was abundant in warts and epidermodysplasia verruciformis (64% of libraries). After depth adjustment, however, HPV in cSCC and actinic keratosis, the most deeply sequenced tissue, did not differ from unselected skin at productive level (OR 2.0, <em>P</em> = 0.14), persisting only as a trace footprint (any-read OR 1.7, <em>P</em> = 7.9×10⁻⁷). A minority of lesions nonetheless harboured bona fide productive gamma-/alpha-HPV infection (HPV12, HPV96, HPV182, HPV16). Cutaneous HPV is thus productive in warts but transcriptionally quiet in healthy skin and carcinoma: a trace, non-productive footprint that both contested models must accommodate. Beyond HPV, this contamination-aware, depth-normalised framework can mine the discarded fraction of public transcriptomes.</p>
 <p><strong>Keywords:</strong> human papillomavirus; beta-papillomavirus; cutaneous squamous cell carcinoma; skin virome; productive infection; hit-and-run; RNA-seq; public data re-mining; contamination</p>
 </section>
 <section id="introduction" class="level2">
@@ -3594,41 +3594,41 @@ Figure S1: Control-level HPV detection within matched sequencing-depth bins. For
 <div aria-describedby="supptbl-types-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
 <colgroup>
-<col style="width: 11%">
-<col style="width: 20%">
-<col style="width: 25%">
-<col style="width: 12%">
-<col style="width: 12%">
 <col style="width: 7%">
-<col style="width: 7%">
+<col style="width: 21%">
+<col style="width: 22%">
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 13%">
+<col style="width: 5%">
 </colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: left;">HPV type</th>
-<th style="text-align: right;">Unselected skin</th>
-<th style="text-align: right;">Productive controls</th>
-<th style="text-align: right;">Neoplasia</th>
-<th style="text-align: right;">Cell line</th>
-<th style="text-align: right;">Other</th>
+<th style="text-align: right;">Unselected skin (N=7,358)</th>
+<th style="text-align: right;">Productive controls (N=43)</th>
+<th style="text-align: right;">Neoplasia (N=442)</th>
+<th style="text-align: right;">Cell line (N=692)</th>
+<th style="text-align: right;">Other (N=2,747)</th>
 <th style="text-align: right;">Total</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">HPV11</td>
-<td style="text-align: right;">14</td>
-<td style="text-align: right;">14</td>
+<td style="text-align: right;">14 (0.20%)</td>
+<td style="text-align: right;">14 (33%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">8</td>
+<td style="text-align: right;">8 (0.31%)</td>
 <td style="text-align: right;">36</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">HPV18</td>
-<td style="text-align: right;">2</td>
+<td style="text-align: right;">2 (0.03%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">32</td>
+<td style="text-align: right;">32 (4.7%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">34</td>
 </tr>
@@ -3636,15 +3636,15 @@ Figure S1: Control-level HPV detection within matched sequencing-depth bins. For
 <td style="text-align: left;">HPV16</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">24</td>
-<td style="text-align: right;">1</td>
+<td style="text-align: right;">3 (0.79%)</td>
+<td style="text-align: right;">24 (3.5%)</td>
+<td style="text-align: right;">1 (0.05%)</td>
 <td style="text-align: right;">28</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">HPV42</td>
-<td style="text-align: right;">13</td>
-<td style="text-align: right;">9</td>
+<td style="text-align: right;">13 (0.18%)</td>
+<td style="text-align: right;">9 (22%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -3652,17 +3652,17 @@ Figure S1: Control-level HPV detection within matched sequencing-depth bins. For
 </tr>
 <tr class="odd">
 <td style="text-align: left;">HPV6</td>
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">3</td>
+<td style="text-align: right;">3 (0.05%)</td>
+<td style="text-align: right;">3 (8.0%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">6</td>
+<td style="text-align: right;">6 (0.24%)</td>
 <td style="text-align: right;">12</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">HPV57</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">10</td>
+<td style="text-align: right;">10 (24%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -3670,16 +3670,16 @@ Figure S1: Control-level HPV detection within matched sequencing-depth bins. For
 </tr>
 <tr class="odd">
 <td style="text-align: left;">HPV2</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">6</td>
+<td style="text-align: right;">1 (0.02%)</td>
+<td style="text-align: right;">6 (15%)</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
+<td style="text-align: right;">1 (0.22%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">8</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">HPV31</td>
-<td style="text-align: right;">6</td>
+<td style="text-align: right;">6 (0.09%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -3688,8 +3688,8 @@ Figure S1: Control-level HPV detection within matched sequencing-depth bins. For
 </tr>
 <tr class="odd">
 <td style="text-align: left;">HPV90</td>
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">3</td>
+<td style="text-align: right;">3 (0.05%)</td>
+<td style="text-align: right;">3 (8.0%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -3697,7 +3697,7 @@ Figure S1: Control-level HPV detection within matched sequencing-depth bins. For
 </tr>
 <tr class="even">
 <td style="text-align: left;">HPV74</td>
-<td style="text-align: right;">5</td>
+<td style="text-align: right;">5 (0.07%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -3707,16 +3707,16 @@ Figure S1: Control-level HPV detection within matched sequencing-depth bins. For
 <tr class="odd">
 <td style="text-align: left;">HPV27</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">1</td>
+<td style="text-align: right;">4 (10%)</td>
+<td style="text-align: right;">1 (0.34%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">5</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">HPV91</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">3</td>
+<td style="text-align: right;">1 (0.02%)</td>
+<td style="text-align: right;">3 (8.0%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -3726,15 +3726,15 @@ Figure S1: Control-level HPV detection within matched sequencing-depth bins. For
 <td style="text-align: left;">HPV182</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">2</td>
+<td style="text-align: right;">2 (0.56%)</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
+<td style="text-align: right;">1 (0.05%)</td>
 <td style="text-align: right;">3</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">HPV44</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">3</td>
+<td style="text-align: right;">3 (8.0%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -3743,7 +3743,7 @@ Figure S1: Control-level HPV detection within matched sequencing-depth bins. For
 <tr class="odd">
 <td style="text-align: left;">HPV52</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">3</td>
+<td style="text-align: right;">3 (8.0%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -3755,12 +3755,12 @@ Figure S1: Control-level HPV detection within matched sequencing-depth bins. For
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">3</td>
+<td style="text-align: right;">3 (0.13%)</td>
 <td style="text-align: right;">3</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">HPV14</td>
-<td style="text-align: right;">2</td>
+<td style="text-align: right;">2 (0.03%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -3769,7 +3769,7 @@ Figure S1: Control-level HPV detection within matched sequencing-depth bins. For
 </tr>
 <tr class="even">
 <td style="text-align: left;">HPV25</td>
-<td style="text-align: right;">2</td>
+<td style="text-align: right;">2 (0.03%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -3778,7 +3778,7 @@ Figure S1: Control-level HPV detection within matched sequencing-depth bins. For
 </tr>
 <tr class="odd">
 <td style="text-align: left;">HPV47</td>
-<td style="text-align: right;">2</td>
+<td style="text-align: right;">2 (0.03%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -3787,7 +3787,7 @@ Figure S1: Control-level HPV detection within matched sequencing-depth bins. For
 </tr>
 <tr class="even">
 <td style="text-align: left;">HPV9</td>
-<td style="text-align: right;">2</td>
+<td style="text-align: right;">2 (0.03%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -3796,9 +3796,9 @@ Figure S1: Control-level HPV detection within matched sequencing-depth bins. For
 </tr>
 <tr class="odd">
 <td style="text-align: left;">HPV20</td>
-<td style="text-align: right;">1</td>
+<td style="text-align: right;">1 (0.02%)</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
+<td style="text-align: right;">1 (0.34%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">2</td>
@@ -3806,7 +3806,7 @@ Figure S1: Control-level HPV detection within matched sequencing-depth bins. For
 <tr class="even">
 <td style="text-align: left;">HPV-mKN1</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">2</td>
+<td style="text-align: right;">2 (5.7%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -3815,7 +3815,7 @@ Figure S1: Control-level HPV detection within matched sequencing-depth bins. For
 <tr class="odd">
 <td style="text-align: left;">HPV4</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">2</td>
+<td style="text-align: right;">2 (5.7%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -3824,7 +3824,7 @@ Figure S1: Control-level HPV detection within matched sequencing-depth bins. For
 <tr class="even">
 <td style="text-align: left;">HPV78</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">2</td>
+<td style="text-align: right;">2 (5.7%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -3834,7 +3834,7 @@ Figure S1: Control-level HPV detection within matched sequencing-depth bins. For
 <td style="text-align: left;">HPV96</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">2</td>
+<td style="text-align: right;">2 (0.56%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">2</td>
@@ -3843,7 +3843,7 @@ Figure S1: Control-level HPV detection within matched sequencing-depth bins. For
 </table>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-supptbl" id="supptbl-types-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table S1: Number of libraries assigned to each HPV reference type across population tiers (types with ≥2 assigned libraries shown). The high-risk mucosal types HPV16 and HPV18 are confined almost entirely to cell-line and engineered material, the signature of integrated-HPV cell-line contamination. Productive controls are dominated by cutaneous wart and low-risk types (HPV57, HPV2, HPV27, HPV6/11, HPV42), unselected skin shows a sparse, low-burden scatter of beta- and gamma-types, and the neoplasia-associated infections are the gamma- and alpha-types HPV12, HPV16, HPV96 and HPV182.
+Table S1: Number of libraries assigned to each HPV reference type across population tiers (types with ≥2 assigned libraries shown). Each cell also gives, in parentheses, the prevalence <em>within</em> that tier, the library count divided by the tier size in the column header, estimated as a Beta-Binomial posterior mean under a weakly-informative Beta(0.5, 0.5) prior. Because tier sizes span more than two orders of magnitude, raw counts are not comparable across tiers: the 14 HPV11 detections in productive controls and the 14 in unselected skin correspond to very different prevalences (33% [20–47] versus 0.20% [0.11–0.31]; posterior mean with 95% credible interval), and the high-risk mucosal types HPV16 and HPV18 are confined almost entirely to cell-line and engineered material (3.5% [2.3–5.0] and 4.7% [3.2–6.4] of cell-line libraries, versus below 0.1% of skin libraries for both), the signature of integrated-HPV cell-line contamination. Productive controls are dominated by cutaneous wart and low-risk types (HPV57, HPV2, HPV27, HPV6/11, HPV42), unselected skin shows a sparse, low-burden scatter of beta- and gamma-types, and the neoplasia-associated infections are the gamma- and alpha-types HPV12, HPV16, HPV96 and HPV182.
 </figcaption>
 </figure>
 </div>
@@ -4028,7 +4028,7 @@ Table S3: Bayesian re-analysis of the principal contrasts under weakly-informati
 <td style="text-align: left;">SRR19520029</td>
 <td style="text-align: left;">SRP378129</td>
 <td style="text-align: left;">HPV16</td>
-<td style="text-align: left;">nahk</td>
+<td style="text-align: left;">Skin</td>
 <td style="text-align: left;">cin; scc</td>
 <td style="text-align: right;">765.1</td>
 </tr>
@@ -4036,7 +4036,7 @@ Table S3: Bayesian re-analysis of the principal contrasts under weakly-informati
 <td style="text-align: left;">SRR19520060</td>
 <td style="text-align: left;">SRP378129</td>
 <td style="text-align: left;">HPV16</td>
-<td style="text-align: left;">nahk</td>
+<td style="text-align: left;">Skin</td>
 <td style="text-align: left;">cin; scc</td>
 <td style="text-align: right;">263.4</td>
 </tr>
@@ -4044,7 +4044,7 @@ Table S3: Bayesian re-analysis of the principal contrasts under weakly-informati
 <td style="text-align: left;">SRR35133829</td>
 <td style="text-align: left;">SRP612624</td>
 <td style="text-align: left;">HPV16</td>
-<td style="text-align: left;">muu</td>
+<td style="text-align: left;">Other</td>
 <td style="text-align: left;">scc</td>
 <td style="text-align: right;">175.8</td>
 </tr>
@@ -4061,24 +4061,24 @@ Table S4: High-risk mucosal HPV16 cases captured by the broadened cutaneous-neop
 <div aria-describedby="supptbl-trace-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
 <colgroup>
-<col style="width: 14%">
-<col style="width: 6%">
-<col style="width: 18%">
-<col style="width: 11%">
-<col style="width: 22%">
-<col style="width: 6%">
-<col style="width: 11%">
-<col style="width: 6%">
+<col style="width: 10%">
+<col style="width: 4%">
+<col style="width: 20%">
+<col style="width: 13%">
+<col style="width: 20%">
+<col style="width: 12%">
+<col style="width: 13%">
+<col style="width: 4%">
 </colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: left;">HPV type</th>
 <th style="text-align: left;">Genus</th>
-<th style="text-align: right;">Unselected skin</th>
-<th style="text-align: right;">Neoplasia</th>
-<th style="text-align: right;">Productive controls</th>
-<th style="text-align: right;">Other</th>
-<th style="text-align: right;">Cell line</th>
+<th style="text-align: right;">Unselected skin (N=7,358)</th>
+<th style="text-align: right;">Neoplasia (N=442)</th>
+<th style="text-align: right;">Productive controls (N=43)</th>
+<th style="text-align: right;">Other (N=2,747)</th>
+<th style="text-align: right;">Cell line (N=692)</th>
 <th style="text-align: right;">Total</th>
 </tr>
 </thead>
@@ -4086,21 +4086,21 @@ Table S4: High-risk mucosal HPV16 cases captured by the broadened cutaneous-neop
 <tr class="odd">
 <td style="text-align: left;">HPV16</td>
 <td style="text-align: left;">Alpha</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">4</td>
+<td style="text-align: right;">1 (0.02%)</td>
+<td style="text-align: right;">4 (1.0%)</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">18</td>
+<td style="text-align: right;">4 (0.16%)</td>
+<td style="text-align: right;">18 (2.7%)</td>
 <td style="text-align: right;">27</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">HPV18</td>
 <td style="text-align: left;">Alpha</td>
-<td style="text-align: right;">11</td>
+<td style="text-align: right;">11 (0.16%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">9</td>
+<td style="text-align: right;">1 (0.05%)</td>
+<td style="text-align: right;">9 (1.4%)</td>
 <td style="text-align: right;">21</td>
 </tr>
 <tr class="odd">
@@ -4109,14 +4109,14 @@ Table S4: High-risk mucosal HPV16 cases captured by the broadened cutaneous-neop
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">16</td>
+<td style="text-align: right;">16 (0.60%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">16</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">HPV-mDysk6</td>
 <td style="text-align: left;">Gamma</td>
-<td style="text-align: right;">6</td>
+<td style="text-align: right;">6 (0.09%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -4126,8 +4126,8 @@ Table S4: High-risk mucosal HPV16 cases captured by the broadened cutaneous-neop
 <tr class="odd">
 <td style="text-align: left;">HPV12</td>
 <td style="text-align: left;">Beta</td>
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">2</td>
+<td style="text-align: right;">3 (0.05%)</td>
+<td style="text-align: right;">2 (0.56%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -4136,7 +4136,7 @@ Table S4: High-risk mucosal HPV16 cases captured by the broadened cutaneous-neop
 <tr class="even">
 <td style="text-align: left;">HPV-mw34c11a</td>
 <td style="text-align: left;">Gamma</td>
-<td style="text-align: right;">4</td>
+<td style="text-align: right;">4 (0.06%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -4146,37 +4146,37 @@ Table S4: High-risk mucosal HPV16 cases captured by the broadened cutaneous-neop
 <tr class="odd">
 <td style="text-align: left;">HPV134</td>
 <td style="text-align: left;">Gamma</td>
-<td style="text-align: right;">3</td>
+<td style="text-align: right;">3 (0.05%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
+<td style="text-align: right;">1 (0.05%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">4</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">HPV-mw20c10a</td>
 <td style="text-align: left;">Gamma</td>
-<td style="text-align: right;">1</td>
+<td style="text-align: right;">1 (0.02%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">3</td>
+<td style="text-align: right;">3 (0.13%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">4</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">HPV107</td>
 <td style="text-align: left;">Beta</td>
-<td style="text-align: right;">1</td>
+<td style="text-align: right;">1 (0.02%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">3</td>
+<td style="text-align: right;">3 (0.13%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">4</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">HPV20</td>
 <td style="text-align: left;">Beta</td>
-<td style="text-align: right;">3</td>
+<td style="text-align: right;">3 (0.05%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -4188,15 +4188,15 @@ Table S4: High-risk mucosal HPV16 cases captured by the broadened cutaneous-neop
 <td style="text-align: left;">Alpha</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">2</td>
+<td style="text-align: right;">1 (3.4%)</td>
+<td style="text-align: right;">2 (0.09%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">3</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">HPV4</td>
 <td style="text-align: left;">Gamma</td>
-<td style="text-align: right;">2</td>
+<td style="text-align: right;">2 (0.03%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -4206,7 +4206,7 @@ Table S4: High-risk mucosal HPV16 cases captured by the broadened cutaneous-neop
 <tr class="odd">
 <td style="text-align: left;">HPV41</td>
 <td style="text-align: left;">Nu</td>
-<td style="text-align: right;">2</td>
+<td style="text-align: right;">2 (0.03%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -4216,7 +4216,7 @@ Table S4: High-risk mucosal HPV16 cases captured by the broadened cutaneous-neop
 <tr class="even">
 <td style="text-align: left;">HPV65</td>
 <td style="text-align: left;">Gamma</td>
-<td style="text-align: right;">2</td>
+<td style="text-align: right;">2 (0.03%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -4226,7 +4226,7 @@ Table S4: High-risk mucosal HPV16 cases captured by the broadened cutaneous-neop
 <tr class="odd">
 <td style="text-align: left;">HPV66</td>
 <td style="text-align: left;">Alpha</td>
-<td style="text-align: right;">2</td>
+<td style="text-align: right;">2 (0.03%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -4236,40 +4236,40 @@ Table S4: High-risk mucosal HPV16 cases captured by the broadened cutaneous-neop
 <tr class="even">
 <td style="text-align: left;">HPV-mDysk2</td>
 <td style="text-align: left;">Gamma</td>
-<td style="text-align: right;">1</td>
+<td style="text-align: right;">1 (0.02%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
+<td style="text-align: right;">1 (0.22%)</td>
 <td style="text-align: right;">2</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">HPV-mw18c25</td>
 <td style="text-align: left;">Gamma</td>
-<td style="text-align: right;">1</td>
+<td style="text-align: right;">1 (0.02%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
+<td style="text-align: right;">1 (0.05%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">2</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">HPV38</td>
 <td style="text-align: left;">Beta</td>
-<td style="text-align: right;">1</td>
+<td style="text-align: right;">1 (0.02%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
+<td style="text-align: right;">1 (0.22%)</td>
 <td style="text-align: right;">2</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">HPV49</td>
 <td style="text-align: left;">Beta</td>
-<td style="text-align: right;">1</td>
+<td style="text-align: right;">1 (0.02%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
+<td style="text-align: right;">1 (0.05%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">2</td>
 </tr>
@@ -4277,7 +4277,7 @@ Table S4: High-risk mucosal HPV16 cases captured by the broadened cutaneous-neop
 <td style="text-align: left;">HPV182</td>
 <td style="text-align: left;">Beta</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">2</td>
+<td style="text-align: right;">2 (0.56%)</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -4287,7 +4287,7 @@ Table S4: High-risk mucosal HPV16 cases captured by the broadened cutaneous-neop
 </table>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-supptbl" id="supptbl-trace-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table S5: Detection-tier HPV type catalogue. For the 325 HPV-positive libraries that fell below the breadth ≥ 0.10 and depth ≥ 2 assignment threshold, the best-hit reference was taken from unique STAR primary alignments (MAPQ 255) in the retained alignments; 137 resolved to a confident low-coverage type spanning 42 types (those with ≥ 2 resolved calls shown), with genus from the complete PaVE lookup. These are low-coverage, non-productive detections: the type is confidently identified but genome coverage is below the assignment breadth, so they extend the descriptive type catalogue without bearing on productivity. Healthy skin is dominated by cutaneous beta/gamma/nu types (39 of 56 resolved skin calls), whereas the mucosal types HPV16 and HPV18 concentrate in cell-line and other material, reproducing the contamination pattern of <a href="#supptbl-types" class="quarto-xref">Table S1</a> at the sensitivity floor.
+Table S5: Detection-tier HPV type catalogue. For the 325 HPV-positive libraries that fell below the breadth ≥ 0.10 and depth ≥ 2 assignment threshold, the best-hit reference was taken from unique STAR primary alignments (MAPQ 255) in the retained alignments; 137 resolved to a confident low-coverage type spanning 42 types (those with ≥ 2 resolved calls shown), with genus from the complete PaVE lookup. These are low-coverage, non-productive detections: the type is confidently identified but genome coverage is below the assignment breadth, so they extend the descriptive type catalogue without bearing on productivity. As in <a href="#supptbl-types" class="quarto-xref">Table S1</a>, each cell gives the count with its within-tier prevalence in parentheses (Beta-Binomial posterior mean, Beta(0.5, 0.5) prior; tier sizes in the headers), so trace detections remain comparable across tiers of very different size. Healthy skin is dominated by cutaneous beta/gamma/nu types (39 of 56 resolved skin calls), whereas the mucosal types HPV16 and HPV18 concentrate in cell-line and other material (HPV16 trace prevalence 2.7% [1.6–4.0] in cell lines versus 0.02% [0.00–0.06] in skin), reproducing the contamination pattern of <a href="#supptbl-types" class="quarto-xref">Table S1</a> at the sensitivity floor.
 </figcaption>
 </figure>
 </div>
