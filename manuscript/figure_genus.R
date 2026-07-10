@@ -11,7 +11,7 @@
 #   Any       - union of the two (a library appears in at most one of them)
 # A library can contribute to more than one genus if it carries more than one
 # type, so the bars within a tier need not sum to the tier's positivity rate.
-suppressPackageStartupMessages({library(tidyverse); library(here)})
+suppressPackageStartupMessages({library(tidyverse); library(cowplot); library(here)})
 source(here("manuscript/_paths.R"))
 
 AGG   <- c("results_full_v2", "results_lesions", "results_lesions_csc", "results_lesions_wide")
@@ -87,8 +87,14 @@ p <- ggplot(pd, aes(Genus, mean_p, colour = Genus)) +
                 limits = c(FLOOR, 400)) +
   scale_colour_brewer(palette = "Dark2", guide = "none") +
   labs(x = "HPV genus", y = "Prevalence within tier (%, log scale)") +
-  theme_bw(base_size = 9) +
-  theme(strip.text.y = element_text(size = 7), panel.grid.minor = element_blank(),
+  # cowplot house style. theme_cowplot() drops the panel border and gridlines,
+  # so a facet grid needs panel_border() back to keep the 7x3 cells legible, and
+  # a horizontal-only background_grid() to read points off the log y-axis.
+  theme_cowplot(font_size = 9) +
+  panel_border(color = "grey80") +
+  background_grid(major = "y", minor = "none", color.major = "grey92") +
+  theme(strip.background = element_rect(fill = "grey95", color = "grey80"),
+        strip.text.y = element_text(size = 7),
         # Five genus labels in seven narrow facets collide when horizontal.
         axis.text.x = element_text(angle = 45, hjust = 1, size = 7.5))
 
