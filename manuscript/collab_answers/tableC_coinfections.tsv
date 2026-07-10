@@ -1,0 +1,39 @@
+sample_id	tier	study	n_types	combination	genera	reads	breadth	mean_depth
+SRR14243745	control_productive	SRP314958	4	HPV11 + HPV90 + HPV44 + HPV42	alpha + alpha + alpha + alpha	118663 / 5472 / 5307 / 1640	1.00 / 0.96 / 0.99 / 0.87	1963.0 / 90.5 / 89.5 / 26.9
+SRR14243779	control_productive	SRP314961	4	HPV11 + HPV90 + HPV44 + HPV42	alpha + alpha + alpha + alpha	118663 / 5472 / 5307 / 1640	1.00 / 0.96 / 0.99 / 0.87	1963.0 / 90.5 / 89.5 / 26.9
+SRR14243780	control_productive	SRP314961	4	HPV11 + HPV90 + HPV42 + HPV44	alpha + alpha + alpha + alpha	177293 / 4010 / 3682 / 3510	0.99 / 0.92 / 0.79 / 0.98	2996.4 / 67.0 / 62.2 / 60.0
+SRR14243784	control_productive	SRP314961	4	HPV91 + HPV52 + HPV11 + HPV42	alpha + alpha + alpha + alpha	83713 / 5064 / 188 / 150	0.99 / 0.94 / 0.66 / 0.22	1391.0 / 82.8 / 3.1 / 2.5
+SRR14243747	control_productive	SRP314958	3	HPV91 + HPV52 + HPV11	alpha + alpha + alpha	67413 / 5090 / 372	1.00 / 0.95 / 0.79	1114.2 / 83.1 / 6.0
+SRR14243783	control_productive	SRP314961	3	HPV91 + HPV52 + HPV11	alpha + alpha + alpha	67413 / 5090 / 372	1.00 / 0.95 / 0.79	1114.2 / 83.1 / 6.0
+SRR10044860	control_productive	SRP219878	2	HPV78 + HPV57	alpha + alpha	1083536 / 365	1.00 / 0.66	13780.2 / 4.6
+SRR10044861	control_productive	SRP219878	2	HPV78 + HPV57	alpha + alpha	1076992 / 396	1.00 / 0.70	13697.4 / 5.0
+SRR10044876	control_productive	SRP219878	2	HPV27 + HPV-mKN1	alpha + gamma	392990 / 162	1.00 / 0.49	4998.0 / 2.2
+SRR10044877	control_productive	SRP219878	2	HPV27 + HPV-mKN1	alpha + gamma	388686 / 189	1.00 / 0.47	4943.1 / 2.6
+SRR14243746	control_productive	SRP314958	2	HPV6 + HPV11	alpha + alpha	33154 / 742	0.99 / 0.82	548.7 / 12.0
+SRR14243748	control_productive	SRP314958	2	HPV11 + HPV42	alpha + alpha	423120 / 136	1.00 / 0.29	6987.9 / 2.1
+SRR14243781	control_productive	SRP314961	2	HPV6 + HPV11	alpha + alpha	33154 / 742	0.99 / 0.82	548.7 / 12.0
+SRR14243782	control_productive	SRP314961	2	HPV6 + HPV42	alpha + alpha	65656 / 206	0.97 / 0.44	1102.3 / 3.3
+SRR14243785	control_productive	SRP314961	2	HPV11 + HPV42	alpha + alpha	423120 / 136	1.00 / 0.29	6987.9 / 2.1
+SRR14243786	control_productive	SRP314961	2	HPV11 + HPV42	alpha + alpha	756284 / 184	1.00 / 0.59	12564.2 / 3.1
+SRR14243788	control_productive	SRP314961	2	HPV11 + HPV42	alpha + alpha	28751 / 136	0.95 / 0.49	485.0 / 2.2
+ERR1971044	neoplasia	ERP022968	2	HPV182 + HPV96	beta + beta	17878 / 4482	0.98 / 0.99	243.0 / 60.7
+ERR2274877	neoplasia	ERP106532	2	HPV182 + HPV96	beta + beta	18387 / 4716	0.99 / 0.99	245.0 / 62.6
+SRR19520005	neoplasia	SRP378129	2	HPV12 + HPV27	beta + alpha	72838 / 508	1.00 / 0.52	711.4 / 4.9
+SRR14243792	unselected_skin	SRP314961	5	HPV74 + HPV6 + HPV42 + HPV91 + HPV11	alpha + alpha + alpha + alpha + alpha	2048 / 788 / 202 / 134 / 118	0.76 / 0.45 / 0.20 / 0.40 / 0.32	35.0 / 13.1 / 3.2 / 2.2 / 2.0
+SRR14243751	unselected_skin	SRP314958	4	HPV74 + HPV11 + HPV6 + HPV42	alpha + alpha + alpha + alpha	1442 / 614 / 352 / 144	0.91 / 0.78 / 0.55 / 0.51	24.3 / 10.1 / 5.8 / 2.3
+SRR14243791	unselected_skin	SRP314961	4	HPV74 + HPV11 + HPV6 + HPV42	alpha + alpha + alpha + alpha	1442 / 614 / 352 / 144	0.91 / 0.78 / 0.55 / 0.51	24.3 / 10.1 / 5.8 / 2.3
+SRR14243750	unselected_skin	SRP314958	3	HPV42 + HPV90 + HPV11	alpha + alpha + alpha	35058 / 16468 / 6956	1.00 / 0.98 / 0.98	571.9 / 272.1 / 115.2
+SRR14243752	unselected_skin	SRP314958	3	HPV42 + HPV11 + HPV74	alpha + alpha + alpha	178495 / 562 / 242	1.00 / 0.72 / 0.16	2942.3 / 9.3 / 3.2
+SRR14243789	unselected_skin	SRP314961	3	HPV42 + HPV90 + HPV11	alpha + alpha + alpha	35058 / 16468 / 6956	1.00 / 0.98 / 0.98	571.9 / 272.1 / 115.2
+SRR14243790	unselected_skin	SRP314961	3	HPV42 + HPV90 + HPV11	alpha + alpha + alpha	56572 / 16236 / 8148	0.99 / 0.97 / 0.93	954.8 / 272.8 / 137.8
+SRR14243793	unselected_skin	SRP314961	3	HPV42 + HPV11 + HPV74	alpha + alpha + alpha	178495 / 562 / 242	1.00 / 0.72 / 0.16	2942.3 / 9.3 / 3.2
+SRR14243753	unselected_skin	SRP314958	2	HPV11 + HPV42	alpha + alpha	1216 / 126	0.90 / 0.53	20.1 / 2.1
+SRR14243794	unselected_skin	SRP314961	2	HPV42 + HPV11	alpha + alpha	240096 / 470	0.99 / 0.79	3816.0 / 7.6
+SRR14243795	unselected_skin	SRP314961	2	HPV11 + HPV42	alpha + alpha	1216 / 126	0.90 / 0.53	20.1 / 2.1
+SRR14243796	unselected_skin	SRP314961	2	HPV11 + HPV42	alpha + alpha	1868 / 174	0.61 / 0.37	31.4 / 2.7
+SRR19519996	unselected_skin	SRP378129	2	HPV176 + HPV-m7269	gamma + gamma	742 / 304	0.26 / 0.26	7.7 / 3.2
+SRR21205030	unselected_skin	SRP394058	2	HPV25 + HPV14	beta + beta	4284831 / 220	1.00 / 0.63	75813.1 / 4.0
+SRR21205031	unselected_skin	SRP394058	2	HPV25 + HPV37	beta + beta	6612 / 304	0.98 / 0.78	117.2 / 5.5
+SRR21205037	unselected_skin	SRP394058	2	HPV9 + HPV2	beta + alpha	2606 / 1060	0.98 / 0.89	48.2 / 19.1
+SRR21205038	unselected_skin	SRP394058	2	HPV20 + HPV9	beta + beta	1019242 / 38692	0.91 / 1.00	18557.5 / 736.0
+SRR29524701	unselected_skin	SRP515675	2	HPV-mw34c14a + HPV49	gamma + beta	180 / 132	0.50 / 0.31	3.7 / 2.6
