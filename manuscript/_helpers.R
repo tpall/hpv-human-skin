@@ -270,6 +270,10 @@ cf <- local({
   lib <- co %>% distinct(sample_id, study, n_types)
   sec <- co %>% group_by(sample_id) %>% arrange(desc(mean_depth), .by_group = TRUE) %>%
     slice(-1) %>% ungroup()                      # non-dominant calls
+  # How lopsided is a typical co-infection? Depth of the deepest type over the
+  # second deepest, per library.
+  ratio <- co %>% group_by(sample_id) %>% arrange(desc(mean_depth), .by_group = TRUE) %>%
+    summarise(r = first(mean_depth) / nth(mean_depth, 2), .groups = "drop") %>% pull(r)
   w <- .coinf$types %>% filter(type %in% c("HPV11", "HPV42")) %>%
     distinct(sample_id, type) %>% mutate(v = TRUE) %>%
     pivot_wider(names_from = type, values_from = v, values_fill = FALSE)
@@ -294,6 +298,9 @@ cf <- local({
        pair_donors = n_distinct(pair$donor),
        sec_med_depth = median(sec$mean_depth),
        sec_shallow   = round(100 * mean(sec$mean_depth < 5)),
+       dom_ratio_med = median(ratio),
+       dom_ratio_lo  = unname(quantile(ratio, .25)),
+       dom_ratio_hi  = unname(quantile(ratio, .75)),
        both1142 = sum(w$HPV11 & w$HPV42),
        only42   = sum(!w$HPV11 & w$HPV42),
        only11   = sum(w$HPV11 & !w$HPV42),
