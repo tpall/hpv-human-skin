@@ -87,14 +87,15 @@ p <- ggplot(pd, aes(Genus, mean_p, colour = Genus)) +
                 limits = c(FLOOR, 400)) +
   scale_colour_brewer(palette = "Dark2", guide = "none") +
   labs(x = "HPV genus", y = "Prevalence within tier (%, log scale)") +
-  # cowplot house style. theme_cowplot() drops the panel border and gridlines,
-  # so a facet grid needs panel_border() back to keep the 7x3 cells legible, and
-  # a horizontal-only background_grid() to read points off the log y-axis.
+  # cowplot house style: clean typography, L-shaped axis lines, no gridlines,
+  # no strip boxes. A 7x3 facet grid needs one addition, a thin panel border to
+  # separate cells whose points would otherwise touch; strip labels stay as bare
+  # text, which is the cowplot convention.
   theme_cowplot(font_size = 9) +
-  panel_border(color = "grey80") +
-  background_grid(major = "y", minor = "none", color.major = "grey92") +
-  theme(strip.background = element_rect(fill = "grey95", color = "grey80"),
-        strip.text.y = element_text(size = 7),
+  panel_border(color = "grey85", size = 0.4) +
+  theme(strip.background = element_blank(),
+        strip.text = element_text(face = "plain"),
+        strip.text.y = element_text(size = 8),
         # Five genus labels in seven narrow facets collide when horizontal.
         axis.text.x = element_text(angle = 45, hjust = 1, size = 7.5))
 
