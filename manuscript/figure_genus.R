@@ -13,6 +13,7 @@
 # type, so the bars within a tier need not sum to the tier's positivity rate.
 suppressPackageStartupMessages({library(tidyverse); library(cowplot); library(here)})
 source(here("manuscript/_paths.R"))
+old <- theme_set(theme_cowplot())
 
 AGG   <- c("results_full_v2", "results_lesions", "results_lesions_csc", "results_lesions_wide")
 TIERS <- c("unselected_skin", "control_productive", "EV", "peri_lesional",
@@ -82,22 +83,19 @@ p <- ggplot(pd, aes(Genus, mean_p, colour = Genus)) +
              colour = "grey55", na.rm = TRUE) +
   geom_text(data = ~ filter(.x, k > 0), aes(y = hi_p, label = k), vjust = -.6,
             size = 2.3, show.legend = FALSE) +
-  facet_grid(level ~ tier) +
+  # Short row-strip labels so they fit the row height at the cowplot font size;
+  # the data keys in pd$level stay long (the caption and _helpers.R use them).
+  facet_grid(level ~ tier, labeller = labeller(level = c(
+    "Assigned type (Table S1)" = "Assigned (S1)",
+    "Trace type (Table S5)"    = "Trace (S5)",
+    "Any detection"            = "Any (S1 ∪ S5)"))) +
   scale_y_log10(breaks = c(.01, .1, 1, 10, 100), labels = c("0", "0.1", "1", "10", "100"),
                 limits = c(FLOOR, 400)) +
   scale_colour_brewer(palette = "Dark2", guide = "none") +
   labs(x = "HPV genus", y = "Prevalence within tier (%, log scale)") +
-  # cowplot house style: clean typography, L-shaped axis lines, no gridlines,
-  # no strip boxes. A 7x3 facet grid needs one addition, a thin panel border to
-  # separate cells whose points would otherwise touch; strip labels stay as bare
-  # text, which is the cowplot convention.
-  theme_cowplot(font_size = 9) +
-  panel_border(color = "grey85", size = 0.4) +
-  theme(strip.background = element_blank(),
-        strip.text = element_text(face = "plain"),
-        strip.text.y = element_text(size = 8),
-        # Five genus labels in seven narrow facets collide when horizontal.
-        axis.text.x = element_text(angle = 45, hjust = 1, size = 7.5))
+  # theme_cowplot() is set globally above; the only override is to angle the
+  # genus labels, since five of them per facet collide across seven columns.
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ggsave(here("manuscript/figureS2.png"), p, width = 10.5, height = 6.4, dpi = 200)
 ggsave(here("manuscript/figureS2.pdf"), p, width = 10.5, height = 6.4)
