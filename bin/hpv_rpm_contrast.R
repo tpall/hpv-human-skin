@@ -35,6 +35,7 @@ opt <- parse_args(OptionParser(option_list = list(
   make_option("--null-sheet",   default = "results_full_v2/metadata/samplesheet_enriched.csv"),
   make_option("--null-flags",   default = "results_full_v2/metadata/cell_line_flags_curated.tsv"),
   make_option("--contam-studies", default = "SRP563552,SRP516327"),
+  make_option("--tier-overrides", default = "assets/tier_overrides.csv"),
   make_option("--outdir",       default = "results_reframe")
 )))
 dir.create(opt$outdir, showWarnings = FALSE, recursive = TRUE)
@@ -96,8 +97,42 @@ nullss <- nullss %>% left_join(flags, by = "srr_id") %>%
 meta <- bind_rows(les, nullss)
 
 # ── 3. Tier assignment (cultures & contamination subtracted from the null) ───
+# Curated overrides (assets/tier_overrides.csv) correct the handful of studies
+# whose free-text SRA metadata is absent or actively misleading: a "Skin or
+# mucosa" source_name on peri-lesional mucosa, an EV biopsy cohort with no
+# diagnosis keyword, a cell line whose name never reaches the parsed fields, and
+# a wart whose `cell_line` attribute holds a sample label. Every row carries its
+# evidence. is_cell_line overrides run BEFORE the tier rules (they feed the
+# precedence); tier overrides run after (they are the final word).
+ovr <- if (nzchar(opt$`tier-overrides`) && file.exists(opt$`tier-overrides`)) {
+  read_csv(opt$`tier-overrides`, comment = "#", show_col_types = FALSE)
+} else {
+  message("  no tier-overrides file; using automatic assignment only")
+  tibble(scope = character(), id = character(), field = character(),
+         value = character(), reason = character())
+}
+apply_override <- function(d, fld) {
+  o <- ovr %>% filter(field == fld)
+  # Always emit `.new` (all-NA when no rule applies) so callers can treat the
+  # override and no-override paths identically.
+  if (!nrow(o)) return(mutate(d, .new = NA_character_))
+  by_sample <- o %>% filter(scope == "sample") %>% select(srr_id = id, .new = value)
+  by_study  <- o %>% filter(scope == "study")  %>% select(study  = id, .new = value)
+  d %>%
+    left_join(by_sample, by = "srr_id") %>%
+    left_join(by_study,  by = "study", suffix = c("", ".study")) %>%
+    # sample-level wins over study-level
+    mutate(.new = coalesce(.new, .new.study)) %>%
+    select(-.new.study)
+}
+
 contam <- str_trim(str_split(opt$`contam-studies`, ",")[[1]])
 dat <- rpm %>% left_join(meta, by = c("srr_id", "cohort"))
+
+# 3a. is_cell_line overrides, before the tier rules consume the flag
+dat <- apply_override(dat, "is_cell_line") %>%
+  mutate(is_cell_line = if_else(is.na(.new), coalesce(is_cell_line, FALSE), norm_bool(.new))) %>%
+  select(-.new)
 
 dat <- dat %>% mutate(
   dx = tolower(coalesce(diagnosis, "")),
@@ -112,9 +147,18 @@ dat <- dat %>% mutate(
     TRUE                                          ~ "other"
   ))
 
+# 3b. explicit tier overrides, after the automatic rules
+dat <- apply_override(dat, "tier") %>%
+  mutate(tier = coalesce(.new, tier)) %>% select(-.new)
+
 tier_levels <- c("unselected_skin", "contamination_study", "cell_line",
-                 "control_productive", "EV", "neoplasia", "other")
+                 "control_productive", "EV", "neoplasia", "peri_lesional", "other")
+stopifnot(all(dat$tier %in% tier_levels))
 dat <- dat %>% mutate(tier = factor(tier, levels = tier_levels))
+
+n_ovr <- dat %>% semi_join(bind_rows(ovr %>% filter(scope == "sample") %>% select(srr_id = id)),
+                           by = "srr_id") %>% nrow()
+message(sprintf("  tier overrides: %d rules, %d sample-level rows matched", nrow(ovr), n_ovr))
 
 # Detection floor calibrated on the productive controls: the 5th-percentile RPM
 # of HPV-defined wart/condyloma tissue is the level we are demonstrably
@@ -147,6 +191,7 @@ tier_display <- c(
   control_productive  = "Productive controls (warts/condyloma)",
   EV                  = "Epidermodysplasia verruciformis",
   neoplasia           = "Neoplasia (cSCC/AK)",
+  peri_lesional       = "Peri-lesional mucosa",
   other               = "Other tissues")
 pdat <- dat %>% filter(!is.na(tier)) %>%
   mutate(rpm_plot = pmax(rpm, 0) + 0.05)
@@ -180,7 +225,7 @@ dmatch <- dat %>%
             .groups = "drop")
 write_tsv(dmatch, file.path(opt$outdir, "depth_matched_detection.tsv"))
 
-key_tiers <- c("unselected_skin", "control_productive", "EV", "neoplasia")
+key_tiers <- c("unselected_skin", "control_productive", "EV", "neoplasia", "peri_lesional")
 pd <- dmatch %>% filter(tier %in% key_tiers, n >= 3)
 if (nrow(pd)) {
   pdepth <- ggplot(pd, aes(depth_bin, pct_ge_floor, colour = tier, group = tier)) +

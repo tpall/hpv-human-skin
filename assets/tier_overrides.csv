@@ -1,0 +1,61 @@
+scope,id,field,value,reason
+# Curated corrections to the automatic tier assignment in bin/hpv_rpm_contrast.R.
+#
+# The automatic assignment reads free-text SRA metadata, which for a handful of
+# studies is either absent (no diagnosis keyword) or actively misleading (a
+# "Skin or mucosa" source_name on mucosal tissue). Each row below records one
+# correction, the evidence for it, and the level it applies at.
+#
+# scope    : "sample" (id = SRR/ERR/DRR run accession) or "study" (id = SRP/ERP/DRP)
+# field    : "tier" (force a tier) or "is_cell_line" (change the flag, which then
+#            feeds the normal tier precedence)
+# value    : the new value
+#
+# is_cell_line overrides are applied BEFORE tier assignment; tier overrides after.
+#
+# --- HPV31-positive HaCaT (HaCaT31) cells, shTOP2A knockdown -----------------
+# ENA study title: "Effect of Top2a depletion on the transcriptional profile of
+# HPV31-positive HaCaT (HaCaT31) cells". The submitted per-run metadata carries
+# only "shTOP2A-1 rep2" + "skin", so no cell-line pattern can fire. These are
+# HPV31-carrying immortalised keratinocytes, not primary skin.
+study,SRP560153,is_cell_line,TRUE,HPV31-positive HaCaT31 cell line (ENA study title); metadata lacks the line name
+#
+# --- Genuine cutaneous wart mis-flagged as a cell line -----------------------
+# SRA `cell_line` attribute is populated with "L11", a submitter sample label,
+# not a recognised line. Title is "Skin_wart_18358", tissue=Skin, diagnosis
+# "control; wart", HPV2 at breadth 0.69 / depth 479x with L1 reads: a real
+# productive wart. Belongs with the productive controls.
+sample,SRR25439062,is_cell_line,FALSE,SRA cell_line field holds sample label "L11"; sample is a primary skin wart
+#
+# --- Epidermodysplasia verruciformis patient skin biopsies ------------------
+# Vahidnezhad et al., "Whole transcriptome-based skin virome profiling in typical
+# epidermodysplasia verruciformis reveals alpha-, beta-, and gamma-HPV infections"
+# (JCI Insight). Per-run metadata carries only "tissue=Skin", so the diagnosis
+# vocabulary never sees "verruciformis" and these land in unselected_skin. They
+# carry productive beta-HPV (HPV14 breadth 0.993, depth 43,539x, L1 = 334,566)
+# and are the four highest-RPM libraries in the skin tier.
+study,SRP394058,tier,EV,EV patient skin biopsies (Vahidnezhad JCI Insight); no diagnosis keyword in SRA metadata
+#
+# --- Condyloma-adjacent normal mucosa ---------------------------------------
+# SRP314958 (RNA-seq) and SRP314961 (MeRIP-seq input + IP) are the same five
+# donors: CA_1..CA_5 are condyloma acuminatum lesions (correctly in
+# control_productive), CON_1..CON_5 are the matched adjacent tissue. Their
+# metadata reads source_name="Skin or mucosa", tissue="adjcent mucocal tissues",
+# so the tissue matcher sees "Skin" and files them as unselected skin. They are
+# peri-lesional mucosa from condyloma patients and must not sit in the
+# prevalence null: all 15 exceed the control-calibrated detection floor.
+sample,SRR14243750,tier,peri_lesional,CON_1 condyloma-adjacent mucosa (SRP314958 RNA-seq)
+sample,SRR14243751,tier,peri_lesional,CON_2 condyloma-adjacent mucosa (SRP314958 RNA-seq)
+sample,SRR14243752,tier,peri_lesional,CON_3 condyloma-adjacent mucosa (SRP314958 RNA-seq)
+sample,SRR14243753,tier,peri_lesional,CON_4 condyloma-adjacent mucosa (SRP314958 RNA-seq)
+sample,SRR14243754,tier,peri_lesional,CON_5 condyloma-adjacent mucosa (SRP314958 RNA-seq)
+sample,SRR14243789,tier,peri_lesional,CON_1 condyloma-adjacent mucosa (SRP314961 MeRIP input)
+sample,SRR14243790,tier,peri_lesional,CON_1 condyloma-adjacent mucosa (SRP314961 MeRIP IP)
+sample,SRR14243791,tier,peri_lesional,CON_2 condyloma-adjacent mucosa (SRP314961 MeRIP input)
+sample,SRR14243792,tier,peri_lesional,CON_2 condyloma-adjacent mucosa (SRP314961 MeRIP IP)
+sample,SRR14243793,tier,peri_lesional,CON_3 condyloma-adjacent mucosa (SRP314961 MeRIP input)
+sample,SRR14243794,tier,peri_lesional,CON_3 condyloma-adjacent mucosa (SRP314961 MeRIP IP)
+sample,SRR14243795,tier,peri_lesional,CON_4 condyloma-adjacent mucosa (SRP314961 MeRIP input)
+sample,SRR14243796,tier,peri_lesional,CON_4 condyloma-adjacent mucosa (SRP314961 MeRIP IP)
+sample,SRR14243797,tier,peri_lesional,CON_5 condyloma-adjacent mucosa (SRP314961 MeRIP input)
+sample,SRR14243798,tier,peri_lesional,CON_5 condyloma-adjacent mucosa (SRP314961 MeRIP IP)
