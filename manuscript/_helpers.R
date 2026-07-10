@@ -3,6 +3,7 @@
 # provides `stats`). Keeps display conventions in one place so every quoted
 # number is computed, not hand-typed.
 suppressPackageStartupMessages({library(tidyverse); library(here)})
+source(here("manuscript/_paths.R"))
 
 ## ── Number formatting ───────────────────────────────────────────────────────
 .superscript <- c(`0`="⁰",`1`="¹",`2`="²",`3`="³",`4`="⁴",`5`="⁵",`6`="⁶",`7`="⁷",`8`="⁸",`9`="⁹",`-`="⁻")
@@ -17,8 +18,10 @@ fp <- function(p){
 }
 
 # Odds ratio / OR-CI bound: <10 -> 1 decimal, <1000 -> integer, else comma integer.
+# An unbounded value (complete separation) prints as ∞, never as a 16-digit number.
 fo <- function(x){
   if (is.na(x)) return("NA")
+  if (!is.finite(x)) return("∞")
   if (x >= 1000) return(formatC(round(x), format = "d", big.mark = ","))
   if (x >= 10)   return(formatC(round(x), format = "d"))
   formatC(x, format = "f", digits = 1)
@@ -72,11 +75,12 @@ build_bayes_table <- function(stats, bget){
 # (k+0.5)/(N+1), 95% credible interval from qbeta(). N = libraries screened in
 # the tier (from the per-sample RPM table); shown in each column header.
 .tier_N <- local({
-  read_tsv(here("results_reframe_csc/hpv_rpm_per_sample.tsv"), show_col_types = FALSE) %>%
+  read_tsv(rpm_per_sample_tsv(), show_col_types = FALSE) %>%
     count(tier) %>% { setNames(.$n, .$tier) }
 })
-.type_cat <- read_tsv(here("results_reframe_csc/type_catalogue_by_tier.tsv"), show_col_types = FALSE)
+.type_cat <- read_tsv(type_catalogue_tsv(), show_col_types = FALSE)
 .tier_lab <- c(unselected_skin = "Unselected skin", control_productive = "Productive controls",
+               EV = "EV", peri_lesional = "Peri-lesional mucosa",
                neoplasia = "Neoplasia", cell_line = "Cell line", other = "Other")
 .hdr_N <- function(tc) paste0(.tier_lab[[tc]], " (N=", comma(.tier_N[[tc]]), ")")
 
@@ -110,6 +114,8 @@ build_type_table <- function(){
   tibble(`HPV type` = gsub("(REF|nr)$", "", raw$hpv_reference)) %>%
     mutate(!!.hdr_N("unselected_skin")    := .np(raw$unselected_skin,    "unselected_skin"),
            !!.hdr_N("control_productive") := .np(raw$control_productive, "control_productive"),
+           !!.hdr_N("EV")                 := .np(raw$EV,                 "EV"),
+           !!.hdr_N("peri_lesional")      := .np(raw$peri_lesional,      "peri_lesional"),
            !!.hdr_N("neoplasia")          := .np(raw$neoplasia,          "neoplasia"),
            !!.hdr_N("cell_line")          := .np(raw$cell_line,          "cell_line"),
            !!.hdr_N("other")              := .np(raw$other,              "other"),
@@ -152,12 +158,14 @@ build_prod_table <- function(){
 # but sub-threshold samples, i.e. below the breadth>=0.10 & depth>=2 assignment
 # cutoff. `trace_types.tsv` is a one-time BAM re-map; genus from the complete
 # PaVE lookup (`type_genus.csv`). Detection-tier, low-coverage, not productive.
-.trace_tiers <- c("unselected_skin","neoplasia","control_productive","other","cell_line")
+# Peri-lesional mucosa contributes no trace calls (all 15 libraries clear the
+# assignment threshold and therefore appear in Table S1), so it has no column here.
+.trace_tiers <- c("unselected_skin","neoplasia","control_productive","EV","other","cell_line")
 # Raw trace count matrix (type × tier), filtered to Total >= 2. Shared by the
 # display builder and the caption CrI lookups so both see identical counts.
 .trace_counts <- function(){
   tt  <- read_tsv(here("manuscript/trace_types.tsv"), show_col_types = FALSE)
-  rp  <- read_tsv(here("results_reframe_csc/hpv_rpm_per_sample.tsv"), show_col_types = FALSE) %>%
+  rp  <- read_tsv(rpm_per_sample_tsv(), show_col_types = FALSE) %>%
     select(srr_id, tier)
   gen <- read_csv(here("manuscript/type_genus.csv"), show_col_types = FALSE) %>%
     select(hpv_reference, genus_short)
@@ -180,10 +188,39 @@ build_trace_table <- function(){
     mutate(!!.hdr_N("unselected_skin")    := .np(x$unselected_skin,    "unselected_skin"),
            !!.hdr_N("neoplasia")          := .np(x$neoplasia,          "neoplasia"),
            !!.hdr_N("control_productive") := .np(x$control_productive, "control_productive"),
+           !!.hdr_N("EV")                 := .np(x$EV,                 "EV"),
            !!.hdr_N("other")              := .np(x$other,              "other"),
            !!.hdr_N("cell_line")          := .np(x$cell_line,          "cell_line"),
            Total = x$Total)
 }
+# Trace-eligible libraries per tier: HPV-positive but with no reference passing
+# the breadth/depth assignment criterion. These are the only libraries that can
+# appear in Table S5 at all, so the caption quotes them alongside the tier N
+# (the denominator of the printed prevalences, which stays the tier N so that
+# Tables S1 and S5 remain on one scale).
+.trace_eligible_N <- local({
+  assigned <- unique(unlist(lapply(
+    c("results_full_v2","results_lesions","results_lesions_csc","results_lesions_wide"),
+    function(d) sub("_hpv_types\\.tsv$", "",
+                    list.files(here(d, "aggregated"), "_hpv_types\\.tsv$")))))
+  # a library has an assignment only if its types file is non-empty
+  has_call <- function(srr) {
+    for (d in c("results_full_v2","results_lesions","results_lesions_csc","results_lesions_wide")) {
+      f <- here(d, "aggregated", paste0(srr, "_hpv_types.tsv"))
+      if (file.exists(f) && length(readLines(f, warn = FALSE)) > 1) return(TRUE)
+    }
+    FALSE
+  }
+  rp <- read_tsv(rpm_per_sample_tsv(), show_col_types = FALSE) %>% filter(hpv_reads >= 10)
+  rp %>% mutate(assigned = map_lgl(srr_id, ~ .x %in% assigned && has_call(.x))) %>%
+    filter(!assigned) %>% count(tier) %>% { setNames(.$n, .$tier) }
+})
+trace_elig <- function(tc) unname(coalesce(.trace_eligible_N[tc], 0L))
+# Human-readable "Unselected skin 196, Cell line 35, ..." for the caption, ordered
+# as the table columns are, and using the display labels rather than the raw keys.
+trace_elig_str <- function(tiers = .trace_tiers)
+  paste(sprintf("%s %d", .tier_lab[tiers], vapply(tiers, trace_elig, integer(1))),
+        collapse = ", ")
 # Trace-count lookup for caption CrIs.
 kT  <- function(type, tc){ x <- .trace_counts(); v <- x[[tc]][x$type == type]
   if (length(v)) as.integer(v[1]) else 0L }
