@@ -225,3 +225,21 @@ trace_elig_str <- function(tiers = .trace_tiers)
 kT  <- function(type, tc){ x <- .trace_counts(); v <- x[[tc]][x$type == type]
   if (length(v)) as.integer(v[1]) else 0L }
 ciT <- function(type, tc) prev_ci(kT(type, tc), tc)
+
+## ── Figure S2: genus prevalence by tier ─────────────────────────────────────
+# manuscript/figure_genus.R plots the figure and writes the counts it plotted.
+# The caption reads that file, so figure and caption cannot drift apart.
+.genus_prev <- read_tsv(here("manuscript/genus_prevalence_by_tier.tsv"), show_col_types = FALSE)
+.gp_row <- function(genus, tier, level = "Any detection"){
+  r <- .genus_prev[.genus_prev$genus == genus & .genus_prev$tier == tier &
+                     .genus_prev$level == level, ]
+  if (!nrow(r)) stop("no genus_prevalence row for ", genus, " / ", tier, " / ", level)
+  r[1, ]
+}
+# Libraries detected: "10/10".
+kG  <- function(genus, tier, level = "Any detection"){
+  r <- .gp_row(genus, tier, level); paste0(r$k, "/", r$N) }
+# Posterior prevalence with credible interval: "95% [78–100]".
+ciG <- function(genus, tier, level = "Any detection"){
+  r <- .gp_row(genus, tier, level)
+  paste0(fpct(r$mean), "% [", fpct(r$lo), "–", fpct(r$hi), "]") }
