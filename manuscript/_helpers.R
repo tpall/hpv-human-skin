@@ -226,6 +226,80 @@ kT  <- function(type, tc){ x <- .trace_counts(); v <- x[[tc]][x$type == type]
   if (length(v)) as.integer(v[1]) else 0L }
 ciT <- function(type, tc) prev_ci(kT(type, tc), tc)
 
+## ── Table S6: multi-type (co-infection) libraries ───────────────────────────
+# Every library with two or more assigned references, i.e. two or more types
+# each clearing breadth >= 0.10 and depth >= 2. Coverage comes from
+# `samtools coverage -q 10`, so only uniquely-mapped reads (STAR MAPQ 255)
+# contribute: a read that maps equally well to two HPV references is a
+# multimapper (MAPQ <= 3) and is discarded before these numbers are computed.
+# Cross-mapping between types therefore cannot manufacture a co-infection call.
+.coinf_dirs <- c("results_full_v2", "results_lesions", "results_lesions_csc", "results_lesions_wide")
+.coinf <- local({
+  ty <- map_dfr(unlist(lapply(.coinf_dirs, function(d)
+      list.files(here(d, "aggregated"), "_hpv_types\\.tsv$", full.names = TRUE))),
+    ~ suppressMessages(read_tsv(.x, show_col_types = FALSE, col_types = cols(.default = "c")))) %>%
+    distinct(sample_id, hpv_reference, .keep_all = TRUE) %>%
+    mutate(coverage_breadth = as.double(coverage_breadth), mean_depth = as.double(mean_depth),
+           type = gsub("(REF|nr)$", "", hpv_reference))
+  rp <- read_tsv(rpm_per_sample_tsv(), show_col_types = FALSE) %>% select(srr_id, tier, study)
+  k  <- ty %>% count(sample_id, name = "n_types")
+  list(types = ty %>% left_join(k, by = "sample_id") %>%
+                      left_join(rp, by = c("sample_id" = "srr_id")),
+       n_typed = nrow(k))
+})
+.coinf_tier_order <- c("control_productive", "EV", "peri_lesional", "neoplasia",
+                       "unselected_skin", "other", "cell_line")
+build_coinf_table <- function(){
+  .coinf$types %>% filter(n_types >= 2) %>%
+    group_by(sample_id, tier, study) %>%
+    arrange(desc(mean_depth), .by_group = TRUE) %>%
+    summarise(dom_depth = max(mean_depth),
+              types = paste(sprintf("%s (%.2f, %s×)", type, coverage_breadth,
+                                    formatC(round(mean_depth), format = "d", big.mark = ",")),
+                            collapse = " + "),
+              .groups = "drop") %>%
+    mutate(tier = factor(tier, levels = .coinf_tier_order)) %>%
+    arrange(tier, desc(dom_depth)) %>%
+    transmute(Library = sample_id, Tier = .tier_lab[as.character(tier)], Study = study,
+              `Assigned types (coverage breadth, mean depth), ordered by depth` = types)
+}
+# Co-infection counts quoted in the caption and in the Results paragraph.
+.CONDYLOMA_PAIR <- c("SRP314958", "SRP314961")
+cf <- local({
+  co  <- .coinf$types %>% filter(n_types >= 2)
+  lib <- co %>% distinct(sample_id, study, n_types)
+  sec <- co %>% group_by(sample_id) %>% arrange(desc(mean_depth), .by_group = TRUE) %>%
+    slice(-1) %>% ungroup()                      # non-dominant calls
+  w <- .coinf$types %>% filter(type %in% c("HPV11", "HPV42")) %>%
+    distinct(sample_id, type) %>% mutate(v = TRUE) %>%
+    pivot_wider(names_from = type, values_from = v, values_fill = FALSE)
+  # Donor identity for the condyloma study pair: SRP314958 is RNA-seq and
+  # SRP314961 is MeRIP-seq of the same material, whose run titles are CA_n /
+  # CON_n with an _input or _IP suffix on the MeRIP fractions.
+  titles <- map_dfr(list.files(here(), "lesions_raw.csv", recursive = TRUE, full.names = TRUE),
+      ~ suppressMessages(read_csv(.x, show_col_types = FALSE)) %>% mutate(across(everything(), as.character))) %>%
+    distinct(srr_id, .keep_all = TRUE) %>%
+    transmute(sample_id = srr_id, donor = str_remove(title, "_(IP|input)$"))
+  pair <- co %>% filter(study %in% .CONDYLOMA_PAIR) %>% left_join(titles, by = "sample_id")
+  # An HPV11 + HPV42 call is "unambiguous" only when *both* types clear a
+  # coverage bar far above the assignment threshold (breadth 0.10, depth 2).
+  strict <- .coinf$types %>% filter(type %in% c("HPV11", "HPV42"),
+                                    coverage_breadth >= 0.70, mean_depth >= 5) %>%
+    count(sample_id, name = "n") %>% filter(n == 2) %>%
+    left_join(titles, by = "sample_id")
+  list(libs = nrow(lib), typed = .coinf$n_typed,
+       k2 = sum(lib$n_types == 2), k3 = sum(lib$n_types == 3),
+       k4 = sum(lib$n_types == 4), k5 = sum(lib$n_types == 5),
+       pair_libs = sum(lib$study %in% .CONDYLOMA_PAIR),
+       pair_donors = n_distinct(pair$donor),
+       sec_med_depth = median(sec$mean_depth),
+       sec_shallow   = round(100 * mean(sec$mean_depth < 5)),
+       both1142 = sum(w$HPV11 & w$HPV42),
+       only42   = sum(!w$HPV11 & w$HPV42),
+       only11   = sum(w$HPV11 & !w$HPV42),
+       strict_libs = nrow(strict), strict_donors = n_distinct(strict$donor))
+})
+
 ## ── Figure S2: genus prevalence by tier ─────────────────────────────────────
 # manuscript/figure_genus.R plots the figure and writes the counts it plotted.
 # The caption reads that file, so figure and caption cannot drift apart.

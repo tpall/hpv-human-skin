@@ -3411,6 +3411,7 @@ Figure 1: Depth-normalised HPV transcript burden distinguishes productive warts
 <h3 class="anchored" data-anchor-id="the-hpv-type-landscape-is-partitioned-by-population">The HPV type landscape is partitioned by population</h3>
 <p>The HPV-type-by-tier catalogue (<a href="#supptbl-types" class="quarto-xref">Table S1</a>) recapitulates these conclusions in a single descriptive view, and the corrected tiering sharpens it. The high-risk mucosal types HPV16/HPV18 are confined almost entirely to cell-line material (3.5% [2.3–5.0] and 4.7% [3.2–6.3] of cell-line libraries). Productive controls are dominated by cutaneous wart types (HPV57, HPV2, HPV27) plus the low-risk mucocutaneous HPV6/HPV11 and gamma types (HPV4, HPV-mKN1). The EV tier carries precisely the beta-types the syndrome is defined by (HPV9, HPV14, HPV20, HPV25, HPV47) alongside an alpha co-detection. Peri-lesional mucosa carries the mucosal alpha repertoire of its adjacent condylomata (HPV11 in 91% [73–99] of libraries, HPV42, HPV6, HPV74, HPV90). Unselected skin, by contrast, contributes no HPV type at all above the two-library display threshold except two HPV18 contamination calls: its beta/gamma reservoir is real but sits entirely below the assignment threshold, and is recovered only at the detection tier (below). The genuine neoplasia-associated productive infections are the gamma/alpha types noted above (HPV12, HPV16, HPV96, HPV182). Collapsed from type to genus (<a href="#suppfig-genus" class="quarto-xref">Figure S2</a>), the same partition is a single picture: productive controls are alpha with a gamma minority, EV biopsies are essentially pure beta (10/10 libraries), peri-lesional mucosa is purely alpha, cell lines are alpha, and unselected skin is flat and low across alpha, beta and gamma, with the study’s only nu detections. Cutaneous neoplasia is the one tissue tier in which beta exceeds alpha (2.6% [1.3–4.3] versus 1.9% [0.86–3.4]), the genus-level shadow of a beta-HPV footprint. The epidemiological reservoir of cutaneous beta/gamma HPV in healthy skin is therefore real but transcriptionally quiet, productive disease is the property of warts and EV, and HPV-associated cutaneous neoplasia carries the virus, when at all, as a trace, non-productive footprint.</p>
 <p>Extending this catalogue below the assignment threshold answers the descriptive question of <em>which</em> types make up the trace. A detection-tier re-map of the HPV-positive but untyped libraries, taking the best-hit reference from unique alignments at sub-threshold coverage, resolved a confident low-coverage type for 137 of 325 such libraries across 42 types (<a href="#supptbl-trace" class="quarto-xref">Table S5</a>). This recovers the expected commensal signal at the sensitivity floor: healthy skin carried a diverse cutaneous reservoir (38 of 55 resolved skin calls were beta-, gamma- or nu-types, including HPV12/HPV20, HPV4/HPV65/HPV134 and candidate skin-virome types), cutaneous neoplasia the carcinoma-associated beta and gamma types (HPV5, HPV12, HPV182, HPV222), while the mucosal HPV16/HPV18 signal stayed confined to cell-line material and a low-level contamination overlay. These are low-coverage, non-productive detections that identify the type without bearing on productivity, and so extend the type catalogue rather than qualify the trace-not-productive conclusion.</p>
+<p>A further descriptive feature of the catalogue is that types frequently co-occur: 38 of the 163 typed libraries carry two or more assigned references, up to five in one library (<a href="#supptbl-coinf" class="quarto-xref">Table S6</a>). Because coverage is scored from uniquely-mapped reads alone, cross-mapping between similar types cannot generate these calls. The commonest pairing by far is HPV11 with HPV42, which co-occur in 20 libraries, while only 2 carry HPV42 without HPV11; in the peri-lesional tier the pairing is forced by the marginal counts of <a href="#supptbl-types" class="quarto-xref">Table S1</a> (14 HPV11 and 13 HPV42 calls over 15 libraries). We nonetheless present this as a hypothesis rather than a finding, for three reasons set out in <a href="#supptbl-coinf" class="quarto-xref">Table S6</a>. The co-infected libraries are heavily pseudo-replicated, 25 of the 38 coming from 9 donors of one study, each sequenced in three fractions across two SRA submissions; the secondary type in a co-infection is usually near the detection threshold (median depth 6.8×, 40% below 5×), to the point that one donor’s MeRIP input and IP fractions call different second types; and requiring both partners to clear a stricter coverage bar leaves only 9 HPV11/HPV42 libraries from 3 donors. Within that stricter set the deeper type differs by tissue, HPV11 in the condyloma lesion and HPV42 in the two peri-lesional specimens, but HPV42 clears the bar only where it is abundant, so tissue tropism and detection sensitivity are confounded. The pattern is worth testing in a cohort assembled for the purpose; it cannot be resolved here.</p>
 </section>
 <section id="a-bayesian-re-analysis-under-weakly-informative-priors-confirms-the-contrasts" class="level3">
 <h3 class="anchored" data-anchor-id="a-bayesian-re-analysis-under-weakly-informative-priors-confirms-the-contrasts">A Bayesian re-analysis under weakly-informative priors confirms the contrasts</h3>
@@ -4381,6 +4382,265 @@ Table S5: Detection-tier HPV type catalogue. This table is the complement of <a 
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-suppfig" id="suppfig-genus-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure S2: Read across the bottom row, the figure is the type landscape of the study in one panel. The productive controls are alpha-dominated (39/44 libraries, 88% [77–96]) with a gamma minority (10% [3.1–20]) and no beta at all, the repertoire of cutaneous and mucocutaneous warts. The EV biopsies are the mirror image, essentially pure beta (10/10, 95% [78–100]), which is the genus the syndrome is defined by. Peri-lesional mucosa is purely alpha (15/15), carrying its adjacent condylomata’s types and nothing cutaneous. Cell lines are alpha (13% [10–15]), the integrated HPV16/HPV18 contamination signature. Against these, unselected skin is flat and low: alpha, beta and gamma occur at indistinguishable rates near 0.27% [0.16–0.40], joined by the only nu detections in the study (2/7327 libraries, HPV41), the profile of a sparse commensal reservoir rather than of any one disease. Cutaneous neoplasia is the one tissue tier in which beta exceeds alpha (2.6% [1.3–4.3] versus 1.9% [0.86–3.4]), consistent with a beta-HPV footprint, though at prevalences one to two orders of magnitude below the productive tiers. The mu genus (HPV1, the classic plantar-wart type) was detected in no tier.
+</figcaption>
+</figure>
+</div>
+<div id="supptbl-coinf" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-supptbl figure">
+<div aria-describedby="supptbl-coinf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 8%">
+<col style="width: 15%">
+<col style="width: 7%">
+<col style="width: 68%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Library</th>
+<th style="text-align: left;">Tier</th>
+<th style="text-align: left;">Study</th>
+<th style="text-align: left;">Assigned types (coverage breadth, mean depth), ordered by depth</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">SRR10044860</td>
+<td style="text-align: left;">Productive controls</td>
+<td style="text-align: left;">SRP219878</td>
+<td style="text-align: left;">HPV78 (1.00, 13,780×) + HPV57 (0.66, 5×)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SRR10044861</td>
+<td style="text-align: left;">Productive controls</td>
+<td style="text-align: left;">SRP219878</td>
+<td style="text-align: left;">HPV78 (1.00, 13,697×) + HPV57 (0.70, 5×)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SRR14243786</td>
+<td style="text-align: left;">Productive controls</td>
+<td style="text-align: left;">SRP314961</td>
+<td style="text-align: left;">HPV11 (1.00, 12,564×) + HPV42 (0.59, 3×)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SRR14243748</td>
+<td style="text-align: left;">Productive controls</td>
+<td style="text-align: left;">SRP314958</td>
+<td style="text-align: left;">HPV11 (1.00, 6,988×) + HPV42 (0.29, 2×)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SRR14243785</td>
+<td style="text-align: left;">Productive controls</td>
+<td style="text-align: left;">SRP314961</td>
+<td style="text-align: left;">HPV11 (1.00, 6,988×) + HPV42 (0.29, 2×)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SRR10044876</td>
+<td style="text-align: left;">Productive controls</td>
+<td style="text-align: left;">SRP219878</td>
+<td style="text-align: left;">HPV27 (1.00, 4,998×) + HPV-mKN1 (0.49, 2×)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SRR10044877</td>
+<td style="text-align: left;">Productive controls</td>
+<td style="text-align: left;">SRP219878</td>
+<td style="text-align: left;">HPV27 (1.00, 4,943×) + HPV-mKN1 (0.47, 3×)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SRR14243780</td>
+<td style="text-align: left;">Productive controls</td>
+<td style="text-align: left;">SRP314961</td>
+<td style="text-align: left;">HPV11 (0.99, 2,996×) + HPV90 (0.92, 67×) + HPV42 (0.79, 62×) + HPV44 (0.98, 60×)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SRR14243745</td>
+<td style="text-align: left;">Productive controls</td>
+<td style="text-align: left;">SRP314958</td>
+<td style="text-align: left;">HPV11 (1.00, 1,963×) + HPV90 (0.96, 90×) + HPV44 (0.99, 90×) + HPV42 (0.87, 27×)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SRR14243779</td>
+<td style="text-align: left;">Productive controls</td>
+<td style="text-align: left;">SRP314961</td>
+<td style="text-align: left;">HPV11 (1.00, 1,963×) + HPV90 (0.96, 90×) + HPV44 (0.99, 90×) + HPV42 (0.87, 27×)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SRR14243784</td>
+<td style="text-align: left;">Productive controls</td>
+<td style="text-align: left;">SRP314961</td>
+<td style="text-align: left;">HPV91 (0.99, 1,391×) + HPV52 (0.94, 83×) + HPV11 (0.66, 3×) + HPV42 (0.22, 2×)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SRR14243747</td>
+<td style="text-align: left;">Productive controls</td>
+<td style="text-align: left;">SRP314958</td>
+<td style="text-align: left;">HPV91 (1.00, 1,114×) + HPV52 (0.95, 83×) + HPV11 (0.79, 6×)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SRR14243783</td>
+<td style="text-align: left;">Productive controls</td>
+<td style="text-align: left;">SRP314961</td>
+<td style="text-align: left;">HPV91 (1.00, 1,114×) + HPV52 (0.95, 83×) + HPV11 (0.79, 6×)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SRR14243782</td>
+<td style="text-align: left;">Productive controls</td>
+<td style="text-align: left;">SRP314961</td>
+<td style="text-align: left;">HPV6 (0.97, 1,102×) + HPV42 (0.44, 3×)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SRR14243746</td>
+<td style="text-align: left;">Productive controls</td>
+<td style="text-align: left;">SRP314958</td>
+<td style="text-align: left;">HPV6 (0.99, 549×) + HPV11 (0.82, 12×)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SRR14243781</td>
+<td style="text-align: left;">Productive controls</td>
+<td style="text-align: left;">SRP314961</td>
+<td style="text-align: left;">HPV6 (0.99, 549×) + HPV11 (0.82, 12×)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SRR14243788</td>
+<td style="text-align: left;">Productive controls</td>
+<td style="text-align: left;">SRP314961</td>
+<td style="text-align: left;">HPV11 (0.95, 485×) + HPV42 (0.49, 2×)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SRR21205030</td>
+<td style="text-align: left;">EV</td>
+<td style="text-align: left;">SRP394058</td>
+<td style="text-align: left;">HPV25 (1.00, 75,813×) + HPV14 (0.63, 4×)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SRR21205038</td>
+<td style="text-align: left;">EV</td>
+<td style="text-align: left;">SRP394058</td>
+<td style="text-align: left;">HPV20 (0.91, 18,558×) + HPV9 (1.00, 736×)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SRR21205031</td>
+<td style="text-align: left;">EV</td>
+<td style="text-align: left;">SRP394058</td>
+<td style="text-align: left;">HPV25 (0.98, 117×) + HPV37 (0.78, 5×)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SRR21205037</td>
+<td style="text-align: left;">EV</td>
+<td style="text-align: left;">SRP394058</td>
+<td style="text-align: left;">HPV9 (0.98, 48×) + HPV2 (0.89, 19×)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SRR14243794</td>
+<td style="text-align: left;">Peri-lesional mucosa</td>
+<td style="text-align: left;">SRP314961</td>
+<td style="text-align: left;">HPV42 (0.99, 3,816×) + HPV11 (0.79, 8×)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SRR14243752</td>
+<td style="text-align: left;">Peri-lesional mucosa</td>
+<td style="text-align: left;">SRP314958</td>
+<td style="text-align: left;">HPV42 (1.00, 2,942×) + HPV11 (0.72, 9×) + HPV74 (0.16, 3×)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SRR14243793</td>
+<td style="text-align: left;">Peri-lesional mucosa</td>
+<td style="text-align: left;">SRP314961</td>
+<td style="text-align: left;">HPV42 (1.00, 2,942×) + HPV11 (0.72, 9×) + HPV74 (0.16, 3×)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SRR14243790</td>
+<td style="text-align: left;">Peri-lesional mucosa</td>
+<td style="text-align: left;">SRP314961</td>
+<td style="text-align: left;">HPV42 (0.99, 955×) + HPV90 (0.97, 273×) + HPV11 (0.93, 138×)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SRR14243750</td>
+<td style="text-align: left;">Peri-lesional mucosa</td>
+<td style="text-align: left;">SRP314958</td>
+<td style="text-align: left;">HPV42 (1.00, 572×) + HPV90 (0.98, 272×) + HPV11 (0.98, 115×)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SRR14243789</td>
+<td style="text-align: left;">Peri-lesional mucosa</td>
+<td style="text-align: left;">SRP314961</td>
+<td style="text-align: left;">HPV42 (1.00, 572×) + HPV90 (0.98, 272×) + HPV11 (0.98, 115×)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SRR14243792</td>
+<td style="text-align: left;">Peri-lesional mucosa</td>
+<td style="text-align: left;">SRP314961</td>
+<td style="text-align: left;">HPV74 (0.76, 35×) + HPV6 (0.45, 13×) + HPV42 (0.20, 3×) + HPV91 (0.40, 2×) + HPV11 (0.32, 2×)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SRR14243796</td>
+<td style="text-align: left;">Peri-lesional mucosa</td>
+<td style="text-align: left;">SRP314961</td>
+<td style="text-align: left;">HPV11 (0.61, 31×) + HPV42 (0.37, 3×)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SRR14243751</td>
+<td style="text-align: left;">Peri-lesional mucosa</td>
+<td style="text-align: left;">SRP314958</td>
+<td style="text-align: left;">HPV74 (0.91, 24×) + HPV11 (0.78, 10×) + HPV6 (0.55, 6×) + HPV42 (0.51, 2×)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SRR14243791</td>
+<td style="text-align: left;">Peri-lesional mucosa</td>
+<td style="text-align: left;">SRP314961</td>
+<td style="text-align: left;">HPV74 (0.91, 24×) + HPV11 (0.78, 10×) + HPV6 (0.55, 6×) + HPV42 (0.51, 2×)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SRR14243753</td>
+<td style="text-align: left;">Peri-lesional mucosa</td>
+<td style="text-align: left;">SRP314958</td>
+<td style="text-align: left;">HPV11 (0.90, 20×) + HPV42 (0.53, 2×)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SRR14243795</td>
+<td style="text-align: left;">Peri-lesional mucosa</td>
+<td style="text-align: left;">SRP314961</td>
+<td style="text-align: left;">HPV11 (0.90, 20×) + HPV42 (0.53, 2×)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SRR19520005</td>
+<td style="text-align: left;">Neoplasia</td>
+<td style="text-align: left;">SRP378129</td>
+<td style="text-align: left;">HPV12 (1.00, 711×) + HPV27 (0.52, 5×)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ERR2274877</td>
+<td style="text-align: left;">Neoplasia</td>
+<td style="text-align: left;">ERP106532</td>
+<td style="text-align: left;">HPV182 (0.99, 245×) + HPV96 (0.99, 63×)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ERR1971044</td>
+<td style="text-align: left;">Neoplasia</td>
+<td style="text-align: left;">ERP022968</td>
+<td style="text-align: left;">HPV182 (0.98, 243×) + HPV96 (0.99, 61×)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SRR19519996</td>
+<td style="text-align: left;">Unselected skin</td>
+<td style="text-align: left;">SRP378129</td>
+<td style="text-align: left;">HPV176 (0.26, 8×) + HPV-m7269 (0.26, 3×)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SRR29524701</td>
+<td style="text-align: left;">Unselected skin</td>
+<td style="text-align: left;">SRP515675</td>
+<td style="text-align: left;">HPV-mw34c14a (0.50, 4×) + HPV49 (0.31, 3×)</td>
+</tr>
+</tbody>
+</table>
+<p>Libraries carrying more than one assigned HPV type. Every library in which two or more references independently cleared the assignment criterion (coverage breadth ≥ 0.10 <strong>and</strong> mean depth ≥ 2) is listed, with each type’s breadth and mean depth, ordered by depth. 38 of the 163 typed libraries qualify (24 with two types, 7 with three, 6 with four, 1 with five). Coverage is computed by <code>samtools coverage -q 10</code>, which retains only uniquely-mapped reads, since STAR assigns MAPQ ≤ 3 to any read placing equally well on two references. Cross-mapping between similar types therefore cannot manufacture a co-infection call; each type in a row is supported by reads that map to it and to nothing else.</p>
+<p>Three cautions govern how far this table can be read. First, <strong>the rows are not independent observations</strong>. 25 of the 38 come from the paired studies SRP314958 (RNA-seq) and SRP314961 (MeRIP-seq), which are the same 9 donors, five condyloma lesions (CA_1 to CA_5) and four matched peri-lesional specimens (CON_1 to CON_4), each sequenced as an RNA-seq library plus a MeRIP input and IP fraction. Rows sharing a donor carry near-identical read profiles. Second, <strong>the secondary types often sit close to the threshold</strong>: across all non-dominant calls the median depth is 6.8× and 40% fall below 5×, so which type is called second can depend on the library fraction. In donor CA_2 the RNA-seq and MeRIP input fractions call HPV6 + HPV11 while the IP fraction of the same specimen calls HPV6 + HPV42. Third, the dominant type in a co-infected library typically exceeds its partner by two to three orders of magnitude in depth, so most rows describe one established infection with a minor second type rather than two comparable ones.</p>
+<p>Where both partners are unambiguous the pairings are biologically coherent. Two “other-tissue” carcinoma and actinic-keratosis libraries (ERR2274877, ERR1971044) carry the gamma-types HPV96 and HPV182 together at 98–99% breadth and 61–245× depth. An EV biopsy (SRR21205038) carries the beta-types HPV20 and HPV9 at 18,558× and 736×. Both are two full genomes in one library, not a genome plus a fragment.</p>
+<p>The most frequent pairing in the study is HPV11 with HPV42: 20 libraries carry both, 16 carry HPV11 without HPV42, and only 2 carry HPV42 without HPV11. In the peri-lesional tier the association is forced by the marginals of <a href="#supptbl-types" class="quarto-xref">Table S1</a>, where 14 HPV11 and 13 HPV42 calls are distributed over 15 libraries. Applying a stricter bar to both partners (breadth ≥ 0.70 and depth ≥ 5× for each) leaves 9 libraries from 3 donors: one condyloma lesion (CA_1) and two peri-lesional specimens (CON_1, CON_3).</p>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-supptbl" id="supptbl-coinf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table S6: The dominance relation between the two types is asymmetric, but not cleanly so. HPV11 is the deeper type in all five condyloma lesions, exceeding HPV42 48- to 4,100-fold in the three with a strong HPV11 signal (CA_1, CA_4, CA_5) and 2- to 4-fold in the other two. In peri-lesional mucosa the picture splits: in CON_1 and CON_3, the two specimens where HPV42 is unambiguous, HPV42 is the deeper type (955× versus 138×, and 3,816× versus 9×, i.e. 7-fold and 410-fold), whereas in CON_2, CON_4 and CON_5, where HPV42 barely clears the assignment threshold, HPV11 remains the deeper type. Whether this reflects a genuine tissue difference in which type predominates, or merely that HPV42 clears the threshold only where it happens to be abundant, cannot be settled from three donors of one study. It is a hypothesis the data motivate, not a result they support.
 </figcaption>
 </figure>
 </div>
