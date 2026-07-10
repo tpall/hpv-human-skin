@@ -230,9 +230,12 @@ pd <- dmatch %>% filter(tier %in% key_tiers, n >= 3)
 if (nrow(pd)) {
   pdepth <- ggplot(pd, aes(depth_bin, pct_ge_floor, colour = tier, group = tier)) +
     geom_line() + geom_point(aes(size = n)) +
+    # Same tier labels as the x-axis of the main contrast plot, so the two
+    # figures name the populations identically. Unwrapped: the legend has room.
+    scale_colour_discrete(name = "Tier", labels = function(lv) tier_display[lv]) +
     labs(title = "Control-level HPV detection within matched sequencing-depth bins",
          subtitle = sprintf("%% of samples >= %.1f RPM floor; flat-high controls vs flat-low skin = gap is not depth", floor_rpm),
-         x = "Total reads (Kraken2-screened)", y = "% at/above detection floor", size = "n") +
+         x = "Total reads (Kraken2-screened)", y = "% at/above detection floor", size = "Libraries") +
     theme_minimal()
   ggsave(file.path(opt$outdir, "depth_matched_detection.pdf"), pdepth, width = 8, height = 5)
   ggsave(file.path(opt$outdir, "depth_matched_detection.png"), pdepth, width = 8, height = 5, dpi = 150)
