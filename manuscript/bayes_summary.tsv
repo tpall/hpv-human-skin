@@ -1,10 +1,10 @@
 model	OR	lo	hi	p_gt1	rhat
-M1_engineered	5.5246	3.2799	8.649	1	1.0034
-M1_cell_line	4.4458	3.0399	6.3491	1	1.0034
-M2b_neoplasia_vs_skin_floor	1.8652	0.7171	4.2336	0.9015	1.001
-M2b_depth	2.8437	1.4457	5.9037	0.9995	1.001
-M2c_controls_vs_skin_floor	1837.2052	715.1265	6087.1211	1	1.0011
-M2c_controls_vs_skin_floor_studentt	2527.1911	872.9401	10575.8854	1	1.0017
+M1_engineered	4.5748	2.756	7.3596	1	1.0011
+M1_cell_line	5.2478	3.6476	7.3134	1	1.0011
+M2b_neoplasia_vs_skin_floor	8.6766	2.8994	26.3863	1	1.0013
+M2b_depth	1.4623	0.5003	5.1116	0.7435	1.0013
+M2c_controls_vs_skin_floor	6708.555	2330.1475	23010.8162	1	1.0017
+M2c_controls_vs_skin_floor_studentt	10715.2835	3250.4122	46581.2144	1	1.001
 M2d_depth_within_neoplasia	1.7794	0.249	20.8405	0.6982	1.0009
-M2a_neoplasia_vs_skin_any	1.6678	1.3562	2.0544	1	1.0017
+M2a_neoplasia_vs_skin_any	1.6933	1.3872	2.0749	1	1.001
 M3_controls_vs_neoplasia	3.7165	1.2583	10.6742	0.9908	1
