@@ -5,6 +5,7 @@
 # source() it (e.g. from the manuscript setup chunk) to obtain `stats`.
 # All paths are resolved via here::here(), so it works from any CWD.
 suppressPackageStartupMessages({library(tidyverse); library(here)})
+source(here("manuscript/_paths.R"))
 options(width=200)
 wilson <- function(x,n){ if(n==0) return(c(NA,NA)); p<-x/n; z<-1.96
   ctr<-(p+z^2/(2*n))/(1+z^2/n); hw<-z*sqrt(p*(1-p)/n+z^2/(4*n^2))/(1+z^2/n); c(ctr-hw,ctr+hw)}
@@ -17,7 +18,8 @@ cat("# MODEL 1: Cell-line / engineered enrichment of HPV positivity (full_v2 unb
 cat("######################################################################\n")
 st <- read_tsv(here("results_full_v2/metadata/hpv_status.tsv"), show_col_types=FALSE)
 fl <- read_tsv(here("results_full_v2/metadata/cell_line_flags_curated.tsv"), show_col_types=FALSE) %>%
-  transmute(srr_id, is_cell_line=toupper(is_cell_line)=="TRUE", is_engineered=toupper(is_engineered)=="TRUE")
+  transmute(srr_id, is_cell_line=toupper(is_cell_line)=="TRUE", is_engineered=toupper(is_engineered)=="TRUE") %>%
+  apply_cellline_overrides()
 d1 <- st %>% left_join(fl, by="srr_id") %>%
   mutate(is_cell_line=coalesce(is_cell_line,FALSE), is_engineered=coalesce(is_engineered,FALSE),
          hpv_pos = hpv_status=="HPV+",
@@ -38,14 +40,15 @@ cat(sprintf("LR test vs null: p = %.3g\n", lr_p))
 cat("\n######################################################################\n")
 cat("# MODEL 2: Depth-controlled HPV detection across population tiers (pooled reframe)\n")
 cat("######################################################################\n")
-rp <- read_tsv(here("results_reframe_csc/hpv_rpm_per_sample.tsv"), show_col_types=FALSE) %>%
+rp <- read_tsv(rpm_per_sample_tsv(), show_col_types=FALSE) %>%
   filter(!is.na(total_reads), total_reads>0)
 floor_rpm <- rp %>% filter(tier=="control_productive", !is_cell_line, rpm>0) %>% pull(rpm) %>% quantile(.05, na.rm=TRUE)
 cat(sprintf("Control-calibrated detection floor (5th pctile productive controls): %.2f RPM\n", floor_rpm))
 rp <- rp %>% mutate(any_hpv = rpm>0, detect = rpm>=floor_rpm, l10=log10(total_reads))
 tiersum <- rp %>% group_by(tier) %>% summarise(n=n(), med_reads=round(median(total_reads)/1e6,1),
       pct_any=round(100*mean(any_hpv),1), pct_floor=round(100*mean(detect),1),
-      med_rpm=round(median(rpm),3), .groups="drop")
+      med_rpm=round(median(rpm),3), n_floor=sum(detect),
+      max_reads=round(max(total_reads)/1e6,1), .groups="drop")
 cat("\nTier detection summary:\n"); print(tiersum)
 
 ## Headline contrast: neoplasia vs unselected skin, depth-adjusted
@@ -62,8 +65,29 @@ cat("\nControls vs unselected_skin, productive-level detection (Fisher exact):\n
 ct <- rp %>% filter(tier %in% c("control_productive","unselected_skin")) %>%
   mutate(tier=factor(as.character(tier), levels=c("unselected_skin","control_productive")))
 tab <- table(tier=ct$tier, detect=ct$detect); print(tab)
-ft <- fisher.test(tab); cat(sprintf("OR=%.1f  95%%CI %.1f-%s  p=%.3g\n",
-    ft$estimate, ft$conf.int[1], ifelse(is.finite(ft$conf.int[2]),sprintf('%.1f',ft$conf.int[2]),'Inf'), ft$p.value))
+ft <- fisher.test(tab)
+# Under near-complete separation `fisher.test` returns its internal search
+# ceiling (~4.5e15) as the upper bound. That is an artefact of the optimiser,
+# not an estimate, so report the interval as unbounded above.
+fish_hi <- if (ft$conf.int[2] > 1e12) Inf else ft$conf.int[2]
+cat(sprintf("OR=%.1f  95%%CI %.1f-%s  p=%.3g\n",
+    ft$estimate, ft$conf.int[1], ifelse(is.finite(fish_hi),sprintf('%.1f',fish_hi),'Inf'), ft$p.value))
+
+## EV and peri-lesional mucosa: separated against skin, so Fisher exact rather
+## than a depth-adjusted glm (every peri-lesional library is above the floor).
+fisher_vs_skin <- function(other){
+  d <- rp %>% filter(tier %in% c("unselected_skin", other))
+  if (n_distinct(d$tier) < 2) return(list(OR=NA, lo=NA, hi=NA, p=NA))
+  f <- fisher.test(table(tier=factor(as.character(d$tier), levels=c("unselected_skin", other)),
+                         detect=d$detect))
+  list(OR=unname(f$estimate), lo=f$conf.int[1],
+       hi=if (f$conf.int[2] > 1e12) Inf else f$conf.int[2], p=f$p.value)
+}
+ev_f  <- fisher_vs_skin("EV")
+per_f <- fisher_vs_skin("peri_lesional")
+cat(sprintf("\nEV vs unselected_skin (Fisher): OR=%.1f p=%.3g\n", ev_f$OR, ev_f$p))
+cat(sprintf("Peri-lesional vs unselected_skin (Fisher): OR=%s p=%.3g\n",
+            ifelse(is.finite(per_f$OR), sprintf('%.1f', per_f$OR), 'Inf'), per_f$p))
 
 ## Depth-only check within neoplasia: does deeper sequencing buy productive-level detection?
 cat("\nWithin neoplasia: detect ~ log10(reads):\n")
@@ -152,7 +176,7 @@ cat(sprintf("\nTrace catalogue: %d/%d HPV+ untyped re-mapped to a confident type
 panel_n <- if (file.exists(.fai)) length(readLines(.fai)) else 455L
 
 ## ── HPV type-by-tier catalogue (for HPV16/HPV18 contamination fractions) ─────
-tc <- read_tsv(here("results_reframe_csc/type_catalogue_by_tier.tsv"), show_col_types=FALSE)
+tc <- read_tsv(type_catalogue_tsv(), show_col_types=FALSE)
 .h18 <- tc[tc$hpv_reference=="HPV18REF",]; .h16 <- tc[tc$hpv_reference=="HPV16REF",]
 
 ## ── Peripheral discovery-cohort counts ──────────────────────────────────────
@@ -164,6 +188,7 @@ tc <- read_tsv(here("results_reframe_csc/type_catalogue_by_tier.tsv"), show_col_
 .oe <- as.list(o1[o1$term=="sample_classengineered",]);   .ol <- as.list(o1[o1$term=="sample_classcell_line",])
 .tc_ctrl<-as.list(tiersum[tiersum$tier=="control_productive",]); .tc_neo<-as.list(tiersum[tiersum$tier=="neoplasia",])
 .tc_uns <-as.list(tiersum[tiersum$tier=="unselected_skin",]);    .tc_cl <-as.list(tiersum[tiersum$tier=="cell_line",]); .tc_oth<-as.list(tiersum[tiersum$tier=="other",])
+.tc_ev  <-as.list(tiersum[tiersum$tier=="EV",]);                 .tc_per<-as.list(tiersum[tiersum$tier=="peri_lesional",])
 .a_neo<-as.list(o2a[o2a$term=="tierneoplasia",]); .a_l10<-as.list(o2a[o2a$term=="l10",])
 .b_neo<-as.list(o2b[o2b$term=="tierneoplasia",]); .b_l10<-as.list(o2b[o2b$term=="l10",])
 .mn_l10<-as.list(mn_o[mn_o$term=="l10",])
@@ -182,11 +207,19 @@ stats <- lapply(list(
   ctrl_n=.tc_ctrl$n, ctrl_pctfloor=.tc_ctrl$pct_floor, ctrl_medrpm=.tc_ctrl$med_rpm, ctrl_medreads=.tc_ctrl$med_reads,
   neo_n=.tc_neo$n,   neo_pctfloor=.tc_neo$pct_floor,   neo_medrpm=.tc_neo$med_rpm,   neo_medreads=.tc_neo$med_reads,
   uns_n=.tc_uns$n,   uns_pctfloor=.tc_uns$pct_floor,   cl2_n=.tc_cl$n, oth_n=.tc_oth$n,
+  # Absolute above-floor counts: the odds ratios above are large only because the
+  # skin baseline is near zero, so the text quotes the raw fractions too.
+  ctrl_pos_floor=.tc_ctrl$n_floor, neo_pos_floor=.tc_neo$n_floor, uns_pos_floor=.tc_uns$n_floor,
+  neo_maxreads=.tc_neo$max_reads,
+  ev_n=.tc_ev$n,     ev_pctfloor=.tc_ev$pct_floor,     ev_medrpm=.tc_ev$med_rpm,   ev_medreads=.tc_ev$med_reads,
+  ev_or=ev_f$OR,     ev_lo=ev_f$lo,   ev_hi=ev_f$hi,   ev_p=ev_f$p,
+  per_n=.tc_per$n,   per_pctfloor=.tc_per$pct_floor,   per_medrpm=.tc_per$med_rpm,
+  per_or=per_f$OR,   per_lo=per_f$lo, per_hi=per_f$hi, per_p=per_f$p,
   m2a_or=.a_neo$OR, m2a_lo=.a_neo$lo, m2a_hi=.a_neo$hi, m2a_p=.a_neo$p,
   m2a_l10_or=.a_l10$OR, m2a_l10_lo=.a_l10$lo, m2a_l10_hi=.a_l10$hi, m2a_l10_p=.a_l10$p,
   m2b_or=.b_neo$OR, m2b_lo=.b_neo$lo, m2b_hi=.b_neo$hi, m2b_p=.b_neo$p,
   m2b_l10_or=.b_l10$OR, m2b_l10_lo=.b_l10$lo, m2b_l10_hi=.b_l10$hi, m2b_l10_p=.b_l10$p,
-  fish_or=ft$estimate, fish_lo=ft$conf.int[1], fish_hi=ft$conf.int[2], fish_p=ft$p.value,
+  fish_or=ft$estimate, fish_lo=ft$conf.int[1], fish_hi=fish_hi, fish_p=ft$p.value,
   neo_depth_or=.mn_l10$OR, neo_depth_lo=.mn_l10$lo, neo_depth_hi=.mn_l10$hi, neo_depth_p=.mn_l10$p,
   m3_ctrl_pct=.m3c$pct, m3_ctrl_prod=.m3c$prod, m3_ctrl_n=.m3c$n,
   m3_neo_pct=.m3n$pct,  m3_neo_prod=.m3n$prod,  m3_neo_n=.m3n$n,
@@ -196,7 +229,8 @@ stats <- lapply(list(
   m3_neo_pct_cut=round(.m3nc$pct,1), m3_neo_n_cut=.m3nc$n, m3_neo_prod_cut=.m3nc$prod,
   m3_or_cut=.f3c$estimate, m3_lo_cut=.f3c$conf.int[1], m3_hi_cut=.f3c$conf.int[2], m3_p_cut=.f3c$p.value,
   trace_n=nrow(.tt), trace_resolved=sum(.tt$trace_ok), trace_ntypes=n_distinct(.tres$top_ref),
-  trace_skin_n=nrow(.tskin), trace_skin_cut=sum(.tskin$genus_short %in% c("beta","gamma","nu"))
+  trace_skin_n=nrow(.tskin), trace_skin_cut=sum(.tskin$genus_short %in% c("beta","gamma","nu")),
+  trace_ctrl_resolved=sum(.tres$tier == "control_productive", na.rm=TRUE)
 ), unname)
 
 saveRDS(stats, here("manuscript/stats.rds"))

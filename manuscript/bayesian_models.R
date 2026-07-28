@@ -9,6 +9,7 @@
 # Continuous depth covariate is mean-centred (l10c) so the tier effect is read
 # at mean sequencing depth and its prior is on a natural per-10x-reads scale.
 suppressPackageStartupMessages({library(tidyverse); library(rstanarm); library(here)})
+source(here("manuscript/_paths.R"))
 options(mc.cores = 4)
 SEED <- 123
 wk_coef <- normal(0, 2.5, autoscale = FALSE)   # weakly-informative slope prior
@@ -31,13 +32,14 @@ line <- function(tag, freq, s)
 ## ── Data (mirrors results_models.R) ─────────────────────────────────────────
 st <- read_tsv(here("results_full_v2/metadata/hpv_status.tsv"), show_col_types = FALSE)
 fl <- read_tsv(here("results_full_v2/metadata/cell_line_flags_curated.tsv"), show_col_types = FALSE) %>%
-  transmute(srr_id, is_cell_line = toupper(is_cell_line) == "TRUE", is_engineered = toupper(is_engineered) == "TRUE")
+  transmute(srr_id, is_cell_line = toupper(is_cell_line) == "TRUE", is_engineered = toupper(is_engineered) == "TRUE") %>%
+  apply_cellline_overrides()
 d1 <- st %>% left_join(fl, by = "srr_id") %>%
   mutate(is_cell_line = coalesce(is_cell_line, FALSE), is_engineered = coalesce(is_engineered, FALSE),
          hpv_pos = hpv_status == "HPV+",
          sample_class = factor(ifelse(is_cell_line, "cell_line", ifelse(is_engineered, "engineered", "clinical")),
                                levels = c("clinical", "engineered", "cell_line")))
-rp <- read_tsv(here("results_reframe_csc/hpv_rpm_per_sample.tsv"), show_col_types = FALSE) %>%
+rp <- read_tsv(rpm_per_sample_tsv(), show_col_types = FALSE) %>%
   filter(!is.na(total_reads), total_reads > 0)
 floor_rpm <- rp %>% filter(tier == "control_productive", !is_cell_line, rpm > 0) %>% pull(rpm) %>% quantile(.05, na.rm = TRUE)
 rp <- rp %>% mutate(any_hpv = rpm > 0, detect = rpm >= floor_rpm, l10 = log10(total_reads))
@@ -86,15 +88,15 @@ cat("BAYESIAN PREMISE CHECKS  (weakly-informative Normal(0,2.5) coef priors)\n")
 cat("================================================================\n")
 
 cat("\nPREMISE 1: Cell-line / engineered libraries are enriched for HPV positivity:\n")
-line("engineered vs clinical", "5.7", or_summ(b1, "sample_classengineered"))
-line("cell_line vs clinical",  "4.5", or_summ(b1, "sample_classcell_line"))
+line("engineered vs clinical", "4.7", or_summ(b1, "sample_classengineered"))
+line("cell_line vs clinical",  "5.3", or_summ(b1, "sample_classcell_line"))
 
-cat("\nPREMISE 2: After depth adjustment, neoplasia is NOT elevated at productive level,\n")
-cat("            but productive controls hugely exceed skin (the trace-not-productive story):\n")
-line("neoplasia vs skin (floor)", "2.0", or_summ(b2b, "tierneoplasia"))
+cat("\nPREMISE 2: Productive controls hugely exceed skin at the detection floor, while\n")
+cat("            neoplasia is only marginally elevated over a near-zero skin baseline:\n")
+line("neoplasia vs skin (floor)", "10.0", or_summ(b2b, "tierneoplasia"))
 line("depth /10x reads (floor)",  "-",   or_summ(b2b, "l10c"))
-line("controls vs skin (floor)",  "2,515", or_summ(b2c, "tiercontrol_productive"))
-line("  ^ student-t(3) prior",    "2,515", or_summ(b2c_t, "tiercontrol_productive"))
+line("controls vs skin (floor)",  "8,296", or_summ(b2c, "tiercontrol_productive"))
+line("  ^ student-t(3) prior",    "8,296", or_summ(b2c_t, "tiercontrol_productive"))
 line("depth within neoplasia",    "1.7", or_summ(b2d, "l10c"))
 
 cat("\nPREMISE 2b: Neoplasia carries a modest TRACE (any-HPV) excess:\n")
