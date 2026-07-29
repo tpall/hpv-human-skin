@@ -38,7 +38,10 @@ composition comparison, not a per-library join. The result is a clean **decoupli
 of presence from activity**: the HPV types that dominate the skin DNA reservoir are
 the ones that are transcriptionally silent, and the transcriptionally productive
 types are minor or absent from the DNA reservoir. The quiet majority is not a
-sampling artefact; it is the genuinely dominant β/γ commensal DNA reservoir.
+sampling artefact; it is the genuinely dominant β/γ commensal DNA reservoir. Broadening
+the DNA reservoir to other body sites (Result 3) recovers the textbook tropism from DNA
+alone — vaginal is overwhelmingly α mucosal, skin is β/γ commensal, gut is a mixture of
+both — which validates the composition read-out and confirms the skin reservoir is real.
 
 ## The two datasets and why they cannot be joined
 
@@ -120,6 +123,48 @@ bind_rows(
             `RNA skin` = rna_skin_present, `RNA productive` = rna_productive) |>
   knitr::kable()
 ```
+
+## Result 3 — the reservoir across body sites recovers known tropism
+
+Our RNA-seq survey is skin-only (tissue categories: 9,037 skin, no vaginal or gut),
+so vaginal and gut cannot be given a matched RNA-activity axis. What they *can* show
+is the **DNA reservoir** itself, and comparing it across body sites is a strong
+internal check: if the petabase reservoir is real signal rather than noise, its genus
+composition should recover the textbook tropism of the papillomaviruses. It does.
+
+```{r reservoir}
+rg <- read_csv(here("dna_rna_triangulation/reservoir_by_tissue_genus.csv"), show_col_types = FALSE)
+gp <- function(tis, g) round(100 * rg$prop[rg$tissue == tis & rg$genus == g], 1)
+nv <- function(tis) round(100 * rg$prop[rg$tissue == tis & rg$genus == "Novel_any"], 1)
+```
+
+![**The HPV DNA reservoir across body sites recovers known genus tropism.** (A) Genus composition of the HPV+ DNA reservoir (Shen; skin n=1,765, vaginal n=541, gut n=292 libraries), normalised within body site (a co-infected library contributes to more than one genus, so this is the composition of type detections). Skin is a β/γ commensal reservoir, the vaginal reservoir is overwhelmingly α mucosal, and the gut is a mixture of both. (B) The ten most frequent types per body site, coloured by genus.](figure_reservoir_by_tissue.png){#fig-reservoir}
+
+The three body sites give three distinct, biologically expected reservoirs
+(@fig-reservoir):
+
+- **Skin** is a Betapapillomavirus/Gammapapillomavirus commensal reservoir
+  (β `r gp("Skin","Beta")`%, γ `r gp("Skin","Gamma")`% of detections, α only
+  `r gp("Skin","Alpha")`%), the same composition analysed above.
+- **Vaginal** is overwhelmingly **Alphapapillomavirus** (α `r gp("Vaginal","Alpha")`%,
+  β `r gp("Vaginal","Beta")`%, γ `r gp("Vaginal","Gamma")`%); its top types are the
+  classic mucosal set (HPV91, 51, 66, 67, 16, 90), mixing high- and low-risk α. This
+  is the textbook mucosal niche, recovered here purely from DNA metagenome assembly.
+- **Gut** is a **mixture**: α `r gp("Gut","Alpha")`%, β `r gp("Gut","Beta")`%,
+  γ `r gp("Gut","Gamma")`%. Its top types interleave mucosal α (HPV16, HPV6, HPV56)
+  with cutaneous β skin types (HPV24, HPV124) — exactly the signature of stool/gut
+  metagenomes picking up both mucosal shedding and **perianal-skin commensal β-HPV**,
+  the same collection-route contamination independently seen in rectal-swab gut
+  metagenomes (the eluring aging cohort).
+
+The novel-cluster fraction tracks how well each niche is catalogued: **`r nv("Skin")`%**
+of skin libraries and **`r nv("Gut")`%** of gut libraries carry an unclassified PV
+cluster, versus only **`r nv("Vaginal")`%** of vaginal libraries — the mucosal α types
+are exhaustively described, while the cutaneous β/γ reservoir is not.
+
+That the reservoir cleanly reconstructs the vaginal-α / skin-β/γ tropism from DNA alone
+validates the composition read-out used in Results 1–2: the skin reservoir's β/γ
+dominance and the type-level presence/activity decoupling are not analysis artefacts.
 
 ## Caveats
 
