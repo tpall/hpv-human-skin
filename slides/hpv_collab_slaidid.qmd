@@ -38,7 +38,7 @@ Kaar: nahk (tehtud) → põhimõte (uued analüüsid) → limaskest (käimas).
 ## Algsed hüpoteesid — neli tööküsimust
 
 ::: {.incremental}
-1. Millised HPV tüübid on levinud **tervel nahal**?
+1. Millised HPV tüübid on levinud **terves nahas**?
 2. Millised HPV tüübid on levinud erinevates **nahapatoloogiates**?
 3. Millistes **ebatraditsioonilistes kudedes** leidub HPV transkripte?
 4. Millistes transkriptoomides esineb viiruse **produktiivne faas** (hilised / L1 transkriptid)?
@@ -46,7 +46,7 @@ Kaar: nahk (tehtud) → põhimõte (uued analüüsid) → limaskest (käimas).
 
 ## Küsimustest tulemusteni
 
-Need neli küsimust on **nahakesksed**; käsikiri vastab neile:
+Algsed küsimused on **nahakesksed**; käsikiri vastab neile:
 
 ::: {.incremental}
 - **Q1** → vaikiv β/γ nahareservuaar
