@@ -1,0 +1,210 @@
+---
+title: "HPV inimnahas ja limaskestal"
+subtitle: "Tehtud töö, uued analüüsid ja käimasolev laiendus"
+author: "Taavi Päll"
+date: today
+lang: et
+format:
+  revealjs:
+    theme: simple
+    slide-number: true
+    embed-resources: true
+    incremental: false
+    transition: fade
+    fig-align: center
+---
+
+## Kolm osa
+
+::: {.incremental}
+1. **Mis on juba käsikirjas** — avaliku RNA-seq taasanalüüs: nahavähi HPV on jälg, mitte produktiivne infektsioon
+2. **Mis me juurde tegime** — sõltumatu DNA-andmestik (Shen/Logan) kinnitab ja teravdab tulemust; anaalne piloot
+3. **Mis me just käivitasime** — vaginaalne/emakakaela RNA-jooks, limaskesta aktiivsuse telg
+:::
+
+::: {.notes}
+Kaar: nahk (tehtud) → põhimõte (uued analüüsid) → limaskest (käimas).
+:::
+
+# I osa — Käsikiri {background-color="#1b3a5b"}
+
+## Küsimus ja lähenemine
+
+**Küsimus:** kas naha-HPV on nahavähis (cSCC/AK) transkriptsiooniliselt aktiivne, või vaid "hit-and-run" jälg?
+
+**Lähenemine:** avalike inim-RNA-seq teekide taasanalüüs
+
+::: {.incremental}
+- iga teek skriinitud HPV-lugemite suhtes (Kraken2)
+- **saastet arvestav**: rakuliin / muundatud / primaarkude eristatud
+- **sügavusega normeeritud**: HPV lugemeid miljoni kohta (RPM), et lahutada koormus sekveneerimissügavusest
+:::
+
+## Tulemus 1 — signaal on suuresti rakuliini saaste
+
+::: {.incremental}
+- Rakuliini ja muundatud teegid on HPV+ **~5× sagedamini** kui primaarkude (P < 10⁻⁸)
+- Need positiivsed on peaaegu ainult **HPV16 / HPV18** — integreerunud kõrge riski α-tüübid (HeLa, SiHa jt)
+- Primaarnahk kannab HPV-d vaid **2–4%** juhtudest
+:::
+
+> Avalike transkriptoomide "HPV-küllus" on suures osas laborisaaste, mis tuleb enne igasugust levimusväidet eemaldada.
+
+## Tulemus 2 — nahavähk kannab vaid jälge
+
+::: {.incremental}
+- Nahavähk (cSCC/AK) jõuab tuvastuslävele vaid üksikutes teekides, **~6 suurusjärku madalam** kui produktiivsed kontrollid
+- ...ja seda **hoolimata ~4× sügavamast sekveneerimisest** kui kontrollid
+- Sügavus tõstab *ükskõik millise* lugemi leidmise tõenäosust, aga **mitte** produktiivse taseme oma
+:::
+
+> Populatsiooni tasemel on HPV nahavähis madala tasemega, transkriptsiooniliselt vaikiv jälg — täpselt hit-and-run mudeli ennustus.
+
+## Tulemus 3 — test töötab, reservuaar on olemas aga vaikiv
+
+::: {.incremental}
+- **Positiivsed kontrollid** (soolatüükad, epidermodysplasia verruciformis) on produktiivsed → analüüs *näeb* produktiivset infektsiooni, kui see on olemas
+- Üksikud ehtsad produktiivsed β/γ nahainfektsioonid *esinevad* — aga on erand nulltaustal
+- Terve naha β/γ **reservuaar on reaalne, kuid transkriptsiooniliselt vaikiv**
+:::
+
+## Käsikirja kokkuvõte
+
+::: {.callout-note appearance="minimal"}
+Naha-HPV: **olemas, aga vaikiv**. Produktiivne haigus kuulub soolatüügastele ja EV-le; nahavähk kannab viirust (kui üldse) jäljena.
+:::
+
+Bayesi taasanalüüs nõrgalt informatiivsete prioritega kinnitab kõik kontrastid.
+
+# II osa — Uued analüüsid {background-color="#1b3a5b"}
+
+## Lünk: "olemas" oli vaid järeldatud
+
+::: {.incremental}
+- Käsikiri näitab **"vaikiv"** otseselt (transkriptsiooni pole)
+- ...aga **"olemas"** vaid nõrgalt — jälgedena tuvastusläve piiril, allpool määramisläve
+- **"Olemas" on järeldus, mitte mõõtmine.** Kas vaikus on tõesti kohalolu, mitte puudumine?
+:::
+
+## Idee: sõltumatu DNA-andmestik
+
+**Shen jt — petabase'i-mastaabis papilloomiviiruste kaardistus (Logan / kogu SRA)**
+
+::: {.incremental}
+- 27 miljonit SRA teeki, ~10 h joondus­otsing
+- 383 uut tüüpi 105 peremeesliigis
+- **DNA-põhine** → mõõdab *kohalolu*, samas kui meie RNA mõõdab *aktiivsust*
+:::
+
+Teegid on erinevad (DNA vs RNA), seega **koosseisu võrdlus, mitte ühendamine**.
+
+## Tulemus — DNA kinnitab kohalolu otse
+
+Naha DNA-reservuaar (Shen, HPV+ metagenoomid):
+
+| Perekond | Osakaal naha teekidest |
+|---|---|
+| **Beeta** | **55,5%** |
+| **Gamma** | **40,6%** |
+| Alfa | 6,7% |
+
+> Vaikiv enamus **ongi** domineeriv β/γ kommensaalne DNA-reservuaar — mitte RNA-valimi artefakt.
+
+## Tulemus — kohalolu ja aktiivsus **lahknevad**
+
+::: {.incremental}
+- DNA-s **sagedaseimad** tüübid (β: HPV24, HPV12, HPV107) on transkriptsiooniliselt **vaikseimad**
+- **Produktiivsed** tüübid (α soolatüügaste tüübid HPV11/57/42/6) on DNA-s **haruldased** — nahas 0 DNA-tuvastust
+- Ainult **HPV2** on mõlemat
+:::
+
+> "Nahk on vaikiv" (fakt koe kohta) → **olemasolu ja aktiivsus on eraldi teljed** (fakt viiruse kohta).
+
+## Tulemus — kudede tropism DNA-st
+
+DNA-reservuaar taastab õpikutropismi ainuüksi DNA-st:
+
+::: {.incremental}
+- **Vagina: 84% α** (limaskest — HPV91/51/66/67/16)
+- **Nahk: β/γ** (kommensaal)
+- **Sool: segu** — α (HPV16/6) **+ naha β** (HPV24/124) = perianaalnaha saaste *(sama signaal kui eluringi rektaaltampooni-kohordis)*
+:::
+
+Uudsete klastrite osakaal: nahk 14,5% · sool 9,6% · vagina 0,2% → naha β/γ on alakataloogitud.
+
+## Tulemus — anaalne RNA-piloot
+
+Puuduv **positiivne kontroll**: kas mõnes koes on α-HPV üldse produktiivne?
+
+::: {.incremental}
+- 692 teeki tüpiseeritud; **230 HPV+ (34%)** — kordades kõrgem kui naha 2–4%
+- 5 märgistatud rakuliini — **kõik HPV-negatiivsed** (kuraator töötab)
+- **161 produktiivset teeki (L1/L2 hilistranskriptid): 100% α**, HPV16 (91), HPV11, HPV6, HPV18
+:::
+
+> Anaalne α-HPV on **valjult produktiivne** (HPV16-põhine, nagu emakakael); naha β-tüübid, mis saastavad soole/anaali DNA-d, on **vaikivad**.
+
+## Kontseptuaalne panus
+
+::: {.callout-important appearance="minimal"}
+**"Naha-HPV on vaikiv"** →
+**"HPV kohalolu ja produktiivne aktiivsus on eristatavad ning lahknevad *perekonna* ja *anatoomilise niši* järgi."**
+:::
+
+::: {.incremental}
+- limaskesta **α** on produktiivne seal, kus ta elab (emakakael, anaal)
+- naha **β/γ** on vaikiv reservuaar kõikjal, kus ta esineb (nahk; ja saastena soole/anaali DNA-s)
+- kaks sõltumatut avalikku arhiivi (RNA-aktiivsus × DNA-kohalolu)
+:::
+
+# III osa — Käimasolev töö {background-color="#1b3a5b"}
+
+## Limaskesta test
+
+Vaginaalne **DNA-reservuaar** on 84% α (HPV91/51/66/67/16).
+
+**Küsimus:** kas need DNA-sagedased tüübid on ka **produktiivsed** samas koes?
+
+::: {.incremental}
+- see on sama-koe *kohalolu-vs-aktiivsus* ühendus, mida saime teha vaid naha jaoks
+- limaskesta ennustus: nad **langevad kokku** → emakakael = **puhas vastand nahale** (nišš, kus kohalolu *ennustab* aktiivsust)
+:::
+
+## Jooksev töö — vaginaalne/emakakaela jooks
+
+::: {.incremental}
+- **12 764** emakakaela/vagina RNA-seq teeki leitud; 12 316 uut
+- **6 839 (55,5%) märgistatud rakuliinideks** (HeLa/SiHa/CaSki + muundatud) → kuraatori mastaabitest
+- tüpiseerime **5 477 puhast kude** (teadaolevad rakuliinid vahele jäetud — nende lugu on juba käsikirjas)
+- 55 tükki, jookseb praegu (töö 498853, Helios)
+:::
+
+## Mida vaginaalne jooks lahendab
+
+::: {.incremental}
+1. **Vaginaalne kohalolu-vs-aktiivsus ühendus** — kas DNA-sagedased α-tüübid on produktiivsed (limaskesta vastand nahale)
+2. **Kõrge vs madala riski gradient** — kas HPV16/18/31/33/45 domineerivad produktiivset ekspressiooni haiguse raskusastme (normaalne → CIN → kartsinoom) järgi
+3. **Kuraatori mastaabitest** — puhas α-produktiivne koesignaal HeLa-müüri tagant = tugevaim tõestus, et saastet arvestav raamistik töötab
+:::
+
+## Arutelukoht kohtumiseks
+
+Kuidas uus töö käsikirja suhestub?
+
+::: {.incremental}
+- **(A) Liita** — DNA kui ortogonaalne tugi praegusele RNA-tööle (tugevdab, ei muuda sõnumit)
+- **(B) Tõsta** — sõnastada käsikiri ümber lahknemise põhimõtte ümber (suurem lugu, vajab vaginaalset)
+- **(C) Eraldada** — praegune käsikiri jääb; lahknemise põhimõte omaette kaaslasartiklina (vaginaalne valmis)
+:::
+
+## Kokkuvõte
+
+::: {.incremental}
+- **Käsikiri:** naha-HPV on olemas, aga vaikiv; produktiivne soolatüügastes; nahavähis jälg
+- **Uus:** sõltumatu DNA kinnitab kohalolu ja paljastab lahknemise → põhimõte perekonna ja niši järgi
+- **Käimas:** vaginaalne jooks viib limaskesta aktiivsuse telje kohale → emakakael kui puhas vastand nahale
+:::
+
+::: {.callout-tip appearance="minimal"}
+Peamine sõnum: **kohalolu ≠ aktiivsus** — ja see lahkneb süstemaatiliselt perekonna ja anatoomilise niši järgi.
+:::
