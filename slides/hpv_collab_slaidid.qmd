@@ -45,7 +45,7 @@ Kaar: nahk (tehtud) → põhimõte (uued analüüsid) → limaskest (käimas).
 :::
 
 ::: {.callout-note appearance="minimal"}
-Just need küsimused ongi kaar: käsikiri vastab neile (Q1 → vaikiv β/γ reservuaar; Q2/Q4 → produktiivne soolatüügastes, jälg nahavähis = **hit-and-run, mitte tõukejõud**; Q3 → viis meid soole / anaali / vagina juurde), uus töö sõnastab Q1/Q4 ümber lahknemise põhimõtteks.
+Need küsimused on kogu loo kaar. Käsikiri vastab: **Q1** → vaikiv β/γ nahareservuaar; **Q2/Q4** → produktiivne soolatüügastes/EV-s, jälg nahavähis = **hit-and-run, mitte tõukejõud**; **Q3** (ebatraditsioonilised koed) → HPV genoomid **soole** metagenoomides = perianaalnaha saaste. NB: anaal ja emakakael on HPV **klassikalised** α-limaskesta nišid — sinna läksime produktiivse **positiivse kontrollina** (Q4 teises nišis), mitte kui ebatraditsioonilisse koesse. Uus töö sõnastab Q1/Q4 ümber lahknemise põhimõtteks.
 :::
 
 # I osa — Käsikiri {background-color="#1b3a5b"}
