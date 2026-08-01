@@ -164,7 +164,7 @@ DNA-reservuaar taastab õpikutropismi ainuüksi DNA-st:
 ::: {.incremental}
 - **Vagina: 84% α** (limaskest — HPV91/51/66/67/16)
 - **Nahk: β/γ** (kommensaal)
-- **Sool: segu** — α (HPV16/6) **+ naha β** (HPV24/124) = perianaalnaha saaste *(sama signaal kui eluringi rektaaltampooni-kohordis)*
+- **Sool: segu** — α (HPV16/6) **+ naha β** (HPV24/124) = perianaalnaha saaste *(sama signaal kui eluringi rektaalkaabe-kohordis)*
 :::
 
 Uudsete klastrite osakaal: nahk 14,5% · sool 9,6% · vagina 0,2% → naha β/γ on alakataloogitud.
