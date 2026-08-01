@@ -164,7 +164,7 @@ DNA-reservuaar taastab õpikutropismi ainuüksi DNA-st:
 ::: {.incremental}
 - **Vagina: 84% α** (limaskest — HPV91/51/66/67/16)
 - **Nahk: β/γ** (kommensaal)
-- **Sool: segu** — α (HPV16/6) **+ naha β** (HPV24/124) = perianaalnaha saaste *(sama signaal kui eluringi rektaalkaabe-kohordis)*
+- **Sool: segu** — α (HPV16/6) **+ naha β** (HPV24/124) = perianaalnaha saaste *(sama signaal kui eluringi rektaalkaape-kohordis)*
 :::
 
 Uudsete klastrite osakaal: nahk 14,5% · sool 9,6% · vagina 0,2% → naha β/γ on alakataloogitud.
@@ -201,6 +201,30 @@ Puuduv **positiivne kontroll** — kas α-HPV on mõnes koes üldse produktiivne
 - naha **β/γ** on vaikiv reservuaar kõikjal, kus ta esineb (nahk; ja saastena soole/anaali DNA-s)
 - kaks sõltumatut avalikku arhiivi (RNA-aktiivsus × DNA-kohalolu)
 :::
+
+## Kohalolu ≠ aktiivsus: kaks "aktiivsuse" telge {.smaller}
+
+Põhimõte **ei ole uus** — see on HPV bioloogia alustala. Kuid "aktiivsust" on kaks eri telge:
+
+| Olek | DNA | E6/E7 *(transformeeriv)* | L1/L2 *(produktiivne)* |
+|---|:---:|:---:|:---:|
+| Latentne kommensaal *(terve nahk)* | + | – | – |
+| Produktiivne *(soolatüügas)* | + | + | **+** |
+| Integreerunud vähk *(cSCC)* | + | **+** | **–** |
+
+**Meie telg = produktiivne (L1/L2), mitte onkogeenne (E6/E7).** Need on isekeskis lahknenud: integreerunud vähk on E6/E7-aktiivne, kuid L1-vaikne → meie loeme selle "jäljeks" (Moody 2010). Aus piirang.
+
+## Kirjanduses killustatud — meil ühendatud {.smaller}
+
+Kirjandus näitab "kohalolu ≠ aktiivsus" eraldi vaatlustena, nišši kaupa:
+
+::: {.incremental}
+- latentsus / "twilight zone" (Doorbar 2023); diferentseerumisega elutsükkel — L1/L2 vaid suprabasaalkihis (Doorbar 2012)
+- DNA vs E6/E7 mRNA sõeluuringus (mRNA-testid spetsiifilisemad); integratsioonil kaob L1 (Moody 2010)
+- hit-and-run: β-koormus kõrgeim varastes kolletes, langeb vähis (Borgogna 2018); HPV vaikne cSCC-s (Arron 2011)
+:::
+
+**Uudne meil:** DNA × RNA kogu SRA mastaabis · tüübi-tasemel **anti-korrelatsioon** · ühtne **perekond × nišš** seadus.
 
 # III osa — Käimasolev töö {background-color="#1b3a5b"}
 
