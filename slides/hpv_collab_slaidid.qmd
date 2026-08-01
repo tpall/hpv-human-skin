@@ -26,6 +26,28 @@ format:
 Kaar: nahk (tehtud) → põhimõte (uued analüüsid) → limaskest (käimas).
 :::
 
+## Algsed hüpoteesid
+
+**Keskne küsimus:** kas beeta-HPV on väljakujunenud nahavähis transkriptsiooniliselt aktiivne **tõukejõud**, või vaid jälg — **"hit-and-run" jalajälg**?
+
+::: {.incremental}
+- **Hit-and-run** — β-HPV toimib varakult (UV-ga koos, kahjustab DNA-paranduse signaale), kuid on väljakujunenud kasvaja jaoks *loobutav* → jälg, mitte tõukejõud
+- **Kaitsev immuunsus** — T-raku immuunsus kommensaalsete papilloomiviiruste vastu on hoopis *kaitsev*; immunosupressiooniga seotud cSCC = immuunjärelevalve tõrge
+:::
+
+## Algsed hüpoteesid — neli tööküsimust
+
+::: {.incremental}
+1. Millised HPV tüübid on levinud **tervel nahal**?
+2. Millised HPV tüübid on levinud erinevates **nahapatoloogiates**?
+3. Millistes **ebatraditsioonilistes kudedes** leidub HPV transkripte?
+4. Millistes transkriptoomides esineb viiruse **produktiivne faas** (hilised / L1 transkriptid)?
+:::
+
+::: {.callout-note appearance="minimal"}
+Just need küsimused ongi kaar: käsikiri vastab neile (Q1 → vaikiv β/γ reservuaar; Q2/Q4 → produktiivne soolatüügastes, jälg nahavähis = **hit-and-run, mitte tõukejõud**; Q3 → viis meid soole / anaali / vagina juurde), uus töö sõnastab Q1/Q4 ümber lahknemise põhimõtteks.
+:::
+
 # I osa — Käsikiri {background-color="#1b3a5b"}
 
 ## Küsimus ja lähenemine
