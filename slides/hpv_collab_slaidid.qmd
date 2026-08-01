@@ -107,8 +107,6 @@ Algsed küsimused on **nahakesksed**; käsikiri vastab neile:
 Naha-HPV: **olemas, aga vaikiv**. Produktiivne haigus kuulub soolatüügastele ja EV-le; nahavähk kannab viirust (kui üldse) jäljena.
 :::
 
-Bayesi taasanalüüs nõrgalt informatiivsete prioritega kinnitab kõik kontrastid.
-
 # II osa — Uued analüüsid {background-color="#1b3a5b"}
 
 ## Lünk: "olemas" oli vaid järeldatud
