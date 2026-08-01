@@ -69,7 +69,7 @@ Algsed küsimused on **nahakesksed**; käsikiri vastab neile:
 - **sügavusega normeeritud**: HPV lugemeid miljoni kohta (RPM), et lahutada koormus sekveneerimissügavusest
 :::
 
-## Tulemus 1 — signaal on suuresti rakuliini saaste
+## Tulemus 1 — signaal on suuresti rakuliini saaste {.smaller}
 
 ::: {.incremental}
 - Rakuliini ja muundatud teegid on HPV+ **~5× sagedamini** kui primaarkude (P < 10⁻⁸)
@@ -79,7 +79,7 @@ Algsed küsimused on **nahakesksed**; käsikiri vastab neile:
 
 > Avalike transkriptoomide "HPV-küllus" on suures osas laborisaaste, mis tuleb enne igasugust levimusväidet eemaldada.
 
-## Tulemus 2 — nahavähk kannab vaid jälge
+## Tulemus 2 — nahavähk kannab vaid jälge {.smaller}
 
 ::: {.incremental}
 - Nahavähk (cSCC/AK) jõuab tuvastuslävele vaid üksikutes teekides, **~6 suurusjärku madalam** kui produktiivsed kontrollid
@@ -131,7 +131,7 @@ Bayesi taasanalüüs nõrgalt informatiivsete prioritega kinnitab kõik kontrast
 
 Teegid on erinevad (DNA vs RNA), seega **koosseisu võrdlus, mitte ühendamine**.
 
-## Tulemus — DNA kinnitab kohalolu otse
+## Tulemus — DNA kinnitab kohalolu otse {.smaller}
 
 Naha DNA-reservuaar (Shen, HPV+ metagenoomid):
 
@@ -143,7 +143,7 @@ Naha DNA-reservuaar (Shen, HPV+ metagenoomid):
 
 > Vaikiv enamus **ongi** domineeriv β/γ kommensaalne DNA-reservuaar — mitte RNA-valimi artefakt.
 
-## Tulemus — kohalolu ja aktiivsus **lahknevad**
+## Tulemus — kohalolu ja aktiivsus **lahknevad** {.smaller}
 
 ::: {.incremental}
 - DNA-s **sagedaseimad** tüübid (β: HPV24, HPV12, HPV107) on transkriptsiooniliselt **vaikseimad**
@@ -173,17 +173,17 @@ Uudsete klastrite osakaal: nahk 14,5% · sool 9,6% · vagina 0,2% → naha β/γ
 
 ![Vagina = valdavalt α (limaskest), nahk = β/γ (kommensaal), sool = segu; ainuüksi DNA-st taastatud õpikutropism.](../dna_rna_triangulation/figure_reservoir_by_tissue.png){width="50%" fig-align="center"}
 
-## Tulemus — anaalne RNA-piloot
+## Tulemus — anaalne RNA-piloot {.smaller}
 
-Puuduv **positiivne kontroll**: kas mõnes koes on α-HPV üldse produktiivne?
+Puuduv **positiivne kontroll** — kas α-HPV on mõnes koes üldse produktiivne?
 
 ::: {.incremental}
-- 692 teeki tüpiseeritud; **230 HPV+ (34%)** — kordades kõrgem kui naha 2–4%
-- 5 märgistatud rakuliini — **kõik HPV-negatiivsed** (kuraator töötab)
-- **161 produktiivset teeki (L1/L2 hilistranskriptid): 100% α**, HPV16 (91), HPV11, HPV6, HPV18
+- 692 tüpiseeritud; **230 HPV+ (34%)** — kordades üle naha 2–4%
+- 5 märgistatud rakuliini — **kõik HPV-negatiivsed**
+- **161 produktiivset teeki: 100% α**, HPV16 (91), siis HPV11/6/18
 :::
 
-> Anaalne α-HPV on **valjult produktiivne** (HPV16-põhine, nagu emakakael); naha β-tüübid, mis saastavad soole/anaali DNA-d, on **vaikivad**.
+> Anaalne α-HPV on **valjult produktiivne** (HPV16, nagu emakakael) — naha β-tüübid soole/anaali DNA-s on **vaikivad**.
 
 ## Joonis — anaalne produktiivne HPV
 
