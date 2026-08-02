@@ -7,14 +7,14 @@ d <- fromJSON(here("trace_decomposition/trace_rows.json")) %>% as_tibble() %>%
     tier %in% c("unselected_skin","neoplasia","other") & rpm < FLOOR ~ "Alla läve\njälg (nahk/vähk)",
     TRUE ~ NA_character_)) %>%
   filter(!is.na(group)) %>%
-  mutate(cat = case_when(L1 >= 3 ~ "Produktiivne (L1≥3)",
+  mutate(cat = case_when(L1 >= 3 ~ "Produktiivne (≥3 L1-lugemit)",
                          EARLY > 0 ~ "Varajane (E-geenid, L1 puudub)",
                          TRUE ~ "Geenideta (k-meeri müra)"),
-         cat = factor(cat, levels = c("Geenideta (k-meeri müra)","Varajane (E-geenid, L1 puudub)","Produktiivne (L1≥3)")),
+         cat = factor(cat, levels = c("Geenideta (k-meeri müra)","Varajane (E-geenid, L1 puudub)","Produktiivne (≥3 L1-lugemit)")),
          group = factor(group, levels = c("Alla läve\njälg (nahk/vähk)","Produktiivsed\nkontrollid (tüükad/EV)")))
 comp <- d %>% count(group, cat) %>% group_by(group) %>% mutate(frac = n/sum(n))
 write_csv(comp, here("trace_decomposition/trace_composition.csv"))
-cols <- c("Geenideta (k-meeri müra)"="grey70","Varajane (E-geenid, L1 puudub)"="#D95F02","Produktiivne (L1≥3)"="#1B9E77")
+cols <- c("Geenideta (k-meeri müra)"="grey70","Varajane (E-geenid, L1 puudub)"="#D95F02","Produktiivne (≥3 L1-lugemit)"="#1B9E77")
 pA <- ggplot(comp, aes(group, frac, fill = cat)) +
   geom_col(width = .68, colour = "white", linewidth = .3) +
   geom_text(aes(label = ifelse(frac > .04, scales::percent(frac, 1), "")), position = position_stack(vjust=.5), size=3.6) +
