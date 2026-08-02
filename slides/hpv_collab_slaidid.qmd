@@ -107,6 +107,14 @@ Algsed küsimused on **nahakesksed**; käsikiri vastab neile:
 Naha-HPV: **olemas, aga vaikiv**. Produktiivne haigus kuulub soolatüügastele ja EV-le; nahavähk kannab viirust (kui üldse) jäljena.
 :::
 
+## Aga kas "jälg" on müra või bioloogia? {.smaller}
+
+Lahutasime alla läve HPV-lugemid varajaseks (E-geenid) ja hiliseks (L1/L2):
+
+![Alla läve jälg: ~56% müra (geenideta), ~28% varajane (E-geenid, L1 puudub), ~16% madal produktiivne — vs kontrollide 91% produktiivne. Varajase signaali tüübid on nahatüübid, **mitte HeLa** (2/64 HPV16/18).](../trace_decomposition/figure_trace_decomposition.png){width="60%" fig-align="center"}
+
+**Enamik jäljest on k-meeri müra; reaalne vähemus on varajane (E6/E7) transkriptsioon ilma L1-ta — latentse reservuaari allkiri, mitte HeLa saaste.**
+
 # II osa — Uued analüüsid {background-color="#1b3a5b"}
 
 ## Lünk: "olemas" oli vaid järeldatud
