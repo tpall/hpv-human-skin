@@ -1,6 +1,6 @@
 ---
 title: "The skin DNA HPV reservoir is transcriptionally silent"
-subtitle: "A cross-modality triangulation of the present-but-quiet thesis against Shen et al.'s petabase (Logan) papillomavirus survey"
+subtitle: "Cross-modality decoupling of HPV presence and activity, tested against Shen et al.'s petabase (Logan) papillomavirus survey"
 author: "Taavi Päll"
 date: "2026-07-28"
 format:
@@ -201,7 +201,7 @@ were Alphapapillomavirus**, led by
 Every one of the `r a("n_productive_types")` productively-expressed types was α; no β or
 γ type reached productive expression in a single anal library.
 
-This completes the triangulation for a second niche, and it does double duty. First it
+This completes the cross-modality decoupling for a second niche, and it does double duty. First it
 **reinforces** the decoupling: the anal transition zone sits directly against
 perianal skin, so the cutaneous β types that leak into gut/anal DNA metagenomes
 (Result 3: the gut reservoir was a mixture of mucosal α and cutaneous β such as HPV24

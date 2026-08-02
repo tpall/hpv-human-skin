@@ -1,6 +1,6 @@
 ---
-title: "HPV inimnahas ja limaskestal"
-subtitle: "Tehtud töö, uued analüüsid ja käimasolev laiendus"
+title: "HPV nahas ja limaskestal"
+subtitle: "Käsikiri, uued analüüsid ja käimasolev laiendus"
 author: "Taavi Päll"
 date: today
 lang: et
@@ -18,8 +18,8 @@ format:
 
 ::: {.incremental}
 1. **Mis on juba käsikirjas** — avaliku RNA-seq taasanalüüs: nahavähi HPV on jälg, mitte produktiivne infektsioon
-2. **Mis me juurde tegime** — sõltumatu DNA-andmestik (Shen/Logan) kinnitab ja teravdab tulemust; anaalne piloot
-3. **Mis me just käivitasime** — vaginaalne/emakakaela RNA-jooks, limaskesta aktiivsuse telg
+2. **Mis on juurde tehtud** — sõltumatu DNA-andmestik (Shen/Logan) kinnitab ja teravdab tulemust; anaalne piloot
+3. **Mis käib** — vaginaalne/emakakaela RNA-jooks, limaskesta aktiivsuse telg
 :::
 
 ::: {.notes}
@@ -52,7 +52,7 @@ Algsed küsimused on **nahakesksed**; käsikiri vastab neile:
 - **Q1** → vaikiv β/γ nahareservuaar
 - **Q2 / Q4** → produktiivne soolatüügastes / EV-s, jälg nahavähis = **hit-and-run, mitte tõukejõud**
 - **Q3** (ebatraditsioonilised koed) → HPV genoomid **soole** metagenoomides = perianaalnaha saaste
-- **Anaal / emakakael pole algsetes küsimustes** — limaskesta töö on **uus siht** DNA-triangulatsioonist (produktiivne positiivne kontroll + lahknemise põhimõtte üldistus)
+- **Anaal / emakakael pole algsetes küsimustes** — limaskesta töö on **uus siht** DNA×RNA võrdlusest (produktiivne positiivne kontroll + lahknemise põhimõtte üldistus)
 :::
 
 # I osa — Käsikiri {background-color="#1b3a5b"}
@@ -61,7 +61,7 @@ Algsed küsimused on **nahakesksed**; käsikiri vastab neile:
 
 **Küsimus:** kas naha-HPV on nahavähis (cSCC/AK) transkriptsiooniliselt aktiivne, või vaid "hit-and-run" jälg?
 
-**Lähenemine:** avalike inim-RNA-seq teekide taasanalüüs
+**Lähenemine:** avalike inimese RNA-seq teekide taasanalüüs
 
 ::: {.incremental}
 - iga teek skriinitud HPV-lugemite suhtes (Kraken2)
