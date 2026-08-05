@@ -81,7 +81,13 @@ build_bayes_table <- function(stats, bget){
 .type_cat <- read_tsv(type_catalogue_tsv(), show_col_types = FALSE)
 .tier_lab <- c(unselected_skin = "Unselected skin", control_productive = "Productive controls",
                EV = "EV", peri_lesional = "Peri-lesional mucosa",
-               neoplasia = "Neoplasia", cell_line = "Cell line", other = "Other")
+               non_permissive_tissue = "Non-permissive tissue",
+               engineered = "Engineered cells",
+               # "other" is the residual tier: 99% of it carries no site keyword
+               # in its SRA metadata, so it is an absence of information rather
+               # than an identified non-cutaneous site. Keep the label short for
+               # table headers but do not call it a tissue.
+               neoplasia = "Neoplasia", cell_line = "Cell line", other = "Site not recorded")
 .hdr_N <- function(tc) paste0(.tier_lab[[tc]], " (N=", comma(.tier_N[[tc]]), ")")
 
 # Prevalence % formatting: ~2 sig figs, decimals scaled by magnitude.
@@ -132,12 +138,17 @@ build_type_table <- function(){
 build_prod_table <- function(){
   curated <- tibble::tribble(
     ~sample,        ~tissue,                       ~type,
-    "ERR2274877",   "Other (carcinoma; CIN)",      "HPV96 (+HPV182)",
-    "ERR1971044",   "Other (actinic keratosis)",   "HPV96 (+HPV182)",
-    "SRR19520005",  "Skin (cSCC; CIN)",            "HPV12",
-    "SRR19520060",  "Skin (cSCC; CIN)",            "HPV16",
-    "SRR19520029",  "Skin (cSCC; CIN)",            "HPV16",
-    "SRR19520008",  "Skin (normal; CIN)",          "HPV105",
+    # Tissue/diagnosis strings track the enriched samplesheets. The "; CIN"
+    # tails present here previously were an artefact of bare-substring keyword
+    # matching ("cin" inside "carCINoma"); none of these libraries is cervical.
+    # ERR2274877/ERR1971044 are ERP106532/ERP022968, the two cutaneous AK/cSCC
+    # studies whose SRA records carry no tissue text (see assets/tier_overrides.csv).
+    "ERR2274877",   "Skin (carcinoma)",            "HPV96 (+HPV182)",
+    "ERR1971044",   "Skin (actinic keratosis)",    "HPV96 (+HPV182)",
+    "SRR19520005",  "Skin (cSCC)",                 "HPV12",
+    "SRR19520060",  "Skin (cSCC)",                 "HPV16",
+    "SRR19520029",  "Skin (cSCC)",                 "HPV16",
+    "SRR19520008",  "Skin (normal)",               "HPV105",
     "SRR24991592",  "Skin (unspecified)",          "HPV227")
   purrr::pmap_dfr(curated, function(sample, tissue, type){
     d   <- .prod_find(sample)
@@ -248,6 +259,7 @@ ciT <- function(type, tc) prev_ci(kT(type, tc), tc)
        n_typed = nrow(k))
 })
 .coinf_tier_order <- c("control_productive", "EV", "peri_lesional", "neoplasia",
+                       "non_permissive_tissue", "engineered",
                        "unselected_skin", "other", "cell_line")
 build_coinf_table <- function(){
   .coinf$types %>% filter(n_types >= 2) %>%

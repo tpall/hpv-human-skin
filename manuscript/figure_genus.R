@@ -17,10 +17,12 @@ old <- theme_set(theme_cowplot())
 
 AGG   <- c("results_full_v2", "results_lesions", "results_lesions_csc", "results_lesions_wide")
 TIERS <- c("unselected_skin", "control_productive", "EV", "peri_lesional",
+           "non_permissive_tissue", "engineered",
            "neoplasia", "cell_line", "other")
 GEN   <- c("alpha", "beta", "gamma", "mu", "nu")
 TLAB  <- c(unselected_skin = "Unselected skin", control_productive = "Productive\ncontrols",
            EV = "EV", peri_lesional = "Peri-lesional\nmucosa", neoplasia = "Neoplasia",
+           non_permissive_tissue = "Non-permissive\ntissue", engineered = "Engineered\ncells",
            cell_line = "Cell line", other = "Other")
 
 rp <- read_tsv(rpm_per_sample_tsv(), show_col_types = FALSE)

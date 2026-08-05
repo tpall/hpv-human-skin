@@ -141,7 +141,10 @@ if(n_distinct(pc$grp)==2){
 .rp2 <- rp %>% left_join(.dt, by="srr_id") %>% mutate(mucosal_hr=coalesce(mucosal_hr,FALSE))
 .cin <- .rp2 %>% filter(tier=="neoplasia", mucosal_hr) %>% arrange(desc(rpm))
 # Estonian tissue categories -> English for display only (pipeline keeps Estonian).
-.tissue_en <- c(nahk="Skin", anogenitaal="Anogenital", suuoos="Oral", muu="Other")
+# "muu" is the fall-through of the keyword classifier, i.e. no site keyword was
+# found in the SRA text -- it means "site not recorded", not "a different site".
+# Labelling it "Other" read as a positive finding about the tissue.
+.tissue_en <- c(nahk="Skin", anogenitaal="Anogenital", suuoos="Oral", muu="Unclassified")
 cin_tbl <- .cin %>% transmute(Accession=srr_id, Study=study, Type=sub("REF$","",dom_type),
                               Tissue=coalesce(.tissue_en[tissue_category], str_to_sentence(tissue_category)),
                               Diagnosis=diagnosis, RPM=round(rpm,1))
@@ -189,6 +192,55 @@ tc <- read_tsv(type_catalogue_tsv(), show_col_types=FALSE)
 .tc_ctrl<-as.list(tiersum[tiersum$tier=="control_productive",]); .tc_neo<-as.list(tiersum[tiersum$tier=="neoplasia",])
 .tc_uns <-as.list(tiersum[tiersum$tier=="unselected_skin",]);    .tc_cl <-as.list(tiersum[tiersum$tier=="cell_line",]); .tc_oth<-as.list(tiersum[tiersum$tier=="other",])
 .tc_ev  <-as.list(tiersum[tiersum$tier=="EV",]);                 .tc_per<-as.list(tiersum[tiersum$tier=="peri_lesional",])
+# Non-permissive tissue (cutaneous adipose): no stratified squamous compartment,
+# so it is a negative control for the trace background rather than a candidate site.
+.tc_npt<-as.list(tiersum[tiersum$tier=="non_permissive_tissue",])
+.tc_eng<-as.list(tiersum[tiersum$tier=="engineered",])
+
+## ── E1:E2 integration marker + E2 integrity in the DNA reservoir ─────────────
+## E1 and E2 sit on the same early transcript, so their counts should track;
+## integration disrupts E2 and inverts the ratio (bin/e1e2_integration_marker.R,
+## bin/e2_integrity_from_logan.sh). Read from disk so the text stays live.
+.e1e2 <- tryCatch(read_tsv(here("results_e1e2/e1e2_by_tier.tsv"), show_col_types=FALSE),
+                  error=function(e) NULL)
+.e1e2_disc <- tryCatch(nrow(read_tsv(here("results_e1e2/e1e2_discordant.tsv"), show_col_types=FALSE)),
+                       error=function(e) NA_integer_)
+.e2int <- tryCatch(read_tsv(here("dna_rna_triangulation/e2_integrity_by_site.tsv"), show_col_types=FALSE),
+                   error=function(e) NULL)
+
+## Virus-host junction pilot (Helios job 508305; results_junction/). Integration
+## is called from chimeric reads against a combined GRCh38+HPV index. The
+## discriminating statistic is CLUSTERING -- the fraction of a library's
+## junctions falling at its single most-supported site -- not the raw count,
+## which scales with viral depth and is highest in the episomal EV libraries.
+.jx <- tryCatch(read_tsv(here("results_junction/junction_summary.tsv"), show_col_types=FALSE),
+                error=function(e) NULL)
+.JXCUT <- 0.2          # integrated vs episomal; observed gap is 0.034 to 0.327
+.jxint <- function(tiers) if (is.null(.jx)) NA_integer_ else
+  sum(.jx$tier %in% tiers & .jx$frac_top >= .JXCUT)
+.jxn <- function(tiers) if (is.null(.jx)) NA_integer_ else sum(.jx$tier %in% tiers)
+.jxrange <- function(tiers, integrated=TRUE) {
+  if (is.null(.jx)) return("NA")
+  v <- .jx$frac_top[.jx$tier %in% tiers & (if (integrated) .jx$frac_top >= .JXCUT else .jx$frac_top < .JXCUT)]
+  if (!length(v)) return("NA")
+  sprintf("%.2f\u2013%.2f", min(v), max(v))
+}
+## External validation of the ratio on a graded cervical series (PRJNA612785 /
+## SRP252916, results_cervix_graded_e1e2/). Four arms of six, one rRNA-depleted
+## protocol: HPV-negative normal epithelium, HPV16-positive normal epithelium,
+## HPV16+ HSIL, HPV16+ squamous carcinoma. The arms come from the submitting
+## study, so the marker is scored against labels it had no hand in assigning,
+## in a tissue and a progression it was not developed on.
+.cxg <- tryCatch(read_tsv(here("results_cervix_graded_e1e2/e1e2_by_tier.tsv"), show_col_types=FALSE),
+                 error=function(e) NULL)
+.cx <- function(grp, col="median_log2")
+  if (is.null(.cxg) || !any(.cxg$tier==grp)) NA_real_ else .cxg[[col]][.cxg$tier==grp]
+
+.ef <- function(tier) if (is.null(.e1e2)) NA_real_ else .e1e2$fold[.e1e2$tier==tier]
+.epct <- function(tier) if (is.null(.e1e2)) NA_real_ else .e1e2$pct_integration_like[.e1e2$tier==tier]
+.ecrit <- function(tier, col) if (is.null(.e1e2)) NA_integer_ else .e1e2[[col]][.e1e2$tier==tier]
+.e2row <- function(site, set="ge7kb") if (is.null(.e2int)) NULL else
+  as.list(.e2int[.e2int$site==site & .e2int$contig_set==set,])
 .a_neo<-as.list(o2a[o2a$term=="tierneoplasia",]); .a_l10<-as.list(o2a[o2a$term=="l10",])
 .b_neo<-as.list(o2b[o2b$term=="tierneoplasia",]); .b_l10<-as.list(o2b[o2b$term=="l10",])
 .mn_l10<-as.list(mn_o[mn_o$term=="l10",])
@@ -206,13 +258,48 @@ stats <- lapply(list(
   floor_rpm=floor_rpm,
   ctrl_n=.tc_ctrl$n, ctrl_pctfloor=.tc_ctrl$pct_floor, ctrl_medrpm=.tc_ctrl$med_rpm, ctrl_medreads=.tc_ctrl$med_reads,
   neo_n=.tc_neo$n,   neo_pctfloor=.tc_neo$pct_floor,   neo_medrpm=.tc_neo$med_rpm,   neo_medreads=.tc_neo$med_reads,
-  uns_n=.tc_uns$n,   uns_pctfloor=.tc_uns$pct_floor,   cl2_n=.tc_cl$n, oth_n=.tc_oth$n,
+  uns_n=.tc_uns$n,   uns_pctfloor=.tc_uns$pct_floor,   uns_pctany=.tc_uns$pct_any,
+  cl2_n=.tc_cl$n, oth_n=.tc_oth$n,
   # Absolute above-floor counts: the odds ratios above are large only because the
   # skin baseline is near zero, so the text quotes the raw fractions too.
   ctrl_pos_floor=.tc_ctrl$n_floor, neo_pos_floor=.tc_neo$n_floor, uns_pos_floor=.tc_uns$n_floor,
   neo_maxreads=.tc_neo$max_reads,
   ev_n=.tc_ev$n,     ev_pctfloor=.tc_ev$pct_floor,     ev_medrpm=.tc_ev$med_rpm,   ev_medreads=.tc_ev$med_reads,
   ev_or=ev_f$OR,     ev_lo=ev_f$lo,   ev_hi=ev_f$hi,   ev_p=ev_f$p,
+  npt_n=.tc_npt$n,   npt_pctfloor=.tc_npt$pct_floor,   npt_pctany=.tc_npt$pct_any,
+  # NB: eng_n above is Model 1's engineered SAMPLE CLASS (whole sweep); this is
+  # the engineered TIER in the RPM table. Distinct denominators, distinct names.
+  engt_n=.tc_eng$n,  engt_pctfloor=.tc_eng$pct_floor,
+  e1e2_cl=.ef("cell_line"), e1e2_ctrl=.ef("control_productive"),
+  e1e2_neo=.ef("neoplasia"), e1e2_skin=.ef("unselected_skin"),
+  e1e2_disc=.e1e2_disc,
+  e1e2_cl_pct=.epct("cell_line"), e1e2_eng_pct=.epct("engineered"),
+  e1e2_cl_ratio=.ecrit("cell_line","n_ratio"), e1e2_cl_e67=.ecrit("cell_line","n_e67"),
+  e1e2_cl_n=.ecrit("cell_line","n"),
+  e1e2_ev_pct=.epct("EV"), e1e2_per_pct=.epct("peri_lesional"),
+  e1e2_ctrl_pct=.epct("control_productive"),
+  # cervical graded series (external validation)
+  cxg_norm=.cx("hpv16_normal_epithelium"), cxg_hsil=.cx("hpv16_hsil"),
+  cxg_scc=.cx("hpv16_scc"),
+  cxg_norm_n=.cx("hpv16_normal_epithelium","n"), cxg_hsil_n=.cx("hpv16_hsil","n"),
+  cxg_scc_n=.cx("hpv16_scc","n"),
+  cxg_norm_int=.cx("hpv16_normal_epithelium","n_ratio"),
+  cxg_hsil_int=.cx("hpv16_hsil","n_ratio"), cxg_scc_int=.cx("hpv16_scc","n_ratio"),
+  # Empirical detection limit: the shallowest library in which integration WAS
+  # called bounds what a negative can mean. Every negative cSCC library carries
+  # several-fold more viral reads than that, so the negatives are not depth-limited.
+  jx_pos_minreads=if (is.null(.jx)) NA else min(.jx$hpv_reads[.jx$frac_top >= .JXCUT]),
+  jx_neg_minfold=if (is.null(.jx)) NA else
+    min(.jx$hpv_reads[.jx$frac_top < .JXCUT & .jx$tier=="neoplasia"]) /
+    min(.jx$hpv_reads[.jx$frac_top >= .JXCUT]),
+  jx_n=if (is.null(.jx)) NA_integer_ else nrow(.jx),
+  jx_int_range=.jxrange(c("cell_line","neoplasia"), TRUE),
+  jx_epi_range=.jxrange(c("control_productive","EV","neoplasia"), FALSE),
+  jx_neo_n=.jxn("neoplasia"), jx_neo_int=.jxint("neoplasia"),
+  jx_neo_epi=.jxn("neoplasia") - .jxint("neoplasia"),
+  jx_cl_int=.jxint("cell_line"), jx_cl_n=.jxn("cell_line"),
+  e2_full_n=.e2row("skin")$n_E1, e2_full_ok=.e2row("skin")$n_E2_given_E1,
+  e2_vag_n=.e2row("vaginal")$n_E1, e2_vag_ok=.e2row("vaginal")$n_E2_given_E1,
   per_n=.tc_per$n,   per_pctfloor=.tc_per$pct_floor,   per_medrpm=.tc_per$med_rpm,
   per_or=per_f$OR,   per_lo=per_f$lo, per_hi=per_f$hi, per_p=per_f$p,
   m2a_or=.a_neo$OR, m2a_lo=.a_neo$lo, m2a_hi=.a_neo$hi, m2a_p=.a_neo$p,

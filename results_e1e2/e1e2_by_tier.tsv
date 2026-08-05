@@ -1,0 +1,9 @@
+tier	n	median_log2	fold	n_ratio	n_e67	pct_integration_like
+cell_line	93	7.02	129.48	41	42	89.2
+engineered	18	5.09	33.99	11	4	83.3
+unselected_skin	60	-1.02	0.49	8	0	13.3
+other	52	-0.18	0.89	6	0	11.5
+neoplasia	20	-4.79	0.04	1	1	10
+control_productive	42	-1.88	0.27	2	0	4.8
+EV	10	-1.73	0.3	0	0	0
+peri_lesional	15	-2.63	0.16	0	0	0
