@@ -1,0 +1,18 @@
+bioproject	arm	material	n_runs	priority	reason
+PRJNA612785	graded	cervical epithelium / HSIL / SCC, rRNA-depleted total RNA	24	1	Four groups, 6 cases each, one protocol: HPV-NEGATIVE normal epithelium, HPV16-POSITIVE normal epithelium, HPV16+ HSIL, HPV16+ squamous carcinoma. The HPV16-positive NORMAL arm is the direct cervical counterpart to skin carriage -- virus present, no disease -- and the series carries the presence-to-activity gradient inside a single controlled design. rRNA-depletion (not polyA) also favours viral read recovery.
+PRJNA504398	normal	hysterectomy tissue, ectocervix n=10 + endocervix n=15	33	2	Genuine normal cervical tissue from women not on hormonal contraception/treatment, sampled at hysterectomy for benign gynaecological indications. Not cancer, not a line. Anatomically split ecto/endo, which the skin comparison does not need but does not hurt.
+PRJNA1428916	carriage	cervical exfoliated cells + cervical secretions	58	3	HR-HPV-positive patients followed 6-12 months with clearance-vs-persistence outcome. Carriage rather than carcinoma, and SURFACE-sampled material -- the closest public analogue to Shen's skin-surface sampling, so the presence-vs-activity contrast is drawn on comparable material rather than across sampling modes.
+PRJNA597049	non-cancer	cervical mucosa (schistosomiasis cohort)	97	4	Cervical mucosal gene expression in women with/without S. haematobium. The automated triage called this "tumour" on keyword bleed; it is NOT cancer. Largest non-malignant cervical mucosa set found, with an internal infected/uninfected split.
+PRJNA644250	tumour	cervical cancer tissue, virus + host transcriptomes	129	5	Explicitly integrates VIRAL and host transcriptomes across populations, so the viral side is known to be recoverable from these libraries. Strongest tumour-arm anchor.
+PRJNA645743	tumour	cervical cancer, RNA-seq + HPV capture-seq	20	6	Paired RNA-seq and HPV capture sequencing; the capture arm is an orthogonal check on our typing calls.
+PRJNA603319	tumour	invasive cervical carcinoma, multi-genotype	19	7	HPV genome expression in carcinomas infected by MULTIPLE genotypes -- useful where our typing has to resolve co-infection.
+PRJNA636799	tumour	pre-treatment primary cervical cancer	68	8	Pre-treatment and primary, so no chemoradiation confound on transcription.
+PRJNA1153589	tumour	pre-treatment primary cervical cancer	31	9	Same design as PRJNA636799, independent cohort.
+PRJNA521318	tumour	cervical adenocarcinoma + squamous carcinoma	11	10	Carries both histologies, so the adenocarcinoma side (HeLa's histology) is represented by real tissue.
+PRJNA1065004	EXCLUDE	pan-cancer trial, cervix a minority	239	-	Oncobox prospective trial across many tumour types; cervical libraries would need per-sample extraction, and the study is not a cervical cohort.
+PRJNA494155	EXCLUDE	peripheral blood	51	-	"Peripheral blood cells of patients with cervical lesions". Material is blood, not cervix. Passed the survey's primary-tissue rule on patient/cohort wording.
+PRJNA524816	EXCLUDE	gut 16S	13	-	Gut microbiota of cervical cancer patients. Neither cervix nor RNA-seq.
+PRJNA1456551	EXCLUDE	plasma extracellular vesicles	12	-	Plasma EV miRNA under anaesthesia. Not cervical tissue.
+PRJNA420201	EXCLUDE	mixed tumour + plasma	10	-	circRNA from cervical tumour AND plasma in one submission; would need per-sample splitting for 10 runs.
+PRJNA1272618	EXCLUDE	embargoed	140	-	GEO GSE299125 private until 2027-06-28. Will fail at download.
+PRJNA1369845	EXCLUDE	embargoed	18	-	GEO GSE311549 private until 2027-09-30. Will fail at download.
