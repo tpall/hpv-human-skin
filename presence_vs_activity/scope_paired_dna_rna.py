@@ -271,11 +271,19 @@ def summarise(rows, out_path, note, shen_runs=frozenset()):
     return specimen
 
 
-# Strategy filters used to probe a project for its MISSING modality.
-DNA_STRAT_TERM = ('("WGS"[Strategy] OR "WXS"[Strategy] OR "Targeted-Capture"[Strategy] '
+# SRA-side filters used to probe for a modality. These MUST match classify(),
+# which keys on LibrarySource, or the query silently under-fetches: SAMD00005178
+# carries 95 transcriptomic runs of which only 1 is LibraryStrategy "RNA-Seq"
+# and 94 are "OTHER", so a strategy-only filter returned 1 of 95. Source is the
+# authority; strategy is kept as a widener for records with an odd source.
+DNA_STRAT_TERM = ('("genomic"[Source] OR "metagenomic"[Source] '
+                  'OR "genomic single cell"[Source] '
+                  'OR "WGS"[Strategy] OR "WXS"[Strategy] OR "Targeted-Capture"[Strategy] '
                   'OR "WGA"[Strategy] OR "AMPLICON"[Strategy] OR "ChIP-Seq"[Strategy] '
                   'OR "Bisulfite-Seq"[Strategy] OR "ATAC-seq"[Strategy] OR "Hi-C"[Strategy])')
-RNA_STRAT_TERM = ('("RNA-Seq"[Strategy] OR "miRNA-Seq"[Strategy] '
+RNA_STRAT_TERM = ('("transcriptomic"[Source] OR "metatranscriptomic"[Source] '
+                  'OR "transcriptomic single cell"[Source] '
+                  'OR "RNA-Seq"[Strategy] OR "miRNA-Seq"[Strategy] '
                   'OR "ncRNA-Seq"[Strategy] OR "FL-cDNA"[Strategy] OR "EST"[Strategy])')
 
 
