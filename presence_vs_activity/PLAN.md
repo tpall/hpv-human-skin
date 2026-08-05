@@ -46,13 +46,20 @@ vaginal is 84% alpha mucosal, gut is a mixture. Recovered from DNA alone, which
 validates the composition read-out before anything is asked of it.
 
 **R2. Skin: presence does not predict productivity.**
-Status: DONE but needs the fix in section 5.1. The DNA-abundant beta/gamma types
+Status: DONE but needs the fix in section 5.1. Three paired skin-metagenome
+specimens were found (5.5) and should be typed, since they test R2 directly
+instead of by composition. The DNA-abundant beta/gamma types
 are transcriptionally silent; the productive types are alpha wart viruses that
 are DNA-rare or absent. Only HPV2 occupies the abundant-and-productive corner.
 
 **R3. Cervix and vagina: presence does predict productivity.**
-Status: NEEDS THE RUN (section 6). The within-tissue join that R2 could only do
-for skin: are the DNA-frequent vaginal types (HPV91/51/66/67/16/90) the
+Status: NEEDS THE RUN (section 6), but now has a paired core. 22 cervical
+specimens carry HPV-positive DNA and unscreened matched RNA from the same
+BioSample (section 5.5), which turns part of R3 into a genuine paired statistic
+rather than a composition comparison. Run those first.
+
+The full-cohort version is the within-tissue join that R2 could only do for
+skin: are the DNA-frequent vaginal types (HPV91/51/66/67/16/90) the
 productive ones? Prediction is yes, which makes the cervix the clean contrast
 case to skin. Carries a second axis: high-risk alpha dominating productive
 expression by lesion grade while low-risk and commensal mucosal types stay quiet.
@@ -64,7 +71,9 @@ types HPV24 and HPV124 that appear in anal and gut DNA are entirely silent in
 the anal transcriptome. The strongest figure in the paper.
 
 Honest limit: this is within-*niche*, not within-*sample*. The DNA is gut
-metagenome and the RNA is anorectal RNA-seq, different libraries. See 5.5.
+metagenome and the RNA is anorectal RNA-seq, different libraries. Section 5.5
+settles this: no paired anal specimens exist in SRA, so the limit is permanent
+and should be stated in the paper rather than treated as future work.
 
 **R5. Where the decoupling has a molecular correlate.**
 Status: PARTIAL. The graded cervical series (PRJNA612785) shows E1:E2 rising
@@ -117,13 +126,76 @@ per-sample curation the skin cohort received, and 82% carry a generic tissue
 label with an anal-carcinoma diagnosis rather than an explicit anal tissue field.
 R4 cannot go in the paper on automatic calls. (Caveat 5.)
 
-### 5.5 Scope paired DNA and RNA from the same specimen
-Highest value per unit effort in this list, and new. Search SRA for BioSamples
-carrying both a DNA library (WGS, metagenome, capture) and an RNA-seq library
-from the same anal or cervical biopsy. If even a few dozen exist, R4 converts
-from a composition comparison into a genuine paired test, which is a different
-tier of evidence and would likely become the paper's centrepiece. If none exist,
-say so in the limitations and move on.
+### 5.5 Paired DNA and RNA from the same specimen: DONE, and it exists
+
+Run 2026-08-05 with `scope_paired_dna_rna.py`. Results in `pairs_*.tsv`.
+
+Three tiers are reported separately and only the first is a paired test:
+`specimen` (same BioSample carries both modalities), `donor` (same project plus
+a shared subject token, different BioSamples), `study` (same project only).
+
+| niche | runs | BioSamples | specimen | donor | study |
+|---|---:|---:|---:|---:|---:|
+| anal | 1,682 | 1,464 | **0** | 0 | 0 |
+| anal, project-expanded | 2,541 | 2,320 | **0** | 0 | 1 |
+| cervical | 54,932 | 44,723 | **64** | 58 | 62 |
+| cervical, project-expanded | 64,393 | 48,163 | **64** | 59 | 94 |
+| Shen HPV+ BioSamples | 10,657 | 6,614 | **61** | 53 | 21 |
+
+**Anal is a clean negative.** Anal DNA studies and anal RNA studies are entirely
+disjoint BioProjects, verified independently of the tool. R4 therefore cannot be
+upgraded to a paired test and its within-niche limitation stands as written.
+
+**Cervix is the win.** 64 same-BioSample pairs, of which **22 have a BioSample
+already in Shen's HPV-positive catalogue** (29 of the 138 DNA runs ARE Shen HPV+
+libraries), and **none of the 108 paired RNA runs has been screened by this
+project**. Those 22 are the paired test in its strongest form: HPV is already
+known to be present in the DNA, so typing the matched RNA asks "present, but is
+it active?" on the same material instead of across cohorts. At ~108 runs this is
+trivial compute and should run BEFORE the 6,396-library cohort, since it is a
+publishable result on its own and it de-risks the big run.
+
+Only 2 of the 64 are cell lines (one SiHa, one CaSki) against a 54% HeLa base
+rate in the broad cervical space. Requiring a matched DNA library selects hard
+for clinical studies, because nobody submits exome data for a cell line as a
+patient series. The pairs concentrate in seven projects, so this is a
+read-by-hand list rather than 64 separate curation problems.
+
+**Paired skin specimens exist too**, which was not expected: 3 in PRJNA872116
+(skin metagenome, WGS + RNA-seq, HPV-positive DNA). Small, but skin is the pole
+where presence is NOT supposed to predict activity, so even three paired
+specimens test R2 directly rather than by composition. Worth typing alongside
+the cervical set since the marginal cost is nil.
+
+The Shen-anchored mode also surfaced **13 paired vaginal-metagenome specimens**
+(PRJNA797778, AMPLICON+WGS DNA with RNA-seq), which is a mucosal paired set in
+metagenome rather than tissue material, and so a useful protocol contrast.
+
+**Project expansion changes the weak tiers only.** Probing every single-modality
+project for the modality the site vocabulary could not see added 10,123 cervical
+runs and took study-level projects from 62 to 94, but specimen pairs stayed at
+exactly 64. That is expected in hindsight: a BioSample carrying both modalities
+shares its metadata across both runs, so the site query already sees both. Run
+expansion for the study tier, not for pairs.
+
+### 5.6 Triage still owed on the pair list
+
+- **16 of the 64 cervical pairs have an AMPLICON DNA side.** If that amplicon is
+  HPV genotyping it is ideal, a direct HPV DNA presence measure on the same
+  specimen. If it is 16S it is useless here. Must be checked per project, not
+  assumed.
+- **The donor tier is unvalidated.** `donor_token` strips replicate suffixes off
+  sample names, which is crude and will both over- and under-merge. The 58 to 59
+  donor pairs are a lead list to read by hand, never a statistic.
+- **Non-amniote entries in Shen's catalogue.** Among paired specimens alone the
+  catalogue carries papillomavirus-positive libraries from rice, cacao,
+  asparagus, sea bass, three butterflies and a springtail. Papillomaviruses
+  infect amniotes only, so these are either false hits or human contamination in
+  those libraries. Cow, pig and mouse also appear and are legitimate hosts, not
+  errors. Do not call this k-mer noise without a protein-level check, which is
+  the test that settled the deltavirus candidates in a sibling project. Either
+  outcome is a small independent datapoint for the paper's central thesis about
+  what a catalogue presence number means.
 
 ## 6. The cervical/vaginal run
 
