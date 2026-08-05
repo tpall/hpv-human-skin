@@ -46,6 +46,20 @@ if (!"is_cell_line" %in% names(samples)) {
 }
 samples <- samples %>%
   mutate(is_cell_line = tolower(as.character(is_cell_line)) == "true")
+# Curated corrections (assets/tier_overrides.csv) are an analysis-time layer and
+# are NOT baked into the samplesheet, so apply them here too -- otherwise this
+# report buckets curated-skin studies as unclassified and misses curated
+# cell-line calls. See bin/_overrides.R.
+# Locate the shared override layer relative to this script.
+.ovr_src <- local({
+  f <- sub("^--file=", "", grep("^--file=", commandArgs(FALSE), value = TRUE))
+  d <- if (length(f)) dirname(f[1]) else "bin"
+  for (p in c(file.path(d, "_overrides.R"), "bin/_overrides.R"))
+    if (file.exists(p)) return(p)
+  stop("cannot locate bin/_overrides.R")
+})
+source(.ovr_src)
+samples <- samples %>% apply_overrides(c("tissue_category", "is_cell_line")) %>% drop_excluded()
 # Raw samplesheet holds comma-prone free-text columns (title, tissue_source)
 # kept out of the slim samplesheet so Nextflow's splitCsv can't mis-split.
 raw_path <- opts$`raw-samplesheet`

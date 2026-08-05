@@ -59,3 +59,69 @@ sample,SRR14243795,tier,peri_lesional,CON_4 condyloma-adjacent mucosa (SRP314961
 sample,SRR14243796,tier,peri_lesional,CON_4 condyloma-adjacent mucosa (SRP314961 MeRIP IP)
 sample,SRR14243797,tier,peri_lesional,CON_5 condyloma-adjacent mucosa (SRP314961 MeRIP input)
 sample,SRR14243798,tier,peri_lesional,CON_5 condyloma-adjacent mucosa (SRP314961 MeRIP IP)
+study,ERP022968,tissue_category,nahk,"ArrayExpress E-MTAB-5678: titles are AK_1..AK_29 and diagnoses are actinic keratosis/cSCC/normal; actinic keratosis is by definition cutaneous. SRA carries no tissue_source, so keyword classification cannot reach it."
+study,ERP106532,tissue_category,nahk,"ArrayExpress E-MTAB-6430 (Univ. of Queensland): diagnoses are actinic keratosis and squamous cell carcinoma; titles are bare Sample N with no tissue_source, so the site is unreachable by keyword."
+study,SRP572392,exclude,TRUE,"16S rRNA amplicon libraries from urine (433 runs). Not RNA-seq and outside the assay's domain: a 16S amplicon library contains no HPV sequence that could be detected regardless of infection status, so all 433 are structural zeros (0/433 with any HPV read) that deflate the null background rate every skin comparison is measured against. Excluded, not relabelled."
+study,SRP557480,tier,non_permissive_tissue,"Cutaneous adipose tissue from psoriasis patients. Papillomaviruses replicate only in differentiating stratified squamous epithelium, so adipose has no permissive compartment -- yet 29.0% of these libraries carry a trace HPV read versus 28.2% of unselected skin, and none reaches the detection floor. Retained as a non-permissive-tissue negative control demonstrating that the trace background is not biology."
+#
+# Non-permissive tissue controls (2026-08-02). Tissue and cell types with no
+# stratified squamous compartment, so no site at which a papillomavirus could
+# replicate. Retained as negative controls, not excluded: together with the
+# cutaneous adipose cohort they show the trace-HPV background is the assay
+# floor rather than biology. Studies whose libraries carry ABOVE-floor HPV
+# (SRP572742, SRP565659 blood fraction) are deliberately NOT here -- those are
+# cross-library contamination, documented in the supplement.
+study,SRP547042,tier,non_permissive_tissue,"Blood-derived plasmacytoid dendritic cells (run titles 'pDC,...,Donor NNN'); haematopoietic, no stratified squamous compartment. All 25 runs in the study are non-permissive."
+study,ERP138550,tier,non_permissive_tissue,"AD patient-derived induced neurons; neural tissue, no stratified squamous compartment. All 19 runs in the study are non-permissive."
+study,ERP150223,tier,non_permissive_tissue,"Primate iPSC-derived astrocytes; neural, no stratified squamous compartment. All 4 runs in the study are non-permissive."
+study,SRP520100,tier,non_permissive_tissue,"RNA-Seq of Homo sapiens: leukocytes; haematopoietic, no stratified squamous compartment. All 3 runs in the study are non-permissive."
+sample,SRR29430511,tier,non_permissive_tissue,"Peripheral Blood Mononuclear Cell. Peripheral blood mononuclear cells. Study also contains 16 skin runs, which keep their skin assignment, so this is applied per run."
+sample,SRR29430485,tier,non_permissive_tissue,"Peripheral Blood Mononuclear Cell. Peripheral blood mononuclear cells. Study also contains 16 skin runs, which keep their skin assignment, so this is applied per run."
+sample,SRR29430514,tier,non_permissive_tissue,"Peripheral Blood Mononuclear Cell. Peripheral blood mononuclear cells. Study also contains 16 skin runs, which keep their skin assignment, so this is applied per run."
+sample,SRR29430497,tier,non_permissive_tissue,"Peripheral Blood Mononuclear Cell. Peripheral blood mononuclear cells. Study also contains 16 skin runs, which keep their skin assignment, so this is applied per run."
+sample,SRR29430512,tier,non_permissive_tissue,"Peripheral Blood Mononuclear Cell. Peripheral blood mononuclear cells. Study also contains 16 skin runs, which keep their skin assignment, so this is applied per run."
+sample,SRR29430506,tier,non_permissive_tissue,"Peripheral Blood Mononuclear Cell. Peripheral blood mononuclear cells. Study also contains 16 skin runs, which keep their skin assignment, so this is applied per run."
+sample,SRR29430501,tier,non_permissive_tissue,"Peripheral Blood Mononuclear Cell. Peripheral blood mononuclear cells. Study also contains 16 skin runs, which keep their skin assignment, so this is applied per run."
+sample,SRR29430508,tier,non_permissive_tissue,"Peripheral Blood Mononuclear Cell. Peripheral blood mononuclear cells. Study also contains 16 skin runs, which keep their skin assignment, so this is applied per run."
+sample,SRR29430503,tier,non_permissive_tissue,"Peripheral Blood Mononuclear Cell. Peripheral blood mononuclear cells. Study also contains 16 skin runs, which keep their skin assignment, so this is applied per run."
+sample,SRR29430507,tier,non_permissive_tissue,"Peripheral Blood Mononuclear Cell. Peripheral blood mononuclear cells. Study also contains 16 skin runs, which keep their skin assignment, so this is applied per run."
+sample,SRR29430495,tier,non_permissive_tissue,"Peripheral Blood Mononuclear Cell. Peripheral blood mononuclear cells. Study also contains 16 skin runs, which keep their skin assignment, so this is applied per run."
+sample,SRR29430479,tier,non_permissive_tissue,"Peripheral Blood Mononuclear Cell. Peripheral blood mononuclear cells. Study also contains 16 skin runs, which keep their skin assignment, so this is applied per run."
+sample,SRR29430496,tier,non_permissive_tissue,"Peripheral Blood Mononuclear Cell. Peripheral blood mononuclear cells. Study also contains 16 skin runs, which keep their skin assignment, so this is applied per run."
+sample,SRR29430513,tier,non_permissive_tissue,"Peripheral Blood Mononuclear Cell. Peripheral blood mononuclear cells. Study also contains 16 skin runs, which keep their skin assignment, so this is applied per run."
+sample,SRR29430509,tier,non_permissive_tissue,"Peripheral Blood Mononuclear Cell. Peripheral blood mononuclear cells. Study also contains 16 skin runs, which keep their skin assignment, so this is applied per run."
+sample,SRR29430500,tier,non_permissive_tissue,"Peripheral Blood Mononuclear Cell. Peripheral blood mononuclear cells. Study also contains 16 skin runs, which keep their skin assignment, so this is applied per run."
+sample,SRR29430480,tier,non_permissive_tissue,"Peripheral Blood Mononuclear Cell. Peripheral blood mononuclear cells. Study also contains 16 skin runs, which keep their skin assignment, so this is applied per run."
+sample,SRR29430483,tier,non_permissive_tissue,"Peripheral Blood Mononuclear Cell. Peripheral blood mononuclear cells. Study also contains 16 skin runs, which keep their skin assignment, so this is applied per run."
+sample,SRR29430502,tier,non_permissive_tissue,"Peripheral Blood Mononuclear Cell. Peripheral blood mononuclear cells. Study also contains 16 skin runs, which keep their skin assignment, so this is applied per run."
+sample,SRR29430498,tier,non_permissive_tissue,"Peripheral Blood Mononuclear Cell. Peripheral blood mononuclear cells. Study also contains 16 skin runs, which keep their skin assignment, so this is applied per run."
+sample,SRR29430474,tier,non_permissive_tissue,"Peripheral Blood Mononuclear Cell. Peripheral blood mononuclear cells. Study also contains 16 skin runs, which keep their skin assignment, so this is applied per run."
+sample,SRR29430499,tier,non_permissive_tissue,"Peripheral Blood Mononuclear Cell. Peripheral blood mononuclear cells. Study also contains 16 skin runs, which keep their skin assignment, so this is applied per run."
+sample,SRR29430481,tier,non_permissive_tissue,"Peripheral Blood Mononuclear Cell. Peripheral blood mononuclear cells. Study also contains 16 skin runs, which keep their skin assignment, so this is applied per run."
+sample,SRR29430505,tier,non_permissive_tissue,"Peripheral Blood Mononuclear Cell. Peripheral blood mononuclear cells. Study also contains 16 skin runs, which keep their skin assignment, so this is applied per run."
+sample,SRR29430484,tier,non_permissive_tissue,"Peripheral Blood Mononuclear Cell. Peripheral blood mononuclear cells. Study also contains 16 skin runs, which keep their skin assignment, so this is applied per run."
+sample,SRR29430510,tier,non_permissive_tissue,"Peripheral Blood Mononuclear Cell. Peripheral blood mononuclear cells. Study also contains 16 skin runs, which keep their skin assignment, so this is applied per run."
+sample,SRR29430475,tier,non_permissive_tissue,"Peripheral Blood Mononuclear Cell. Peripheral blood mononuclear cells. Study also contains 16 skin runs, which keep their skin assignment, so this is applied per run."
+sample,SRR28644413,tier,non_permissive_tissue,"Blood. Blood fraction of a cutaneous T-cell lymphoma study. The study's 14 skin runs keep their skin assignment, so this is applied per run."
+sample,SRR28644417,tier,non_permissive_tissue,"Blood. Blood fraction of a cutaneous T-cell lymphoma study. The study's 14 skin runs keep their skin assignment, so this is applied per run."
+sample,SRR28644414,tier,non_permissive_tissue,"Blood. Blood fraction of a cutaneous T-cell lymphoma study. The study's 14 skin runs keep their skin assignment, so this is applied per run."
+sample,SRR28644415,tier,non_permissive_tissue,"Blood. Blood fraction of a cutaneous T-cell lymphoma study. The study's 14 skin runs keep their skin assignment, so this is applied per run."
+#
+# Skin-tissue studies whose SRA run fields carry no site keyword but whose
+# study-level title states the tissue. Culture-derived studies deliberately
+# excluded (tier rules do not consult is_in_vitro, so "nahk" would put
+# in-vitro material into the unselected-skin null).
+study,SRP542783,tissue_category,nahk,"GEO series title: 'RNA-Seq of face skin: Acne'. Facial skin, 212 runs, no per-run tissue field."
+study,ERP165377,tissue_category,nahk,"Study title: 'Single cell RNA-seq of skin biopsies from patients with cutaneous T cell lymphoma (CTCL)'; run titles are CTCL1_skin1_GEX_S1 etc. 32 of its 244 runs already classify as skin from those names."
+study,ERP148386,tissue_category,nahk,"Study title: 'Mapping the developing human skin - scRNA-seq' (Human Cell Atlas fetal skin; run ids HCA_rFSKI*/FCAImmP*). Primary skin tissue."
+study,SRP548651,tissue_category,nahk,"GEO series title: 'Filaggrin status modulates gene transcription, DNA damage and epidermal barrier repair'; run titles carry clinical visit and Involved/Uninvolved skin site (NR_SK_10_003_Visit2_Uninvolved)."
+study,ERP176950,tissue_category,nahk,"Study title: 'RNA-Seq of human ex-vivo skin samples with variable skin color types'. Ex-vivo skin tissue; run titles are bare 'Sample N'."
+study,SRP498743,tissue_category,nahk,"GEO series title: 'Comparison of Tape-Stripping Platforms as Non-Invasive Solutions for Skin Biomarker Discovery'; run titles 'Dsquame, Forehead, Volunteer N' -- D-Squame tape-stripped stratum corneum."
+study,ERP152609,tissue_category,nahk,"Study title: 'RNAseq of scalp biopsies from EGFRi treated patients, who exhibited a folliculitis'. Scalp skin biopsies; run titles are bare 'Sample N'."
+study,ERP141290,tissue_category,nahk,"Study title: 'RNAseq of human buttock skin from healthy controls exposed to solar simulated radiation'. Irradiated buttock skin; run titles are bare specimen codes (H02A/H02B)."
+study,ERP141292,tissue_category,nahk,"Study title: 'RNAseq of human buttock skin from patients with solar urticaria exposed to solar simulated radiation'. Sibling of ERP141290 (same design, same bare specimen-code naming S01A/S01B)."
+study,SRP600916,tissue_category,nahk,"Study title: 'Trem2+ Macrophages Enriched in the Scalp Induce Tc17...'; every run carries tissue_source='scalp'."
+study,ERP155847,tissue_category,nahk,"Study title: 'Spatial transcriptomics of skin biopsies from patients with cutaneous T cell lymphoma (CTCL)'. Spatial assay on biopsy sections; run titles are bare CTCL1/CTCL2."
+study,SRP528142,tissue_category,nahk,"Study title: 'Differences in cell subsets between sun-exposed and unexposed skin: preliminary single-cell...'. Paired sun-exposed/unexposed skin; run titles are bare specimen codes."
+study,ERP188949,tissue_category,nahk,"Study title: 'Distinct diversity of skin cell populations of rhinophyma and hypertrophic scar'. Both are skin lesions; run titles are bare codes (HS-H/ROS)."
+study,ERP177859,tissue_category,nahk,"Study title: 'Spatial localisation of human skin fibroblasts'. Spatial assay on skin sections (run ids WS_D_SKNsp*), not dissociated culture."

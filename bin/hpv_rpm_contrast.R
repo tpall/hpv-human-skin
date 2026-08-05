@@ -129,9 +129,33 @@ apply_override <- function(d, fld) {
 contam <- str_trim(str_split(opt$`contam-studies`, ",")[[1]])
 dat <- rpm %>% left_join(meta, by = c("srr_id", "cohort"))
 
+# 3-pre. Exclusions, before anything else. Reserved for libraries whose assay
+# cannot detect HPV at all (e.g. 16S rRNA amplicon), which are structural zeros
+# rather than negative observations and would deflate the null background.
+# Biologically non-permissive *tissue* is NOT excluded -- it is a valid negative
+# control and gets its own tier.
+dat <- apply_override(dat, "exclude")
+n_excl <- sum(!is.na(dat$.new) & norm_bool(dat$.new))
+if (n_excl) {
+  ex_studies <- dat %>% filter(!is.na(.new), norm_bool(.new)) %>%
+    distinct(study) %>% pull(study)
+  message(sprintf("  excluded %d libraries from %d study/studies: %s",
+                  n_excl, length(ex_studies), paste(ex_studies, collapse = ", ")))
+}
+dat <- dat %>% filter(is.na(.new) | !norm_bool(.new)) %>% select(-.new)
+
 # 3a. is_cell_line overrides, before the tier rules consume the flag
 dat <- apply_override(dat, "is_cell_line") %>%
   mutate(is_cell_line = if_else(is.na(.new), coalesce(is_cell_line, FALSE), norm_bool(.new))) %>%
+  select(-.new)
+
+# 3a-bis. tissue_category overrides, before the tier rules consume `tc`.
+# A few studies carry no site text at all in SRA (titles like "AK_15" or
+# "Sample 20"), so keyword classification cannot reach them and they fall to
+# "muu" = site unknown. Where the study is unambiguous from its own diagnoses a
+# curated row restores the site; where it is not, it stays unclassified.
+dat <- apply_override(dat, "tissue_category") %>%
+  mutate(tissue_category = coalesce(.new, tissue_category)) %>%
   select(-.new)
 
 dat <- dat %>% mutate(
@@ -139,6 +163,13 @@ dat <- dat %>% mutate(
   tc = tolower(coalesce(tissue_category, "")),
   tier = case_when(
     coalesce(is_cell_line, FALSE)                 ~ "cell_line",
+    # Engineered material (shRNA/siRNA knockdowns, transgenes) is in-vitro
+    # manipulated cell culture, not clinical tissue, whatever its disease label:
+    # e.g. "A375 shNIPBL" and "SKMEL-5 shHOXD13" carry tissue_source "skin", and
+    # the UT-SCC cSCC lines carry a cutaneous-SCC diagnosis. The E1:E2 integration
+    # marker (bin/e1e2_integration_marker.R) shows they behave like cell lines,
+    # so they must not sit in the unselected-skin null or the neoplasia tier.
+    coalesce(is_engineered, FALSE)                ~ "engineered",
     str_detect(dx, "verruciform")                 ~ "EV",
     str_detect(dx, "wart|condyloma")              ~ "control_productive",
     str_detect(dx, "squamous|carcinoma|scc|keratos|bowen") ~ "neoplasia",
@@ -152,7 +183,8 @@ dat <- apply_override(dat, "tier") %>%
   mutate(tier = coalesce(.new, tier)) %>% select(-.new)
 
 tier_levels <- c("unselected_skin", "contamination_study", "cell_line",
-                 "control_productive", "EV", "neoplasia", "peri_lesional", "other")
+                 "control_productive", "EV", "neoplasia", "peri_lesional",
+                 "non_permissive_tissue", "engineered", "other")
 stopifnot(all(dat$tier %in% tier_levels))
 dat <- dat %>% mutate(tier = factor(tier, levels = tier_levels))
 
@@ -192,7 +224,14 @@ tier_display <- c(
   EV                  = "Epidermodysplasia verruciformis",
   neoplasia           = "Neoplasia (cSCC/AK)",
   peri_lesional       = "Peri-lesional mucosa",
-  other               = "Other tissues")
+  # Tissue with no permissive compartment for papillomavirus replication
+  # (adipose): a negative control, not a candidate site of infection.
+  non_permissive_tissue = "Non-permissive tissue",
+  engineered          = "Engineered cells",
+  # 99% of this tier is tissue_category "muu", which means no site keyword was
+  # found in the SRA text -- not that a different site was identified. Labelling
+  # it "Other tissues" asserted something the metadata never established.
+  other               = "Site not recorded")
 pdat <- dat %>% filter(!is.na(tier)) %>%
   mutate(rpm_plot = pmax(rpm, 0) + 0.05)
 p <- ggplot(pdat, aes(tier, rpm_plot)) +
@@ -225,7 +264,8 @@ dmatch <- dat %>%
             .groups = "drop")
 write_tsv(dmatch, file.path(opt$outdir, "depth_matched_detection.tsv"))
 
-key_tiers <- c("unselected_skin", "control_productive", "EV", "neoplasia", "peri_lesional")
+key_tiers <- c("unselected_skin", "control_productive", "EV", "neoplasia",
+               "peri_lesional", "non_permissive_tissue")
 pd <- dmatch %>% filter(tier %in% key_tiers, n >= 3)
 if (nrow(pd)) {
   pdepth <- ggplot(pd, aes(depth_bin, pct_ge_floor, colour = tier, group = tier)) +

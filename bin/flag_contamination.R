@@ -81,6 +81,20 @@ norm_bool <- function(x) if (is.null(x)) FALSE else tolower(as.character(x)) %in
 # Tolerate older samplesheets lacking the flag columns (treat as not-a-line).
 for (col in c("is_cell_line", "is_engineered", "is_in_vitro")) if (!col %in% names(ss)) ss[[col]] <- "false"
 for (col in c("study", "tissue_category", "diagnosis")) if (!col %in% names(ss)) ss[[col]] <- NA
+# Locate the shared override layer relative to this script.
+.ovr_src <- local({
+  f <- sub("^--file=", "", grep("^--file=", commandArgs(FALSE), value = TRUE))
+  d <- if (length(f)) dirname(f[1]) else "bin"
+  for (p in c(file.path(d, "_overrides.R"), "bin/_overrides.R"))
+    if (file.exists(p)) return(p)
+  stop("cannot locate bin/_overrides.R")
+})
+source(.ovr_src)
+
+# Curated corrections live in assets/tier_overrides.csv, not the samplesheet;
+# without them the "nahk" subset below misses curated-skin studies entirely.
+ss <- as.data.frame(apply_overrides(ss, c("tissue_category", "is_cell_line")))
+ss <- as.data.frame(drop_excluded(ss))
 ss_keep <- ss[, c("srr_id", "study", "tissue_category", "diagnosis",
                   "is_cell_line", "is_engineered", "is_in_vitro")]
 calls <- merge(calls, ss_keep, by.x = "sample_id", by.y = "srr_id", all.x = TRUE)
