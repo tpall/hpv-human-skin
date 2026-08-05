@@ -181,7 +181,7 @@ by which HPV integration is called in TCGA-style RNA data.
 | PRJNA517793 | 10 | 0.5 | 53 MB | anogenital warts (benign) |
 | **total** | **843** | **692.4** | | |
 
-692 GB is a few days of download and standard alignment on Helios. Capture
+692 GB is a few days of download and standard alignment on the cluster. Capture
 libraries are the best available material: HPV enrichment raises both viral
 depth and the number of junction-spanning reads.
 
@@ -259,7 +259,7 @@ the molecular signature disagree.
 
 ---
 
-# 9. Result: integration detected from reads (Helios job 508305)
+# 9. Result: integration detected from reads (rocket SLURM job 508305)
 
 The design in §8 was executed on the 17-library pilot. **It works, and it
 overturns the conclusion of §1–7: the question is answerable, just not from
@@ -341,5 +341,7 @@ independent integration events, not cross-contamination between libraries.
   batch, followed by the mucosal DNA cohorts in §8.2 if a larger positive arm
   is wanted.
 
-Code: `run_junction_pilot.sbatch` (on Helios, `results_junction_pilot/`).
+Code: `hpc/run_junction_pilot.sbatch`, scored by
+`bin/score_junction_clustering.py`. Ran on rocket as SLURM job 508305, with
+outputs under `results_junction_pilot/` on the cluster.
 Outputs: `junction_summary.tsv`, per-library `junctions/*.junction.tsv`.

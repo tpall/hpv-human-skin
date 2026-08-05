@@ -208,7 +208,7 @@ tc <- read_tsv(type_catalogue_tsv(), show_col_types=FALSE)
 .e2int <- tryCatch(read_tsv(here("dna_rna_triangulation/e2_integrity_by_site.tsv"), show_col_types=FALSE),
                    error=function(e) NULL)
 
-## Virus-host junction pilot (Helios job 508305; results_junction/). Integration
+## Virus-host junction pilot (rocket SLURM job 508305; results_junction/). Integration
 ## is called from chimeric reads against a combined GRCh38+HPV index. The
 ## discriminating statistic is CLUSTERING -- the fraction of a library's
 ## junctions falling at its single most-supported site -- not the raw count,
