@@ -59,8 +59,20 @@ TISSUES <- list(
   Gut     = c("human gut metagenome", "gut metagenome"))
 GEN_LEVELS <- c("Alpha", "Beta", "Gamma", "Mu", "Nu", "Unresolved", "Novel")
 
+# The skin-metagenome taxid also covers environmental transit surfaces and
+# non-human animal skin; drop those (build_skin_run_exclusions.py writes the table).
+excl_path <- file.path(outdir, "skin_run_exclusions.tsv")
+skin_excl <- if (file.exists(excl_path)) {
+  read_tsv(excl_path, show_col_types = FALSE)$run
+} else {
+  warning("skin_run_exclusions.tsv missing -- run build_skin_run_exclusions.py; ",
+          "keeping non-human-skin libraries")
+  character()
+}
+
 reservoir <- imap_dfr(TISSUES, function(scis, tis) {
   runs <- runinfo %>% filter(sci %in% scis) %>% pull(Run) %>% unique()
+  if (tis == "Skin") runs <- setdiff(runs, skin_excl)
   lc <- master %>% filter(library %in% runs) %>% left_join(demarc, by = "cluster_number")
   nlib <- n_distinct(lc$library)
   genus <- lc %>% distinct(library, genus) %>% count(genus, name = "libs") %>%
@@ -72,6 +84,7 @@ reservoir <- imap_dfr(TISSUES, function(scis, tis) {
 
 top_types <- imap_dfr(TISSUES, function(scis, tis) {
   runs <- runinfo %>% filter(sci %in% scis) %>% pull(Run) %>% unique()
+  if (tis == "Skin") runs <- setdiff(runs, skin_excl)
   lc <- master %>% filter(library %in% runs) %>% left_join(demarc, by = "cluster_number")
   nlib <- n_distinct(lc$library)
   lc %>% filter(!is.na(type)) %>% distinct(library, type, genus) %>%

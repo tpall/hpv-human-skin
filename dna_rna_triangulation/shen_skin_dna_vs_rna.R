@@ -62,9 +62,25 @@ demarc <- read_tsv(paths["demarc"], show_col_types = FALSE) %>%
   select(cluster_number, type, genus, is_novel)
 
 # ---- skin-metagenome HPV+ Runs (Shen RunInfo) ----
+# The skin-metagenome taxid is also used for environmental transit surfaces and
+# non-human animal skin; drop those (build_skin_run_exclusions.py writes the table).
+excl_path <- file.path(outdir, "skin_run_exclusions.tsv")
+skin_excl <- if (file.exists(excl_path)) {
+  read_tsv(excl_path, show_col_types = FALSE)
+} else {
+  warning("skin_run_exclusions.tsv missing -- run build_skin_run_exclusions.py; ",
+          "keeping non-human-skin libraries")
+  tibble(run = character())
+}
 skin_sci <- c("human skin metagenome", "skin metagenome")
 skin_runs <- read_csv(paths["hits"], show_col_types = FALSE) %>%
   filter(str_to_lower(ScientificName) %in% skin_sci) %>% pull(Run) %>% unique()
+n_skin_runs_raw <- length(skin_runs)
+skin_runs <- setdiff(skin_runs, skin_excl$run)
+message(sprintf("skin runs: %d raw -> %d after dropping %d non-human-skin (%s)",
+                n_skin_runs_raw, length(skin_runs),
+                n_skin_runs_raw - length(skin_runs),
+                paste(sort(unique(skin_excl$reason)), collapse = "; ")))
 
 # ---- skin libraries -> clusters -> type/genus (master table) ----
 lib_cluster <- read_tsv(paths["master"], show_col_types = FALSE) %>%
