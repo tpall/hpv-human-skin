@@ -59,6 +59,16 @@ GENERIC_PATTERNS = [
     r"\bcell[\s-]?lines?\b",
     r"\bimmortali[sz]ed\b",
     r"\bpassage[\s-]?\d+",
+    # Passage stated in words rather than the standard "passage N". Seen as
+    # `age = "the fifth generation"` on a HeLa-derived cervical-adenocarcinoma
+    # submission that named no cell line anywhere in its metadata, so no
+    # line-name pattern could fire. Deliberately narrow: only third and above,
+    # because "first/second generation" is the idiom for drug classes and
+    # sequencing platforms, and a negative lookahead drops the remaining
+    # collisions. A genuine early passage is normally written "passage N",
+    # which the pattern above already catches.
+    r"\b(?:\d+(?:rd|th)|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth)[\s-]+generation\b"
+    r"(?![\s-]*(?:sequenc|drug|antihistamin|inhibitor|therap|vaccin|agent|cephalosporin))",
     r"\batcc\b",
     r"\bdsmz\b",
     r"\bjcrb\b",
@@ -170,10 +180,51 @@ IN_VITRO_PATTERNS = [
     r"\bday[\s-]?\d+[\s-]?(?:post[\s-]?)?(?:differentiat|treatment|induction|culture)",
 ]
 
+SINGLE_CELL_PATTERNS = [
+    # Droplet / plate-based single-cell and single-nucleus protocols. These are
+    # a separate axis from cell-line-ness: the material can be genuine primary
+    # tissue and still be unusable here, because the library is 3'-biased and
+    # barcoded. That breaks the E1:E2 ratio (which needs even coverage across
+    # the early region) and makes "composition" a statement about cells rather
+    # than about libraries.
+    #
+    # They are also where the compute goes. In the vaginal random-1000 cohort
+    # 301/1000 runs were single-cell but carried over half of the 8.5 Tbases,
+    # and all 18 largest runs were single-cell; one 129 Gb scRNA-seq library
+    # blocked the pipeline for five hours on download alone.
+    r"\b10x\b",
+    r"\b10[\s_-]?genomics\b",
+    r"\bchromium\b",
+    # Plural matters: the largest library in the vaginal cohort (186 Gb) is
+    # described only as "The suspension of single cells was transferred",
+    # with no protocol name anywhere in its metadata.
+    # The lookahead excludes "single cell clone / cloning / derived clone",
+    # which is CLONAL DERIVATION of a line, not a single-cell library -- its
+    # sequencing is ordinary bulk. Seen as "Single cell clone with CIB1
+    # knockout, originating from immortalized ...".
+    r"\bsingle[\s_-]?cells?\b(?![\s_-]*(?:clone|clonal|cloning|derived))",
+    r"\bsingle[\s_-]?nucle\w*",
+    r"\bsc[rd]na[\s_-]?seq\b",
+    r"\bsnrna[\s_-]?seq\b",
+    r"\bsmart[\s_-]?seq\d*\b",
+    r"\bdrop[\s_-]?seq\b",
+    r"\bcel[\s_-]?seq\d*\b",
+    r"\bcite[\s_-]?seq\b",
+    r"\bmultiome\b",
+    r"\bvisium\b",
+    r"\bspatial[\s_-]?transcriptom\w*",
+    # NB deliberately NOT included: bare "barcode" and "perturb". Both appear in
+    # ordinary bulk submissions (sample barcoding, perturbation experiments).
+    # A looser list flagged 394 of the same 1000 runs against this list's 301 --
+    # keeping a doubtful library only costs compute, dropping a good one costs
+    # data, so the narrow list is the right trade.
+]
+
 _NAMED = _build_compiled(NAMED_CELL_LINES)
 _GENERIC = _build_compiled(GENERIC_PATTERNS)
 _ENGINEERED = _build_compiled(ENGINEERED_PATTERNS)
 _IN_VITRO = _build_compiled(IN_VITRO_PATTERNS)
+_SINGLE_CELL = _build_compiled(SINGLE_CELL_PATTERNS)
 
 
 def classify_cell_line(text: str) -> tuple[bool, str]:
@@ -213,6 +264,23 @@ def classify_in_vitro(text: str) -> tuple[bool, str]:
     if not text:
         return (False, "")
     for rx, label in _IN_VITRO:
+        if rx.search(text):
+            return (True, label)
+    return (False, "")
+
+
+def classify_single_cell(text: str) -> tuple[bool, str]:
+    """Return (is_single_cell, matched_pattern_label).
+
+    Orthogonal to the cell-line / engineered / in-vitro axes: a single-cell
+    library can be primary tissue and still be unusable for HPV typing, because
+    3'-biased barcoded reads cannot support the E1:E2 ratio. Capping reads does
+    not help -- a shortened 10x library is still a 10x library -- so these are
+    excluded rather than downsampled.
+    """
+    if not text:
+        return (False, "")
+    for rx, label in _SINGLE_CELL:
         if rx.search(text):
             return (True, label)
     return (False, "")

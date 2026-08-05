@@ -13,6 +13,7 @@ import argparse
 import csv
 import re
 import sys
+from functools import lru_cache
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -20,6 +21,7 @@ from cell_line_patterns import (
     classify_cell_line,
     classify_engineered,
     classify_in_vitro,
+    classify_single_cell,
     has_explicit_cell_line_field,
 )
 
@@ -36,14 +38,47 @@ def load_tissue_categories(categories_file: str) -> dict[str, str]:
     return mapping
 
 
+# Domain abbreviations that legitimately take affixes on both sides and must
+# still match: cSCC (cutaneous), RDEB-SCC, huSCC, nSCC on the left; SCCIS (in
+# situ) and SCCIC (invasive) on the right. The affix is part of the diagnosis,
+# not a different word, so these keep the old bare-substring behaviour. Safe
+# because no unrelated biomedical word contains "scc"/"bcc".
+_AFFIXABLE = {"scc", "bcc"}
+
+
+@lru_cache(maxsize=None)
+def _term_pattern(term: str) -> re.Pattern:
+    """Word-anchored pattern for a keyword, tolerating a plural suffix.
+
+    Bare substring matching produced silent false positives, because several
+    keywords are substrings of unrelated words:
+      "cin"  inside "car-CIN-oma"   -> every carcinoma was also labelled CIN
+      "oral" inside "fem-ORAL"      -> femoral artery classified as oral cavity
+      "anal" inside "ANAL-ysis"     -> any "analysis" classified as anogenital
+    Anchoring both ends kills those, and the optional plural keeps the matches
+    that bare substrings got right ("warts", "tumors", "carcinomas").
+
+    The boundary is letter-based, not \\b: SRA free text is full of underscores
+    and digits ("skin_biopsy", "healthy_skin", "skin7"), and \\b treats those as
+    word characters, so \\bskin\\b would miss every one of them.
+    """
+    if term in _AFFIXABLE:
+        return re.compile(re.escape(term))
+    return re.compile(rf"(?<![a-z]){re.escape(term)}(?:s|es)?(?![a-z])")
+
+
+def _matches(term: str, text: str) -> bool:
+    return _term_pattern(term).search(text) is not None
+
+
 def classify_tissue(text: str, mapping: dict[str, str]) -> str:
     """Classify tissue text into category using keyword matching."""
     text_lower = text.lower()
 
-    # Try exact substring matches, longest first for specificity
+    # Try word-anchored matches, longest keyword first for specificity
     sorted_keywords = sorted(mapping.keys(), key=len, reverse=True)
     for keyword in sorted_keywords:
-        if keyword in text_lower:
+        if _matches(keyword, text_lower):
             return mapping[keyword]
 
     return "muu"
@@ -72,7 +107,7 @@ def extract_diagnosis(title: str, tissue_source: str, characteristics: str = "")
 
     found = []
     for term in pathology_terms:
-        if term in combined:
+        if _matches(term, combined):
             found.append(term)
 
     if not found:
@@ -101,6 +136,10 @@ def main():
     parser.add_argument("--input", "-i", required=True, help="Input samplesheet CSV")
     parser.add_argument("--categories", "-c", required=True, help="Tissue categories CSV")
     parser.add_argument("--output", "-o", required=True, help="Output enriched samplesheet CSV")
+    parser.add_argument("--keep-input-columns", action="store_true",
+                        help="Preserve every input column (incl. title/tissue_source) instead "
+                             "of the slim Nextflow fieldset. Use when re-classifying an "
+                             "already-enriched sheet, so it stays re-runnable.")
     args = parser.parse_args()
 
     # Load tissue category mapping
@@ -114,6 +153,7 @@ def main():
     cell_line_count = 0
     engineered_count = 0
     in_vitro_count = 0
+    single_cell_count = 0
 
     with open(args.input) as f:
         reader = csv.DictReader(f)
@@ -175,6 +215,17 @@ def main():
             if is_ivt:
                 in_vitro_count += 1
 
+            # Single-cell / single-nucleus libraries. A separate axis again:
+            # the material may be genuine primary tissue, but 3'-biased
+            # barcoded reads cannot carry the E1:E2 ratio, and these libraries
+            # dominate download volume (301/1000 runs but >half the bases in
+            # the vaginal cohort). Flagged, not dropped here -- the samplesheet
+            # builder decides, so the record of what was excluded survives.
+            is_sc, _ = classify_single_cell(detect_text)
+            row["is_single_cell"] = "true" if is_sc else "false"
+            if is_sc:
+                single_cell_count += 1
+
             # Flag for manual curation
             row["needs_curation"] = flag_for_curation(row)
             if row["needs_curation"]:
@@ -193,7 +244,15 @@ def main():
     # columns live in the raw samplesheet, read separately by the R report.
     fieldnames = ["srr_id", "srx_id", "study", "layout",
                   "tissue_category", "diagnosis", "is_cell_line",
-                  "is_engineered", "is_in_vitro", "needs_curation"]
+                  "is_engineered", "is_in_vitro", "is_single_cell",
+                  "needs_curation"]
+    if args.keep_input_columns:
+        # Re-classifying an already-enriched sheet in place: dropping the
+        # free-text columns would make the file unusable as input to this same
+        # script (no text left to classify -> everything falls to "muu").
+        # Keep every input column and append only the derived ones.
+        seen = list(enriched[0].keys())
+        fieldnames = seen + [c for c in fieldnames if c not in seen]
     with open(args.output, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
         writer.writeheader()
@@ -209,6 +268,8 @@ def main():
     print(f"  {'cell_line':15s}: {cell_line_count:5d} ({100 * cell_line_count / total:.1f}%)", file=sys.stderr)
     print(f"  {'engineered':15s}: {engineered_count:5d} ({100 * engineered_count / total:.1f}%)", file=sys.stderr)
     print(f"  {'in_vitro':15s}: {in_vitro_count:5d} ({100 * in_vitro_count / total:.1f}%)", file=sys.stderr)
+    print(f"  {'single_cell':15s}: {single_cell_count:5d} ({100 * single_cell_count / total:.1f}%)"
+          f"   <- exclude before typing; these carry most of the download volume", file=sys.stderr)
     print(f"\nOutput: {args.output}", file=sys.stderr)
 
 
