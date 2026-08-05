@@ -1,0 +1,13 @@
+site	contig_set	n	n_E1	n_E2	n_E2_given_E1	pct_E2_given_E1
+skin	all	3593	1404	1514	1231	87.7
+skin	ge7kb	1073	1072	1072	1071	99.9
+vaginal	all	690	451	486	445	98.7
+vaginal	ge7kb	427	427	427	427	100.0
+gut	all	382	245	254	228	93.1
+gut	ge7kb	211	211	211	211	100.0
+anogenital_wart	all	13	6	7	6	100.0
+anogenital_wart	ge7kb	5	5	5	5	100.0
+cervical_cin	all	72	29	24	23	79.3
+cervical_cin	ge7kb	21	21	21	21	100.0
+cervical_cancer	all	1426	396	378	331	83.6
+cervical_cancer	ge7kb	267	267	265	265	99.3
