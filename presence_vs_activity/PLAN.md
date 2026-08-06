@@ -46,9 +46,11 @@ vaginal is 84% alpha mucosal, gut is a mixture. Recovered from DNA alone, which
 validates the composition read-out before anything is asked of it.
 
 **R2. Skin: presence does not predict productivity.**
-Status: DONE but needs the fix in section 5.1. Three paired skin-metagenome
-specimens were found (5.5) and should be typed, since they test R2 directly
-instead of by composition. The DNA-abundant beta/gamma types
+Status: CONFOUNDED, see 5.5b. The DNA side is 100% surface swabs and the RNA
+side is 100% bulk tissue biopsy, so the two axes differ in the variable that
+most directly controls late transcription. The 3 paired skin specimens, which
+are swab metatranscriptomes, came back PRODUCTIVE. R2 cannot be defended until
+a compartment-matched skin RNA axis exists; that work now outranks section 6. The DNA-abundant beta/gamma types
 are transcriptionally silent; the productive types are alpha wart viruses that
 are DNA-rare or absent. Only HPV2 occupies the abundant-and-productive corner.
 
@@ -177,6 +179,78 @@ runs and took study-level projects from 62 to 94, but specimen pairs stayed at
 exactly 64. That is expected in hindsight: a BioSample carrying both modalities
 shares its metadata across both runs, so the site query already sees both. Run
 expansion for the study tier, not for pairs.
+
+### 5.5b RESULT: the paired run, and the compartment problem it exposed
+
+Job 523244, 2026-08-06, 29 libraries typed (`paired_results/`). The cervical arm
+behaved as predicted. The skin arm did not, and the reason matters more than the
+result.
+
+**Cervix: prediction held.** 19 of 24 cervical libraries are productive, most
+with substantial late transcription. Presence predicted activity in the mucosal
+pole, which is R3 in miniature and on the same material rather than across
+cohorts.
+
+**Skin: prediction failed.** Of 3 paired skin specimens, 1 was HPV-negative and
+2 were productive, not silent:
+
+| library | types (breadth) | E1 | E2 | L1 | L2 | productive |
+|---|---|---:|---:|---:|---:|---|
+| SRR21981202 | HPV190 (99.5%), HPV105 (99.2%), HPV195 (99.2%), HPV47, HPV5, HPV20, HPV124 | 16,200 | 10,975 | 5,601 | 6,264 | yes |
+| SRR21981198 | HPV107 (44%), HPV-mm090c10nr, HPV4 | 419 | 123 | 598 | 355 | yes |
+| SRR21981204 | none | - | - | - | - | HPV-negative |
+
+Beta and gamma types, at up to 654x depth and near-complete genome coverage,
+with abundant capsid transcription. This is exactly what R2 says does not happen.
+
+**Two confounders, and they are not separable at n=2.** PRJNA872116 is "The
+microbiome of RAG-deficient patients": RAG1/RAG2 hypomorphic immunodeficiency.
+HPV5, HPV20 and HPV47 are the classic EV beta types, and EV is itself a genetic
+immunodeficiency, so productive beta-HPV is the expected phenotype in this host.
+The libraries are also `env_medium = swab` metatranscriptomes, i.e. skin
+SURFACE, whereas our RNA cohort is bulk tissue.
+
+**The second confounder is systematic, and it is the real problem.** Checking
+the cached BioSample attributes for Shen's skin reservoir
+(`../dna_rna_triangulation/cache/skin_biosample_attrs.tsv`, n = 941):
+
+| sampling | n | % |
+|---|---:|---:|
+| swab-like | 577 | 61.3 |
+| biopsy or tissue | **0** | **0.0** |
+| unstated | 364 | 38.7 |
+
+Every named collection device is a swab, gauze or pore strip. The env_local_scale
+values are the standard microbiome skin sites (volar forearm, retroauricular
+crease, antecubital fossa). **The entire DNA reservoir is surface sampling, and
+the entire RNA axis is bulk tissue biopsy.**
+
+Papillomavirus transcription is differentiation-coupled: the late programme
+completes in the upper, differentiated layers, which is what a swab collects and
+what a biopsy dilutes with dermis and basal keratinocytes. So the two axes of
+the central comparison differ in the one variable that most directly controls
+the read-out. The decoupling in R2 may be a compartment artefact rather than
+biology, and this paired result is the first direct evidence that it might be:
+when the same compartment is sampled both ways, the beta/gamma reservoir is
+loudly productive.
+
+This does not overturn the cSCC manuscript, which compares RNA against RNA
+within tissue and is unaffected. It goes at R2 of THIS paper.
+
+**What it requires, and this now outranks section 6.** A compartment-matched RNA
+axis for skin: metatranscriptomes from skin swabs, compared against the swab DNA
+reservoir. Then the question becomes answerable rather than confounded:
+
+- if swab RNA is productive and biopsy RNA is silent, the finding is that HPV
+  activity is stratified by tissue depth, which is a better paper than the one
+  planned and is a genuinely new statement about the reservoir;
+- if swab RNA is silent in immunocompetent hosts and productive only in the
+  RAG/EV patients, the decoupling survives and gains a host-status axis;
+- either way the current R2, biopsy RNA against swab DNA, cannot be defended
+  once a referee notices, and one will.
+
+The 13 paired vaginal-metagenome specimens in PRJNA797778 (5.5) are the same
+material class and give the mucosal counterpart for free.
 
 ### 5.6 Triage still owed on the pair list
 
