@@ -46,13 +46,15 @@ vaginal is 84% alpha mucosal, gut is a mixture. Recovered from DNA alone, which
 validates the composition read-out before anything is asked of it.
 
 **R2. Skin: presence does not predict productivity.**
-Status: SURVIVES, with a host axis added; see 5.5d for the test that settled it
-and 5.5b for the objection it answers. The DNA side is 100% surface swabs and the RNA
-side is 100% bulk tissue biopsy, so the two axes differ in the variable that
-most directly controls late transcription. The 3 paired skin specimens, which
-are swab metatranscriptomes, came back PRODUCTIVE. That objection has since
-been tested and rejected (5.5d): healthy skin swabs carry no HPV transcripts at
-all, at greater depth than the immunocompromised arm that is 79% positive.
+Status: SURVIVES, with a host axis added. The objection was that the DNA side is
+100% surface swabs while the RNA side is bulk tissue, so the two axes differ in
+the variable that most directly controls late transcription (5.5b). It is
+answered primarily by the scale argument in **5.2b**, which needs no swab data:
+HPV presence is 17 to 25% in shotgun skin DNA against 2 to 4% in skin RNA, and
+transcription amplifies, so an active infection would make RNA the more
+sensitive detector rather than the less. The swab experiment (5.5d) supports
+this on a small corner of the data: healthy skin swabs carry no HPV transcripts
+at all, at greater depth than the immunocompromised arm that is 79% positive.
 
 The composition finding stands: the DNA-abundant beta/gamma types show no
 productive signal in our biopsy RNA, the productive types are alpha wart viruses
