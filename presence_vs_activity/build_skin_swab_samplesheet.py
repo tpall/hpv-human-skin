@@ -41,6 +41,21 @@ ARMS = {"immunocompromised", "healthy"}
 # SRA, "control" means the untreated arm of an experiment at least as often as
 # it means a healthy subject. Cultured fibroblasts have no stratum corneum, so
 # they cannot answer a question about surface versus deep compartments.
+# Whole studies that carry an arm label but are not skin-swab material. Same
+# reason as NOT_SWAB, at study scope.
+#
+# SRP519513 is "Impact of an mRNA vaccine injection on human skin models, tissue
+# level": ex-vivo skin models given a subcutaneous injection, sampled at tissue
+# level. The host-status classifier called it healthy because the study has a
+# "control clinical-grade water" arm. That is the third time in this cohort that
+# the word "control" in SRA has meant the untreated arm of an experiment rather
+# than a healthy subject, after the HFF-1 cultures below and the cervical
+# normals in assets/tier_overrides.csv. Tissue-level skin models cannot answer a
+# question about the skin SURFACE, which is the entire point of this arm.
+NOT_SWAB_STUDIES = {
+    "SRP519513": "ex-vivo skin models with subcutaneous injection, tissue level, not swabs",
+}
+
 NOT_SWAB = {
     "SRR37812028": "HFF-1 fibroblast culture, not a skin swab (SRP687109)",
     "SRR37812029": "HFF-1 fibroblast culture, not a skin swab (SRP687109)",
@@ -63,6 +78,9 @@ def main():
             continue
         if r["srr_id"] in NOT_SWAB:
             excluded.append((r["srr_id"], NOT_SWAB[r["srr_id"]]))
+            continue
+        if r["study"] in NOT_SWAB_STUDIES:
+            excluded.append((r["srr_id"], f'{r["study"]}: {NOT_SWAB_STUDIES[r["study"]]}'))
             continue
         rows.append({
             "srr_id": r["srr_id"],
