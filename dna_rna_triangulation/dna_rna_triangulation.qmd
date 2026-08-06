@@ -81,11 +81,23 @@ queries BioSample attributes for every skin run and drops 30 of them
 (23 Hong Kong transit-surface swabs, PRJNA413474; 4 dairy-farm udder epithelium,
 PRJNA512046; 3 `host = bovine` cutaneous wounds, PRJNA636289), leaving 1,938 runs.
 The exclusion table is written to `skin_run_exclusions.tsv` and is auditable per run.
-It does not move the composition (β 55.5 → 55.2 %, γ 40.6 → 40.7 %, α and the novel
-fraction unchanged, and the list of productive types with zero skin DNA is identical),
-but it does move per-type ranks: HPV17 loses 22 of 71 libraries (DNA rank 7 → 13) and
-HPV147 loses 11, so transit-surface deposition was inflating specific β/γ types.
-Per-type ranks quoted from a pre-exclusion run are not valid.
+The exclusion barely moves the genus composition (α and the novel fraction
+unchanged), but it does move per-type ranks, because transit-surface deposition
+was inflating specific β/γ types: HPV17 loses 22 of 71 libraries and HPV147
+loses 11. Per-type ranks quoted from a pre-exclusion run are not valid.
+
+A second correction matters more for the type-level claims. PaVE names variants
+of a type with a trailing letter, so HPV38B is a subtype of HPV38, HPV14D of
+HPV14 and HPV57B of HPV57. Our typing panel carries the subtype labels while
+Shen's `best_hit_name` carries the bare type, so the two sides never joined and
+the subtype's libraries fell into `Unresolved`. Both sides are now normalised
+onto the parent type (`norm_type()`), which changes conclusions rather than
+cosmetics: HPV14 goes from zero to **58** skin-DNA libraries and HPV57 from zero
+to **13**, so neither belongs in the list of productive types with no DNA
+reservoir, where both previously appeared. That list is now nine types, not
+eleven. HPV38 gains its subtype's libraries as well (32 to 94), and all three
+move from `Unresolved` to their correct genus, which is why β rises to
+`r s$pct_beta`%.
 
 ## Result 1: the genus of the reservoir flips from the genus of activity
 

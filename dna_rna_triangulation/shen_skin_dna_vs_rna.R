@@ -42,10 +42,25 @@ tg <- read_csv(here("manuscript/type_genus.csv"), show_col_types = FALSE) %>%
             genus = str_to_title(genus_short))
 type2genus <- deframe(tg %>% distinct(type, genus))
 
+# ---- subtype-letter normalisation, applied to BOTH sides ----
+# PaVE names variants of a type with a trailing letter: HPV38B is a subtype of
+# HPV38, HPV14D of HPV14, HPV57B of HPV57. Our typing panel carries the subtype
+# labels and Shen's best_hit_name carries the bare type, so without this the two
+# sides never join and the subtype's libraries are silently lost to "Unresolved".
+#
+# It was not cosmetic. Before this fix HPV57 and HPV14 were reported as
+# PRODUCTIVE TYPES WITH ZERO DNA DETECTIONS, one of the headline claims, while
+# HPV57B (13 libraries) and HPV14D (58 libraries) sat unjoined in the same
+# table. HPV38B (63 libraries) was likewise split from HPV38 (32).
+#
+# Only a single trailing letter directly after a digit is stripped, so novel
+# candidate labels ending in letters (MKN1NR, MSK190NR) are left untouched.
+norm_type <- function(x) str_remove(toupper(x), "(?<=[0-9])[A-Z]$")
+
 # ---- parse Shen best_hit_name -> HPV type number + genus ----
 parse_type <- function(x) {                     # only "human papillomavirus N" / "HPV N"
   m <- str_match(x, regex("human papillomavirus(?:\\s+type)?\\s+(\\d+[A-Za-z]?)|\\bHPV[- ]?(\\d+[A-Za-z]?)", ignore_case = TRUE))
-  toupper(coalesce(m[, 2], m[, 3]))
+  norm_type(coalesce(m[, 2], m[, 3]))
 }
 parse_genus_kw <- function(x) {                 # e.g. "Gammapapillomavirus 22"
   str_to_title(str_match(x, regex("(Alpha|Beta|Gamma|Mu|Nu)papillomavirus", ignore_case = TRUE))[, 2])
@@ -97,9 +112,11 @@ novel_libs <- lib_cluster %>% filter(is_novel) %>% distinct(library) %>% nrow()
 
 # ---- RNA tiers (ours): present in skin vs productive (warts + EV) ----
 rna <- read_tsv(here("results_reframe_fixed/type_catalogue_by_tier.tsv"), show_col_types = FALSE) %>%
-  transmute(type = toupper(str_remove(str_remove(hpv_reference, "REF$"), "^HPV")),
+  transmute(type = norm_type(str_remove(str_remove(hpv_reference, "REF$"), "^HPV")),
             rna_skin_present = unselected_skin,
-            rna_productive = control_productive + EV)
+            rna_productive = control_productive + EV) %>%
+  group_by(type) %>%                     # subtypes collapse onto their parent
+  summarise(across(everything(), sum), .groups = "drop")
 
 # ---- master per-type comparison table ----
 cmp <- full_join(dna_type, rna, by = "type") %>%

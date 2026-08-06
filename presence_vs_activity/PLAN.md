@@ -117,6 +117,32 @@ the RNA side restricted to the unselected-skin tier. The direction is expected t
 hold; the magnitude of the silent column will shrink. Until this is done R2 is
 weaker than it reads. (Caveat 1 of the triangulation report.)
 
+### 5.2c Decision: do NOT run a DNA-versus-RNA RPM comparison (2026-08-06)
+
+RPM is the right instrument in principle. If a virus sits at copy number C and
+is transcribed at rate T, then DNA RPM scales with C and RNA RPM with C x T, so
+their ratio measures T, which is exactly the quantity the decoupling claim is
+about. Computing it would mean running our own Kraken2 screen over a
+depth-matched set of skin shotgun metagenomes (~300 libraries in the 1 to 5 Gb
+band, roughly 750 GB, one night), since Shen's catalogue is contigs and carries
+no read counts.
+
+Decided against, because two differences would sit on top of each other and
+neither can be removed:
+
+- **The denominators mean different things.** Our RPM divides by unclassified
+  plus root reads. In a skin swab metagenome that fraction is largely bacterial;
+  in a skin biopsy transcriptome it is largely human. Partial normalisation is
+  not equivalence.
+- **The compartment differs.** DNA is swab, our RNA is tissue, and a
+  compartment-matched RNA arm does not exist at usable scale (24 healthy swab
+  metatranscriptomes).
+
+The result would carry so many qualifications that it would invite exactly the
+objections that killed the positivity-rate version. R2 rests instead on the
+manuscript's own productivity analysis, which is depth-controlled and stays
+inside one modality.
+
 ### 5.2b RETRACTED: the DNA-vs-RNA positivity gap is a depth artefact
 
 Two errors, both found by the depth check the collaborators asked for. Recorded
@@ -178,11 +204,29 @@ converts composition into prevalence. Caveat to state explicitly: not every SRA
 run is in Logan, so the denominator is the assembled subset and needs its own
 coverage check. (Caveat 2.)
 
-### 5.3 Fix the subtype-letter join
-`HPV38B` against `HPV38`, `HPV14D` against `HPV14`. These fail to join and become
-false zeros or land in `Unresolved`. Small effect, does not touch the
-alpha-versus-beta/gamma contrast, but exactly the kind of thing a referee finds.
-(Caveat 3.)
+### 5.3 Fix the subtype-letter join (DONE 2026-08-06, and it was not small)
+
+`HPV38B` against `HPV38`, `HPV14D` against `HPV14`, `HPV57B` against `HPV57`.
+PaVE names variants with a trailing letter; our typing panel carries the subtype
+label and Shen's `best_hit_name` the bare type, so the two sides never joined and
+the subtype's libraries fell into `Unresolved`. Both sides are now normalised
+onto the parent type by `norm_type()` in `shen_skin_dna_vs_rna.R`, which strips a
+single trailing letter only where it follows a digit, leaving novel candidate
+labels (MKN1NR, MSK190NR) untouched.
+
+I had recorded this as a small effect. It was not. It corrected a headline claim:
+
+| type | DNA libraries before | after |
+|---|---:|---:|
+| HPV14 | **0** | **58** |
+| HPV57 | **0** | **13** |
+| HPV38 | 32 | 94 |
+
+HPV14 and HPV57 were being reported as *productive types with zero DNA
+reservoir*, which was one of the strongest statements in the analysis, while
+their own subtypes sat unjoined in the same table with 58 and 13 libraries. That
+list drops from eleven types to nine. All three types also move from
+`Unresolved` to their correct genus, which raises beta from 55.2% to 57.9%.
 
 ### 5.4 Tier the anorectal pilot
 The 681 libraries carry automatic HPV-positive and productive calls without the
