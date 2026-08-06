@@ -48,13 +48,14 @@ validates the composition read-out before anything is asked of it.
 **R2. Skin: presence does not predict productivity.**
 Status: SURVIVES, with a host axis added. The objection was that the DNA side is
 100% surface swabs while the RNA side is bulk tissue, so the two axes differ in
-the variable that most directly controls late transcription (5.5b). It is
-answered primarily by the scale argument in **5.2b**, which needs no swab data:
-HPV presence is 36.7% in shotgun skin DNA against 2.3% in skin RNA within Shen's own catalogue, and
-transcription amplifies, so an active infection would make RNA the more
-sensitive detector rather than the less. The swab experiment (5.5d) supports
-this on a small corner of the data: healthy skin swabs carry no HPV transcripts
-at all, at greater depth than the immunocompromised arm that is 79% positive.
+the variable that most directly controls late transcription (5.5b). The scale
+argument that was drafted in 5.2b to answer it has been RETRACTED: the
+DNA-versus-RNA positivity gap it rested on is a sequencing-depth artefact. What
+remains against the objection is the swab experiment (5.5d), which is a small
+corner of the data, and the manuscript's own depth-controlled productivity
+analysis, which was never a presence-versus-presence comparison. The
+compartment objection is therefore only partly answered, and the honest position
+is that R2 rests on productivity, not on detection rates.
 
 The composition finding stands: the DNA-abundant beta/gamma types show no
 productive signal in our biopsy RNA, the productive types are alpha wart viruses
@@ -116,59 +117,58 @@ the RNA side restricted to the unselected-skin tier. The direction is expected t
 hold; the magnitude of the silent column will shrink. Until this is done R2 is
 weaker than it reads. (Caveat 1 of the triangulation report.)
 
-### 5.2b The denominator, RESOLVED, and a same-catalogue DNA/RNA control (2026-08-06)
+### 5.2b RETRACTED: the DNA-vs-RNA positivity gap is a depth artefact
 
-**The freeze is Dec 2023**, established from Shen's own release dates (2,226
-hits released in 2023, one in 2024), matching Logan v1 at 27 M accessions rather
-than the v1.2 Dec 2025 freeze. All denominators below are restricted to runs
-public by 2023-12-31.
+Two errors, both found by the depth check the collaborators asked for. Recorded
+in full because the wrong version was circulating for part of a day and because
+the first error affects any future SRA-count work in this project.
 
-**The denominator ambiguity is dissolved by stratifying on the strategies in
-which positives actually occur**, rather than by guessing which strategies count
-as shotgun:
+**Error 1: esearch counts experiments, efetch returns runs.** `esearch` on the
+SRA database returns a count of EXPERIMENTS (SRX); `efetch rettype=runinfo`
+returns RUNS (SRR), and one experiment can hold several runs. Every denominator
+quoted earlier in this section came from esearch while every numerator came from
+Shen's run-level table, so the rates were inflated by the experiment-to-run
+ratio, about 1.7x here. The same query gives 7,304 by esearch and 12,118 unique
+runs by runinfo. Computed consistently within one fetched set, skin shotgun DNA
+positivity is **15.5%** (1,883/12,118), not the 36.7% previously written here.
 
-| LibraryStrategy | HPV+ | total | rate |
-|---|---:|---:|---:|
-| **WGS** | 2,680 | 7,304 | **36.7%** |
-| WGA | 39 | 1,690 | 2.3% |
-| OTHER | **0** | 19,525 | **0.00%** |
-| AMPLICON | 1 | 75,866 | 0.00% |
-| **RNA-Seq** | 17 | 752 | **2.3%** |
+**Error 2, the fatal one: the arms differ in depth by an order of magnitude.**
 
-The 19,525 `OTHER` runs return **zero** HPV-positive libraries, behaving exactly
-like the 75,866 amplicon runs. They are 16S submitted without the AMPLICON tag,
-and they do not belong in the denominator. That was the entire source of the
-earlier 9-to-38% range, and it is now closed: **HPV DNA positivity in skin
-shotgun metagenomes is 36.7%** (30.2% if WGA is pooled in, though WGA behaves
-differently enough at 2.3% that pooling is not advisable).
+| arm | n | median | Q1 | Q3 | HPV+ |
+|---|---:|---:|---:|---:|---:|
+| DNA (WGS) | 12,118 | 0.66 Gb | 0.09 | 2.51 | 15.5% |
+| RNA (RNA-Seq) | 781 | **0.05 Gb** | 0.04 | 0.18 | 2.2% |
 
-**The last row is the important one, and it removes the caveat this argument
-previously carried.** Shen's catalogue contains skin-metagenome RNA libraries as
-well as DNA ones, detected by the *same* pipeline, at the *same* body site,
-under the *same* taxid and the *same* freeze:
+Within the RNA arm the positives are simply the deep libraries: median 0.85 Gb
+for HPV-positive against 0.05 Gb for HPV-negative. And 638 of the 781 RNA
+libraries sit below 0.5 Gb, where neither modality detects anything.
 
-> **DNA (WGS): 36.7% HPV-positive. RNA: 2.3% HPV-positive. Sixteen-fold, within
-> one catalogue and one detection method.**
+Matched on library size, the gap does not survive:
 
-This is no longer a cross-pipeline comparison, so the objection that Shen's
-profile-HMM detection and our Kraken2 screen have different sensitivities does
-not apply to it. And it independently reproduces our own figure: we measure 2 to
-4% HPV positivity in unselected skin RNA from a completely separate cohort and
-pipeline, against Shen's 2.3%.
+| size | DNA | RNA |
+|---|---|---|
+| 0 to 0.5 Gb | 16.7% | 0.2% |
+| 0.5 to 1 Gb | 18.8% | **39.1%** |
+| 1 to 2 Gb | 18.4% | 10.5% |
+| 2 to 5 Gb | 11.9% | 8.3% |
+| 5 to 10 Gb | 9.7% | 3.1% |
+| >10 Gb | 9.4% | 7.7% |
 
-**The argument, now on firm ground.** Transcription amplifies: one genome yields
-many transcripts, so an actively transcribing reservoir would make RNA the *more*
-sensitive detector of presence, not the less. Presence in 36.7% of DNA libraries
-and 2.3% of RNA libraries from the same catalogue therefore measures low
-transcription directly. A compartment-sampling artefact would have to overcome
-the transcriptional amplification factor and then invert the ordering sixteen-
-fold, across thousands of libraries from hundreds of independent studies. This
-is the primary evidence for the decoupling, it needs no swab data, and it should
-lead the DNA section of the paper.
+Comparable order in every bin, higher for RNA in one. The RNA bins hold 13 to 64
+libraries so they are noisy, but no reading of them supports a sixteenfold
+decoupling. **The claim is withdrawn.** It measured sequencing depth.
 
-Remaining check before publication: library size for the DNA and RNA arms of
-this comparison, since metatranscriptomes and shotgun metagenomes are not
-necessarily sequenced to comparable depth.
+**What this does and does not touch.** It does not touch the manuscript. That
+claim is about *productive* infection, scored from late L1/L2 transcription with
+a control-calibrated floor and explicit depth modelling, in our own uniformly
+processed cohort. This section was attempting something different and cruder: a
+presence-versus-presence comparison of detection rates between two library
+types. That comparison is confounded by depth and should not be used.
+
+**What would be needed to do it properly.** A depth-matched design with adequate
+RNA libraries per bin, or a within-library measure such as viral reads per
+million that is normalised rather than thresholded. The RPM approach already in
+the manuscript is the right instrument; the raw positivity rate is not.
 
 ### 5.2 Get a denominator
 `files/all_hits_info.list` is RunInfo for HPV+ libraries only, so every DNA
