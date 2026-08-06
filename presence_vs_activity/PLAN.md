@@ -50,7 +50,7 @@ Status: SURVIVES, with a host axis added. The objection was that the DNA side is
 100% surface swabs while the RNA side is bulk tissue, so the two axes differ in
 the variable that most directly controls late transcription (5.5b). It is
 answered primarily by the scale argument in **5.2b**, which needs no swab data:
-HPV presence is 9 to 38% in shotgun skin DNA against 2 to 4% in skin RNA, and
+HPV presence is 36.7% in shotgun skin DNA against 2.3% in skin RNA within Shen's own catalogue, and
 transcription amplifies, so an active infection would make RNA the more
 sensitive detector rather than the less. The swab experiment (5.5d) supports
 this on a small corner of the data: healthy skin swabs carry no HPV transcripts
@@ -116,51 +116,59 @@ the RNA side restricted to the unselected-skin tier. The direction is expected t
 hold; the magnitude of the silent column will shrink. Until this is done R2 is
 weaker than it reads. (Caveat 1 of the triangulation report.)
 
-### 5.2b The denominator: computed, and definition-dependent (2026-08-06)
+### 5.2b The denominator, RESOLVED, and a same-catalogue DNA/RNA control (2026-08-06)
 
-**The freeze is Dec 2023.** Shen's hits run to 2023 (2,226 released in 2023, one
-in 2024), which matches the Logan v1 freeze of 27 M accessions rather than the
-v1.2 Dec 2025 freeze. Denominators must therefore be restricted to runs public
-by 2023-12-31, or they are inflated by two years of subsequent deposition.
+**The freeze is Dec 2023**, established from Shen's own release dates (2,226
+hits released in 2023, one in 2024), matching Logan v1 at 27 M accessions rather
+than the v1.2 Dec 2025 freeze. All denominators below are restricted to runs
+public by 2023-12-31.
 
-**The numerator** is 2,737 HPV-positive skin-metagenome libraries in Shen after
-our non-human exclusions.
+**The denominator ambiguity is dissolved by stratifying on the strategies in
+which positives actually occur**, rather than by guessing which strategies count
+as shotgun:
 
-**The denominator depends on what counts as a shotgun library, and the choice
-swings the answer 14-fold.** All restricted to <= 2023:
+| LibraryStrategy | HPV+ | total | rate |
+|---|---:|---:|---:|
+| **WGS** | 2,680 | 7,304 | **36.7%** |
+| WGA | 39 | 1,690 | 2.3% |
+| OTHER | **0** | 19,525 | **0.00%** |
+| AMPLICON | 1 | 75,866 | 0.00% |
+| **RNA-Seq** | 17 | 752 | **2.3%** |
 
-| denominator | n | HPV+ rate |
-|---|---:|---:|
-| A. `WGS` strategy only | 7,304 | **37.5%** |
-| B. DNA source, any strategy except AMPLICON | 29,169 | **9.4%** |
-| C. DNA source, any strategy (incl. amplicon) | 104,536 | 2.6% |
+The 19,525 `OTHER` runs return **zero** HPV-positive libraries, behaving exactly
+like the 75,866 amplicon runs. They are 16S submitted without the AMPLICON tag,
+and they do not belong in the denominator. That was the entire source of the
+earlier 9-to-38% range, and it is now closed: **HPV DNA positivity in skin
+shotgun metagenomes is 36.7%** (30.2% if WGA is pooled in, though WGA behaves
+differently enough at 2.3% that pooling is not advisable).
 
-C is wrong: 75,866 of those runs are 16S amplicon and cannot contain HPV at any
-infection rate. The real answer is between A and B, and the gap between them is
-19,525 runs with `LibraryStrategy = OTHER`. That label is used both for genuine
-shotgun metagenomics and for 16S submitted without the AMPLICON tag, and SRA
-metadata cannot separate the two. Resolving it would need read-length or
-library-name heuristics on 19.5k runs.
+**The last row is the important one, and it removes the caveat this argument
+previously carried.** Shen's catalogue contains skin-metagenome RNA libraries as
+well as DNA ones, detected by the *same* pipeline, at the *same* body site,
+under the *same* taxid and the *same* freeze:
 
-**So quote a range, not a point.** HPV DNA positivity in skin shotgun
-metagenomes is **9 to 38%**, against **2 to 4% in unselected skin RNA**. The
-collaborators' recollection of ~25% sits inside that range.
+> **DNA (WGS): 36.7% HPV-positive. RNA: 2.3% HPV-positive. Sixteen-fold, within
+> one catalogue and one detection method.**
 
-**One caveat that must travel with the comparison.** The DNA rate comes from
-Shen's detection (profile-HMM on assembled contigs) and the RNA rate from ours
-(Kraken2 screen on reads). These are different pipelines with different
-sensitivities, so the ratio is not a calibrated fold-difference and should not
-be reported as one. What survives is the direction and the order of magnitude.
+This is no longer a cross-pipeline comparison, so the objection that Shen's
+profile-HMM detection and our Kraken2 screen have different sensitivities does
+not apply to it. And it independently reproduces our own figure: we measure 2 to
+4% HPV positivity in unselected skin RNA from a completely separate cohort and
+pipeline, against Shen's 2.3%.
 
-**The argument the gap carries.** Transcription amplifies: one genome makes many
-transcripts. If the cutaneous reservoir were transcriptionally active at any
-normal rate, RNA-seq would be the *more* sensitive detector of its presence, not
-the less. Seeing presence in 9 to 38% of DNA libraries and 2 to 4% of RNA
-libraries points at low transcription directly. For compartment sampling to
-explain it instead, biopsy dilution would have to overcome the transcriptional
-amplification factor and then invert the ordering, across thousands of libraries
-from hundreds of independent studies. That is not plausible at this scale, and
-it is the primary argument for the decoupling. It needs no swab data.
+**The argument, now on firm ground.** Transcription amplifies: one genome yields
+many transcripts, so an actively transcribing reservoir would make RNA the *more*
+sensitive detector of presence, not the less. Presence in 36.7% of DNA libraries
+and 2.3% of RNA libraries from the same catalogue therefore measures low
+transcription directly. A compartment-sampling artefact would have to overcome
+the transcriptional amplification factor and then invert the ordering sixteen-
+fold, across thousands of libraries from hundreds of independent studies. This
+is the primary evidence for the decoupling, it needs no swab data, and it should
+lead the DNA section of the paper.
+
+Remaining check before publication: library size for the DNA and RNA arms of
+this comparison, since metatranscriptomes and shotgun metagenomes are not
+necessarily sequenced to comparable depth.
 
 ### 5.2 Get a denominator
 `files/all_hits_info.list` is RunInfo for HPV+ libraries only, so every DNA
