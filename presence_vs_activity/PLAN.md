@@ -256,6 +256,41 @@ reservoir. Then the question becomes answerable rather than confounded:
 The 13 paired vaginal-metagenome specimens in PRJNA797778 (5.5) are the same
 material class and give the mucosal counterpart for free.
 
+### 5.5c A paired skin test does not exist in public data. Stop looking.
+
+Recorded so this is not re-attempted a fourth time. Every route to a paired
+DNA/RNA test in skin was tried on 2026-08-06 and all of them fail, for one
+structural reason.
+
+| route | outcome |
+|---|---|
+| same-BioSample pairs, Shen-anchored | 3 specimens, all PRJNA872116 (RAG). Already typed. |
+| same-BioSample pairs, skin niche | 604 found, but 327 with usable WGS are **all cultured cells**: 304 HipSci iPSC, 18 CCLE, 5 progeria fibroblasts. The non-WGS remainder adds CCLE, ENCODE and NCI PDX xenografts (PRJEB37099). Zero skin tissue. |
+| donor-level linkage inside DOCK8 (SRP157584) | Impossible. All 879 DNA runs lack `host_subject_id`; all 54 RNA runs carry it. No join key, and the naming schemes differ (`VRNA_227` against `Dock8_001`). |
+
+Two root causes, both structural rather than bad luck:
+
+**Same-BioSample pairing selects for cell lines.** HipSci, CCLE, ENCODE and PDX
+panels are precisely the projects that run both assays on identical material and
+register it once. Clinical studies register DNA and RNA under separate
+BioSamples. The cervical set, where only 2 of 64 pairs were cell lines, is the
+exception rather than the rule; in skin the ratio is 100% the other way.
+
+**Skin microbiome samples use MIMS environmental BioSample templates.** Those
+carry `env_broad_scale`, `env_local_scale` and `env_medium` but have no slot for
+subject linkage, and the `description` field is boilerplate ("MIMS
+Environmental/Metagenome sample from human skin metagenome") for all 347 DOCK8
+samples. The template is built to describe a site, not a patient. This is the
+same wall that produced the non-human runs in the Shen reservoir, the horses and
+sea stars in the metatranscriptome scoping, and the ex-vivo skin models in the
+healthy arm.
+
+Consequence for the paper: the skin DNA and RNA axes are cross-cohort and will
+stay that way. R2 is a composition comparison, the swab-against-biopsy asymmetry
+is a stated limitation rather than a solved problem, and the host-status contrast
+(section 5.5b) is an RNA-only result that must be worded as absence of activity
+rather than as presence without activity.
+
 ### 5.6 Triage still owed on the pair list
 
 - **16 of the 64 cervical pairs have an AMPLICON DNA side.** If that amplicon is
