@@ -50,7 +50,7 @@ Status: SURVIVES, with a host axis added. The objection was that the DNA side is
 100% surface swabs while the RNA side is bulk tissue, so the two axes differ in
 the variable that most directly controls late transcription (5.5b). It is
 answered primarily by the scale argument in **5.2b**, which needs no swab data:
-HPV presence is 17 to 25% in shotgun skin DNA against 2 to 4% in skin RNA, and
+HPV presence is 9 to 38% in shotgun skin DNA against 2 to 4% in skin RNA, and
 transcription amplifies, so an active infection would make RNA the more
 sensitive detector rather than the less. The swab experiment (5.5d) supports
 this on a small corner of the data: healthy skin swabs carry no HPV transcripts
@@ -116,39 +116,51 @@ the RNA side restricted to the unselected-skin tier. The direction is expected t
 hold; the magnitude of the silent column will shrink. Until this is done R2 is
 weaker than it reads. (Caveat 1 of the triangulation report.)
 
-### 5.2b The denominator, and the argument it makes possible (RESOLVED 2026-08-06)
+### 5.2b The denominator: computed, and definition-dependent (2026-08-06)
 
-The denominator is computable after all, once amplicon libraries are removed.
-Of 153,903 public SRA skin-metagenome runs, **113,480 are 16S amplicon** and
-cannot contain HPV whatever the infection status. The libraries in which HPV
-could be found are the shotgun ones: **16,092 with LibraryStrategy WGS**.
+**The freeze is Dec 2023.** Shen's hits run to 2023 (2,226 released in 2023, one
+in 2024), which matches the Logan v1 freeze of 27 M accessions rather than the
+v1.2 Dec 2025 freeze. Denominators must therefore be restricted to runs public
+by 2023-12-31, or they are inflated by two years of subsequent deposition.
 
-Shen's catalogue contains **2,737** HPV-positive skin-metagenome libraries after
-our non-human exclusions. So:
+**The numerator** is 2,737 HPV-positive skin-metagenome libraries in Shen after
+our non-human exclusions.
 
-> **HPV DNA positivity in shotgun skin metagenomes is at least 2,737 / 16,092 =
-> 17%**, and higher in truth, because Logan assembled a subset of SRA rather
-> than all of it, so the real denominator is smaller than 16,092. A Logan
-> coverage of roughly two thirds of these runs gives ~25%.
+**The denominator depends on what counts as a shotgun library, and the choice
+swings the answer 14-fold.** All restricted to <= 2023:
 
-Against **2 to 4% HPV positivity in unselected skin RNA**, this is a five- to
-tenfold gap, and it carries an argument that does not depend on the swab
-experiment at all:
+| denominator | n | HPV+ rate |
+|---|---:|---:|
+| A. `WGS` strategy only | 7,304 | **37.5%** |
+| B. DNA source, any strategy except AMPLICON | 29,169 | **9.4%** |
+| C. DNA source, any strategy (incl. amplicon) | 104,536 | 2.6% |
 
-**Transcription amplifies.** One genome makes many transcripts. If the cutaneous
-reservoir were transcriptionally active at any normal rate, RNA-seq would be a
-*more* sensitive detector of its presence than DNA sequencing, not a less
-sensitive one. Observing presence in 17 to 25% of DNA libraries and 2 to 4% of
-RNA libraries therefore points at low transcription directly. For a
-compartment-sampling artefact to explain it instead, the dilution of a biopsy
-relative to a swab would have to overcome the transcriptional amplification
-factor and then invert the ordering, across many thousands of libraries from
-hundreds of independent studies. That is not plausible at this scale.
+C is wrong: 75,866 of those runs are 16S amplicon and cannot contain HPV at any
+infection rate. The real answer is between A and B, and the gap between them is
+19,525 runs with `LibraryStrategy = OTHER`. That label is used both for genuine
+shotgun metagenomics and for 16S submitted without the AMPLICON tag, and SRA
+metadata cannot separate the two. Resolving it would need read-length or
+library-name heuristics on 19.5k runs.
 
-This is the primary argument for the decoupling. The swab-RNA experiment (5.5d)
-is a supporting control on a small and unusual corner of the data, since almost
-nobody sequences transcriptomes from the skin surface, which is exactly why that
-cohort yielded only 19 usable healthy libraries.
+**So quote a range, not a point.** HPV DNA positivity in skin shotgun
+metagenomes is **9 to 38%**, against **2 to 4% in unselected skin RNA**. The
+collaborators' recollection of ~25% sits inside that range.
+
+**One caveat that must travel with the comparison.** The DNA rate comes from
+Shen's detection (profile-HMM on assembled contigs) and the RNA rate from ours
+(Kraken2 screen on reads). These are different pipelines with different
+sensitivities, so the ratio is not a calibrated fold-difference and should not
+be reported as one. What survives is the direction and the order of magnitude.
+
+**The argument the gap carries.** Transcription amplifies: one genome makes many
+transcripts. If the cutaneous reservoir were transcriptionally active at any
+normal rate, RNA-seq would be the *more* sensitive detector of its presence, not
+the less. Seeing presence in 9 to 38% of DNA libraries and 2 to 4% of RNA
+libraries points at low transcription directly. For compartment sampling to
+explain it instead, biopsy dilution would have to overcome the transcriptional
+amplification factor and then invert the ordering, across thousands of libraries
+from hundreds of independent studies. That is not plausible at this scale, and
+it is the primary argument for the decoupling. It needs no swab data.
 
 ### 5.2 Get a denominator
 `files/all_hits_info.list` is RunInfo for HPV+ libraries only, so every DNA
@@ -324,10 +336,10 @@ cell-line or mucosal contamination; it is the beta/gamma reservoir itself,
 transcribing.
 
 **What it settles, and what it does not.** This is a control on a small and
-atypical corner of the data, not the main argument. Almost nobody sequences
-transcriptomes from the skin surface, which is why the whole usable healthy
-cohort is 19 libraries; the evidence base for R2 is the ~10,849 skin RNA
-libraries, which are tissue. What this shows is narrow and useful: surface
+atypical corner of the data, not the main argument. Transcriptomes are usually
+run on tissue rather than on surface material, which is why the whole usable
+healthy swab cohort came to 19 libraries; the evidence base for R2 is the
+~10,849 skin RNA libraries, which are overwhelmingly tissue. What this shows is narrow and useful: surface
 sampling per se does not reveal activity that tissue sampling misses, so the
 swab-against-biopsy asymmetry is not the explanation for the silence.
 
