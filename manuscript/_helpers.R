@@ -336,3 +336,37 @@ kG  <- function(genus, tier, level = "Any detection"){
 ciG <- function(genus, tier, level = "Any detection"){
   r <- .gp_row(genus, tier, level)
   paste0(fpct(r$mean), "% [", fpct(r$lo), "–", fpct(r$hi), "]") }
+
+## ── E2 integrity in the DNA catalogue (Table S7) ────────────────────────────
+# The point of this table is NEGATIVE: it shows that asking a contig catalogue
+# whether E2 is intact cannot detect integration, because the only contigs on
+# which the question can be asked are the ones integration would have prevented
+# from assembling. Cervical carcinoma, where integration is the rule, returns
+# the same answer as skin once completeness is conditioned on.
+.E2_SITE_LABEL <- c(
+  skin              = "Skin (metagenome)",
+  vaginal           = "Vaginal (metagenome)",
+  gut               = "Gut (metagenome)",
+  anogenital_wart   = "Anogenital wart",
+  cervical_cin      = "Cervical CIN",
+  cervical_cancer   = "Cervical carcinoma")
+
+build_e2_table <- function(
+    path = here("dna_rna_triangulation/e2_integrity_by_site.tsv")){
+  raw <- readr::read_tsv(path, show_col_types = FALSE)
+  wide <- raw |>
+    dplyr::filter(contig_set %in% c("all", "ge7kb")) |>
+    dplyr::select(site, contig_set, n, n_E2_given_E1, pct_E2_given_E1) |>
+    tidyr::pivot_wider(names_from = contig_set,
+                       values_from = c(n, n_E2_given_E1, pct_E2_given_E1))
+  wide |>
+    dplyr::mutate(site_label = dplyr::coalesce(.E2_SITE_LABEL[site], site),
+                  .keep = "all") |>
+    dplyr::arrange(match(site, names(.E2_SITE_LABEL))) |>
+    dplyr::transmute(
+      `Body site / lesion`      = site_label,
+      `Contigs (n)`             = comma(n_all),
+      `E2 intact, all contigs`  = paste0(p1(pct_E2_given_E1_all), "%"),
+      `Contigs ≥7 kb (n)`  = comma(n_ge7kb),
+      `E2 intact, ≥7 kb`   = paste0(p1(pct_E2_given_E1_ge7kb), "%"))
+}

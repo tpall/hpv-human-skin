@@ -106,3 +106,14 @@ control-calibrated floor rather than on detection. Second, studies whose design
 places high-titre and HPV-free material in the same sequencing run will inflate
 apparent prevalence in the HPV-free arm, so prevalence estimates drawn from
 public data without a non-permissive control are upper bounds.
+
+::: {#supptbl-e2}
+```{r}
+#| echo: false
+#| output: asis
+cat(knitr::kable(build_e2_table(), format = "pipe",
+                 align = c("l", "r", "r", "r", "r")), sep = "\n")
+```
+
+E2 integrity in assembled papillomavirus contigs, and why it cannot detect integration. Contigs recovered from the Logan-wide papillomavirus catalogue [@shenpv2026] were annotated by `tblastn` against RefSeq papillomavirus open reading frames, and scored for whether E2 is present given that E1 is present. The comparison that matters is between the two right-hand columns and the two left-hand ones. Across all contigs, E2 recovery tracks assembly quality rather than biology: it is lowest in cervical CIN (79.3%) and cervical carcinoma (83.6%), which are also the arms with the shortest contigs, and highest in the vaginal and gut metagenomes, which assemble best. Once the question is restricted to near-complete contigs (≥7 kb), where E2 presence can actually be assessed, every category converges on 100%, and cervical carcinoma, in which integration and E2 disruption are the rule, returns 99.3% against 99.9% for skin. That convergence is not a biological result. An integrated genome cannot assemble across the virus-host junction, so conditioning on completeness selects episomal genomes in every category, and the statistic is structurally incapable of detecting the event it was built to detect. This table is reported because the inference is an inviting one to draw from a public contig catalogue, and because it bounds what the DNA axis can contribute: presence of a papillomavirus in such a catalogue is presence of a detectable L1, and carries no information about the state of the genome (Discussion).
+:::
