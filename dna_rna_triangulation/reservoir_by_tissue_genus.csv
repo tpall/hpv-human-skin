@@ -1,10 +1,10 @@
 genus,libs,tissue,n_lib,prop
-Alpha,117,Skin,1735,0.0674
-Beta,957,Skin,1735,0.5516
+Alpha,129,Skin,1735,0.0744
+Beta,1004,Skin,1735,0.5787
 Gamma,706,Skin,1735,0.4069
 Mu,32,Skin,1735,0.0184
-Novel,178,Skin,1735,0.1026
-Unresolved,994,Skin,1735,0.5729
+Novel,168,Skin,1735,0.0968
+Unresolved,959,Skin,1735,0.5527
 Novel_any,252,Skin,1735,0.1452
 Alpha,457,Vaginal,541,0.8447
 Beta,2,Vaginal,541,0.0037
@@ -12,9 +12,9 @@ Gamma,7,Vaginal,541,0.0129
 Unresolved,162,Vaginal,541,0.2994
 Novel_any,1,Vaginal,541,0.0018
 Alpha,89,Gut,292,0.3048
-Beta,101,Gut,292,0.3459
+Beta,102,Gut,292,0.3493
 Gamma,45,Gut,292,0.1541
 Mu,1,Gut,292,0.0034
 Novel,21,Gut,292,0.0719
-Unresolved,88,Gut,292,0.3014
+Unresolved,86,Gut,292,0.2945
 Novel_any,28,Gut,292,0.0959

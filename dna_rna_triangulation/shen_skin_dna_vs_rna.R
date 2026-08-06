@@ -42,20 +42,7 @@ tg <- read_csv(here("manuscript/type_genus.csv"), show_col_types = FALSE) %>%
             genus = str_to_title(genus_short))
 type2genus <- deframe(tg %>% distinct(type, genus))
 
-# ---- subtype-letter normalisation, applied to BOTH sides ----
-# PaVE names variants of a type with a trailing letter: HPV38B is a subtype of
-# HPV38, HPV14D of HPV14, HPV57B of HPV57. Our typing panel carries the subtype
-# labels and Shen's best_hit_name carries the bare type, so without this the two
-# sides never join and the subtype's libraries are silently lost to "Unresolved".
-#
-# It was not cosmetic. Before this fix HPV57 and HPV14 were reported as
-# PRODUCTIVE TYPES WITH ZERO DNA DETECTIONS, one of the headline claims, while
-# HPV57B (13 libraries) and HPV14D (58 libraries) sat unjoined in the same
-# table. HPV38B (63 libraries) was likewise split from HPV38 (32).
-#
-# Only a single trailing letter directly after a digit is stripped, so novel
-# candidate labels ending in letters (MKN1NR, MSK190NR) are left untouched.
-norm_type <- function(x) str_remove(toupper(x), "(?<=[0-9])[A-Z]$")
+source(here("dna_rna_triangulation/_type_norm.R"))
 
 # ---- parse Shen best_hit_name -> HPV type number + genus ----
 parse_type <- function(x) {                     # only "human papillomavirus N" / "HPV N"

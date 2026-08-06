@@ -35,9 +35,11 @@ tg <- read_csv(here("manuscript/type_genus.csv"), show_col_types = FALSE) %>%
 type2genus <- deframe(tg %>% distinct(type, genus))
 
 # ---- cluster -> type/genus from Shen demarcation ----
+source(here("dna_rna_triangulation/_type_norm.R"))
+
 parse_type <- function(x) {
   m <- str_match(x, regex("human papillomavirus(?:\\s+type)?\\s+(\\d+[A-Za-z]?)|\\bHPV[- ]?(\\d+[A-Za-z]?)", ignore_case = TRUE))
-  toupper(coalesce(m[, 2], m[, 3]))
+  norm_type(coalesce(m[, 2], m[, 3]))
 }
 parse_genus_kw <- function(x)
   str_to_title(str_match(x, regex("(Alpha|Beta|Gamma|Mu|Nu)papillomavirus", ignore_case = TRUE))[, 2])

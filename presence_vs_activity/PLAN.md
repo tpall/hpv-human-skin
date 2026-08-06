@@ -110,12 +110,12 @@ re-derive it, and must cite paper 1 for its validation.
 
 All cheap, all are the obvious referee objections, and none needs the cluster.
 
-### 5.1 Restrict the skin RNA side to unselected skin
-Our skin libraries skew clinical and lesional (warts, EV, cSCC), so "beta is
-silent" is partly a statement about which skin got sequenced. Recompute R2 with
-the RNA side restricted to the unselected-skin tier. The direction is expected to
-hold; the magnitude of the silent column will shrink. Until this is done R2 is
-weaker than it reads. (Caveat 1 of the triangulation report.)
+### 5.1 SUPERSEDED: the silent column is a threshold artefact, not a selection one
+
+This item claimed the RNA side skews lesional. It does not: `rna_skin_present`
+already reads the unselected-skin tier. The real defect is that it reads only
+the ASSIGNED catalogue, so types detected below breadth 0.10 / depth 2 show as
+zero. See 5.0 item 3 for the measured trace-tier counts and the decision owed.
 
 ### 5.2c Decision: do NOT run a DNA-versus-RNA RPM comparison (2026-08-06)
 
@@ -227,6 +227,52 @@ reservoir*, which was one of the strongest statements in the analysis, while
 their own subtypes sat unjoined in the same table with 58 and 13 libraries. That
 list drops from eleven types to nine. All three types also move from
 `Unresolved` to their correct genus, which raises beta from 55.2% to 57.9%.
+
+### 5.0 Audit of the claims in this plan (2026-08-06)
+
+Every statement here that I had called small, expected or settled was checked
+against the data. Three were wrong and one was worse than described. Recorded
+because the pattern matters more than the individual errors: the ones I labelled
+as minor were the ones that had not been looked at.
+
+**Wrong, now fixed.**
+
+1. *"The subtype-letter join is a small effect."* It corrupted a headline claim.
+   See 5.3.
+2. *The same bug in the body-site analysis.* `shen_reservoir_by_tissue.R` kept a
+   private copy of the type parser and was never fixed alongside
+   `shen_skin_dna_vs_rna.R`, so the two figures disagreed about which genus
+   HPV38B belongs to. Skin beta moved 55.2% to 57.9%, Unresolved 57.3% to 55.3%.
+   Both now source `_type_norm.R`, so they cannot diverge again.
+3. *"The RNA side skews lesional, so the silent column is inflated"* (old 5.1).
+   Wrong diagnosis of a real problem. `rna_skin_present` already uses the
+   unselected-skin tier, so lesional selection is not the issue. The actual
+   issue is that it uses the ASSIGNED type catalogue (breadth >= 0.10, depth
+   >= 2) only. The beta/gamma reservoir is present in unselected-skin RNA at
+   the detection tier: HPV49 in 5 libraries, HPV20 in 4, HPV12 in 3, HPV134 in
+   3, and 23 beta plus 11 gamma trace calls in total. So the column reads zero
+   where the truth is "a handful, below the assignment threshold". The figure
+   must either add the trace tier to that column or relabel it
+   *assigned-level presence*. Left as a decision because it changes a published
+   figure. **Until then, do not describe those types as absent from skin RNA.**
+
+**Worse than described.** The anorectal caveat says 82% carry a generic tissue
+label "and an anal-carcinoma diagnosis". The first half is exact (570/692 are
+`muu`), but the second is wrong: 474 of 692 carry diagnosis `unspecified`, so
+most have neither a site nor a diagnosis. The pilot's tier assignment rests on
+less than the caveat implied. It also contains 51 `control` and 12
+`control; tumor` labels, which need the control-arm check applied.
+
+**Verified as stated.** Vaginal reservoir 84.5% alpha (unchanged by the type
+fix). Anorectal productive types are 100% Alphapapillomavirus, 22 types, HPV16
+leading at 91 libraries, with no beta or gamma anywhere in the productive list.
+
+**Verified only in part.** R4 says the cutaneous beta types HPV24 and HPV124 are
+"entirely silent" in the anal transcriptome. Confirmed for *productive*
+infection, since the productive list carries no beta at all. Not confirmed for
+any-level detection, which is what "silent" implies and which the pilot outputs
+do not record. Either weaken the wording to "not productive" or compute the
+detection-tier counts for the anal cohort.
 
 ### 5.4 Tier the anorectal pilot
 The 681 libraries carry automatic HPV-positive and productive calls without the
