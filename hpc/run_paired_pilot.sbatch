@@ -52,14 +52,24 @@ cd "$PROJ"
 mkdir -p hpc/logs
 
 SHEET="$PROJ/presence_vs_activity/paired_samplesheet.csv"
-# Outdir is an argument because run_chunked.sh pins the cohort split with
-# chunks/.split_done and will silently rerun the OLD cohort if the samplesheet
-# changed under an existing outdir. A changed sheet therefore needs a new one.
+# KEEP THE SAME OUTDIR ACROSS RERUNS. run_chunked.sh does `cd "$OUTDIR"` before
+# launching, and Nextflow keeps its resume history in <launchDir>/.nextflow, so
+# the cache belongs to the OUTDIR and not to the work dir. A new outdir means
+# -resume finds nothing and every download runs again, even with the work dir
+# handed over intact. That mistake cost a full re-download here.
+#
+# But run_chunked.sh also pins the cohort with chunks/.split_done and will
+# silently rerun the OLD cohort if the samplesheet changed underneath it. So
+# when the sheet changes, do NOT reach for a new outdir. Instead clear the pin
+# and let the cache stand:
+#
+#     rm -f  <outdir>/chunks/.split_done
+#     rm -rf <outdir>/chunks/chunk_*
+#     # leave <outdir>/.nextflow alone
+#
+# That satisfies both constraints: the cohort is re-split from the new sheet,
+# and unchanged samples still hit the resume cache.
 OUTDIR="${1:-$PROJ/results_paired}"
-# Workdir deliberately DEFAULTS TO THE SAME PATH across reruns, so Nextflow
-# -resume (run_chunked.sh passes it) reuses cached downloads and Kraken results
-# for the samples that did not change. That is what makes a re-run after a
-# per-sample failure cheap rather than another full pass.
 WORKDIR="${2:-$PROJ/work_paired}"
 
 [ -s "$SHEET" ] || { echo "ERROR: samplesheet missing: $SHEET" >&2; exit 1; }
