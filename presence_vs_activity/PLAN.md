@@ -46,11 +46,13 @@ vaginal is 84% alpha mucosal, gut is a mixture. Recovered from DNA alone, which
 validates the composition read-out before anything is asked of it.
 
 **R2. Skin: presence does not predict productivity.**
-Status: CONFOUNDED, see 5.5b. The DNA side is 100% surface swabs and the RNA
+Status: SURVIVES, with a host axis added; see 5.5d for the test that settled it
+and 5.5b for the objection it answers. The DNA side is 100% surface swabs and the RNA
 side is 100% bulk tissue biopsy, so the two axes differ in the variable that
 most directly controls late transcription. The 3 paired skin specimens, which
-are swab metatranscriptomes, came back PRODUCTIVE. R2 cannot be defended until
-a compartment-matched skin RNA axis exists; that work now outranks section 6.
+are swab metatranscriptomes, came back PRODUCTIVE. That objection has since
+been tested and rejected (5.5d): healthy skin swabs carry no HPV transcripts at
+all, at greater depth than the immunocompromised arm that is 79% positive.
 
 The composition finding it rests on still stands as a composition finding: the
 DNA-abundant beta/gamma types show no productive signal in our biopsy RNA, the
@@ -255,6 +257,53 @@ reservoir. Then the question becomes answerable rather than confounded:
 
 The 13 paired vaginal-metagenome specimens in PRJNA797778 (5.5) are the same
 material class and give the mucosal counterpart for free.
+
+### 5.5d RESULT: the compartment hypothesis is rejected. Host immunity is the variable.
+
+Job 525959, completed 2026-08-06, 101 of 106 libraries typed. All are skin-swab
+metatranscriptomes, so the sampling compartment is held constant and host immune
+status is the only thing that varies. Results in `skin_swab_results/`.
+
+| arm | typed | HPV+ | rate | productive | median depth |
+|---|---:|---:|---:|---:|---:|
+| healthy (SRP046152, pilosebaceous unit) | 19 | **0** | 0% | 0 | 1.63 Gb |
+| immunocompromised (DOCK8 + RAG) | 66 | **52** | 79% | 37 | 0.95 / 17.48 Gb |
+| ex-vivo skin models (SRP519513, excluded) | 16 | 0 | 0% | 0 | 18.40 Gb |
+
+Complete separation, Fisher exact *P* = 1.9 × 10⁻¹⁰.
+
+**It is not depth.** The two arms returning nothing are the more deeply
+sequenced ones (healthy 1.63 Gb, skin models 18.40 Gb) while DOCK8, at 0.95 Gb,
+is 85% positive. Depth does not drive positivity inside the immunocompromised
+arm either: RAG at 17.48 Gb returns 50% against DOCK8's 85% at a twentieth of
+the depth. An insensitivity artefact would have produced the opposite ordering
+in both comparisons.
+
+**It is the right virus.** Of 220 assigned type-calls in the immunocompromised
+arm, 125 are Gammapapillomavirus and 87 Betapapillomavirus, i.e. 96% is the
+cutaneous commensal repertoire (HPV208, HPV20, HPV12, HPV38, HPV17, HPV24,
+HPV124, HPV107, plus novel mw/mSK/mKN candidate types). Only 4 alpha calls in 2
+libraries, and **zero HPV16, HPV18, HPV31, HPV33 or HPV45**. This is not
+cell-line or mucosal contamination; it is the beta/gamma reservoir itself,
+transcribing.
+
+**What it settles.** Sampling the skin surface does not reveal a productive
+reservoir in immunocompetent people. The compartment hypothesis (5.5b) is
+rejected, and the swab-against-biopsy asymmetry, while still a limitation to
+declare, is not what produced the silence. R2 survives and gains a second axis:
+
+> The cutaneous beta/gamma reservoir is transcriptionally silent in
+> immunocompetent skin, and productivity is licensed by loss of host immune
+> control rather than by anatomical site or sampling compartment.
+
+DOCK8 deficiency is a positive control rather than an arbitrary cohort: it is
+the primary immunodeficiency defined by cutaneous viral disease including HPV.
+
+**How it must be worded.** These libraries are RNA only, with no DNA on the same
+subjects (5.5c), so this is *absence of activity in immunocompetent skin*, not
+*presence without activity*. The decoupling claim continues to rest on the
+cross-cohort composition comparison. Stating it any more strongly would be
+unsupported.
 
 ### 5.5c A paired skin test does not exist in public data. Stop looking.
 

@@ -1,0 +1,3 @@
+sample_id	hpv_reference	ref_length	read_count	covered_bases	coverage_breadth	mean_depth
+SRR25570596	HPV38REF	7400	464	7158	0.9673	9.14
+SRR25570596	HPV12REF	7673	118	3762	0.4903	2.22
