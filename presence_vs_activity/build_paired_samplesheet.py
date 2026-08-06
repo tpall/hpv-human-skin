@@ -52,6 +52,21 @@ _spec.loader.exec_module(_scope)
 # requirement independently.
 USABLE_STRATEGIES = {"RNA-Seq", "FL-cDNA"}
 
+# Read length, which is a HARDER constraint than strategy and is not visible in
+# it. The pipeline aligns with STAR after fastp, both short-read tools, so a
+# long-read library is not slow or noisy here, it is fatal: STAR aborts with
+# "quality string length is not equal to sequence length" on a 1,144 bp read.
+#
+# The case that forced this: job 520459 ran 11 hours and died at the STAR step
+# on SRR23829220, an OXFORD_NANOPORE GridION run whose LibraryStrategy is the
+# perfectly innocent "RNA-Seq". Strategy cannot be trusted for this; Platform
+# can. Seven PacBio Sequel FL-cDNA runs in the same set had the same problem
+# and would have failed next.
+#
+# If long-read libraries are ever wanted, they need their own aligner
+# (minimap2) rather than a threshold here.
+SHORT_READ_PLATFORMS = {"ILLUMINA", "BGISEQ", "DNBSEQ"}
+
 
 def rna_runs_for(biosamples, batch=80):
     """Every public RNA run belonging to these BioSamples, from SRA."""
@@ -95,8 +110,12 @@ def main():
     keep = []
     for r in runs:
         strat = (r.get("LibraryStrategy") or "").strip()
+        plat = (r.get("Platform") or "").strip().upper()
         if strat not in USABLE_STRATEGIES:
-            dropped[strat] += 1
+            dropped[f"strategy={strat or '(blank)'}"] += 1
+            continue
+        if plat not in SHORT_READ_PLATFORMS:
+            dropped[f"platform={plat or '(blank)'}"] += 1
             continue
         keep.append(r)
     if dropped:
@@ -126,6 +145,8 @@ def main():
             "bioproject": r.get("BioProject", ""),
             "paired_set": s,
             "strategy": r.get("LibraryStrategy", ""),
+            "platform": r.get("Platform", ""),
+            "avg_length": r.get("avgLength", ""),
             "sample_name": r.get("SampleName", ""),
             "n_bases": r.get("bases", ""),
         })

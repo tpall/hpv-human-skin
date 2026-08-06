@@ -11,13 +11,18 @@
 # WHY THIS SET. Every presence-vs-activity comparison in this project so far is
 # a composition comparison: the DNA side is metagenome libraries and the RNA
 # side is different libraries from the same body site, so the two are different
-# specimens from different cohorts under different protocols. These 25
+# specimens from different cohorts under different protocols. These 20
 # BioSamples each carry BOTH modalities, and their DNA is already HPV-positive
 # in the Shen/Logan catalogue. Typing the matched RNA therefore asks "HPV is
 # present here, is it active?" on the same material.
 #
-#   cervix_paired  22 specimens, 35 runs   mucosal pole, presence SHOULD predict activity
+#   cervix_paired  17 specimens, 27 runs   mucosal pole, presence SHOULD predict activity
 #   skin_paired     3 specimens,  3 runs   cutaneous pole, presence should NOT
+#
+# 5 cervical specimens were dropped after job 520459 because their only RNA is
+# long-read (PacBio Sequel FL-cDNA, one Nanopore GridION). STAR is a short-read
+# aligner and aborts outright on a 1,144 bp read, so they need minimap2 rather
+# than a threshold. Recovering them is real work, not a filter change.
 #
 # Scoping and selection: presence_vs_activity/PLAN.md section 5.5,
 # presence_vs_activity/scope_paired_dna_rna.py, pairs_cervical.tsv,
@@ -33,13 +38,13 @@
 #     paper is wrong and the composition result was an artefact of comparing
 #     lesional RNA against commensal DNA.
 #
-# 38 runs is a single chunk, so this finishes in hours, not days. The point is
+# 30 runs is a single chunk, so this finishes in hours, not days. The point is
 # to get the paired result BEFORE committing to the 6,396-library cervical
 # cohort, both because it is publishable on its own and because it de-risks the
 # big run.
 #
 # Usage (from the repo root on rocket, via login1 or login2):
-#   sbatch hpc/run_paired_pilot.sbatch
+#   sbatch hpc/run_paired_pilot.sbatch [outdir] [workdir]
 set -euo pipefail
 
 PROJ="${SLURM_SUBMIT_DIR:-$HOME/Projects/hpv-human-skin}"
@@ -47,8 +52,15 @@ cd "$PROJ"
 mkdir -p hpc/logs
 
 SHEET="$PROJ/presence_vs_activity/paired_samplesheet.csv"
-OUTDIR="$PROJ/results_paired"
-WORKDIR="$PROJ/work_paired"
+# Outdir is an argument because run_chunked.sh pins the cohort split with
+# chunks/.split_done and will silently rerun the OLD cohort if the samplesheet
+# changed under an existing outdir. A changed sheet therefore needs a new one.
+OUTDIR="${1:-$PROJ/results_paired}"
+# Workdir deliberately DEFAULTS TO THE SAME PATH across reruns, so Nextflow
+# -resume (run_chunked.sh passes it) reuses cached downloads and Kraken results
+# for the samples that did not change. That is what makes a re-run after a
+# per-sample failure cheap rather than another full pass.
+WORKDIR="${2:-$PROJ/work_paired}"
 
 [ -s "$SHEET" ] || { echo "ERROR: samplesheet missing: $SHEET" >&2; exit 1; }
 echo "[$(date +%T)] samplesheet: $SHEET ($(( $(wc -l < "$SHEET") - 1 )) runs)"
