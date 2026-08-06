@@ -54,11 +54,11 @@ are swab metatranscriptomes, came back PRODUCTIVE. That objection has since
 been tested and rejected (5.5d): healthy skin swabs carry no HPV transcripts at
 all, at greater depth than the immunocompromised arm that is 79% positive.
 
-The composition finding it rests on still stands as a composition finding: the
-DNA-abundant beta/gamma types show no productive signal in our biopsy RNA, the
-productive types are alpha wart viruses that are DNA-rare or absent, and only
-HPV2 occupies the abundant-and-productive corner. What is now in doubt is the
-causal reading of that pattern, not the pattern.
+The composition finding stands: the DNA-abundant beta/gamma types show no
+productive signal in our biopsy RNA, the productive types are alpha wart viruses
+that are DNA-rare or absent, and only HPV2 occupies the abundant-and-productive
+corner. It remains a composition comparison across cohorts, since no paired skin
+specimens exist (5.5c), so the wording must stay at that strength.
 
 **R3. Cervix and vagina: presence does predict productivity.**
 Status: NEEDS THE RUN (section 6), but now has a paired core. 22 cervical
