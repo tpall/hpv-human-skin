@@ -50,9 +50,13 @@ Status: CONFOUNDED, see 5.5b. The DNA side is 100% surface swabs and the RNA
 side is 100% bulk tissue biopsy, so the two axes differ in the variable that
 most directly controls late transcription. The 3 paired skin specimens, which
 are swab metatranscriptomes, came back PRODUCTIVE. R2 cannot be defended until
-a compartment-matched skin RNA axis exists; that work now outranks section 6. The DNA-abundant beta/gamma types
-are transcriptionally silent; the productive types are alpha wart viruses that
-are DNA-rare or absent. Only HPV2 occupies the abundant-and-productive corner.
+a compartment-matched skin RNA axis exists; that work now outranks section 6.
+
+The composition finding it rests on still stands as a composition finding: the
+DNA-abundant beta/gamma types show no productive signal in our biopsy RNA, the
+productive types are alpha wart viruses that are DNA-rare or absent, and only
+HPV2 occupies the abundant-and-productive corner. What is now in doubt is the
+causal reading of that pattern, not the pattern.
 
 **R3. Cervix and vagina: presence does predict productivity.**
 Status: NEEDS THE RUN (section 6), but now has a paired core. 22 cervical
