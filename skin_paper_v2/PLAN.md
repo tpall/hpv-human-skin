@@ -98,11 +98,20 @@ Status key: **HAVE** = built and in the repo; **CHEAP** = one script, hours;
 
 ### Protein analysis
 
-- **NOT POSSIBLE from these data.** RNA-seq gives transcripts, not protein. If
-  "valgu analüüs" means ORF-level *translated* evidence, that needs mass
-  spectrometry, which no public skin dataset provides at scale.
-- If it means *which ORFs are transcribed*, that is R3 above and is available.
-- **Marko should be asked which he meant** before anything is planned here.
+- **DROPPED, and the question is closed.** Marko confirmed (2026-08-07) that he
+  meant proteomics, and that he has already searched for suitable datasets and
+  found none. That matches our position: RNA-seq gives transcripts, not protein,
+  and no public cutaneous dataset carries mass spectrometry at the scale this
+  would need.
+- The nearest available thing is R3, which reports which ORFs are transcribed
+  per library. It is not a substitute for protein evidence and should not be
+  presented as one.
+- Consequence for the paper: **two of Marko's blocks cannot be done**, this one
+  and DNA analysis 2. Both should be stated in the Discussion as measurement
+  limits rather than omitted silently, since both are the obvious next questions
+  a reader will ask. The absence of protein evidence is worth one sentence:
+  transcription is the closest available proxy for activity, and the paper's
+  claims are therefore about transcription.
 
 ### DNA/RNA comparison
 
@@ -189,8 +198,10 @@ figure list for it.
 
 ---
 
-## 6. Question for Marko
+## 6. Open questions
 
-What does "valgu analüüs" mean here? If it is proteomic evidence, we have none
-and none exists at scale in public skin data. If it is which ORFs are
-transcribed, we have it per library and it is a cheap new panel.
+None outstanding for Marko. The proteomics question was closed on 2026-08-07:
+he meant proteomics, had already searched for datasets, and found none.
+
+What remains is the group's decision between Option A and Option B in section 5,
+and the three fixes in section 3, which are needed under either option.
