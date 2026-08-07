@@ -20,10 +20,15 @@ TIERS <- c("unselected_skin", "control_productive", "EV", "peri_lesional",
            "non_permissive_tissue", "engineered",
            "neoplasia", "cell_line", "other")
 GEN   <- c("alpha", "beta", "gamma", "mu", "nu")
-TLAB  <- c(unselected_skin = "Unselected skin", control_productive = "Productive\ncontrols",
+TLAB  <- c(unselected_skin = "Unselected\nskin", control_productive = "Productive\ncontrols",
            EV = "EV", peri_lesional = "Peri-lesional\nmucosa", neoplasia = "Neoplasia",
            non_permissive_tissue = "Non-permissive\ntissue", engineered = "Engineered\ncells",
-           cell_line = "Cell line", other = "Other")
+           cell_line = "Cell line",
+           # Matches bin/hpv_rpm_contrast.R and the Results text. 99% of this
+           # tier carries no site keyword in its SRA metadata rather than an
+           # identified non-cutaneous site, so "Other" asserted something the
+           # metadata never established.
+           other = "Site not\nrecorded")
 
 rp <- read_tsv(rpm_per_sample_tsv(), show_col_types = FALSE)
 tierN <- rp %>% count(tier) %>% { setNames(.$n, .$tier) }
@@ -97,7 +102,14 @@ p <- ggplot(pd, aes(Genus, mean_p, colour = Genus)) +
   labs(x = "HPV genus", y = "Prevalence within tier (%, log scale)") +
   # theme_cowplot() is set globally above; the only override is to angle the
   # genus labels, since five of them per facet collide across seven columns.
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  # Column-strip labels are the width constraint: nine facets across 10.5in
+  # leaves ~1.1in per strip, and at the default cowplot size "Non-permissive"
+  # and "Unselected skin" were clipped at both ends rather than wrapped.
+  # Every label is now at most two lines, and the strip text is sized to the
+  # longest of them.
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        strip.text.x = element_text(size = 9, lineheight = 0.9),
+        strip.text.y = element_text(size = 9))
 
 ggsave(here("manuscript/figure3.png"), p, width = 10.5, height = 6.4, dpi = 200)
 ggsave(here("manuscript/figure3.pdf"), p, width = 10.5, height = 6.4)
