@@ -22,7 +22,7 @@ is not a rearrangement, it is a different paper with a different question:
 
 Both are publishable. The choice is not about which figures exist; it is about
 whether the paper's claim is *about activity* (current) or *about the reservoir*
-(Marko's). Section 6 gives my recommendation.
+(Marko's). Section 5 gives my recommendation.
 
 ---
 
