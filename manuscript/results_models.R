@@ -95,6 +95,57 @@ cat("\nWithin neoplasia: detect ~ log10(reads):\n")
 mn <- glm(detect ~ l10, binomial, rp %>% filter(tier=="neoplasia")); mn_o <- ortab(mn); print(mn_o, digits=3)
 
 cat("\n######################################################################\n")
+cat("# MODEL 2b-split: Actinic keratosis vs cSCC within the neoplasia tier\n")
+cat("######################################################################\n")
+## The neoplasia tier pools AK with cSCC. That pooling has to be justified
+## rather than assumed, because a published hit-and-run mechanism for HPV8 is
+## built specifically on actinic keratosis. Split on the curated diagnosis text:
+## libraries naming both AK and carcinoma are held out as ambiguous rather than
+## assigned to either arm.
+.dxsplit <- function(d) dplyr::case_when(
+  d$tier != "neoplasia" ~ d$tier,
+  stringr::str_detect(d$diagnosis, "actinic") &
+    stringr::str_detect(d$diagnosis, "scc|carcinoma") ~ "neo_mixed",
+  stringr::str_detect(d$diagnosis, "actinic") ~ "neo_AK",
+  TRUE ~ "neo_cSCC")
+rps <- rp %>% mutate(dx = .dxsplit(.))
+.akc <- rps %>% filter(dx %in% c("neo_AK","neo_cSCC","neo_mixed")) %>% group_by(dx) %>%
+  summarise(n=n(), n_studies=n_distinct(study), med_reads=median(total_reads)/1e6,
+            pct_any=100*mean(any_hpv), n_floor=sum(detect), pct_floor=100*mean(detect),
+            med_rpm=median(rpm), .groups="drop")
+print(as.data.frame(.akc), digits=3)
+
+## Each arm against the unselected-skin null, and then against each other.
+.vs_skin <- function(arm, resp) {
+  d <- rps %>% filter(dx %in% c("unselected_skin", arm)) %>%
+    mutate(g = relevel(factor(dx), ref="unselected_skin"))
+  as.list(ortab(glm(as.formula(paste(resp, "~ g + l10")), binomial, d)) %>%
+          filter(term == paste0("g", arm)))
+}
+.ak_any <- .vs_skin("neo_AK","any_hpv");   .ak_fl <- .vs_skin("neo_AK","detect")
+.sc_any <- .vs_skin("neo_cSCC","any_hpv"); .sc_fl <- .vs_skin("neo_cSCC","detect")
+cat(sprintf("\nvs unselected skin: AK any OR %.2f (p=%.3g), floor OR %.1f (p=%.3g); cSCC any OR %.2f (p=%.3g), floor OR %.1f (p=%.3g)\n",
+    .ak_any$OR, .ak_any$p, .ak_fl$OR, .ak_fl$p, .sc_any$OR, .sc_any$p, .sc_fl$OR, .sc_fl$p))
+
+.ac <- rps %>% filter(dx %in% c("neo_AK","neo_cSCC")) %>%
+  mutate(g = relevel(factor(dx), ref="neo_cSCC"))
+.akvs <- as.list(ortab(glm(any_hpv ~ g + l10, binomial, .ac)) %>% filter(term=="gneo_AK"))
+.akvf <- fisher.test(table(.ac$dx, .ac$detect))
+cat(sprintf("AK vs cSCC directly: any OR %.2f (95%% CI %.2f-%.2f, p=%.3g); floor Fisher OR %.2f p=%.3g\n",
+    .akvs$OR, .akvs$lo, .akvs$hi, .akvs$p, .akvf$estimate, .akvf$p.value))
+
+## HPV8 specifically: the type the AK hit-and-run mechanism is built on. It is
+## in the reference panel, so its absence is a result rather than a blind spot.
+.tt_pre <- read_tsv(here("manuscript/trace_types.tsv"), show_col_types=FALSE)
+.h8_files <- unlist(lapply(c("results_full_v2","results_lesions","results_lesions_csc","results_lesions_wide"),
+  function(d) list.files(here(d,"aggregated"), "_hpv_types[.]tsv$", full.names=TRUE)))
+.h8_all <- map_dfr(.h8_files, ~ suppressMessages(read_tsv(.x, show_col_types=FALSE, col_types=cols(.default="c"))))
+.h8_typed <- sum(.h8_all$hpv_reference %in% c("HPV8REF","HPV8"))
+.h8_trace <- sum(.tt_pre$top_ref %in% c("HPV8REF","HPV8"), na.rm=TRUE)
+cat(sprintf("HPV8: %d assigned calls, %d trace best-hits across %d trace libraries\n",
+            .h8_typed, .h8_trace, nrow(.tt_pre)))
+
+cat("\n######################################################################\n")
 cat("# MODEL 2c: Library chemistry alongside depth\n")
 cat("######################################################################\n")
 ## Depth is modelled throughout because it bounds what a viral-transcript survey
@@ -443,6 +494,18 @@ stats <- lapply(list(
   trace_n=nrow(.tt), trace_resolved=sum(.tt$trace_ok), trace_ntypes=n_distinct(.tres$top_ref),
   trace_skin_n=nrow(.tskin), trace_skin_cut=sum(.tskin$genus_short %in% c("beta","gamma","nu")),
   trace_ctrl_resolved=sum(.tres$tier == "control_productive", na.rm=TRUE),
+  # AK vs cSCC split (MODEL 2b-split)
+  ak_n=.akc$n[.akc$dx=="neo_AK"], ak_studies=.akc$n_studies[.akc$dx=="neo_AK"],
+  ak_medreads=.akc$med_reads[.akc$dx=="neo_AK"], ak_pctany=.akc$pct_any[.akc$dx=="neo_AK"],
+  ak_floor=.akc$n_floor[.akc$dx=="neo_AK"], ak_pctfloor=.akc$pct_floor[.akc$dx=="neo_AK"],
+  sc_n=.akc$n[.akc$dx=="neo_cSCC"], sc_studies=.akc$n_studies[.akc$dx=="neo_cSCC"],
+  sc_pctany=.akc$pct_any[.akc$dx=="neo_cSCC"],
+  sc_floor=.akc$n_floor[.akc$dx=="neo_cSCC"], sc_pctfloor=.akc$pct_floor[.akc$dx=="neo_cSCC"],
+  ak_or=.ak_any$OR, ak_p=.ak_any$p, ak_fl_or=.ak_fl$OR, ak_fl_p=.ak_fl$p,
+  sc_or=.sc_any$OR, sc_p=.sc_any$p, sc_fl_or=.sc_fl$OR, sc_fl_p=.sc_fl$p,
+  akvs_or=.akvs$OR, akvs_lo=.akvs$lo, akvs_hi=.akvs$hi, akvs_p=.akvs$p,
+  akvf_p=.akvf$p.value, mixed_n=.akc$n[.akc$dx=="neo_mixed"],
+  hpv8_typed=.h8_typed, hpv8_trace=.h8_trace, trace_libs=nrow(.tt_pre),
   # Library chemistry (MODEL 2c)
   chem_n=.cq("chem_n"), chem_pct=.cq("chem_pct"),
   chem_total=.cq("chem_total"), chem_cdna_pct=.cq("chem_cdna_pct"),
