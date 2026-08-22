@@ -9,6 +9,7 @@ source(here("manuscript/_paths.R"))
 options(width=200)
 wilson <- function(x,n){ if(n==0) return(c(NA,NA)); p<-x/n; z<-1.96
   ctr<-(p+z^2/(2*n))/(1+z^2/n); hw<-z*sqrt(p*(1-p)/n+z^2/(4*n^2))/(1+z^2/n); c(ctr-hw,ctr+hw)}
+comma_ <- function(x) formatC(round(x), format="d", big.mark=",")
 ortab <- function(m){ s<-summary(m)$coefficients
   data.frame(term=rownames(s), OR=exp(s[,1]),
              lo=exp(s[,1]-1.96*s[,2]), hi=exp(s[,1]+1.96*s[,2]), p=s[,4], row.names=NULL)}
@@ -92,6 +93,130 @@ cat(sprintf("Peri-lesional vs unselected_skin (Fisher): OR=%s p=%.3g\n",
 ## Depth-only check within neoplasia: does deeper sequencing buy productive-level detection?
 cat("\nWithin neoplasia: detect ~ log10(reads):\n")
 mn <- glm(detect ~ l10, binomial, rp %>% filter(tier=="neoplasia")); mn_o <- ortab(mn); print(mn_o, digits=3)
+
+cat("\n######################################################################\n")
+cat("# MODEL 2c: Library chemistry alongside depth\n")
+cat("######################################################################\n")
+## Depth is modelled throughout because it bounds what a viral-transcript survey
+## can see. RNA-selection chemistry is the counterpart: poly-A capture recovers
+## polyadenylated early transcripts but is inefficient for the rest of the viral
+## pool, so two libraries of equal depth need not have equal power to detect HPV.
+## Chemistry is called from SRA `LibrarySelection` where it carries a real value
+## and from the free-text construction protocol otherwise
+## (bin/fetch_library_selection.py, bin/classify_library_chemistry.py).
+.CHEMLV <- c("unspecified","polyA","rRNA_depleted","random_primed",
+             "template_switch","tenx_3prime")
+.chem <- tryCatch(read_tsv(here("results_reframe_fixed/library_chemistry.tsv"),
+                           show_col_types=FALSE), error=function(e) NULL)
+if (is.null(.chem)) {
+  cat("library_chemistry.tsv absent; chemistry covariate skipped\n")
+  .cq <- function(...) NA_real_
+  chem_tbl <- tibble(Tier = character())   # @supptbl-chem renders only if filled
+} else {
+  rpc <- rp %>% left_join(.chem %>% select(srr_id, chemistry, library_selection), by="srr_id") %>%
+    mutate(chem=factor(coalesce(chemistry,"unspecified"), levels=.CHEMLV),
+           chem_known = chem != "unspecified")
+  cat(sprintf("Chemistry resolved for %d/%d libraries (%.1f%%)\n",
+      sum(rpc$chem_known), nrow(rpc), 100*mean(rpc$chem_known)))
+  .chempct <- function(tr, cl) 100*mean(rpc$chem[rpc$tier==tr]==cl)
+  cat("\nChemistry composition by tier (%):\n")
+  print(round(100*prop.table(table(rpc$tier, rpc$chem),1),1))
+
+  ## Chemistry effect on trace detection. Fitted among libraries whose chemistry
+  ## is known, so the estimate is not carried by the unspecified stratum, and
+  ## within the two tiers the headline contrast is drawn from, with a tier term:
+  ## chemistry mix differs sharply across tiers (cell lines are half poly-A, EV
+  ## is entirely random-primed), so an unstratified fit confounds the two.
+  ## Reference is poly-A, since the objection is about poly-A vs rRNA depletion.
+  .ck <- rpc %>% filter(chem_known, tier %in% c("unselected_skin","neoplasia")) %>%
+    mutate(chem=droplevels(chem),
+           tier=relevel(factor(as.character(tier)), ref="unselected_skin"))
+  .ock <- ortab(glm(any_hpv ~ chem + l10 + tier, binomial, .ck))
+  cat("\nany_hpv ~ chem + l10 + tier (skin+neoplasia, chemistry-known, ref = poly-A):\n")
+  print(.ock, digits=3)
+  ## Same term across the whole cohort, tier-adjusted, as a check that the null
+  ## is not an artefact of restricting to two tiers. It is modestly above one
+  ## there, carried by the non-cutaneous tiers.
+  .ockall <- ortab(glm(any_hpv ~ chem + l10 + tier, binomial,
+                       rpc %>% filter(chem_known) %>% mutate(chem=droplevels(chem))))
+  cat("\nSame, all tiers:\n"); print(.ockall %>% filter(grepl("chem", term)), digits=3)
+
+  ## Headline contrast re-fitted with the chemistry term.
+  .subc2 <- rpc %>% filter(tier %in% c("unselected_skin","neoplasia")) %>%
+    mutate(tier=relevel(factor(as.character(tier)), ref="unselected_skin"))
+  .a2 <- as.list(ortab(glm(any_hpv ~ tier + l10 + chem, binomial, .subc2)) %>%
+                 filter(term=="tierneoplasia"))
+  ## Productive-floor detections occur only in the poly-A and unspecified strata,
+  ## so the six-level factor is completely separated in the floor model. Collapse
+  ## to poly-A vs everything else, which is the contrast at issue.
+  .b2 <- as.list(ortab(glm(detect ~ tier + l10 + polya, binomial,
+                           .subc2 %>% mutate(polya = chem=="polyA"))) %>%
+                 filter(term=="tierneoplasia"))
+  cat(sprintf("\nTier term with chemistry: any-read OR %.2f (p=%.3g); floor OR %.2f (p=%.3g)\n",
+      .a2$OR, .a2$p, .b2$OR, .b2$p))
+
+  ## The sensitivity that settles it: restrict to rRNA-depleted libraries, the
+  ## chemistry most favourable to viral recovery. If the neoplasia deficit were a
+  ## poly-A artefact it would disappear here.
+  .rib <- .subc2 %>% filter(chem=="rRNA_depleted")
+  .s2 <- as.list(ortab(glm(any_hpv ~ tier + l10, binomial, .rib)) %>%
+                 filter(term=="tierneoplasia"))
+  .ribneo <- .rib %>% filter(tier=="neoplasia")
+  cat(sprintf("rRNA-depleted subset: %d libraries (%d skin, %d neoplasia from %d studies, median %.1fM, max %.1fM); %d above floor; tier OR %.2f (p=%.3g)\n",
+      nrow(.rib), sum(.rib$tier=="unselected_skin"), nrow(.ribneo),
+      n_distinct(.ribneo$study), median(.ribneo$total_reads)/1e6,
+      max(.ribneo$total_reads)/1e6, sum(.rib$detect), .s2$OR, .s2$p))
+
+  ## Supplementary table: chemistry composition by tier, in the display order and
+  ## tier labels used elsewhere in the manuscript.
+  .chemlab <- c(unspecified="Unspecified", polyA="Poly-A", rRNA_depleted="rRNA-depleted",
+                random_primed="Random-primed", template_switch="Template-switching",
+                tenx_3prime="3'-barcoded")
+  .tierlab <- c(unselected_skin="Unselected skin", neoplasia="Neoplasia (cSCC/AK)",
+                control_productive="Productive controls", EV="EV biopsies",
+                peri_lesional="Peri-lesional mucosa", cell_line="Cell lines",
+                engineered="Engineered", non_permissive_tissue="Non-permissive tissue",
+                other="Other")
+  chem_tbl <- rpc %>% count(tier, chem) %>% group_by(tier) %>%
+    mutate(pct = 100*n/sum(n), N = sum(n)) %>% ungroup() %>%
+    mutate(chem = .chemlab[as.character(chem)]) %>%
+    select(-n) %>% pivot_wider(names_from=chem, values_from=pct, values_fill=0) %>%
+    mutate(Tier = paste0(coalesce(.tierlab[tier], tier), " (", comma_(N), ")")) %>%
+    arrange(match(tier, names(.tierlab))) %>%
+    select(Tier, all_of(unname(.chemlab))) %>%
+    mutate(across(-Tier, ~ sub("\\.0$", "", formatC(.x, format="f", digits=1))))
+
+  .cqv <- list(
+    chem_n=sum(rpc$chem_known), chem_pct=100*mean(rpc$chem_known),
+    chem_total=nrow(rpc),
+    # Share filed under the generic "cDNA": the reason the free-text protocol
+    # pass is needed at all.
+    chem_cdna_pct=100*mean(coalesce(rpc$library_selection,"")=="cDNA"),
+    chem_neo_ribo=.chempct("neoplasia","rRNA_depleted"),
+    chem_skin_ribo=.chempct("unselected_skin","rRNA_depleted"),
+    chem_ctrl_ribo=.chempct("control_productive","rRNA_depleted"),
+    chem_neo_polya=.chempct("neoplasia","polyA"),
+    chem_skin_polya=.chempct("unselected_skin","polyA"),
+    chem_ribo_or=.ock$OR[.ock$term=="chemrRNA_depleted"],
+    chem_ribo_lo=.ock$lo[.ock$term=="chemrRNA_depleted"],
+    chem_ribo_hi=.ock$hi[.ock$term=="chemrRNA_depleted"],
+    chem_ribo_p =.ock$p [.ock$term=="chemrRNA_depleted"],
+    chem_tenx_or=.ock$OR[.ock$term=="chemtenx_3prime"],
+    chem_smart_or=.ock$OR[.ock$term=="chemtemplate_switch"],
+    chem_rand_or=.ock$OR[.ock$term=="chemrandom_primed"],
+    chem_ribo_or_all=.ockall$OR[.ockall$term=="chemrRNA_depleted"],
+    chem_ribo_lo_all=.ockall$lo[.ockall$term=="chemrRNA_depleted"],
+    chem_ribo_hi_all=.ockall$hi[.ockall$term=="chemrRNA_depleted"],
+    m2a_or_chem=.a2$OR, m2a_p_chem=.a2$p,
+    m2b_or_chem=.b2$OR, m2b_p_chem=.b2$p,
+    ribo_n=nrow(.rib), ribo_skin_n=sum(.rib$tier=="unselected_skin"),
+    ribo_neo_n=nrow(.ribneo), ribo_neo_studies=n_distinct(.ribneo$study),
+    ribo_neo_medreads=median(.ribneo$total_reads)/1e6,
+    ribo_neo_maxreads=max(.ribneo$total_reads)/1e6,
+    ribo_floor=sum(.rib$detect),
+    ribo_or=.s2$OR, ribo_lo=.s2$lo, ribo_hi=.s2$hi, ribo_p=.s2$p)
+  .cq <- function(k) .cqv[[k]]
+}
 
 cat("\n######################################################################\n")
 cat("# MODEL 3: Productive infection (L1>=3) among HPV+ typed samples\n")
@@ -317,7 +442,25 @@ stats <- lapply(list(
   m3_or_cut=.f3c$estimate, m3_lo_cut=.f3c$conf.int[1], m3_hi_cut=.f3c$conf.int[2], m3_p_cut=.f3c$p.value,
   trace_n=nrow(.tt), trace_resolved=sum(.tt$trace_ok), trace_ntypes=n_distinct(.tres$top_ref),
   trace_skin_n=nrow(.tskin), trace_skin_cut=sum(.tskin$genus_short %in% c("beta","gamma","nu")),
-  trace_ctrl_resolved=sum(.tres$tier == "control_productive", na.rm=TRUE)
+  trace_ctrl_resolved=sum(.tres$tier == "control_productive", na.rm=TRUE),
+  # Library chemistry (MODEL 2c)
+  chem_n=.cq("chem_n"), chem_pct=.cq("chem_pct"),
+  chem_total=.cq("chem_total"), chem_cdna_pct=.cq("chem_cdna_pct"),
+  chem_neo_ribo=.cq("chem_neo_ribo"), chem_skin_ribo=.cq("chem_skin_ribo"),
+  chem_ctrl_ribo=.cq("chem_ctrl_ribo"),
+  chem_neo_polya=.cq("chem_neo_polya"), chem_skin_polya=.cq("chem_skin_polya"),
+  chem_ribo_or=.cq("chem_ribo_or"), chem_ribo_lo=.cq("chem_ribo_lo"),
+  chem_ribo_hi=.cq("chem_ribo_hi"), chem_ribo_p=.cq("chem_ribo_p"),
+  chem_tenx_or=.cq("chem_tenx_or"), chem_smart_or=.cq("chem_smart_or"),
+  chem_rand_or=.cq("chem_rand_or"),
+  chem_ribo_or_all=.cq("chem_ribo_or_all"), chem_ribo_lo_all=.cq("chem_ribo_lo_all"),
+  chem_ribo_hi_all=.cq("chem_ribo_hi_all"),
+  m2a_or_chem=.cq("m2a_or_chem"), m2a_p_chem=.cq("m2a_p_chem"),
+  m2b_or_chem=.cq("m2b_or_chem"), m2b_p_chem=.cq("m2b_p_chem"),
+  ribo_n=.cq("ribo_n"), ribo_skin_n=.cq("ribo_skin_n"), ribo_neo_n=.cq("ribo_neo_n"),
+  ribo_neo_studies=.cq("ribo_neo_studies"), ribo_neo_medreads=.cq("ribo_neo_medreads"),
+  ribo_neo_maxreads=.cq("ribo_neo_maxreads"), ribo_floor=.cq("ribo_floor"),
+  ribo_or=.cq("ribo_or"), ribo_lo=.cq("ribo_lo"), ribo_hi=.cq("ribo_hi"), ribo_p=.cq("ribo_p")
 ), unname)
 
 saveRDS(stats, here("manuscript/stats.rds"))
