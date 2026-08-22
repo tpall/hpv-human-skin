@@ -362,6 +362,21 @@ tc <- read_tsv(type_catalogue_tsv(), show_col_types=FALSE)
 .n_targeted <- nrow(read_tsv(here("results_lesions/aggregated/hpv_status.tsv"),     show_col_types=FALSE))
 .n_csc       <- nrow(read_tsv(here("results_lesions_csc/aggregated/hpv_status.tsv"), show_col_types=FALSE))
 
+## ── ORF programme (figure 4; manuscript/figure_orf.R) ───────────────────────
+## Read from disk so the caption quotes computed numbers. Absent on a machine
+## where the figure has not been built, in which case the entries are NA.
+.orfb <- tryCatch(read_tsv(here("manuscript/orf_breadth_by_tier.tsv"), show_col_types=FALSE),
+                  error=function(e) NULL)
+.orfc <- tryCatch(read_tsv(here("manuscript/orf_composition_by_tier.tsv"), show_col_types=FALSE),
+                  error=function(e) NULL)
+.ob <- function(tr, g) if (is.null(.orfb)) NA_real_ else
+  .orfb$pct[.orfb$tier==tr & .orfb$gene==g]
+.ocgrp <- function(tr, gs) if (is.null(.orfc)) NA_real_ else
+  100*sum(.orfc$share[.orfc$tier==tr & .orfc$gene %in% gs])
+.ocn <- function(tr) if (is.null(.orfc)) NA_integer_ else
+  unique(.orfc$n_lib[.orfc$tier==tr])
+.orfn <- if (is.null(.orfb)) NA_integer_ else sum(.orfb$n[.orfb$gene=="E1"])
+
 ## ── Assemble the flat `stats` list quoted throughout the manuscript ──────────
 .rc <- as.list(rates[rates$sample_class=="clinical",]);   .re <- as.list(rates[rates$sample_class=="engineered",]); .rl <- as.list(rates[rates$sample_class=="cell_line",])
 .oe <- as.list(o1[o1$term=="sample_classengineered",]);   .ol <- as.list(o1[o1$term=="sample_classcell_line",])
@@ -494,6 +509,23 @@ stats <- lapply(list(
   trace_n=nrow(.tt), trace_resolved=sum(.tt$trace_ok), trace_ntypes=n_distinct(.tres$top_ref),
   trace_skin_n=nrow(.tskin), trace_skin_cut=sum(.tskin$genus_short %in% c("beta","gamma","nu")),
   trace_ctrl_resolved=sum(.tres$tier == "control_productive", na.rm=TRUE),
+  # ORF programme (figure 4)
+  orf_n=.orfn,
+  orf_ctrl_l1=.ob("control_productive","L1"), orf_ctrl_e2=.ob("control_productive","E2"),
+  orf_ev_l1=.ob("EV","L1"), orf_neo_l1=.ob("neoplasia","L1"), orf_neo_e7=.ob("neoplasia","E7"),
+  orf_skin_l1=.ob("unselected_skin","L1"), orf_skin_e6=.ob("unselected_skin","E6"),
+  orf_cl_e6=.ob("cell_line","E6"), orf_cl_e7=.ob("cell_line","E7"),
+  orf_cl_e2=.ob("cell_line","E2"), orf_cl_l2=.ob("cell_line","L2"),
+  orf_eng_e2=.ob("engineered","E2"), orf_eng_l2=.ob("engineered","L2"),
+  orfc_ctrl_late=.ocgrp("control_productive", c("L1","L2")),
+  orfc_ctrl_onco=.ocgrp("control_productive", c("E6","E7")),
+  orfc_cl_late=.ocgrp("cell_line", c("L1","L2")),
+  orfc_cl_onco=.ocgrp("cell_line", c("E6","E7")),
+  orfc_neo_late=.ocgrp("neoplasia", c("L1","L2")),
+  orfc_neo_onco=.ocgrp("neoplasia", c("E6","E7")),
+  orfc_skin_late=.ocgrp("unselected_skin", c("L1","L2")),
+  orfc_ctrl_n=.ocn("control_productive"), orfc_cl_n=.ocn("cell_line"),
+  orfc_neo_n=.ocn("neoplasia"), orfc_skin_n=.ocn("unselected_skin"),
   # AK vs cSCC split (MODEL 2b-split)
   ak_n=.akc$n[.akc$dx=="neo_AK"], ak_studies=.akc$n_studies[.akc$dx=="neo_AK"],
   ak_medreads=.akc$med_reads[.akc$dx=="neo_AK"], ak_pctany=.akc$pct_any[.akc$dx=="neo_AK"],
