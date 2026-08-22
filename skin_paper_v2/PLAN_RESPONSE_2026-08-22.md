@@ -116,6 +116,8 @@ neoplasia 26, engineered 18, peri-lesional 15, EV 10.
 
 ### Figure 4: the viral transcriptional programme by population tier
 
+![](../manuscript/figure4.png)
+
 **Panel A, programme breadth.** Percentage of each tier's HPV-positive libraries
 carrying at least one read on each ORF, as a Beta-Binomial posterior mean under
 Beta(0.5, 0.5), the same treatment as the type tables:
