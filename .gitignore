@@ -48,3 +48,6 @@ reports/*.html
 # specific snapshot needs versioning).
 reports/*.xlsx
 dna_rna_triangulation/cache/
+
+# Word lock files (created when a .docx is open)
+~$*
