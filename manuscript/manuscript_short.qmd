@@ -1,0 +1,67 @@
+---
+title: "Cutaneous HPV is transcriptionally quiet in skin and carcinoma but productive in warts: a depth-controlled re-mining of public RNA-seq"
+subtitle: "Short version, formatted to Journal of Investigative Dermatology limits"
+author: "[Authors to be added]"
+date: last-modified
+bibliography: references.bib
+crossref:
+  custom:
+    - kind: float
+      key: suppfig
+      reference-prefix: "Figure S"
+      space-before-numbering: false
+      latex-env: suppfig
+    - kind: float
+      key: supptbl
+      reference-prefix: "Table S"
+      space-before-numbering: false
+      latex-env: supptbl
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    number-sections: false
+    embed-resources: true
+    theme: cosmo
+    fig-cap-location: bottom
+    tbl-cap-location: top
+  docx:
+    reference-doc: reference.docx
+    toc: false
+    number-sections: false
+    fig-cap-location: bottom
+    tbl-cap-location: top
+---
+
+```{r}
+#| label: setup
+#| include: false
+# Reproducible numbers: results_models.R re-fits M1/M2/M3 from the pipeline
+# outputs and builds `stats`; _helpers.R adds formatters + table builders.
+# Every quoted figure below is rendered inline (`r ...`) from these.
+library(tidyverse); library(here); library(knitr)
+invisible(capture.output(source(here("manuscript/results_models.R"))))
+source(here("manuscript/_helpers.R"))
+# Bayesian posterior summaries are precomputed by manuscript/bayesian_models.R
+# (MCMC, ~40s) and read here, so the render itself stays fast/deterministic.
+bayes <- readRDS(here("manuscript/bayes_summary.rds"))
+bget  <- function(m) as.list(bayes[bayes$model == m, ])
+```
+
+{{< include _abstract_short.qmd >}}
+
+{{< include _introduction_short.qmd >}}
+
+{{< include _results_short.qmd >}}
+
+{{< include _discussion_short.qmd >}}
+
+{{< include _methods_brief.qmd >}}
+
+# Supplementary Material {.unnumbered}
+
+## Supplementary Materials and Methods {.unnumbered}
+
+{{< include _methods.qmd >}}
+
+{{< include _supplement.qmd >}}
