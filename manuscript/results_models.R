@@ -362,6 +362,30 @@ tc <- read_tsv(type_catalogue_tsv(), show_col_types=FALSE)
 .n_targeted <- nrow(read_tsv(here("results_lesions/aggregated/hpv_status.tsv"),     show_col_types=FALSE))
 .n_csc       <- nrow(read_tsv(here("results_lesions_csc/aggregated/hpv_status.tsv"), show_col_types=FALSE))
 
+## ── Library completeness: were whole libraries screened? ────────────────────
+## Reading only the leading N reads of a library is a known way to miss viral
+## signal, because a run submitted from a coordinate-sorted BAM emerges from the
+## SRA in reference order and its unmapped (hence viral) reads sit at the tail.
+## Nothing here subsamples, but the claim should be checkable rather than
+## asserted, so compare reads actually screened against the SRA spot count.
+.spots <- tryCatch(read_tsv(here("results_reframe_fixed/library_selection.tsv"),
+                            show_col_types=FALSE) %>%
+                     transmute(srr_id, spots=suppressWarnings(as.numeric(spots))),
+                   error=function(e) NULL)
+if (is.null(.spots)) {
+  .sr <- function(k) NA_real_
+} else {
+  .srd <- rp %>% inner_join(.spots, by="srr_id") %>%
+    filter(!is.na(spots), spots > 0) %>% mutate(ratio = total_reads/spots)
+  .srtier <- .srd %>% group_by(tier) %>% summarise(m=median(ratio), .groups="drop")
+  .srv <- list(n=nrow(.srd), med=100*median(.srd$ratio),
+               p05=100*quantile(.srd$ratio, .05),
+               tier_lo=100*min(.srtier$m), tier_hi=100*max(.srtier$m))
+  .sr <- function(k) .srv[[k]]
+  cat(sprintf("\nLibrary completeness: %d libraries, median %.1f%% of SRA spots screened (5th pctile %.1f%%); tier medians %.1f-%.1f%%\n",
+      .srv$n, .srv$med, .srv$p05, .srv$tier_lo, .srv$tier_hi))
+}
+
 ## ── ORF programme (figure 4; manuscript/figure_orf.R) ───────────────────────
 ## Read from disk so the caption quotes computed numbers. Absent on a machine
 ## where the figure has not been built, in which case the entries are NA.
@@ -509,6 +533,9 @@ stats <- lapply(list(
   trace_n=nrow(.tt), trace_resolved=sum(.tt$trace_ok), trace_ntypes=n_distinct(.tres$top_ref),
   trace_skin_n=nrow(.tskin), trace_skin_cut=sum(.tskin$genus_short %in% c("beta","gamma","nu")),
   trace_ctrl_resolved=sum(.tres$tier == "control_productive", na.rm=TRUE),
+  # Library completeness
+  spot_n=.sr("n"), spot_med=.sr("med"), spot_p05=.sr("p05"),
+  spot_tier_lo=.sr("tier_lo"), spot_tier_hi=.sr("tier_hi"),
   # ORF programme (figure 4)
   orf_n=.orfn,
   orf_ctrl_l1=.ob("control_productive","L1"), orf_ctrl_e2=.ob("control_productive","E2"),
