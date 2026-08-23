@@ -45,8 +45,7 @@ pA <- ggplot(e, aes(tier, log2_e1e2, colour = grp)) +
   scale_x_discrete(labels = TLAB) +
   scale_colour_manual(values = c(`in vitro` = "#c0392b",
                                  `primary tissue` = "#2c6fbb"), name = NULL) +
-  labs(x = NULL, y = expression(log[2]~"(E1 / E2)"),
-       title = "A  Integration inverts the E1:E2 transcript ratio") +
+  labs(x = NULL, y = expression(log[2]~"(E1 / E2)")) +
   theme(legend.position = c(0.72, 0.92),
         legend.background = element_rect(fill = alpha("white", 0.8), colour = NA),
         axis.text.x = element_text(size = 8.5))
@@ -68,8 +67,7 @@ pB <- ggplot(j, aes(n_junctions, frac_top)) +
                       name = NULL) +
   scale_shape_manual(values = c(16, 17, 15, 3), labels = GLAB, name = NULL) +
   labs(x = "Virus-host junctions detected (n, log scale)",
-       y = "Fraction at top site",
-       title = "B  Clustering separates, counts do not") +
+       y = "Fraction at top site") +
   theme(legend.position = "right", legend.key.height = unit(0.8, "lines"),
         legend.text = element_text(size = 8))
 
@@ -87,11 +85,15 @@ pC <- ggplot(cx, aes(tier, log2_e1e2)) +
   geom_point(data = cx_med, aes(tier, m), colour = "#c0392b", size = 3) +
   geom_jitter(width = 0.12, height = 0, size = 1.6, alpha = 0.6, colour = "grey30") +
   scale_x_discrete(labels = CLAB) +
-  labs(x = NULL, y = expression(log[2]~"(E1 / E2)"),
-       title = "C  Ratio tracks lesion grade") +
+  labs(x = NULL, y = expression(log[2]~"(E1 / E2)")) +
   theme(axis.text.x = element_text(size = 9))
 
-fig <- (pA / (pB | pC)) + plot_layout(heights = c(1, 0.95))
+# Panels carry a bare A/B/C tag only. What each panel shows belongs in the
+# legend, not burned into the image, both because journals typeset it that way
+# and because a title inside the figure cannot be edited at proof.
+fig <- (pA / (pB | pC)) + plot_layout(heights = c(1, 0.95)) +
+  plot_annotation(tag_levels = "A") &
+  theme(plot.tag = element_text(face = "bold", size = 13))
 
 ggsave(here("manuscript/figure1.png"), fig, width = 9.5, height = 7.6, dpi = 300, bg = "white")
 ggsave(here("manuscript/figure1.pdf"), fig, width = 9.5, height = 7.6, bg = "white")

@@ -17,7 +17,7 @@ The transcripts carry an independent signature of that artefact. E1 and E2 lie o
 ::: {#fig-integration}
 ![](figure1.png)
 
-Integration read from viral transcription. (**A**) E1:E2 transcript ratio by tier, log~2~((E1 + 0.5)/(E2 + 0.5)) for libraries with at least five combined reads; the dashed line is parity. In-vitro material sits far above parity and primary tissue at or below it, with the episomal HPV31-positive HaCaT derivative falling among primary tissue. (**B**) Virus-host chimeric junctions, plotted as the fraction falling at a library's most-supported coordinate pair against the raw junction count. Clustering separates the groups completely; raw counts do not, and run the other way. (**C**) The ratio across a graded HPV16-positive cervical series of normal epithelium, high-grade lesion and carcinoma; the red line joins arm medians.
+Integration read from viral transcription. (**A**) E1:E2 transcript ratio by tier, log~2~((E1 + 0.5)/(E2 + 0.5)) for libraries with at least five combined reads; the dashed line is parity. In-vitro material sits far above parity and primary tissue at or below it, with the episomal HPV31-positive HaCaT derivative falling among primary tissue. (**B**) Virus-host chimeric junctions, plotted as the fraction falling at a library's most-supported coordinate pair against the raw junction count. Clustering separates the groups completely; raw counts do not, and run the other way. (**C**) The ratio rises monotonically with grade across a graded HPV16-positive cervical series of normal epithelium, high-grade lesion and carcinoma; the red line joins arm medians.
 :::
 
 

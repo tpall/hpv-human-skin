@@ -241,9 +241,9 @@ p <- ggplot(pdat, aes(tier, rpm_plot)) +
         linetype = "dashed", colour = "red") } +
   scale_y_log10() +
   scale_x_discrete(labels = function(lv) str_wrap(tier_display[lv], width = 16)) +
-  labs(title = "Depth-normalised HPV transcript burden by population",
-       subtitle = sprintf("Papillomaviridae reads/M; red = control-calibrated detection floor (%.1f RPM)", floor_rpm),
-       x = NULL, y = "HPV reads per million (log10, +0.05)") +
+  # No in-plot title or subtitle: what the panel shows belongs in the figure
+  # legend, where it can be edited at proof and is not duplicated on the page.
+  labs(x = NULL, y = "HPV reads per million (log10, +0.05)") +
   theme_minimal() + theme(legend.position = "none",
         axis.text.x = element_text(angle = 0, hjust = 0.5))
 ggsave(file.path(opt$outdir, "hpv_rpm_contrast.pdf"), p, width = 9, height = 5.5)
@@ -273,9 +273,9 @@ if (nrow(pd)) {
     # Same tier labels as the x-axis of the main contrast plot, so the two
     # figures name the populations identically. Unwrapped: the legend has room.
     scale_colour_discrete(name = "Tier", labels = function(lv) tier_display[lv]) +
-    labs(title = "Control-level HPV detection within matched sequencing-depth bins",
-         subtitle = sprintf("%% of samples >= %.1f RPM floor; flat-high controls vs flat-low skin = gap is not depth", floor_rpm),
-         x = "Total reads (Kraken2-screened)", y = "% at/above detection floor", size = "Libraries") +
+    labs(x = "Total reads (Kraken2-screened)",
+         y = sprintf("%% of libraries at or above the %.1f RPM floor", floor_rpm),
+         size = "Libraries") +
     theme_minimal()
   ggsave(file.path(opt$outdir, "depth_matched_detection.pdf"), pdepth, width = 8, height = 5)
   ggsave(file.path(opt$outdir, "depth_matched_detection.png"), pdepth, width = 8, height = 5, dpi = 150)

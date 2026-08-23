@@ -80,7 +80,7 @@ pA <- ggplot(brd, aes(gene, fct_rev(tier), fill = pct)) +
   scale_fill_gradient(low = "#f7f7f7", high = "#08519c", limits = c(0, 100),
                       name = "% of libraries\nwith ≥1 read") +
   scale_y_discrete(labels = lab_n) +
-  labs(x = NULL, y = NULL, subtitle = "A  Programme breadth: which ORFs are transcribed at all") +
+  labs(x = NULL, y = NULL) +
   theme(axis.line = element_blank(), axis.ticks = element_blank(),
         legend.position = "right", legend.key.width = unit(0.35, "cm"))
 
@@ -108,9 +108,7 @@ pB <- ggplot(comp, aes(fct_rev(tier), share, fill = gene)) +
                     guide = guide_legend(reverse = TRUE)) +
   scale_x_discrete(labels = lab_c) +
   scale_y_continuous(labels = scales::percent, expand = expansion(c(0, 0.02))) +
-  labs(x = NULL, y = "Mean share of a library's viral reads",
-       subtitle = sprintf("B  Programme composition: where the viral reads fall (libraries with \u2265 %d viral reads)",
-                          MIN_COMP)) +
+  labs(x = NULL, y = sprintf("Mean share of viral reads (libraries with \u2265 %d)", MIN_COMP)) +
   theme(legend.position = "right", legend.key.size = unit(0.4, "cm"))
 
 ## ── Panel C: the criterion ──────────────────────────────────────────────────
@@ -130,11 +128,13 @@ pC <- ggplot(ec, aes(early + 1, L1 + 1, colour = tier)) +
   geom_point(alpha = 0.65, size = 1.6) +
   scale_x_log10() + scale_y_log10() +
   scale_colour_brewer(palette = "Dark2", labels = TLAB, name = NULL) +
-  labs(x = "Early-region reads + 1", y = "L1 major-capsid reads + 1",
-       subtitle = "C  The criterion: early-region against L1 capsid transcription, per library") +
+  labs(x = "Early-region reads + 1", y = "L1 major-capsid reads + 1") +
   theme(legend.position = "right", legend.key.size = unit(0.4, "cm"))
 
-fig <- pA / pB / pC + plot_layout(heights = c(1.15, 0.85, 1.2))
+# Panels carry a bare A/B/C tag only; the descriptions live in the legend.
+fig <- pA / pB / pC + plot_layout(heights = c(1.15, 0.85, 1.2)) +
+  plot_annotation(tag_levels = "A") &
+  theme(plot.tag = element_text(face = "bold", size = 13))
 ggsave(here("manuscript/figure3.png"), fig, width = 9, height = 11.5, dpi = 300, bg = "white")
 ggsave(here("manuscript/figure3.pdf"), fig, width = 9, height = 11.5)
 
