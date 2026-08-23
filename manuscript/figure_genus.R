@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-# Builds manuscript/figure3.png: HPV genus prevalence by population tier.
+# Builds manuscript/figure4.png: HPV genus prevalence by population tier.
 #
 #   Rscript manuscript/figure_genus.R
 #
@@ -111,8 +111,8 @@ p <- ggplot(pd, aes(Genus, mean_p, colour = Genus)) +
         strip.text.x = element_text(size = 9, lineheight = 0.9),
         strip.text.y = element_text(size = 9))
 
-ggsave(here("manuscript/figure3.png"), p, width = 10.5, height = 6.4, dpi = 200)
-ggsave(here("manuscript/figure3.pdf"), p, width = 10.5, height = 6.4)
+ggsave(here("manuscript/figure4.png"), p, width = 10.5, height = 6.4, dpi = 200)
+ggsave(here("manuscript/figure4.pdf"), p, width = 10.5, height = 6.4)
 
 # The caption quotes prevalences from this figure. Persist them so _helpers.R
 # reads the same numbers the figure plots, rather than having them hand-typed.
@@ -128,4 +128,4 @@ cat("\nGenera never detected in any tier:",
     paste(setdiff(str_to_title(GEN),
                   pd %>% filter(k > 0) %>% pull(Genus) %>% unique() %>% as.character()),
           collapse = ", "), "\n")
-cat("Wrote manuscript/figure3.{png,pdf} and genus_prevalence_by_tier.tsv\n")
+cat("Wrote manuscript/figure4.{png,pdf} and genus_prevalence_by_tier.tsv\n")

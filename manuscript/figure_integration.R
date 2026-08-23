@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-# Builds manuscript/figure2.{png,pdf}: the integration read-out, three panels.
+# Builds manuscript/figure1.{png,pdf}: the integration read-out, three panels.
 #
 #   Rscript manuscript/figure_integration.R
 #
@@ -93,8 +93,8 @@ pC <- ggplot(cx, aes(tier, log2_e1e2)) +
 
 fig <- (pA / (pB | pC)) + plot_layout(heights = c(1, 0.95))
 
-ggsave(here("manuscript/figure2.png"), fig, width = 9.5, height = 7.6, dpi = 300, bg = "white")
-ggsave(here("manuscript/figure2.pdf"), fig, width = 9.5, height = 7.6, bg = "white")
+ggsave(here("manuscript/figure1.png"), fig, width = 9.5, height = 7.6, dpi = 300, bg = "white")
+ggsave(here("manuscript/figure1.pdf"), fig, width = 9.5, height = 7.6, bg = "white")
 
 ## ── numbers the caption quotes, printed so they are never hand-typed ────────
 cat("\nPanel A, median fold E1:E2 by tier:\n")
@@ -113,4 +113,4 @@ cat("\nPanel C, cervical progression:\n")
 cx %>% group_by(tier) %>%
   summarise(n = n(), median_log2 = median(log2_e1e2), fold = 2^median(log2_e1e2)) %>%
   as.data.frame() %>% print(right = FALSE)
-cat("\nWrote manuscript/figure2.{png,pdf}\n")
+cat("\nWrote manuscript/figure1.{png,pdf}\n")

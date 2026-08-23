@@ -91,7 +91,7 @@ Algsed küsimused on **nahakesksed**; käsikiri vastab neile:
 
 ## Sügavusega normeeritud HPV-koormus
 
-![Produktiivsed kontrollid (soolatüükad) ja EV on kaugel üle tuvastusläve (punane); nahavähk ja valimata nahateegid on nulli lähedal, hoolimata sügavamast sekveneerimisest. Tulp „Non-permissive tissue" on rasv-, vere- ja närvikude, kus HPV paljuneda ei saa: sama taustatase kui nahal.](../manuscript/figure1.png){width="72%" fig-align="center"}
+![Produktiivsed kontrollid (soolatüükad) ja EV on kaugel üle tuvastusläve (punane); nahavähk ja valimata nahateegid on nulli lähedal, hoolimata sügavamast sekveneerimisest. Tulp „Non-permissive tissue" on rasv-, vere- ja närvikude, kus HPV paljuneda ei saa: sama taustatase kui nahal.](../manuscript/figure2.png){width="72%" fig-align="center"}
 
 ## Kontroll: kude, kus HPV paljuneda ei saa {.smaller}
 

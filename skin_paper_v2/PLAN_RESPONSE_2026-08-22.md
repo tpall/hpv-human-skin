@@ -17,7 +17,7 @@ data cannot support at all.
 
 | block | status |
 |---|---|
-| **R3, by ORF** | **Built. `manuscript/figure4.png`, three panels. See §3.** |
+| **R3, by ORF** | **Built. `manuscript/figure3.png`, three panels. See §3.** |
 | R1, frequencies by sample type | In the manuscript, and stronger than in August: the contrast now survives adjustment for library chemistry |
 | R2A, types by sample type | In the manuscript |
 | D1B, skin HPV types | Have the data; agreed on palette and on moving gut to the supplement |
@@ -100,7 +100,7 @@ near-ubiquitous reservoir yields 2-4%, and substrate is the concrete answer.
 ## 3. The ORF analysis, built
 
 This was your item, it was the cheapest thing on the list, and it is now built:
-`manuscript/figure_orf.R` writes `manuscript/figure4.{png,pdf}` plus
+`manuscript/figure_orf.R` writes `manuscript/figure3.{png,pdf}` plus
 `orf_breadth_by_tier.tsv` and `orf_composition_by_tier.tsv`. It is worth leading
 with, for a reason that was not obvious in August. The paper's central criterion
 is the early-versus-late transcript programme, and until now there was no figure
@@ -116,7 +116,7 @@ neoplasia 26, engineered 18, peri-lesional 15, EV 10.
 
 ### Figure 4: the viral transcriptional programme by population tier
 
-![](../manuscript/figure4.png)
+![](../manuscript/figure3.png)
 
 **Panel A, programme breadth.** Percentage of each tier's HPV-positive libraries
 carrying at least one read on each ORF, as a Beta-Binomial posterior mean under
