@@ -54,7 +54,7 @@ echo "rows: $n (expected 10849)"
 
 # Everything downstream of the tier table. These are NOT rebuilt by the
 # manuscript render: figure2/figureS1 are copies of this script's plots,
-# figureS2 is a separate script, and bayes_summary.rds is read from disk by
+# figure4 and figureS2 come from separate scripts, and bayes_summary.rds is read from disk by
 # manuscript.qmd, so a stale one silently keeps the old posteriors.
 if [ "$OUTDIR" = "results_reframe_fixed" ]; then
   cp "$OUTDIR/hpv_rpm_contrast.png"        manuscript/figure2.png
@@ -62,7 +62,8 @@ if [ "$OUTDIR" = "results_reframe_fixed" ]; then
   cp "$OUTDIR/depth_matched_detection.png" manuscript/figureS1.png
   cp "$OUTDIR/depth_matched_detection.pdf" manuscript/figureS1.pdf
   echo "refreshed manuscript/figure2.{png,pdf}, figureS1.{png,pdf}"
-  Rscript manuscript/figure_genus.R >/dev/null && echo "refreshed manuscript/figureS2.{png,pdf}"
+  Rscript manuscript/figure_genus.R >/dev/null && echo "refreshed manuscript/figure4.{png,pdf}"
+  Rscript manuscript/figure_type_grid.R >/dev/null && echo "refreshed manuscript/figureS2.{png,pdf}"
   Rscript manuscript/bayesian_models.R >/dev/null && echo "refit manuscript/bayes_summary.{rds,tsv}"
   echo "now re-render: quarto render manuscript/manuscript.qmd"
 fi

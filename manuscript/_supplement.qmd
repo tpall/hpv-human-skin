@@ -67,6 +67,12 @@ Detection-tier HPV type catalogue. This table is the complement of @supptbl-type
 :::
 
 
+::: {#suppfig-types}
+![](figureS2.png)
+
+The HPV type landscape, assigned catalogue against detection tier. The same data as @supptbl-types and @supptbl-trace, laid out as one grid because the two tables partition a single cohort: a library either clears the assignment criterion (coverage breadth ≥ 0.10 **and** mean depth ≥ 2) and appears on the left, or resolves to a confident type below it and appears on the right, never both. Rows are HPV types grouped by genus, columns are population tiers, and each cell gives the number of libraries of that tier carrying that type. Fill is on a log~10~ scale, since more than a third of non-empty cells carry three or fewer libraries and a linear ramp renders them indistinguishable from empty; grey marks a type not seen in that tier at all. Read across the two panels, the complementarity is the point. The assigned catalogue is dominated by the mucosal alpha types, concentrated in cell lines (HPV16 and HPV18), in productive controls and in peri-lesional mucosa, which is the contamination and productive-lesion signal respectively. The cutaneous beta and gamma reservoir of healthy skin is almost absent from that panel and appears instead in the detection tier, in the unselected-skin column, because it sits below the coverage threshold a type assignment requires rather than because it is not there. @fig-genus collapses both panels from type to genus.
+:::
+
 ::: {#supptbl-coinf}
 ```{r}
 #| echo: false
