@@ -90,12 +90,15 @@ p <- ggplot(pd, aes(Genus, mean_p, colour = Genus)) +
              colour = "grey55", na.rm = TRUE) +
   geom_text(data = ~ filter(.x, k > 0), aes(y = hi_p, label = k), vjust = -.6,
             size = 2.3, show.legend = FALSE) +
-  # Short row-strip labels so they fit the row height at the cowplot font size;
-  # the data keys in pd$level stay long (the caption and _helpers.R use them).
+  # Strips name the level and nothing else. A supplementary table number burned
+  # into the image cannot be corrected at proof and goes silently wrong whenever
+  # an item is inserted ahead of it, which is exactly what happened when the
+  # chemistry table took S5. The caption cross-references both tables instead,
+  # and those renumber themselves.
   facet_grid(level ~ tier, labeller = labeller(level = c(
-    "Assigned type (Table S1)" = "Assigned (S1)",
-    "Detection tier (Table S6)" = "Detection tier (S6)",
-    "Any detection"             = "Any (S1 \u222a S6)"))) +
+    "Assigned type (Table S1)"  = "Assigned",
+    "Detection tier (Table S6)" = "Detection tier",
+    "Any detection"             = "Any"))) +
   scale_y_log10(breaks = c(.01, .1, 1, 10, 100), labels = c("0", "0.1", "1", "10", "100"),
                 limits = c(FLOOR, 400)) +
   scale_colour_brewer(palette = "Dark2", guide = "none") +
