@@ -1,12 +1,14 @@
 # Marko's structure, re-answered against the revised manuscript
 
 Written 2026-08-22, revised the same day after checking the type-level numbers
-against the data (the HPV8 claim in §4 was wrong; see there). Supersedes the recommendation in
+against the data (the HPV8 claim in §4 was wrong; see there), and again on
+2026-08-24, once the type grid stopped being a sketch and became a manuscript
+figure. Supersedes the recommendation in
 `PLAN.md` §5 only in its *reasons*; the recommendation itself is unchanged. The
 proposal Marko has re-sent is verbatim the list answered in `PLAN.md` §2, but the
-manuscript it would be folded into is not the same manuscript. Ten commits since
-2026-08-07 rewrote the framing, added 30 references, and added a library-chemistry
-covariate. Two of those changes move the DNA question, and they move it in
+manuscript it would be folded into is not the same manuscript. Thirty-two commits
+since 2026-08-07 rewrote the framing, added 30 references, added a
+library-chemistry covariate, and added two figures. Two of those changes move the DNA question, and they move it in
 opposite directions.
 
 ## 0. What we are adopting from your proposal
@@ -20,9 +22,9 @@ data cannot support at all.
 | **R3, by ORF** | **Built. `manuscript/figure3.png`, three panels. See §3.** |
 | R1, frequencies by sample type | In the manuscript, and stronger than in August: the contrast now survives adjustment for library chemistry |
 | R2A, types by sample type | In the manuscript |
-| D1B, skin HPV types | Have the data; agreed on palette and on moving gut to the supplement |
+| **D1B, skin HPV types** | **Built. `manuscript/figureS2.png`, the type-by-tier grid. See §4** |
 | D1A, genus composition | Doable now; the absolute-frequency half is blocked on the DNA denominator, not on the idea |
-| R2B, co-infection | In the supplement; promotable to main text if the hedge travels with it |
+| R2B, co-infection | In the supplement as Table S7; promotable to main text if the hedge travels with it |
 | D2, E2 ORF absence | Not doable, and the reason it fails became a section of its own (§5) |
 
 The ORF analysis is the one worth talking about first. It was your idea, it was
@@ -108,6 +110,9 @@ of it anywhere: the whole argument rested on a threshold the reader had never be
 shown. The Discussion has since also taken on a third model (Rehm 2022, in which
 beta-HPV restricts its own expression through E8^E2), which is a claim about which
 viral genes are transcribed, so an ORF-level panel now has two jobs rather than one.
+
+*Since this was drafted* the panel titles have moved out of the image and into the
+legend, and the figure renumbered from 4 to 3, so the version below is current.
 
 No new computation was needed. The per-gene counts come from the 541
 `*_transcript_classes.tsv` files the pipeline already writes; 488 of those join to
@@ -200,7 +205,9 @@ prevalence statement. Panel A carries the prevalence story on its own.
 alone. Checked against the data, the HPV8-specific claim does not hold; the
 general one is stronger. The corrected table is built by
 `dna_rna_triangulation/skin_dna_vs_rna_corrected.R` and written to
-`skin_dna_vs_rna_types_corrected.csv`.*
+`skin_dna_vs_rna_types_corrected.csv`. The RNA side of that comparison has since
+been drawn as a manuscript figure, `manuscript/figureS2.png`, which is also the
+answer to D1B and is shown at the end of this section.*
 
 The manuscript's HPV8/AK section (added in response to Morgan 2024, which builds a
 hit-and-run stem-cell mechanism on HPV8 in 70% of human AK) ends on an open
@@ -267,6 +274,36 @@ not a within-sample presence-versus-activity measurement. No paired skin specime
 exist in public data (`PLAN.md` §3.3), so the panel shows that the reservoir and
 the transcriptome have different type compositions, and cannot show that any
 individual genome is present-but-silent.
+
+### The figure that came out of it
+
+![](../manuscript/figureS2.png)
+
+`manuscript/figureS2.png`, built by `manuscript/figure_type_grid.R`. It is the
+answer to D1B, and it is in the supplement rather than the main text for a
+reason worth stating, because it is the same reason the earlier draft of this
+section was wrong. Of 66 types, 25 are seen exactly once. Thresholding the grid
+to fit a main-text panel at three or more libraries would keep 86% of the
+library calls but only 42% of the types, which removes the diversity evidence
+and preserves the totals: precisely backwards for a claim about a reservoir that
+is diverse and individually rare.
+
+Three design points, since Marko asked about the palette on D1B and the same
+questions apply here. Fill is prevalence *within* tier, not the count, because
+tier sizes span 10 to 7,800 and three libraries is 23% of the EV tier against
+0.04% of unselected skin; the raw count stays as the cell label so the figure
+still ties back to the tables. The scale is log, because a third of non-empty
+cells carry three or fewer libraries and a linear ramp puts them at the white
+end where the labels vanish. And it is laid out landscape rather than portrait
+so each tier is one line, which is what makes the unselected-skin line of the
+lower panel legible as the reservoir claim rather than something to be counted
+down a column.
+
+The complementarity is the point. The upper panel, assigned types, is
+concentrated in three rows, productive controls, peri-lesional mucosa and cell
+lines, and almost entirely within alpha. The cutaneous beta and gamma types of
+healthy skin appear only in the lower panel, because they sit below the coverage
+threshold a type assignment requires, not because they are absent.
 
 ## 5. Block-by-block, updated
 
