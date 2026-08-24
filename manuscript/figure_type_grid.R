@@ -1,6 +1,10 @@
 #!/usr/bin/env Rscript
 # Builds manuscript/figureS2.{png,pdf}: the HPV type by tier grid, assigned
-# against detection tier.
+# against detection tier. Laid out landscape, types across and tiers down, so
+# each tier reads as one line: the unselected-skin line of the detection panel
+# is then the reservoir claim directly, a long run of pale cells across beta and
+# gamma. Portrait it took 13 inches and the same claim had to be counted down a
+# column.
 #
 #   Rscript manuscript/figure_type_grid.R
 #
@@ -66,7 +70,7 @@ d <- both %>%
   # Beta-Binomial posterior mean under Beta(0.5, 0.5), the same estimator the
   # tables use, so figure and table report one quantity rather than two.
   mutate(pct = 100 * (n + 0.5) / (tier_size + 1),
-         type = factor(type, levels = rev(TYPE_ORDER)))
+         type = factor(type, levels = TYPE_ORDER))
 LIM <- range(d$pct, na.rm = TRUE)
 d <- d %>%
   mutate(lab = ifelse(is.na(n), "", formatC(n, format = "d")),
@@ -76,27 +80,27 @@ d <- d %>%
                           (log10(pct) - log10(LIM[1])) / (log10(LIM[2]) - log10(LIM[1])) < 0.55,
                           "grey15", "white"))
 
-p <- ggplot(d, aes(tier, type, fill = pct)) +
+p <- ggplot(d, aes(type, fct_rev(tier), fill = pct)) +
   geom_tile(colour = "white", linewidth = 0.3) +
   geom_text(aes(label = lab, colour = lab_col), size = 2.6, show.legend = FALSE) +
-  facet_grid(genus ~ id, space = "free", scales = "free_y") +
+  facet_grid(id ~ genus, space = "free_x", scales = "free_x") +
   scale_fill_viridis_c("Prevalence\nwithin tier (%)", option = "mako", direction = -1,
                        trans = "log10", limits = LIM, begin = 0.12, end = 0.95,
                        breaks = c(0.03, 0.3, 3, 30),
                        labels = function(x) formatC(x, format = "g"),
                        na.value = "grey94") +
   scale_colour_identity() +
-  scale_x_discrete(labels = function(x)
-    sprintf("%s\n(n = %s)", TLAB[x],
+  scale_y_discrete(labels = function(x)
+    sprintf("%s (n = %s)", TLAB[x],
             formatC(tier_n$tier_size[match(x, tier_n$tier)], format = "d", big.mark = ","))) +
   labs(x = NULL, y = NULL) +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 8),
-        axis.text.y = element_text(size = 7),
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 6),
+        axis.text.y = element_text(size = 8),
         axis.ticks = element_blank(), panel.grid = element_blank(),
         strip.text.y = element_text(angle = 0), strip.text = element_text(size = 9),
-        panel.spacing.y = unit(2, "pt"), legend.key.height = unit(1.1, "cm"))
+        panel.spacing.x = unit(2, "pt"), legend.key.height = unit(1.1, "cm"))
 
-ggsave(here("manuscript/figureS2.png"), p, width = 9, height = 12.5, dpi = 200, bg = "white")
-ggsave(here("manuscript/figureS2.pdf"), p, width = 9, height = 12.5)
+ggsave(here("manuscript/figureS2.png"), p, width = 13.5, height = 6.2, dpi = 200, bg = "white")
+ggsave(here("manuscript/figureS2.pdf"), p, width = 13.5, height = 6.2)
 cat(sprintf("figureS2: %d types, %d assigned cells, %d detection cells; prevalence %.3f%% to %.1f%%\n",
             n_distinct(both$type), nrow(assigned), nrow(detected), LIM[1], LIM[2]))
