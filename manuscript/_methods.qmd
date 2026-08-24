@@ -101,7 +101,3 @@ rather than downsampled.
 ### Execution at scale
 
 For cohorts of thousands of libraries, a chunked driver processed the samplesheet in fixed-size batches (default 100 libraries per chunk). After each successful chunk, per-sample outputs (Kraken2 reports, HPV typing and transcript tables, and HPV status) were aggregated and the chunk's working directory was deleted to bound disk use; a failed chunk was left intact for inspection and resumed on rerun. A single combined report was generated over the aggregated outputs at completion. Summary tables and figures were produced in R (tidyverse), and the depth-normalised burden analysis was implemented as a standalone R script operating on the aggregated Kraken2 reports, typing tables, and curated sample flags.
-
-### Code and data availability
-
-The complete analysis pipeline, comprising the Nextflow workflow, the per-process software environments and container definitions, the reference-construction and SRA-discovery scripts, and the downstream R analysis and statistical-inference code, is openly available at <https://github.com/tpall/hpv-human-skin>. All sequencing data analysed here are public and were obtained from the NCBI Sequence Read Archive; the per-cohort lists of accessions (SRR/SRX), with assigned tissue category, diagnosis, and cell-line/engineered annotations, are provided as Supplementary Data. Reference genomes were retrieved from the Papillomavirus Episteme (PaVE; <https://pave.niaid.nih.gov>) and NCBI RefSeq.

@@ -1,0 +1,26 @@
+## Data Availability Statement {.unnumbered}
+
+The complete analysis pipeline, comprising the Nextflow workflow, the per-process software environments and container definitions, the reference-construction and SRA-discovery scripts, and the downstream R analysis and statistical-inference code, is openly available at <https://github.com/tpall/hpv-human-skin>. All sequencing data analysed here are public and were obtained from the NCBI Sequence Read Archive; the per-cohort lists of accessions (SRR/SRX), with assigned tissue category, diagnosis, and cell-line/engineered annotations, are provided as Supplementary Data. Reference genomes were retrieved from the Papillomavirus Episteme (PaVE; <https://pave.niaid.nih.gov>) and NCBI RefSeq. No new sequencing data were generated.
+
+## ORCiDs {.unnumbered}
+
+<!-- One line per author, in the author-list order, as: Given Family: https://orcid.org/0000-0000-0000-0000 -->
+[To be completed: ORCiD for each author.]
+
+## Conflict of Interest {.unnumbered}
+
+[To be completed. If none: "The authors state no conflict of interest."]
+
+## Acknowledgements {.unnumbered}
+
+This research was supported by the Estonian Research Council grant (PRG2707).
+
+This research was co-financed through the DURABLE project. The DURABLE project has been co-funded by the European Union, under the EU4Health Programme (EU4H), Project no. 101102733. Views and opinions expressed are however those of the authors only and do not necessarily reflect those of the European Union or the European Health and Digital Executive Agency. Neither the European Union nor the granting authority can be held responsible for them.
+
+The computations were performed on the High Performance Computing Centre of the University of Tartu. We thank the submitting investigators of the studies re-analysed here, whose deposition of raw sequencing data to public archives made this work possible.
+
+## Author Contributions Statement {.unnumbered}
+
+<!-- CRediT taxonomy: https://credit.niso.org/ . Use author initials, e.g.
+     Conceptualization: AB, CD; Data Curation: AB; Formal Analysis: AB, EF; ... -->
+[To be completed, CRediT-compliant.] Conceptualization: ; Data Curation: ; Formal Analysis: ; Funding Acquisition: ; Investigation: ; Methodology: ; Project Administration: ; Resources: ; Software: ; Supervision: ; Validation: ; Visualization: ; Writing - Original Draft Preparation: ; Writing - Review and Editing: .

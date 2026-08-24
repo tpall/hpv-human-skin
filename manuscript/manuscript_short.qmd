@@ -58,7 +58,7 @@ bget  <- function(m) as.list(bayes[bayes$model == m, ])
 
 {{< include _methods_brief.qmd >}}
 
-{{< include _funding.qmd >}}
+{{< include _backmatter.qmd >}}
 
 ## References {.unnumbered}
 

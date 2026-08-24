@@ -2,7 +2,7 @@
 
 Full details are given in Supplementary Materials and Methods.
 
-**Pipeline and reference panel.** A Nextflow workflow screened each library for papillomavirus reads with Kraken2 against a combined human/HPV database, typed positives against the complete PaVE reference set (`r stats$panel_n` sequences) by STAR alignment, and classified early versus late viral transcripts. Code and configuration are available as stated under Data availability.
+**Pipeline and reference panel.** A Nextflow workflow screened each library for papillomavirus reads with Kraken2 against a combined human/HPV database, typed positives against the complete PaVE reference set (`r stats$panel_n` sequences) by STAR alignment, and classified early versus late viral transcripts. Code and configuration are available as stated in the Data Availability Statement.
 
 **Cohort.** Public human RNA-seq runs were discovered through NCBI Entrez and assembled into a case/control design spanning productive controls (warts, condyloma), epidermodysplasia verruciformis, cutaneous neoplasia (cSCC, actinic keratosis), an unselected-skin null, and cell-line, engineered and non-permissive-tissue comparators. Tier assignment read curated SRA metadata, with a small override table correcting studies whose submitted metadata is absent or misleading. `r comma(stats$n_screened)` libraries were screened.
 
