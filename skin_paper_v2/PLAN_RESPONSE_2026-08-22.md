@@ -21,8 +21,8 @@ data cannot support at all.
 |---|---|
 | **R3, by ORF** | **Built. `manuscript/figure3.png`, three panels. See §3.** |
 | R1, frequencies by sample type | In the manuscript, and stronger than in August: the contrast now survives adjustment for library chemistry |
-| R2A, types by sample type | In the manuscript |
-| **D1B, skin HPV types** | **Built. `manuscript/figureS2.png`, the type-by-tier grid. See §4** |
+| D1B, skin HPV types | Have the data; the palette and legend fix you asked for is still open |
+| **R2A, types by sample type** | **Built as a figure. `manuscript/figureS2.png`, the type-by-tier grid. See §4** |
 | D1A, genus composition | Doable now; the absolute-frequency half is blocked on the DNA denominator, not on the idea |
 | R2B, co-infection | In the supplement as Table S7; promotable to main text if the hedge travels with it |
 | D2, E2 ORF absence | Not doable, and the reason it fails became a section of its own (§5) |
@@ -207,7 +207,7 @@ general one is stronger. The corrected table is built by
 `dna_rna_triangulation/skin_dna_vs_rna_corrected.R` and written to
 `skin_dna_vs_rna_types_corrected.csv`. The RNA side of that comparison has since
 been drawn as a manuscript figure, `manuscript/figureS2.png`, which is also the
-answer to D1B and is shown at the end of this section.*
+answer to R2A and is shown at the end of this section.*
 
 The manuscript's HPV8/AK section (added in response to Morgan 2024, which builds a
 hit-and-run stem-cell mechanism on HPV8 in 70% of human AK) ends on an open
@@ -280,7 +280,7 @@ individual genome is present-but-silent.
 ![](../manuscript/figureS2.png)
 
 `manuscript/figureS2.png`, built by `manuscript/figure_type_grid.R`. It is the
-answer to D1B, and it is in the supplement rather than the main text for a
+answer to R2A, and it is in the supplement rather than the main text for a
 reason worth stating, because it is the same reason the earlier draft of this
 section was wrong. Of 66 types, 25 are seen exactly once. Thresholding the grid
 to fit a main-text panel at three or more libraries would keep 86% of the
@@ -288,8 +288,9 @@ library calls but only 42% of the types, which removes the diversity evidence
 and preserves the totals: precisely backwards for a claim about a reservoir that
 is diverse and individually rare.
 
-Three design points, since Marko asked about the palette on D1B and the same
-questions apply here. Fill is prevalence *within* tier, not the count, because
+Three design points. Marko's palette complaint on D1B was that the legends do
+not merge, which is the same bug this figure hit and fixed, so the fix transfers
+straight to the DNA figure. Fill is prevalence *within* tier, not the count, because
 tier sizes span 10 to 7,800 and three libraries is 23% of the EV tier against
 0.04% of unselected skin; the raw count stays as the cell label so the figure
 still ties back to the tables. The scale is log, because a third of non-empty
@@ -318,7 +319,7 @@ count-only-strategies-where-positives-occur approach. Marko's yes to a Bayesian
 proportion model is right and is consistent with the manuscript, which already
 carries a Bayesian re-analysis section.
 
-**D1B: skin HPV types.** HAVE. Agree on the palette and the colour/fill merge.
+**D1B: skin HPV types.** HAVE, and note this is the DNA side: `reservoir_by_tissue_top_types.csv` and `figure_reservoir_by_tissue.png`, not the RNA type grid of §4, which answers R2A. Agree on the palette and the colour/fill merge.
 Agree on moving gut to the supplement, and the genus table supports the artefact
 reading independently: gut returns beta at 34.9% and alpha at 30.5%, which is not
 a credible gut virome and is what reagent or index contamination looks like.
@@ -337,7 +338,7 @@ the headline contrast survives adjustment for library chemistry, and the decisiv
 sensitivity analysis (657 rRNA-depleted libraries, median 45.6M reads, none
 crossing the productive floor) is in the paper.
 
-**R2A: types by sample type.** HAVE.
+**R2A: types by sample type.** HAVE, and now drawn: `figureS2` is exactly this block, the assigned catalogue against the detection tier as one grid (§4).
 
 **R2B: co-infection.** Still not promoted; it remains supplement-only
 (`@supptbl-coinf`, one reference in the Results). One caution before promoting it,
