@@ -36,6 +36,27 @@ ORFS <- c("E1", "E2", "E6", "E7", "L1", "L2")
 LATE <- c("L1", "L2")
 PRODUCTIVE_L1 <- 3          # the manuscript's productive criterion
 
+# Panel C colours. Dark2 is qualitative but its two greens landed on productive
+# controls and unselected skin, which are the two tiers whose separation is the
+# panel's entire point. A diverging scale would be wrong here for a different
+# reason: it implies an ordered variable with a meaningful midpoint, and
+# population tier is neither.
+#
+# So: still qualitative, but grouped, with hue carrying the biology and
+# lightness separating tiers within a group. Warm reds are the productive
+# lesions, cool blues the primary tissue reported as quiet, and neutral greys
+# the in-vitro material. The panel then reads as three families rather than
+# seven arbitrary categories, and the contrast the figure exists to show is the
+# strongest one on it.
+TIER_COLS <- c(
+  control_productive = "#b2182b",   # productive: deep red
+  EV                 = "#ef6548",   #             mid red
+  peri_lesional      = "#fdae61",   #             orange
+  neoplasia          = "#2166ac",   # primary, quiet: deep blue
+  unselected_skin    = "#74add1",   #                 mid blue
+  cell_line          = "#4d4d4d",   # in vitro: dark grey
+  engineered         = "#9e9e9e")   #           light grey
+
 TLAB <- c(control_productive = "Productive\ncontrols", EV = "EV",
           peri_lesional = "Peri-lesional", neoplasia = "Neoplasia",
           unselected_skin = "Unselected\nskin", cell_line = "Cell line",
@@ -127,7 +148,7 @@ pC <- ggplot(ec, aes(early + 1, L1 + 1, colour = tier)) +
            label = "productive threshold (L1 \u2265 3)", size = 3, colour = "grey35") +
   geom_point(alpha = 0.65, size = 1.6) +
   scale_x_log10() + scale_y_log10() +
-  scale_colour_brewer(palette = "Dark2", labels = TLAB, name = NULL) +
+  scale_colour_manual(values = TIER_COLS, labels = TLAB, name = NULL) +
   labs(x = "Early-region reads + 1", y = "L1 major-capsid reads + 1") +
   theme(legend.position = "right", legend.key.size = unit(0.4, "cm"))
 
