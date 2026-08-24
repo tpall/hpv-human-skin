@@ -22,7 +22,7 @@ Integration read from viral transcription. (**A**) E1:E2 transcript ratio by tie
 
 ### Skin neoplasia carries trace HPV, not productive infection
 
-Productive controls (warts, condyloma) reached the control-calibrated detection floor (`r p1(stats$floor_rpm)` RPM) in `r pp(stats$ctrl_pctfloor)`% of libraries, and EV biopsies in `r pp(stats$ev_pctfloor)`%, with median burdens of `r comma(stats$ctrl_medrpm)` and `r p1(stats$ev_medrpm)` RPM. Across `r comma(stats$neo_n)` cSCC/AK libraries only `r stats$neo_pos_floor` reached it (`r pp(stats$neo_pctfloor)`%), median burden `r formatC(stats$neo_medrpm, format="f", digits=3)` RPM, six orders of magnitude lower (@fig-rpm; Fisher OR `r fo(stats$fish_or)`, *P* = `r fp(stats$fish_p)`).
+Every library, including negatives, was scored as papillomavirus reads per million (RPM). Productive controls (warts, condyloma) reached the control-calibrated detection floor (`r p1(stats$floor_rpm)` RPM) in `r pp(stats$ctrl_pctfloor)`% of libraries, and EV biopsies in `r pp(stats$ev_pctfloor)`%, with median burdens of `r comma(stats$ctrl_medrpm)` and `r p1(stats$ev_medrpm)` RPM. Across `r comma(stats$neo_n)` cSCC/AK libraries only `r stats$neo_pos_floor` reached it (`r pp(stats$neo_pctfloor)`%), median burden `r formatC(stats$neo_medrpm, format="f", digits=3)` RPM, six orders of magnitude lower (@fig-rpm; Fisher OR `r fo(stats$fish_or)`, *P* = `r fp(stats$fish_p)`).
 
 ::: {#fig-rpm}
 ![](figure2.png)
