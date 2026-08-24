@@ -82,7 +82,7 @@ d <- d %>%
 
 p <- ggplot(d, aes(type, fct_rev(tier), fill = pct)) +
   geom_tile(colour = "white", linewidth = 0.3) +
-  geom_text(aes(label = lab, colour = lab_col), size = 2.6, show.legend = FALSE) +
+  geom_text(aes(label = lab, colour = lab_col), size = 3, show.legend = FALSE) +
   facet_grid(id ~ genus, space = "free_x", scales = "free_x") +
   scale_fill_viridis_c("Prevalence\nwithin tier (%)", option = "mako", direction = -1,
                        trans = "log10", limits = LIM, begin = 0.12, end = 0.95,
@@ -94,13 +94,17 @@ p <- ggplot(d, aes(type, fct_rev(tier), fill = pct)) +
     sprintf("%s (n = %s)", TLAB[x],
             formatC(tier_n$tier_size[match(x, tier_n$tier)], format = "d", big.mark = ","))) +
   labs(x = NULL, y = NULL) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 6),
-        axis.text.y = element_text(size = 8),
+  # 66 type labels across roughly 10.8 in of panel leaves about 11.8 pt per
+  # column, so a rotated label can go to 9 pt before neighbours collide. Set at
+  # 8.5 to keep a margin, with the tier labels and cell counts raised to match
+  # rather than leaving the axis looking out of scale with the rest.
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 8.5),
+        axis.text.y = element_text(size = 9.5),
         axis.ticks = element_blank(), panel.grid = element_blank(),
         strip.text.y = element_text(angle = 0), strip.text = element_text(size = 9),
         panel.spacing.x = unit(2, "pt"), legend.key.height = unit(1.1, "cm"))
 
-ggsave(here("manuscript/figureS2.png"), p, width = 13.5, height = 6.2, dpi = 200, bg = "white")
-ggsave(here("manuscript/figureS2.pdf"), p, width = 13.5, height = 6.2)
+ggsave(here("manuscript/figureS2.png"), p, width = 13.5, height = 6.8, dpi = 200, bg = "white")
+ggsave(here("manuscript/figureS2.pdf"), p, width = 13.5, height = 6.8)
 cat(sprintf("figureS2: %d types, %d assigned cells, %d detection cells; prevalence %.3f%% to %.1f%%\n",
             n_distinct(both$type), nrow(assigned), nrow(detected), LIM[1], LIM[2]))
