@@ -106,6 +106,62 @@ ggsave(file.path(OUT, "prov_S1S6_combined.png"),
          guides(colour = guide_legend(override.aes = list(size = 3, alpha = 1))),
        width = 13, height = 9.5, dpi = 200, bg = "white")
 
+## ── S1 + S6 as a faceted tile grid ──────────────────────────────────────────
+## Structure follows the version drafted by hand: genus as facet rows, assigned
+## against detected as facet columns, so the partition between the two tables is
+## explicit rather than something the reader has to reconstruct.
+##
+## The colour problem in that draft is that fill was linear on a skewed count:
+## 37% of cells carry n <= 3, and on a linear 1-35 ramp n = 3 sits at 6%, which
+## is effectively white, so the white count labels vanished. Three changes:
+##   1. log10 fill, which moves n = 3 to 31% of the ramp
+##   2. a palette that does not start at white (begin = 0.12)
+##   3. label colour chosen per tile from the fill, rather than always white
+tile_labels <- function(n, lim) {
+  # White on the dark half, near-black on the light half. Computed on the same
+  # log scale as the fill so the switch happens where the palette actually
+  # turns dark, not where the raw count happens to sit.
+  pos <- (log10(n) - log10(lim[1])) / (log10(lim[2]) - log10(lim[1]))
+  ifelse(is.na(pos) | pos < 0.55, "grey15", "white")
+}
+
+tiles <- function(d, opt = "mako", begin = 0.12, end = 0.95) {
+  lim <- c(1, max(d$n, na.rm = TRUE))
+  d <- d %>% mutate(type = factor(type, levels = rev(TYPE_ORDER)),
+                    genus = factor(genus, levels = GLEV),
+                    lab_col = tile_labels(n, lim))
+  ggplot(d, aes(tier, type, fill = n)) +
+    geom_tile(colour = "white", linewidth = 0.4) +
+    geom_text(aes(label = ifelse(is.na(n), "", n), colour = lab_col),
+              size = 2.7, show.legend = FALSE) +
+    facet_grid(genus ~ id, space = "free", scales = "free_y") +
+    scale_fill_viridis_c("Libraries", option = opt, direction = -1,
+                         trans = "log10", limits = lim,
+                         begin = begin, end = end,
+                         breaks = c(1, 3, 10, 30), na.value = "grey97") +
+    scale_colour_identity() +
+    scale_x_discrete(labels = function(x) gsub("\\n", " ", TLAB[x])) +
+    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 8),
+          axis.text.y = element_text(size = 7),
+          axis.title = element_blank(), axis.ticks = element_blank(),
+          axis.line = element_blank(),
+          strip.text.y = element_text(angle = 0),
+          panel.spacing.y = unit(2, "pt"),
+          legend.key.height = unit(1.1, "cm"))
+}
+
+grid_d <- bind_rows(assigned = rename(s1, ref = hpv_reference),
+                    detected = rename(s6, ref = top_ref), .id = "id") %>%
+  select(id, tier, type, genus, n) %>%
+  mutate(id = factor(id, levels = c("assigned", "detected"),
+                     labels = c("Assigned (S1)", "Detection tier (S6)"))) %>%
+  complete(id, nesting(tier, genus, type))
+
+for (o in c("mako", "viridis", "rocket")) {
+  ggsave(file.path(OUT, sprintf("prov_S1S6_tiles_%s.png", o)),
+         tiles(grid_d, opt = o), width = 9, height = 12.5, dpi = 200, bg = "white")
+}
+
 ## ── Table S7: co-infected libraries ─────────────────────────────────────────
 ## Every assigned type in every library carrying more than one, ordered by the
 ## deepest type. The three cautions the table's caption spells out are all
