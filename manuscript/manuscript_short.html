@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="[Authors to be added]">
-<meta name="dcterms.date" content="2026-08-23">
+<meta name="dcterms.date" content="2026-08-24">
 
 <title>Cutaneous HPV is transcriptionally quiet in skin and carcinoma but productive in warts: a depth-controlled re-mining of public RNA-seq</title>
 <style>
@@ -3219,6 +3219,8 @@ window.Quarto = {
   <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
   <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion">Discussion</a></li>
   <li><a href="#materials-and-methods" id="toc-materials-and-methods" class="nav-link" data-scroll-target="#materials-and-methods">Materials and Methods</a></li>
+  <li><a href="#funding" id="toc-funding" class="nav-link" data-scroll-target="#funding">Funding</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   <li><a href="#supplementary-material" id="toc-supplementary-material" class="nav-link" data-scroll-target="#supplementary-material">Supplementary Material</a>
   <ul class="collapse">
   <li><a href="#supplementary-materials-and-methods" id="toc-supplementary-materials-and-methods" class="nav-link" data-scroll-target="#supplementary-materials-and-methods">Supplementary Materials and Methods</a></li>
@@ -3253,7 +3255,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">August 23, 2026</p>
+      <p class="date">August 24, 2026</p>
     </div>
   </div>
   
@@ -3411,6 +3413,160 @@ Figure 4: HPV genus prevalence by population tier. The assigned-type catalogue,
 <p><strong>Whole-library screening.</strong> Every library was screened in full: no step subsamples reads and <code>fasterq-dump</code> was run without a spot limit. This matters because reads deposited from a coordinate-sorted alignment emerge from the SRA in reference order, placing unmapped, and therefore viral, reads at the end of the run. Reads reaching the screen were a median 98.6% of the SRA-reported spot count, with per-tier medians spanning 95.8% to 100%, so no tier was read less completely than another.</p>
 <p><strong>Calling infection and productivity.</strong> A reference was assigned when coverage breadth was at least 0.10 and mean depth at least 2. Every library, including negatives, was scored as papillomavirus reads per million (RPM). Productive infection required at least three L1 major-capsid reads, and a control-calibrated detection floor was set at the 5th-percentile RPM of non-cell-line productive controls (13.2 RPM).</p>
 <p><strong>Confounder control and statistics.</strong> Sequencing depth entered every model as log<sub>10</sub> library size. Library-selection chemistry was recovered from SRA <code>LibrarySelection</code> and, where that field is generic, from library-construction protocol text, resolving 62.2% of libraries. Integration was read from the E1:E2 transcript ratio and validated against virus-host junctions and an independent graded cervical series. Logistic regressions and Fisher exact tests were fitted in R, with Wilson intervals for proportions and a Bayesian re-analysis under weakly-informative priors as a robustness check.</p>
+</section>
+<section id="funding" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="funding">Funding</h2>
+<p>This research was supported by the Estonian Research Council grant (PRG2707).</p>
+<p>This research was co-financed through the DURABLE project. The DURABLE project has been co-funded by the European Union, under the EU4Health Programme (EU4H), Project no. 101102733. Views and opinions expressed are however those of the authors only and do not necessarily reflect those of the European Union or the European Health and Digital Executive Agency. Neither the European Union nor the granting authority can be held responsible for them.</p>
+</section>
+<section id="references" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-adey2013" class="csl-entry" role="listitem">
+Adey, Andrew et al. 2013. <span>“The Haplotype-Resolved Genome and Epigenome of the Aneuploid <span>HeLa</span> Cancer Cell Line.”</span> <em>Nature</em> 500: 207–11. <a href="https://doi.org/10.1038/nature12064">https://doi.org/10.1038/nature12064</a>.
+</div>
+<div id="ref-antonsson2000" class="csl-entry" role="listitem">
+Antonsson, Annika, Ola Forslund, Henrik Ekberg, Gunnar Sterner, and Bo G. Hansson. 2000. <span>“The Ubiquity and Impressive Genomic Diversity of Human Skin Papillomaviruses Suggest a Commensalic Nature of These Viruses.”</span> <em>Journal of Virology</em> 74 (24): 11636–41. <a href="https://doi.org/10.1128/JVI.74.24.11636-11641.2000">https://doi.org/10.1128/JVI.74.24.11636-11641.2000</a>.
+</div>
+<div id="ref-arron2011" class="csl-entry" role="listitem">
+Arron, Sarah T. et al. 2011. <span>“Transcriptome Sequencing Demonstrates That Human Papillomavirus Is Not Active in Cutaneous Squamous Cell Carcinoma.”</span> <em>Journal of Investigative Dermatology</em> 131 (8): 1745–53. <a href="https://doi.org/10.1038/jid.2011.91">https://doi.org/10.1038/jid.2011.91</a>.
+</div>
+<div id="ref-arroyomuhr2021" class="csl-entry" role="listitem">
+Arroyo Mühr, Laila Sara, Emilie Hultin, and Joakim Dillner. 2021. <span>“Transcription of Human Papillomaviruses in Nonmelanoma Skin Cancers of the Immunosuppressed.”</span> <em>International Journal of Cancer</em> 149 (6): 1341–47. <a href="https://doi.org/10.1002/ijc.33683">https://doi.org/10.1002/ijc.33683</a>.
+</div>
+<div id="ref-asplund2019" class="csl-entry" role="listitem">
+Asplund, Maria, Kristín R. Kjartansdóttir, Sarah Mollerup, Lasse Vinner, Helena Fridholm, Jose A. R. Herrera, Jens Friis-Nielsen, et al. 2019. <span>“Contaminating Viral Sequences in High-Throughput Sequencing Viromics: A Linkage Study of 700 Sequencing Libraries.”</span> <em>Clinical Microbiology and Infection</em> 25 (10): 1277–85. <a href="https://doi.org/10.1016/j.cmi.2019.04.028">https://doi.org/10.1016/j.cmi.2019.04.028</a>.
+</div>
+<div id="ref-bhargava2025" class="csl-entry" role="listitem">
+Bhargava, Devika, Alexandra Labadie, Rachel L. Hanson-Rios-Stutz, Austin Goodyke, Emily M. Moses, Amrita S. Das, Sarah Vanderweele, et al. 2025. <span>“From Castaways to Discoveries: Unveiling Treasures in Skin <span>RNAseq</span> Using a Novel Multidimensional Data Processing Workflow Including Infection-Host Dynamics.”</span> <em>Physiological Genomics</em> 57 (5): 343–56. <a href="https://doi.org/10.1152/physiolgenomics.00093.2024">https://doi.org/10.1152/physiolgenomics.00093.2024</a>.
+</div>
+<div id="ref-bzhalava2014" class="csl-entry" role="listitem">
+Bzhalava, Davit, Laila Sara Arroyo Mühr, Camilla Lagheden, Johanna Ekström, Ola Forslund, Joakim Dillner, and Emilie Hultin. 2014. <span>“Deep Sequencing Extends the Diversity of Human Papillomaviruses in Human Skin.”</span> <em>Scientific Reports</em> 4: 5807. <a href="https://doi.org/10.1038/srep05807">https://doi.org/10.1038/srep05807</a>.
+</div>
+<div id="ref-cantalupo2015" class="csl-entry" role="listitem">
+Cantalupo, Paul G., Joshua P. Katz, and James M. Pipas. 2015. <span>“<span>HeLa</span> Nucleic Acid Contamination in <span>The Cancer Genome Atlas</span> Leads to the Misidentification of Human Papillomavirus 18.”</span> <em>Journal of Virology</em> 89 (8): 4051–57. <a href="https://doi.org/10.1128/JVI.03365-14">https://doi.org/10.1128/JVI.03365-14</a>.
+</div>
+<div id="ref-cantalupo2019" class="csl-entry" role="listitem">
+Cantalupo, Paul G., and James M. Pipas. 2019. <span>“Detecting Viral Sequences in <span>NGS</span> Data.”</span> <em>Current Opinion in Virology</em> 39: 41–48. <a href="https://doi.org/10.1016/j.coviro.2019.07.010">https://doi.org/10.1016/j.coviro.2019.07.010</a>.
+</div>
+<div id="ref-chen2018" class="csl-entry" role="listitem">
+Chen, Shifu, Yanqing Zhou, Yaru Chen, and Jia Gu. 2018. <span>“Fastp: An Ultra-Fast All-in-One <span>FASTQ</span> Preprocessor.”</span> <em>Bioinformatics</em> 34 (17): i884–90. <a href="https://doi.org/10.1093/bioinformatics/bty560">https://doi.org/10.1093/bioinformatics/bty560</a>.
+</div>
+<div id="ref-danecek2021" class="csl-entry" role="listitem">
+Danecek, Petr, James K. Bonfield, Jennifer Liddle, John Marshall, Valeriu Ohan, Martin O. Pollard, Andrew Whitwham, et al. 2021. <span>“Twelve Years of <span>SAMtools</span> and <span>BCFtools</span>.”</span> <em>GigaScience</em> 10 (2): giab008. <a href="https://doi.org/10.1093/gigascience/giab008">https://doi.org/10.1093/gigascience/giab008</a>.
+</div>
+<div id="ref-devitt2019" class="csl-entry" role="listitem">
+Devitt, Katharina, Sarah J. Hanson, Zewen K. Tuong, Erin McMeniman, H. Peter Soyer, Ian H. Frazer, and Samuel W. Lukowski. 2019. <span>“Single-Cell <span>RNA</span> Sequencing Reveals Cell Type-Specific <span>HPV</span> Expression in Hyperplastic Skin Lesions.”</span> <em>Virology</em> 537: 14–19. <a href="https://doi.org/10.1016/j.virol.2019.08.007">https://doi.org/10.1016/j.virol.2019.08.007</a>.
+</div>
+<div id="ref-ditommaso2017" class="csl-entry" role="listitem">
+Di Tommaso, Paolo, Maria Chatzou, Evan W. Floden, Pablo Prieto Barja, Emilio Palumbo, and Cedric Notredame. 2017. <span>“Nextflow Enables Reproducible Computational Workflows.”</span> <em>Nature Biotechnology</em> 35 (4): 316–19. <a href="https://doi.org/10.1038/nbt.3820">https://doi.org/10.1038/nbt.3820</a>.
+</div>
+<div id="ref-dobin2013" class="csl-entry" role="listitem">
+Dobin, Alexander, Carrie A. Davis, Felix Schlesinger, Jorg Drenkow, Chris Zaleski, Sonali Jha, Philippe Batut, Mark Chaisson, and Thomas R. Gingeras. 2013. <span>“<span>STAR</span>: Ultrafast Universal <span class="nocase">RNA-seq</span> Aligner.”</span> <em>Bioinformatics</em> 29 (1): 15–21. <a href="https://doi.org/10.1093/bioinformatics/bts635">https://doi.org/10.1093/bioinformatics/bts635</a>.
+</div>
+<div id="ref-doorbar2023" class="csl-entry" role="listitem">
+Doorbar, John. 2023. <span>“The Human Papillomavirus Twilight Zone: Latency, Immune Control and Subclinical Infection.”</span> <em>Tumour Virus Research</em> 16: 200268.
+</div>
+<div id="ref-dorfer2021" class="csl-entry" role="listitem">
+Dorfer, Sonja et al. 2021. <span>“<span>MmuPV1</span> Is a Key Driver of Skin Cancer Development Upon Immunosuppression.”</span> <em>American Journal of Transplantation</em> 21 (2): 525–39.
+</div>
+<div id="ref-edgar2022" class="csl-entry" role="listitem">
+Edgar, Robert C. et al. 2022. <span>“Petabase-Scale Sequence Alignment Catalyses Viral Discovery.”</span> <em>Nature</em> 602: 142–47. <a href="https://doi.org/10.1038/s41586-021-04332-2">https://doi.org/10.1038/s41586-021-04332-2</a>.
+</div>
+<div id="ref-fujimoto2019" class="csl-entry" role="listitem">
+Fujimoto, Masakazu, Ibu Matsuzaki, Yuki Takahashi, Yuichi Iwahashi, Kenji Warigaya, Fumiyoshi Kojima, Masatoshi Jinnin, and Shin-ichi Murata. 2019. <span>“High-Risk Human Papillomavirus <span>E6/E7</span> <span class="nocase">mRNA</span> Is Rarely Detected in Nonanogenital Cutaneous Squamous Cell Carcinoma: An <span>RNA</span> in Situ Hybridization-Based Tissue Microarray Study.”</span> <em>The American Journal of Dermatopathology</em> 41 (3): 205–10. <a href="https://doi.org/10.1097/DAD.0000000000001289">https://doi.org/10.1097/DAD.0000000000001289</a>.
+</div>
+<div id="ref-gihawi2023" class="csl-entry" role="listitem">
+Gihawi, Abraham, Yuchen Ge, Jennifer Lu, Daniela Puiu, Amanda Xu, Colin S. Cooper, Daniel S. Brewer, Mihaela Pertea, and Steven L. Salzberg. 2023. <span>“Major Data Analysis Errors Invalidate Cancer Microbiome Findings.”</span> <em>mBio</em> 14 (5): e0160723. <a href="https://doi.org/10.1128/mbio.01607-23">https://doi.org/10.1128/mbio.01607-23</a>.
+</div>
+<div id="ref-rstanarm" class="csl-entry" role="listitem">
+Goodrich, Ben, Jonah Gabry, Imad Ali, and Sam Brilleman. 2024. <em><span class="nocase">rstanarm</span>: <span>Bayesian</span> Applied Regression Modeling via <span>Stan</span></em>. <a href="https://mc-stan.org/rstanarm/">https://mc-stan.org/rstanarm/</a>.
+</div>
+<div id="ref-howley2015" class="csl-entry" role="listitem">
+Howley, Peter M., and Herbert J. Pfister. 2015. <span>“Beta Genus Papillomaviruses and Skin Cancer.”</span> <em>Virology</em> 479-480: 290–96.
+</div>
+<div id="ref-hultin2019" class="csl-entry" role="listitem">
+Hultin, Emilie, Laila Sara Arroyo Mühr, Camilla Lagheden, and Joakim Dillner. 2019. <span>“<span>HPV</span> Transcription in Skin Tumors.”</span> <em>PLOS ONE</em> 14 (5): e0217942. <a href="https://doi.org/10.1371/journal.pone.0217942">https://doi.org/10.1371/journal.pone.0217942</a>.
+</div>
+<div id="ref-kazemian2015" class="csl-entry" role="listitem">
+Kazemian, Majid et al. 2015. <span>“Possible Human Papillomavirus 38 Contamination of Endometrial Cancer <span class="nocase">RNA-sequencing</span> Samples in <span>TCGA</span>.”</span> <em>Journal of Virology</em> 89 (17): 8967–73. <a href="https://doi.org/10.1128/JVI.00822-15">https://doi.org/10.1128/JVI.00822-15</a>.
+</div>
+<div id="ref-lambert2021" class="csl-entry" role="listitem">
+Lambert, Paul F., Karl Münger, Frank Rösl, Daniel Hasche, and Massimo Tommasino. 2021. <span>“Beta Human Papillomaviruses and Skin Cancer.”</span> <em>Nature</em> 588 (7838): E20–21. <a href="https://doi.org/10.1038/s41586-020-3023-0">https://doi.org/10.1038/s41586-020-3023-0</a>.
+</div>
+<div id="ref-leiendecker2023" class="csl-entry" role="listitem">
+Leiendecker, Lukas, Tobias Neumann, Pauline S. Jung, Shona M. Cronin, Thomas L. Steinacker, Alexander Schleiffer, Michael Schutzbier, et al. 2023. <span>“Human Papillomavirus 42 Drives Digital Papillary Adenocarcinoma and Elicits a Germ Cell-Like Program Conserved in <span>HPV</span>-Positive Cancers.”</span> <em>Cancer Discovery</em> 13 (1): 70–84. <a href="https://doi.org/10.1158/2159-8290.CD-22-0489">https://doi.org/10.1158/2159-8290.CD-22-0489</a>.
+</div>
+<div id="ref-leinonen2011" class="csl-entry" role="listitem">
+Leinonen, Rasko, Hideaki Sugawara, and Martin Shumway. 2011. <span>“The <span>Sequence Read Archive</span>.”</span> <em>Nucleic Acids Research</em> 39 (Database issue): D19–21. <a href="https://doi.org/10.1093/nar/gkq1019">https://doi.org/10.1093/nar/gkq1019</a>.
+</div>
+<div id="ref-liao2014" class="csl-entry" role="listitem">
+Liao, Yang, Gordon K. Smyth, and Wei Shi. 2014. <span>“featureCounts: An Efficient General Purpose Program for Assigning Sequence Reads to Genomic Features.”</span> <em>Bioinformatics</em> 30 (7): 923–30. <a href="https://doi.org/10.1093/bioinformatics/btt656">https://doi.org/10.1093/bioinformatics/btt656</a>.
+</div>
+<div id="ref-ma2014" class="csl-entry" role="listitem">
+Ma, Yingfei, Ramana Madupu, Ulas Karaoz, Carlos W. Nossa, Liying Yang, Shibu Yooseph, Patrick S. Yachimski, Eoin L. Brodie, Karen E. Nelson, and Zhiheng Pei. 2014. <span>“Human Papillomavirus Community in Healthy Persons, Defined by Metagenomics Analysis of Human Microbiome Project Shotgun Sequencing Data Sets.”</span> <em>Journal of Virology</em> 88 (9): 4786–97. <a href="https://doi.org/10.1128/JVI.00093-14">https://doi.org/10.1128/JVI.00093-14</a>.
+</div>
+<div id="ref-morgan2024" class="csl-entry" role="listitem">
+Morgan, Huw J., Carlotta Olivero, Boris Y. Shorning, Alex Gibbs, Alexandra L. Phillips, Lokapriya Ananthan, Annabelle Xiao Hui Lim, et al. 2024. <span>“<span>HPV8</span>-Induced <span>STAT3</span> Activation Led Keratinocyte Stem Cell Expansion in Human Actinic Keratoses.”</span> <em>JCI Insight</em> 9 (15): e177898. <a href="https://doi.org/10.1172/jci.insight.177898">https://doi.org/10.1172/jci.insight.177898</a>.
+</div>
+<div id="ref-oh2026" class="csl-entry" role="listitem">
+Oh, Choon Chiat, Gek San Tan, Jeremy Wee Kiat Ng, Tony Kiat Hon Lim, Fan Foon Cheo, Po Yin Tang, N. Gopalakrishna Iyer, et al. 2026. <span>“Human Papillomavirus Diversity in Asian Individuals with Cutaneous Squamous Cell Carcinoma.”</span> <em>JAMA Dermatology</em> 162 (5): 509–14. <a href="https://doi.org/10.1001/jamadermatol.2026.0308">https://doi.org/10.1001/jamadermatol.2026.0308</a>.
+</div>
+<div id="ref-purdie2005" class="csl-entry" role="listitem">
+Purdie, Karin J., Tharsi Surentheran, Jane C. Sterling, Lucy Bell, Jane M. McGregor, Charlotte M. Proby, Catherine A. Harwood, and Judith Breuer. 2005. <span>“Human Papillomavirus Gene Expression in Cutaneous Squamous Cell Carcinomas from Immunosuppressed and Immunocompetent Individuals.”</span> <em>Journal of Investigative Dermatology</em> 125 (1): 98–107. <a href="https://doi.org/10.1111/j.0022-202X.2005.23635.x">https://doi.org/10.1111/j.0022-202X.2005.23635.x</a>.
+</div>
+<div id="ref-rehm2022" class="csl-entry" role="listitem">
+Rehm, Tina M., Elke Straub, Thomas Iftner, and Frank Stubenrauch. 2022. <span>“Restriction of Viral Gene Expression and Replication Prevents Immortalization of Human Keratinocytes by a Beta-Human Papillomavirus.”</span> <em>Proceedings of the National Academy of Sciences</em> 119 (11): e2118930119. <a href="https://doi.org/10.1073/pnas.2118930119">https://doi.org/10.1073/pnas.2118930119</a>.
+</div>
+<div id="ref-rollison2021" class="csl-entry" role="listitem">
+Rollison, Dana E., Rossybelle P. Amorrortu, Yayi Zhao, Jane L. Messina, Michael J. Schell, Neil A. Fenske, Basil S. Cherpelis, et al. 2021. <span>“Cutaneous Human Papillomaviruses and the Risk of Keratinocyte Carcinomas.”</span> <em>Cancer Research</em> 81 (17): 4628–38. <a href="https://doi.org/10.1158/0008-5472.CAN-21-0805">https://doi.org/10.1158/0008-5472.CAN-21-0805</a>.
+</div>
+<div id="ref-rollison2019sites" class="csl-entry" role="listitem">
+Rollison, Dana E., Michael J. Schell, Neil A. Fenske, Basil Cherpelis, Jane L. Messina, Anna R. Giuliano, Pearlie K. Epling-Burnette, et al. 2019. <span>“Cutaneous Viral Infections Across 2 Anatomic Sites Among a Cohort of Patients Undergoing Skin Cancer Screening.”</span> <em>The Journal of Infectious Diseases</em> 219 (5): 711–22. <a href="https://doi.org/10.1093/infdis/jiy577">https://doi.org/10.1093/infdis/jiy577</a>.
+</div>
+<div id="ref-rollison2019" class="csl-entry" role="listitem">
+Rollison, Dana E., Daniele Viarisio, Rossybelle P. Amorrortu, Tarik Gheit, and Massimo Tommasino. 2019. <span>“An Emerging Issue in Oncogenic Virology: The Role of Beta Human Papillomavirus Types in the Development of Cutaneous Squamous Cell Carcinoma.”</span> <em>Journal of Virology</em> 93 (7): e01003–18. <a href="https://doi.org/10.1128/JVI.01003-18">https://doi.org/10.1128/JVI.01003-18</a>.
+</div>
+<div id="ref-saeidian2023" class="csl-entry" role="listitem">
+Saeidian, Amir Hossein, Leila Youssefian, Maryam Naji, others, Jouni Uitto, and Hassan Vahidnezhad. 2023. <span>“Whole Transcriptome–Based Skin Virome Profiling in Typical Epidermodysplasia Verruciformis Reveals <span><span class="math inline">\(\alpha\)</span></span>-, <span><span class="math inline">\(\beta\)</span></span>-, and <span><span class="math inline">\(\gamma\)</span></span>-<span>HPV</span> Infections.”</span> <em>JCI Insight</em> 8 (5): e162558. <a href="https://doi.org/10.1172/jci.insight.162558">https://doi.org/10.1172/jci.insight.162558</a>.
+</div>
+<div id="ref-selitsky2020" class="csl-entry" role="listitem">
+Selitsky, Sara R., David Marron, Daniel Hollern, Lisle E. Mose, Katherine A. Hoadley, Corbin Jones, Joel S. Parker, Dirk P. Dittmer, and Charles M. Perou. 2020. <span>“Virus Expression Detection Reveals <span>RNA</span>-Sequencing Contamination in <span>TCGA</span>.”</span> <em>BMC Genomics</em> 21 (1): 79. <a href="https://doi.org/10.1186/s12864-020-6483-6">https://doi.org/10.1186/s12864-020-6483-6</a>.
+</div>
+<div id="ref-shenpv2026" class="csl-entry" role="listitem">
+Shen, Jessica Y. Q., Rayan Chikhi, Anton Korobeynikov, and Artem Babaian. 2026. <span>“Petabase-Scale Papillomavirus Discovery.”</span> <em>bioRxiv</em>. <a href="https://doi.org/10.64898/2026.04.21.719858">https://doi.org/10.64898/2026.04.21.719858</a>.
+</div>
+<div id="ref-shen2016" class="csl-entry" role="listitem">
+Shen, Wei, Shuai Le, Yan Li, and Fuquan Hu. 2016. <span>“<span>SeqKit</span>: A Cross-Platform and Ultrafast Toolkit for <span>FASTA/Q</span> File Manipulation.”</span> <em>PLoS ONE</em> 11 (10): e0163962. <a href="https://doi.org/10.1371/journal.pone.0163962">https://doi.org/10.1371/journal.pone.0163962</a>.
+</div>
+<div id="ref-son2025" class="csl-entry" role="listitem">
+Son, Heehwa G., Dat Thinh Ha, Yun Xia, Tiancheng Li, Jasmine Blandin, Tomonori Oka, Marjan Azin, et al. 2025. <span>“Commensal Papillomavirus Immunity Preserves the Homeostasis of Highly Mutated Normal Skin.”</span> <em>Cancer Cell</em> 43 (1): 36–48.e10. <a href="https://doi.org/10.1016/j.ccell.2024.11.013">https://doi.org/10.1016/j.ccell.2024.11.013</a>.
+</div>
+<div id="ref-strickley2019" class="csl-entry" role="listitem">
+Strickley, John D. et al. 2019. <span>“Immunity to Commensal Papillomaviruses Protects Against Skin Cancer.”</span> <em>Nature</em> 575 (7783): 519–22. <a href="https://doi.org/10.1038/s41586-019-1719-9">https://doi.org/10.1038/s41586-019-1719-9</a>.
+</div>
+<div id="ref-strickley2021" class="csl-entry" role="listitem">
+Strickley, John D., Jonathan L. Messerschmidt, Alfred Bennett Jenson, Joongho Joh, and Shadmehr Demehri. 2021. <span>“Reply to: Beta Human Papillomaviruses and Skin Cancer.”</span> <em>Nature</em> 588 (7838): E22–23. <a href="https://doi.org/10.1038/s41586-020-3024-z">https://doi.org/10.1038/s41586-020-3024-z</a>.
+</div>
+<div id="ref-vandoorslaer2017" class="csl-entry" role="listitem">
+Van Doorslaer, Koenraad et al. 2017. <span>“The <span>Papillomavirus Episteme</span>: A Major Update to the Papillomavirus Sequence Database.”</span> <em>Nucleic Acids Research</em> 45 (D1): D499–506. <a href="https://doi.org/10.1093/nar/gkw879">https://doi.org/10.1093/nar/gkw879</a>.
+</div>
+<div id="ref-vandiver2021" class="csl-entry" role="listitem">
+Vandiver, Amy R., Bennett J. Thomas, Mehrdad Karimzada, Byron C. Knowles, Giovanni A. Botten, Roberto Spreafico, Jeremy N. Rotman, et al. 2021. <span>“Detection of Viral Gene Expression in Risk-Stratified Biopsies Reveals No Active <span>HPV</span> in Cutaneous Squamous Cell Carcinoma.”</span> <em>Experimental Dermatology</em> 30 (11): 1711–16. <a href="https://doi.org/10.1111/exd.14385">https://doi.org/10.1111/exd.14385</a>.
+</div>
+<div id="ref-viarisio2018" class="csl-entry" role="listitem">
+Viarisio, Daniele et al. 2018. <span>“Beta <span>HPV38</span> Oncoproteins Act with a Hit-and-Run Mechanism in Ultraviolet Radiation-Induced Skin Carcinogenesis in Mice.”</span> <em>PLoS Pathogens</em> 14 (1): e1006783. <a href="https://doi.org/10.1371/journal.ppat.1006783">https://doi.org/10.1371/journal.ppat.1006783</a>.
+</div>
+<div id="ref-weissenborn2012" class="csl-entry" role="listitem">
+Weissenborn, Sönke, Rachel E. Neale, Tim Waterboer, Damiano Abeni, Jan Nico Bouwes Bavinck, Adele C. Green, Catherine A. Harwood, et al. 2012. <span>“Beta-Papillomavirus <span>DNA</span> Loads in Hair Follicles of Immunocompetent People and Organ Transplant Recipients.”</span> <em>Medical Microbiology and Immunology</em> 201 (2): 117–25. <a href="https://doi.org/10.1007/s00430-011-0212-3">https://doi.org/10.1007/s00430-011-0212-3</a>.
+</div>
+<div id="ref-wenande2025" class="csl-entry" role="listitem">
+Wenande, Emily, Anna Hastrup, Stine Wiegell, Peter A. Philipsen, Niels Bech Thomsen, Shadmehr Demehri, Susanne K. Kjaer, and Merete Haedersdal. 2025. <span>“Human Papillomavirus Vaccination and Actinic Keratosis Burden: The <span>VAXAK</span> Randomized Clinical Trial.”</span> <em>JAMA Dermatology</em> 161 (6): 605–14. <a href="https://doi.org/10.1001/jamadermatol.2025.0531">https://doi.org/10.1001/jamadermatol.2025.0531</a>.
+</div>
+<div id="ref-wood2019" class="csl-entry" role="listitem">
+Wood, Derrick E., Jennifer Lu, and Ben Langmead. 2019. <span>“Improved Metagenomic Analysis with <span>Kraken 2</span>.”</span> <em>Genome Biology</em> 20: 257. <a href="https://doi.org/10.1186/s13059-019-1891-0">https://doi.org/10.1186/s13059-019-1891-0</a>.
+</div>
+</div>
 </section>
 <section id="supplementary-material" class="level1 unnumbered">
 <h1 class="unnumbered">Supplementary Material</h1>
@@ -4716,156 +4872,10 @@ Table S8: E2 integrity in assembled papillomavirus contigs, and why it cannot de
 </figcaption>
 </figure>
 </div>
-
 </section>
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-adey2013" class="csl-entry" role="listitem">
-Adey, Andrew et al. 2013. <span>“The Haplotype-Resolved Genome and Epigenome of the Aneuploid <span>HeLa</span> Cancer Cell Line.”</span> <em>Nature</em> 500: 207–11. <a href="https://doi.org/10.1038/nature12064">https://doi.org/10.1038/nature12064</a>.
-</div>
-<div id="ref-antonsson2000" class="csl-entry" role="listitem">
-Antonsson, Annika, Ola Forslund, Henrik Ekberg, Gunnar Sterner, and Bo G. Hansson. 2000. <span>“The Ubiquity and Impressive Genomic Diversity of Human Skin Papillomaviruses Suggest a Commensalic Nature of These Viruses.”</span> <em>Journal of Virology</em> 74 (24): 11636–41. <a href="https://doi.org/10.1128/JVI.74.24.11636-11641.2000">https://doi.org/10.1128/JVI.74.24.11636-11641.2000</a>.
-</div>
-<div id="ref-arron2011" class="csl-entry" role="listitem">
-Arron, Sarah T. et al. 2011. <span>“Transcriptome Sequencing Demonstrates That Human Papillomavirus Is Not Active in Cutaneous Squamous Cell Carcinoma.”</span> <em>Journal of Investigative Dermatology</em> 131 (8): 1745–53. <a href="https://doi.org/10.1038/jid.2011.91">https://doi.org/10.1038/jid.2011.91</a>.
-</div>
-<div id="ref-arroyomuhr2021" class="csl-entry" role="listitem">
-Arroyo Mühr, Laila Sara, Emilie Hultin, and Joakim Dillner. 2021. <span>“Transcription of Human Papillomaviruses in Nonmelanoma Skin Cancers of the Immunosuppressed.”</span> <em>International Journal of Cancer</em> 149 (6): 1341–47. <a href="https://doi.org/10.1002/ijc.33683">https://doi.org/10.1002/ijc.33683</a>.
-</div>
-<div id="ref-asplund2019" class="csl-entry" role="listitem">
-Asplund, Maria, Kristín R. Kjartansdóttir, Sarah Mollerup, Lasse Vinner, Helena Fridholm, Jose A. R. Herrera, Jens Friis-Nielsen, et al. 2019. <span>“Contaminating Viral Sequences in High-Throughput Sequencing Viromics: A Linkage Study of 700 Sequencing Libraries.”</span> <em>Clinical Microbiology and Infection</em> 25 (10): 1277–85. <a href="https://doi.org/10.1016/j.cmi.2019.04.028">https://doi.org/10.1016/j.cmi.2019.04.028</a>.
-</div>
-<div id="ref-bhargava2025" class="csl-entry" role="listitem">
-Bhargava, Devika, Alexandra Labadie, Rachel L. Hanson-Rios-Stutz, Austin Goodyke, Emily M. Moses, Amrita S. Das, Sarah Vanderweele, et al. 2025. <span>“From Castaways to Discoveries: Unveiling Treasures in Skin <span>RNAseq</span> Using a Novel Multidimensional Data Processing Workflow Including Infection-Host Dynamics.”</span> <em>Physiological Genomics</em> 57 (5): 343–56. <a href="https://doi.org/10.1152/physiolgenomics.00093.2024">https://doi.org/10.1152/physiolgenomics.00093.2024</a>.
-</div>
-<div id="ref-bzhalava2014" class="csl-entry" role="listitem">
-Bzhalava, Davit, Laila Sara Arroyo Mühr, Camilla Lagheden, Johanna Ekström, Ola Forslund, Joakim Dillner, and Emilie Hultin. 2014. <span>“Deep Sequencing Extends the Diversity of Human Papillomaviruses in Human Skin.”</span> <em>Scientific Reports</em> 4: 5807. <a href="https://doi.org/10.1038/srep05807">https://doi.org/10.1038/srep05807</a>.
-</div>
-<div id="ref-cantalupo2015" class="csl-entry" role="listitem">
-Cantalupo, Paul G., Joshua P. Katz, and James M. Pipas. 2015. <span>“<span>HeLa</span> Nucleic Acid Contamination in <span>The Cancer Genome Atlas</span> Leads to the Misidentification of Human Papillomavirus 18.”</span> <em>Journal of Virology</em> 89 (8): 4051–57. <a href="https://doi.org/10.1128/JVI.03365-14">https://doi.org/10.1128/JVI.03365-14</a>.
-</div>
-<div id="ref-cantalupo2019" class="csl-entry" role="listitem">
-Cantalupo, Paul G., and James M. Pipas. 2019. <span>“Detecting Viral Sequences in <span>NGS</span> Data.”</span> <em>Current Opinion in Virology</em> 39: 41–48. <a href="https://doi.org/10.1016/j.coviro.2019.07.010">https://doi.org/10.1016/j.coviro.2019.07.010</a>.
-</div>
-<div id="ref-chen2018" class="csl-entry" role="listitem">
-Chen, Shifu, Yanqing Zhou, Yaru Chen, and Jia Gu. 2018. <span>“Fastp: An Ultra-Fast All-in-One <span>FASTQ</span> Preprocessor.”</span> <em>Bioinformatics</em> 34 (17): i884–90. <a href="https://doi.org/10.1093/bioinformatics/bty560">https://doi.org/10.1093/bioinformatics/bty560</a>.
-</div>
-<div id="ref-danecek2021" class="csl-entry" role="listitem">
-Danecek, Petr, James K. Bonfield, Jennifer Liddle, John Marshall, Valeriu Ohan, Martin O. Pollard, Andrew Whitwham, et al. 2021. <span>“Twelve Years of <span>SAMtools</span> and <span>BCFtools</span>.”</span> <em>GigaScience</em> 10 (2): giab008. <a href="https://doi.org/10.1093/gigascience/giab008">https://doi.org/10.1093/gigascience/giab008</a>.
-</div>
-<div id="ref-devitt2019" class="csl-entry" role="listitem">
-Devitt, Katharina, Sarah J. Hanson, Zewen K. Tuong, Erin McMeniman, H. Peter Soyer, Ian H. Frazer, and Samuel W. Lukowski. 2019. <span>“Single-Cell <span>RNA</span> Sequencing Reveals Cell Type-Specific <span>HPV</span> Expression in Hyperplastic Skin Lesions.”</span> <em>Virology</em> 537: 14–19. <a href="https://doi.org/10.1016/j.virol.2019.08.007">https://doi.org/10.1016/j.virol.2019.08.007</a>.
-</div>
-<div id="ref-ditommaso2017" class="csl-entry" role="listitem">
-Di Tommaso, Paolo, Maria Chatzou, Evan W. Floden, Pablo Prieto Barja, Emilio Palumbo, and Cedric Notredame. 2017. <span>“Nextflow Enables Reproducible Computational Workflows.”</span> <em>Nature Biotechnology</em> 35 (4): 316–19. <a href="https://doi.org/10.1038/nbt.3820">https://doi.org/10.1038/nbt.3820</a>.
-</div>
-<div id="ref-dobin2013" class="csl-entry" role="listitem">
-Dobin, Alexander, Carrie A. Davis, Felix Schlesinger, Jorg Drenkow, Chris Zaleski, Sonali Jha, Philippe Batut, Mark Chaisson, and Thomas R. Gingeras. 2013. <span>“<span>STAR</span>: Ultrafast Universal <span class="nocase">RNA-seq</span> Aligner.”</span> <em>Bioinformatics</em> 29 (1): 15–21. <a href="https://doi.org/10.1093/bioinformatics/bts635">https://doi.org/10.1093/bioinformatics/bts635</a>.
-</div>
-<div id="ref-doorbar2023" class="csl-entry" role="listitem">
-Doorbar, John. 2023. <span>“The Human Papillomavirus Twilight Zone: Latency, Immune Control and Subclinical Infection.”</span> <em>Tumour Virus Research</em> 16: 200268.
-</div>
-<div id="ref-dorfer2021" class="csl-entry" role="listitem">
-Dorfer, Sonja et al. 2021. <span>“<span>MmuPV1</span> Is a Key Driver of Skin Cancer Development Upon Immunosuppression.”</span> <em>American Journal of Transplantation</em> 21 (2): 525–39.
-</div>
-<div id="ref-edgar2022" class="csl-entry" role="listitem">
-Edgar, Robert C. et al. 2022. <span>“Petabase-Scale Sequence Alignment Catalyses Viral Discovery.”</span> <em>Nature</em> 602: 142–47. <a href="https://doi.org/10.1038/s41586-021-04332-2">https://doi.org/10.1038/s41586-021-04332-2</a>.
-</div>
-<div id="ref-fujimoto2019" class="csl-entry" role="listitem">
-Fujimoto, Masakazu, Ibu Matsuzaki, Yuki Takahashi, Yuichi Iwahashi, Kenji Warigaya, Fumiyoshi Kojima, Masatoshi Jinnin, and Shin-ichi Murata. 2019. <span>“High-Risk Human Papillomavirus <span>E6/E7</span> <span class="nocase">mRNA</span> Is Rarely Detected in Nonanogenital Cutaneous Squamous Cell Carcinoma: An <span>RNA</span> in Situ Hybridization-Based Tissue Microarray Study.”</span> <em>The American Journal of Dermatopathology</em> 41 (3): 205–10. <a href="https://doi.org/10.1097/DAD.0000000000001289">https://doi.org/10.1097/DAD.0000000000001289</a>.
-</div>
-<div id="ref-gihawi2023" class="csl-entry" role="listitem">
-Gihawi, Abraham, Yuchen Ge, Jennifer Lu, Daniela Puiu, Amanda Xu, Colin S. Cooper, Daniel S. Brewer, Mihaela Pertea, and Steven L. Salzberg. 2023. <span>“Major Data Analysis Errors Invalidate Cancer Microbiome Findings.”</span> <em>mBio</em> 14 (5): e0160723. <a href="https://doi.org/10.1128/mbio.01607-23">https://doi.org/10.1128/mbio.01607-23</a>.
-</div>
-<div id="ref-rstanarm" class="csl-entry" role="listitem">
-Goodrich, Ben, Jonah Gabry, Imad Ali, and Sam Brilleman. 2024. <em><span class="nocase">rstanarm</span>: <span>Bayesian</span> Applied Regression Modeling via <span>Stan</span></em>. <a href="https://mc-stan.org/rstanarm/">https://mc-stan.org/rstanarm/</a>.
-</div>
-<div id="ref-howley2015" class="csl-entry" role="listitem">
-Howley, Peter M., and Herbert J. Pfister. 2015. <span>“Beta Genus Papillomaviruses and Skin Cancer.”</span> <em>Virology</em> 479-480: 290–96.
-</div>
-<div id="ref-hultin2019" class="csl-entry" role="listitem">
-Hultin, Emilie, Laila Sara Arroyo Mühr, Camilla Lagheden, and Joakim Dillner. 2019. <span>“<span>HPV</span> Transcription in Skin Tumors.”</span> <em>PLOS ONE</em> 14 (5): e0217942. <a href="https://doi.org/10.1371/journal.pone.0217942">https://doi.org/10.1371/journal.pone.0217942</a>.
-</div>
-<div id="ref-kazemian2015" class="csl-entry" role="listitem">
-Kazemian, Majid et al. 2015. <span>“Possible Human Papillomavirus 38 Contamination of Endometrial Cancer <span class="nocase">RNA-sequencing</span> Samples in <span>TCGA</span>.”</span> <em>Journal of Virology</em> 89 (17): 8967–73. <a href="https://doi.org/10.1128/JVI.00822-15">https://doi.org/10.1128/JVI.00822-15</a>.
-</div>
-<div id="ref-lambert2021" class="csl-entry" role="listitem">
-Lambert, Paul F., Karl Münger, Frank Rösl, Daniel Hasche, and Massimo Tommasino. 2021. <span>“Beta Human Papillomaviruses and Skin Cancer.”</span> <em>Nature</em> 588 (7838): E20–21. <a href="https://doi.org/10.1038/s41586-020-3023-0">https://doi.org/10.1038/s41586-020-3023-0</a>.
-</div>
-<div id="ref-leiendecker2023" class="csl-entry" role="listitem">
-Leiendecker, Lukas, Tobias Neumann, Pauline S. Jung, Shona M. Cronin, Thomas L. Steinacker, Alexander Schleiffer, Michael Schutzbier, et al. 2023. <span>“Human Papillomavirus 42 Drives Digital Papillary Adenocarcinoma and Elicits a Germ Cell-Like Program Conserved in <span>HPV</span>-Positive Cancers.”</span> <em>Cancer Discovery</em> 13 (1): 70–84. <a href="https://doi.org/10.1158/2159-8290.CD-22-0489">https://doi.org/10.1158/2159-8290.CD-22-0489</a>.
-</div>
-<div id="ref-leinonen2011" class="csl-entry" role="listitem">
-Leinonen, Rasko, Hideaki Sugawara, and Martin Shumway. 2011. <span>“The <span>Sequence Read Archive</span>.”</span> <em>Nucleic Acids Research</em> 39 (Database issue): D19–21. <a href="https://doi.org/10.1093/nar/gkq1019">https://doi.org/10.1093/nar/gkq1019</a>.
-</div>
-<div id="ref-liao2014" class="csl-entry" role="listitem">
-Liao, Yang, Gordon K. Smyth, and Wei Shi. 2014. <span>“featureCounts: An Efficient General Purpose Program for Assigning Sequence Reads to Genomic Features.”</span> <em>Bioinformatics</em> 30 (7): 923–30. <a href="https://doi.org/10.1093/bioinformatics/btt656">https://doi.org/10.1093/bioinformatics/btt656</a>.
-</div>
-<div id="ref-ma2014" class="csl-entry" role="listitem">
-Ma, Yingfei, Ramana Madupu, Ulas Karaoz, Carlos W. Nossa, Liying Yang, Shibu Yooseph, Patrick S. Yachimski, Eoin L. Brodie, Karen E. Nelson, and Zhiheng Pei. 2014. <span>“Human Papillomavirus Community in Healthy Persons, Defined by Metagenomics Analysis of Human Microbiome Project Shotgun Sequencing Data Sets.”</span> <em>Journal of Virology</em> 88 (9): 4786–97. <a href="https://doi.org/10.1128/JVI.00093-14">https://doi.org/10.1128/JVI.00093-14</a>.
-</div>
-<div id="ref-morgan2024" class="csl-entry" role="listitem">
-Morgan, Huw J., Carlotta Olivero, Boris Y. Shorning, Alex Gibbs, Alexandra L. Phillips, Lokapriya Ananthan, Annabelle Xiao Hui Lim, et al. 2024. <span>“<span>HPV8</span>-Induced <span>STAT3</span> Activation Led Keratinocyte Stem Cell Expansion in Human Actinic Keratoses.”</span> <em>JCI Insight</em> 9 (15): e177898. <a href="https://doi.org/10.1172/jci.insight.177898">https://doi.org/10.1172/jci.insight.177898</a>.
-</div>
-<div id="ref-oh2026" class="csl-entry" role="listitem">
-Oh, Choon Chiat, Gek San Tan, Jeremy Wee Kiat Ng, Tony Kiat Hon Lim, Fan Foon Cheo, Po Yin Tang, N. Gopalakrishna Iyer, et al. 2026. <span>“Human Papillomavirus Diversity in Asian Individuals with Cutaneous Squamous Cell Carcinoma.”</span> <em>JAMA Dermatology</em> 162 (5): 509–14. <a href="https://doi.org/10.1001/jamadermatol.2026.0308">https://doi.org/10.1001/jamadermatol.2026.0308</a>.
-</div>
-<div id="ref-purdie2005" class="csl-entry" role="listitem">
-Purdie, Karin J., Tharsi Surentheran, Jane C. Sterling, Lucy Bell, Jane M. McGregor, Charlotte M. Proby, Catherine A. Harwood, and Judith Breuer. 2005. <span>“Human Papillomavirus Gene Expression in Cutaneous Squamous Cell Carcinomas from Immunosuppressed and Immunocompetent Individuals.”</span> <em>Journal of Investigative Dermatology</em> 125 (1): 98–107. <a href="https://doi.org/10.1111/j.0022-202X.2005.23635.x">https://doi.org/10.1111/j.0022-202X.2005.23635.x</a>.
-</div>
-<div id="ref-rehm2022" class="csl-entry" role="listitem">
-Rehm, Tina M., Elke Straub, Thomas Iftner, and Frank Stubenrauch. 2022. <span>“Restriction of Viral Gene Expression and Replication Prevents Immortalization of Human Keratinocytes by a Beta-Human Papillomavirus.”</span> <em>Proceedings of the National Academy of Sciences</em> 119 (11): e2118930119. <a href="https://doi.org/10.1073/pnas.2118930119">https://doi.org/10.1073/pnas.2118930119</a>.
-</div>
-<div id="ref-rollison2021" class="csl-entry" role="listitem">
-Rollison, Dana E., Rossybelle P. Amorrortu, Yayi Zhao, Jane L. Messina, Michael J. Schell, Neil A. Fenske, Basil S. Cherpelis, et al. 2021. <span>“Cutaneous Human Papillomaviruses and the Risk of Keratinocyte Carcinomas.”</span> <em>Cancer Research</em> 81 (17): 4628–38. <a href="https://doi.org/10.1158/0008-5472.CAN-21-0805">https://doi.org/10.1158/0008-5472.CAN-21-0805</a>.
-</div>
-<div id="ref-rollison2019sites" class="csl-entry" role="listitem">
-Rollison, Dana E., Michael J. Schell, Neil A. Fenske, Basil Cherpelis, Jane L. Messina, Anna R. Giuliano, Pearlie K. Epling-Burnette, et al. 2019. <span>“Cutaneous Viral Infections Across 2 Anatomic Sites Among a Cohort of Patients Undergoing Skin Cancer Screening.”</span> <em>The Journal of Infectious Diseases</em> 219 (5): 711–22. <a href="https://doi.org/10.1093/infdis/jiy577">https://doi.org/10.1093/infdis/jiy577</a>.
-</div>
-<div id="ref-rollison2019" class="csl-entry" role="listitem">
-Rollison, Dana E., Daniele Viarisio, Rossybelle P. Amorrortu, Tarik Gheit, and Massimo Tommasino. 2019. <span>“An Emerging Issue in Oncogenic Virology: The Role of Beta Human Papillomavirus Types in the Development of Cutaneous Squamous Cell Carcinoma.”</span> <em>Journal of Virology</em> 93 (7): e01003–18. <a href="https://doi.org/10.1128/JVI.01003-18">https://doi.org/10.1128/JVI.01003-18</a>.
-</div>
-<div id="ref-saeidian2023" class="csl-entry" role="listitem">
-Saeidian, Amir Hossein, Leila Youssefian, Maryam Naji, others, Jouni Uitto, and Hassan Vahidnezhad. 2023. <span>“Whole Transcriptome–Based Skin Virome Profiling in Typical Epidermodysplasia Verruciformis Reveals <span><span class="math inline">\(\alpha\)</span></span>-, <span><span class="math inline">\(\beta\)</span></span>-, and <span><span class="math inline">\(\gamma\)</span></span>-<span>HPV</span> Infections.”</span> <em>JCI Insight</em> 8 (5): e162558. <a href="https://doi.org/10.1172/jci.insight.162558">https://doi.org/10.1172/jci.insight.162558</a>.
-</div>
-<div id="ref-selitsky2020" class="csl-entry" role="listitem">
-Selitsky, Sara R., David Marron, Daniel Hollern, Lisle E. Mose, Katherine A. Hoadley, Corbin Jones, Joel S. Parker, Dirk P. Dittmer, and Charles M. Perou. 2020. <span>“Virus Expression Detection Reveals <span>RNA</span>-Sequencing Contamination in <span>TCGA</span>.”</span> <em>BMC Genomics</em> 21 (1): 79. <a href="https://doi.org/10.1186/s12864-020-6483-6">https://doi.org/10.1186/s12864-020-6483-6</a>.
-</div>
-<div id="ref-shenpv2026" class="csl-entry" role="listitem">
-Shen, Jessica Y. Q., Rayan Chikhi, Anton Korobeynikov, and Artem Babaian. 2026. <span>“Petabase-Scale Papillomavirus Discovery.”</span> <em>bioRxiv</em>. <a href="https://doi.org/10.64898/2026.04.21.719858">https://doi.org/10.64898/2026.04.21.719858</a>.
-</div>
-<div id="ref-shen2016" class="csl-entry" role="listitem">
-Shen, Wei, Shuai Le, Yan Li, and Fuquan Hu. 2016. <span>“<span>SeqKit</span>: A Cross-Platform and Ultrafast Toolkit for <span>FASTA/Q</span> File Manipulation.”</span> <em>PLoS ONE</em> 11 (10): e0163962. <a href="https://doi.org/10.1371/journal.pone.0163962">https://doi.org/10.1371/journal.pone.0163962</a>.
-</div>
-<div id="ref-son2025" class="csl-entry" role="listitem">
-Son, Heehwa G., Dat Thinh Ha, Yun Xia, Tiancheng Li, Jasmine Blandin, Tomonori Oka, Marjan Azin, et al. 2025. <span>“Commensal Papillomavirus Immunity Preserves the Homeostasis of Highly Mutated Normal Skin.”</span> <em>Cancer Cell</em> 43 (1): 36–48.e10. <a href="https://doi.org/10.1016/j.ccell.2024.11.013">https://doi.org/10.1016/j.ccell.2024.11.013</a>.
-</div>
-<div id="ref-strickley2019" class="csl-entry" role="listitem">
-Strickley, John D. et al. 2019. <span>“Immunity to Commensal Papillomaviruses Protects Against Skin Cancer.”</span> <em>Nature</em> 575 (7783): 519–22. <a href="https://doi.org/10.1038/s41586-019-1719-9">https://doi.org/10.1038/s41586-019-1719-9</a>.
-</div>
-<div id="ref-strickley2021" class="csl-entry" role="listitem">
-Strickley, John D., Jonathan L. Messerschmidt, Alfred Bennett Jenson, Joongho Joh, and Shadmehr Demehri. 2021. <span>“Reply to: Beta Human Papillomaviruses and Skin Cancer.”</span> <em>Nature</em> 588 (7838): E22–23. <a href="https://doi.org/10.1038/s41586-020-3024-z">https://doi.org/10.1038/s41586-020-3024-z</a>.
-</div>
-<div id="ref-vandoorslaer2017" class="csl-entry" role="listitem">
-Van Doorslaer, Koenraad et al. 2017. <span>“The <span>Papillomavirus Episteme</span>: A Major Update to the Papillomavirus Sequence Database.”</span> <em>Nucleic Acids Research</em> 45 (D1): D499–506. <a href="https://doi.org/10.1093/nar/gkw879">https://doi.org/10.1093/nar/gkw879</a>.
-</div>
-<div id="ref-vandiver2021" class="csl-entry" role="listitem">
-Vandiver, Amy R., Bennett J. Thomas, Mehrdad Karimzada, Byron C. Knowles, Giovanni A. Botten, Roberto Spreafico, Jeremy N. Rotman, et al. 2021. <span>“Detection of Viral Gene Expression in Risk-Stratified Biopsies Reveals No Active <span>HPV</span> in Cutaneous Squamous Cell Carcinoma.”</span> <em>Experimental Dermatology</em> 30 (11): 1711–16. <a href="https://doi.org/10.1111/exd.14385">https://doi.org/10.1111/exd.14385</a>.
-</div>
-<div id="ref-viarisio2018" class="csl-entry" role="listitem">
-Viarisio, Daniele et al. 2018. <span>“Beta <span>HPV38</span> Oncoproteins Act with a Hit-and-Run Mechanism in Ultraviolet Radiation-Induced Skin Carcinogenesis in Mice.”</span> <em>PLoS Pathogens</em> 14 (1): e1006783. <a href="https://doi.org/10.1371/journal.ppat.1006783">https://doi.org/10.1371/journal.ppat.1006783</a>.
-</div>
-<div id="ref-weissenborn2012" class="csl-entry" role="listitem">
-Weissenborn, Sönke, Rachel E. Neale, Tim Waterboer, Damiano Abeni, Jan Nico Bouwes Bavinck, Adele C. Green, Catherine A. Harwood, et al. 2012. <span>“Beta-Papillomavirus <span>DNA</span> Loads in Hair Follicles of Immunocompetent People and Organ Transplant Recipients.”</span> <em>Medical Microbiology and Immunology</em> 201 (2): 117–25. <a href="https://doi.org/10.1007/s00430-011-0212-3">https://doi.org/10.1007/s00430-011-0212-3</a>.
-</div>
-<div id="ref-wenande2025" class="csl-entry" role="listitem">
-Wenande, Emily, Anna Hastrup, Stine Wiegell, Peter A. Philipsen, Niels Bech Thomsen, Shadmehr Demehri, Susanne K. Kjaer, and Merete Haedersdal. 2025. <span>“Human Papillomavirus Vaccination and Actinic Keratosis Burden: The <span>VAXAK</span> Randomized Clinical Trial.”</span> <em>JAMA Dermatology</em> 161 (6): 605–14. <a href="https://doi.org/10.1001/jamadermatol.2025.0531">https://doi.org/10.1001/jamadermatol.2025.0531</a>.
-</div>
-<div id="ref-wood2019" class="csl-entry" role="listitem">
-Wood, Derrick E., Jennifer Lu, and Ben Langmead. 2019. <span>“Improved Metagenomic Analysis with <span>Kraken 2</span>.”</span> <em>Genome Biology</em> 20: 257. <a href="https://doi.org/10.1186/s13059-019-1891-0">https://doi.org/10.1186/s13059-019-1891-0</a>.
-</div>
-</div></section></div></main>
+</main>
 <!-- /main column -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {

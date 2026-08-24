@@ -1,0 +1,5 @@
+## Funding {.unnumbered}
+
+This research was supported by the Estonian Research Council grant (PRG2707).
+
+This research was co-financed through the DURABLE project. The DURABLE project has been co-funded by the European Union, under the EU4Health Programme (EU4H), Project no. 101102733. Views and opinions expressed are however those of the authors only and do not necessarily reflect those of the European Union or the European Health and Digital Executive Agency. Neither the European Union nor the granting authority can be held responsible for them.

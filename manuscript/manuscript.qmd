@@ -57,6 +57,8 @@ bget  <- function(m) as.list(bayes[bayes$model == m, ])
 
 {{< include _discussion.qmd >}}
 
+{{< include _funding.qmd >}}
+
 ## References {.unnumbered}
 
 ::: {#refs}
