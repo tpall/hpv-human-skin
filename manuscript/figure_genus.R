@@ -3,11 +3,11 @@
 #
 #   Rscript manuscript/figure_genus.R
 #
-# Collapses the two type catalogues (Table S1, assigned types; Table S5,
+# Collapses the two type catalogues (Table S1, assigned types; Table S6,
 # detection-tier trace types) from HPV type to HPV genus, so the type landscape
 # can be read at a glance. Three rows:
 #   Assigned  - library has a reference passing breadth >= 0.10 and depth >= 2
-#   Trace     - HPV-positive, no reference passes, but a best-hit type resolves
+#   Detection - HPV-positive, no reference passes, but a best-hit type resolves
 #   Any       - union of the two (a library appears in at most one of them)
 # A library can contribute to more than one genus if it carries more than one
 # type, so the bars within a tier need not sum to the tier's positivity rate.
@@ -47,7 +47,7 @@ assigned <- map_dfr(unlist(lapply(AGG, function(d)
   left_join(rp %>% select(srr_id, tier), by = c("sample_id" = "srr_id")) %>%
   distinct(id = sample_id, tier, genus_short)
 
-# Trace types (the Table S5 population): same quality filter as build_trace_table().
+# Detection-tier types (the Table S6 population): same filter as build_trace_table().
 trace <- read_tsv(here("manuscript/trace_types.tsv"), show_col_types = FALSE) %>%
   filter(!top_ref %in% c("NONE", "NO_BAM"), top_reads >= 5, max_mapq >= 20,
          top_reads / pmax(n_primary, 1) >= 0.5) %>%
@@ -70,12 +70,12 @@ summarise_level <- function(d, level) {
 }
 pd <- bind_rows(
     summarise_level(assigned, "Assigned type (Table S1)"),
-    summarise_level(trace,    "Trace type (Table S5)"),
+    summarise_level(trace,    "Detection tier (Table S6)"),
     summarise_level(anyd,     "Any detection")) %>%
   mutate(tier  = factor(TLAB[tier], levels = TLAB[TIERS]),
          Genus = factor(str_to_title(genus_short), levels = str_to_title(GEN)),
          level = factor(level, levels = c("Assigned type (Table S1)",
-                                          "Trace type (Table S5)", "Any detection")),
+                                          "Detection tier (Table S6)", "Any detection")),
          # A zero count still has a small positive posterior mean. Drawing it
          # would read as a detection, so zeros are marked at the axis floor.
          mean_p = if_else(k > 0, mean, NA_real_),
@@ -94,8 +94,8 @@ p <- ggplot(pd, aes(Genus, mean_p, colour = Genus)) +
   # the data keys in pd$level stay long (the caption and _helpers.R use them).
   facet_grid(level ~ tier, labeller = labeller(level = c(
     "Assigned type (Table S1)" = "Assigned (S1)",
-    "Trace type (Table S5)"    = "Trace (S5)",
-    "Any detection"            = "Any (S1 ∪ S5)"))) +
+    "Detection tier (Table S6)" = "Detection tier (S6)",
+    "Any detection"             = "Any (S1 \u222a S6)"))) +
   scale_y_log10(breaks = c(.01, .1, 1, 10, 100), labels = c("0", "0.1", "1", "10", "100"),
                 limits = c(FLOOR, 400)) +
   scale_colour_brewer(palette = "Dark2", guide = "none") +

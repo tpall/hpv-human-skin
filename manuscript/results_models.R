@@ -338,7 +338,7 @@ cat(sprintf("\nCIN check: %d mucosal-HR neoplasia cases (%s); neo floor -> %.2f%
     nrow(.cin), paste(.cin$srr_id,collapse=","), .neo_floor_cut, .bcut$OR, .bcut$p,
     .m3nc$pct, .m3nc$prod, .m3nc$n, .f3c$estimate, .f3c$p.value))
 
-## ── Trace-type detection catalogue summary (Table S5) ───────────────────────
+## ── Trace-type detection catalogue summary (Table S6) ───────────────────────
 .tt <- read_tsv(here("manuscript/trace_types.tsv"), show_col_types=FALSE) %>%
   mutate(trace_ok = !top_ref %in% c("NONE","NO_BAM") & top_reads>=5 & max_mapq>=20 &
                     top_reads/pmax(n_primary,1)>=0.5)

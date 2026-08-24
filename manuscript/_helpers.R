@@ -164,7 +164,7 @@ build_prod_table <- function(){
   })
 }
 
-## ── Table S5: detection-tier (trace) HPV type catalogue ─────────────────────
+## ── Table S6: detection-tier (trace) HPV type catalogue ─────────────────────
 # Best-hit type from STAR primary alignments (unique, MAPQ 255) for HPV-positive
 # but sub-threshold samples, i.e. below the breadth>=0.10 & depth>=2 assignment
 # cutoff. `trace_types.tsv` is a one-time BAM re-map; genus from the complete
@@ -206,7 +206,7 @@ build_trace_table <- function(){
 }
 # Trace-eligible libraries per tier: HPV-positive but with no reference passing
 # the breadth/depth assignment criterion. These are the only libraries that can
-# appear in Table S5 at all, so the caption quotes them alongside the tier N
+# appear in Table S6 at all, so the caption quotes them alongside the tier N
 # (the denominator of the printed prevalences, which stays the tier N so that
 # Tables S1 and S5 remain on one scale).
 .trace_eligible_N <- local({
@@ -237,7 +237,7 @@ kT  <- function(type, tc){ x <- .trace_counts(); v <- x[[tc]][x$type == type]
   if (length(v)) as.integer(v[1]) else 0L }
 ciT <- function(type, tc) prev_ci(kT(type, tc), tc)
 
-## ── Table S6: multi-type (co-infection) libraries ───────────────────────────
+## ── Table S7: multi-type (co-infection) libraries ───────────────────────────
 # Every library with two or more assigned references, i.e. two or more types
 # each clearing breadth >= 0.10 and depth >= 2. Coverage comes from
 # `samtools coverage -q 10`, so only uniquely-mapped reads (STAR MAPQ 255)
@@ -319,7 +319,7 @@ cf <- local({
        strict_libs = nrow(strict), strict_donors = n_distinct(strict$donor))
 })
 
-## ── Figure S2: genus prevalence by tier ─────────────────────────────────────
+## ── Figure 4: genus prevalence by tier ──────────────────────────────────────
 # manuscript/figure_genus.R plots the figure and writes the counts it plotted.
 # The caption reads that file, so figure and caption cannot drift apart.
 .genus_prev <- read_tsv(here("manuscript/genus_prevalence_by_tier.tsv"), show_col_types = FALSE)
@@ -337,7 +337,7 @@ ciG <- function(genus, tier, level = "Any detection"){
   r <- .gp_row(genus, tier, level)
   paste0(fpct(r$mean), "% [", fpct(r$lo), "–", fpct(r$hi), "]") }
 
-## ── E2 integrity in the DNA catalogue (Table S7) ────────────────────────────
+## ── E2 integrity in the DNA catalogue (Table S8) ────────────────────────────
 # The point of this table is NEGATIVE: it shows that asking a contig catalogue
 # whether E2 is intact cannot detect integration, because the only contigs on
 # which the question can be asked are the ones integration would have prevented
