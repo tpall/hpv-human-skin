@@ -131,16 +131,16 @@ tiles <- function(d, opt = "mako", begin = 0.12, end = 0.95) {
                     genus = factor(genus, levels = GLEV),
                     lab_col = tile_labels(n, lim))
   ggplot(d, aes(tier, type, fill = n)) +
-    geom_tile(colour = "white", linewidth = 0.4) +
+    geom_tile(colour = "white", linewidth = 0.3) +
     geom_text(aes(label = ifelse(is.na(n), "", n), colour = lab_col),
               size = 2.7, show.legend = FALSE) +
     facet_grid(genus ~ id, space = "free", scales = "free_y") +
     scale_fill_viridis_c("Libraries", option = opt, direction = -1,
                          trans = "log10", limits = lim,
                          begin = begin, end = end,
-                         breaks = c(1, 3, 10, 30), na.value = "grey97") +
+                         breaks = c(1, 3, 10, 30), na.value = "grey94") +
     scale_colour_identity() +
-    scale_x_discrete(labels = function(x) gsub("\\n", " ", TLAB[x])) +
+    scale_x_discrete(labels = function(x) gsub("\\n", " ", gsub("-\\n", "-", TLAB[x]))) +
     theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 8),
           axis.text.y = element_text(size = 7),
           axis.title = element_blank(), axis.ticks = element_blank(),
@@ -155,7 +155,11 @@ grid_d <- bind_rows(assigned = rename(s1, ref = hpv_reference),
   select(id, tier, type, genus, n) %>%
   mutate(id = factor(id, levels = c("assigned", "detected"),
                      labels = c("Assigned (S1)", "Detection tier (S6)"))) %>%
-  complete(id, nesting(tier, genus, type))
+  # Full grid: every type gets a cell in every tier, in both panels, so an empty
+  # cell means the type was not seen there. Completing on nesting(tier, ...)
+  # instead would leave a cell empty only where the *other* panel had one, which
+  # is a different and much less obvious statement.
+  complete(id, tier, nesting(genus, type))
 
 for (o in c("mako", "viridis", "rocket")) {
   ggsave(file.path(OUT, sprintf("prov_S1S6_tiles_%s.png", o)),
