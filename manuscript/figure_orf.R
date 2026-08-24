@@ -125,8 +125,9 @@ lab_c <- setNames(sprintf("%s\n(n = %d)", TLAB[as.character(ncomp$tier)], ncomp$
 pB <- ggplot(comp, aes(fct_rev(tier), share, fill = gene)) +
   geom_col(width = 0.72, position = position_stack(reverse = TRUE)) +
   coord_flip() +
-  scale_fill_brewer(palette = "RdYlBu", direction = -1, name = NULL,
-                    guide = guide_legend(reverse = TRUE)) +
+  # Legend runs E1 to L2, matching the left-to-right order of the stack, so the
+  # key can be read straight off the bar rather than back to front.
+  scale_fill_brewer(palette = "RdYlBu", direction = -1, name = NULL) +
   scale_x_discrete(labels = lab_c) +
   scale_y_continuous(labels = scales::percent, expand = expansion(c(0, 0.02))) +
   labs(x = NULL, y = sprintf("Mean share of viral reads (libraries with \u2265 %d)", MIN_COMP)) +
