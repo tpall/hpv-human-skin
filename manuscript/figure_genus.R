@@ -83,12 +83,20 @@ pd <- bind_rows(
          hi_p   = if_else(k > 0, hi,   NA_real_))
 
 FLOOR <- 0.01   # log axis needs a positive stand-in for "not detected"
-p <- ggplot(pd, aes(Genus, mean_p, colour = Genus)) +
-  geom_errorbar(aes(ymin = lo_p, ymax = hi_p), width = .18, linewidth = .4, na.rm = TRUE) +
-  geom_point(size = 2, na.rm = TRUE) +
+# Colour is deliberately not mapped. Genus is already the x axis, so colouring
+# by it encodes nothing a reader cannot read off the position, which is why it
+# carried no legend; a redundant scale without a key is noise rather than
+# information. One ink colour throughout, with the grey crosses reserved for
+# "not detected" so that distinction keeps a channel of its own.
+INK <- "#2c6fbb"
+p <- ggplot(pd, aes(Genus, mean_p)) +
+  geom_errorbar(aes(ymin = lo_p, ymax = hi_p), width = .18, linewidth = .4,
+                colour = INK, na.rm = TRUE) +
+  geom_point(size = 2, colour = INK, na.rm = TRUE) +
   geom_point(data = ~ filter(.x, k == 0), aes(y = FLOOR), shape = 4, size = 1.4,
              colour = "grey55", na.rm = TRUE) +
   geom_text(data = ~ filter(.x, k > 0), aes(y = hi_p, label = k), vjust = -.6,
+            colour = INK,
             size = 2.3, show.legend = FALSE) +
   # Strips name the level and nothing else. A supplementary table number burned
   # into the image cannot be corrected at proof and goes silently wrong whenever
@@ -101,7 +109,6 @@ p <- ggplot(pd, aes(Genus, mean_p, colour = Genus)) +
     "Any detection"             = "Any"))) +
   scale_y_log10(breaks = c(.01, .1, 1, 10, 100), labels = c("0", "0.1", "1", "10", "100"),
                 limits = c(FLOOR, 400)) +
-  scale_colour_brewer(palette = "Dark2", guide = "none") +
   labs(x = "HPV genus", y = "Prevalence within tier (%, log scale)") +
   # theme_cowplot() is set globally above; the only override is to angle the
   # genus labels, since five of them per facet collide across seven columns.
