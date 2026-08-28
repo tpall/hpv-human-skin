@@ -54,7 +54,12 @@ reports/*.html
 # Curation workbooks (generated; commit explicitly with `git add -f` if a
 # specific snapshot needs versioning).
 reports/*.xlsx
-dna_rna_triangulation/cache/
+
+# Analysis caches: fetched SRA/BioSample metadata and other re-downloadable
+# intermediates, in any analysis directory. Matches a directory named `cache`
+# at any depth. (conda_cache/ and singularity_cache/ are listed separately
+# above; they are tool caches rather than analysis ones.)
+cache/
 
 # Word lock files (created when a .docx is open)
 ~$*
