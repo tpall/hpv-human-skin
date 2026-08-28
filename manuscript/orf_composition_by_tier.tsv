@@ -11,12 +11,6 @@ EV	E6	0.0574	9
 EV	E7	0.0404	9
 EV	L1	0.1355	9
 EV	L2	0.1018	9
-peri_lesional	E1	0.1112	15
-peri_lesional	E2	0.6759	15
-peri_lesional	E6	0.014	15
-peri_lesional	E7	0.0185	15
-peri_lesional	L1	0.0864	15
-peri_lesional	L2	0.094	15
 neoplasia	E1	0.0335	18
 neoplasia	E2	0.6338	18
 neoplasia	E6	0.0531	18

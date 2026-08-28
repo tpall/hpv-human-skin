@@ -30,8 +30,7 @@ stopifnot(file.exists(E1E2), file.exists(JX), file.exists(CXG))
 ## ── Panel A: E1:E2 ratio by tier ────────────────────────────────────────────
 TLAB <- c(cell_line = "Cell line", engineered = "Engineered", other = "Site not\nrecorded",
           unselected_skin = "Unselected\nskin", neoplasia = "Neoplasia",
-          control_productive = "Productive\ncontrols", EV = "EV",
-          peri_lesional = "Peri-lesional")
+          control_productive = "Productive\ncontrols", EV = "EV")
 e <- read_tsv(E1E2, show_col_types = FALSE) %>%
   filter(tier %in% names(TLAB), !is.na(log2_e1e2)) %>%
   mutate(tier = factor(tier, levels = names(TLAB)),

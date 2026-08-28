@@ -16,12 +16,12 @@ source(here("manuscript/_paths.R"))
 old <- theme_set(theme_cowplot())
 
 AGG   <- c("results_full_v2", "results_lesions", "results_lesions_csc", "results_lesions_wide")
-TIERS <- c("unselected_skin", "control_productive", "EV", "peri_lesional",
+TIERS <- c("unselected_skin", "control_productive", "EV",
            "non_permissive_tissue", "engineered",
            "neoplasia", "cell_line", "other")
 GEN   <- c("alpha", "beta", "gamma", "mu", "nu")
 TLAB  <- c(unselected_skin = "Unselected\nskin", control_productive = "Productive\ncontrols",
-           EV = "EV", peri_lesional = "Peri-lesional\nmucosa", neoplasia = "Neoplasia",
+           EV = "EV", neoplasia = "Neoplasia",
            non_permissive_tissue = "Non-permissive\ntissue", engineered = "Engineered\ncells",
            cell_line = "Cell line",
            # Matches bin/hpv_rpm_contrast.R and the Results text. 99% of this
@@ -70,12 +70,12 @@ summarise_level <- function(d, level) {
 }
 pd <- bind_rows(
     summarise_level(assigned, "Assigned type (Table S1)"),
-    summarise_level(trace,    "Detection tier (Table S6)"),
+    summarise_level(trace,    "Detection level (Table S6)"),
     summarise_level(anyd,     "Any detection")) %>%
   mutate(tier  = factor(TLAB[tier], levels = TLAB[TIERS]),
          Genus = factor(str_to_title(genus_short), levels = str_to_title(GEN)),
          level = factor(level, levels = c("Assigned type (Table S1)",
-                                          "Detection tier (Table S6)", "Any detection")),
+                                          "Detection level (Table S6)", "Any detection")),
          # A zero count still has a small positive posterior mean. Drawing it
          # would read as a detection, so zeros are marked at the axis floor.
          mean_p = if_else(k > 0, mean, NA_real_),
@@ -105,11 +105,11 @@ p <- ggplot(pd, aes(Genus, mean_p)) +
   # and those renumber themselves.
   facet_grid(level ~ tier, labeller = labeller(level = c(
     "Assigned type (Table S1)"  = "Assigned",
-    "Detection tier (Table S6)" = "Detection tier",
+    "Detection level (Table S6)" = "Detection level",
     "Any detection"             = "Any"))) +
   scale_y_log10(breaks = c(.01, .1, 1, 10, 100), labels = c("0", "0.1", "1", "10", "100"),
                 limits = c(FLOOR, 400)) +
-  labs(x = "HPV genus", y = "Prevalence within tier (%, log scale)") +
+  labs(x = "HPV genus", y = "Prevalence within sample group (%, log scale)") +
   # theme_cowplot() is set globally above; the only override is to angle the
   # genus labels, since five of them per facet collide across seven columns.
   # Column-strip labels are the width constraint: nine facets across 10.5in

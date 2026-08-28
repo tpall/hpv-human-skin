@@ -74,8 +74,8 @@ fish_hi <- if (ft$conf.int[2] > 1e12) Inf else ft$conf.int[2]
 cat(sprintf("OR=%.1f  95%%CI %.1f-%s  p=%.3g\n",
     ft$estimate, ft$conf.int[1], ifelse(is.finite(fish_hi),sprintf('%.1f',fish_hi),'Inf'), ft$p.value))
 
-## EV and peri-lesional mucosa: separated against skin, so Fisher exact rather
-## than a depth-adjusted glm (every peri-lesional library is above the floor).
+## EV is separated against skin (8/10 above the floor), so Fisher exact rather
+## than a depth-adjusted glm.
 fisher_vs_skin <- function(other){
   d <- rp %>% filter(tier %in% c("unselected_skin", other))
   if (n_distinct(d$tier) < 2) return(list(OR=NA, lo=NA, hi=NA, p=NA))
@@ -85,10 +85,7 @@ fisher_vs_skin <- function(other){
        hi=if (f$conf.int[2] > 1e12) Inf else f$conf.int[2], p=f$p.value)
 }
 ev_f  <- fisher_vs_skin("EV")
-per_f <- fisher_vs_skin("peri_lesional")
 cat(sprintf("\nEV vs unselected_skin (Fisher): OR=%.1f p=%.3g\n", ev_f$OR, ev_f$p))
-cat(sprintf("Peri-lesional vs unselected_skin (Fisher): OR=%s p=%.3g\n",
-            ifelse(is.finite(per_f$OR), sprintf('%.1f', per_f$OR), 'Inf'), per_f$p))
 
 ## Depth-only check within neoplasia: does deeper sequencing buy productive-level detection?
 cat("\nWithin neoplasia: detect ~ log10(reads):\n")
@@ -162,7 +159,7 @@ cat("######################################################################\n")
 if (is.null(.chem)) {
   cat("library_chemistry.tsv absent; chemistry covariate skipped\n")
   .cq <- function(...) NA_real_
-  chem_tbl <- tibble(Tier = character())   # @supptbl-chem renders only if filled
+  chem_tbl <- tibble(`Sample group` = character())   # @supptbl-chem renders only if filled
 } else {
   rpc <- rp %>% left_join(.chem %>% select(srr_id, chemistry, library_selection), by="srr_id") %>%
     mutate(chem=factor(coalesce(chemistry,"unspecified"), levels=.CHEMLV),
@@ -225,17 +222,17 @@ if (is.null(.chem)) {
                 tenx_3prime="3'-barcoded")
   .tierlab <- c(unselected_skin="Unselected skin", neoplasia="Neoplasia (cSCC/AK)",
                 control_productive="Productive controls", EV="EV biopsies",
-                peri_lesional="Peri-lesional mucosa", cell_line="Cell lines",
+                cell_line="Cell lines",
                 engineered="Engineered", non_permissive_tissue="Non-permissive tissue",
                 other="Other")
   chem_tbl <- rpc %>% count(tier, chem) %>% group_by(tier) %>%
     mutate(pct = 100*n/sum(n), N = sum(n)) %>% ungroup() %>%
     mutate(chem = .chemlab[as.character(chem)]) %>%
     select(-n) %>% pivot_wider(names_from=chem, values_from=pct, values_fill=0) %>%
-    mutate(Tier = paste0(coalesce(.tierlab[tier], tier), " (", comma_(N), ")")) %>%
+    mutate(`Sample group` = paste0(coalesce(.tierlab[tier], tier), " (", comma_(N), ")")) %>%
     arrange(match(tier, names(.tierlab))) %>%
-    select(Tier, all_of(unname(.chemlab))) %>%
-    mutate(across(-Tier, ~ sub("\\.0$", "", formatC(.x, format="f", digits=1))))
+    select(`Sample group`, all_of(unname(.chemlab))) %>%
+    mutate(across(-`Sample group`, ~ sub("\\.0$", "", formatC(.x, format="f", digits=1))))
 
   .cqv <- list(
     chem_n=sum(rpc$chem_known), chem_pct=100*mean(rpc$chem_known),
@@ -406,7 +403,7 @@ if (is.null(.spots)) {
 .oe <- as.list(o1[o1$term=="sample_classengineered",]);   .ol <- as.list(o1[o1$term=="sample_classcell_line",])
 .tc_ctrl<-as.list(tiersum[tiersum$tier=="control_productive",]); .tc_neo<-as.list(tiersum[tiersum$tier=="neoplasia",])
 .tc_uns <-as.list(tiersum[tiersum$tier=="unselected_skin",]);    .tc_cl <-as.list(tiersum[tiersum$tier=="cell_line",]); .tc_oth<-as.list(tiersum[tiersum$tier=="other",])
-.tc_ev  <-as.list(tiersum[tiersum$tier=="EV",]);                 .tc_per<-as.list(tiersum[tiersum$tier=="peri_lesional",])
+.tc_ev  <-as.list(tiersum[tiersum$tier=="EV",])
 # Non-permissive tissue (cutaneous adipose): no stratified squamous compartment,
 # so it is a negative control for the trace background rather than a candidate site.
 .tc_npt<-as.list(tiersum[tiersum$tier=="non_permissive_tissue",])
@@ -491,7 +488,7 @@ stats <- lapply(list(
   e1e2_cl_pct=.epct("cell_line"), e1e2_eng_pct=.epct("engineered"),
   e1e2_cl_ratio=.ecrit("cell_line","n_ratio"), e1e2_cl_e67=.ecrit("cell_line","n_e67"),
   e1e2_cl_n=.ecrit("cell_line","n"),
-  e1e2_ev_pct=.epct("EV"), e1e2_per_pct=.epct("peri_lesional"),
+  e1e2_ev_pct=.epct("EV"),
   e1e2_ctrl_pct=.epct("control_productive"),
   # cervical graded series (external validation)
   cxg_norm=.cx("hpv16_normal_epithelium"), cxg_hsil=.cx("hpv16_hsil"),
@@ -515,8 +512,6 @@ stats <- lapply(list(
   jx_cl_int=.jxint("cell_line"), jx_cl_n=.jxn("cell_line"),
   e2_full_n=.e2row("skin")$n_E1, e2_full_ok=.e2row("skin")$n_E2_given_E1,
   e2_vag_n=.e2row("vaginal")$n_E1, e2_vag_ok=.e2row("vaginal")$n_E2_given_E1,
-  per_n=.tc_per$n,   per_pctfloor=.tc_per$pct_floor,   per_medrpm=.tc_per$med_rpm,
-  per_or=per_f$OR,   per_lo=per_f$lo, per_hi=per_f$hi, per_p=per_f$p,
   m2a_or=.a_neo$OR, m2a_lo=.a_neo$lo, m2a_hi=.a_neo$hi, m2a_p=.a_neo$p,
   m2a_l10_or=.a_l10$OR, m2a_l10_lo=.a_l10$lo, m2a_l10_hi=.a_l10$hi, m2a_l10_p=.a_l10$p,
   m2b_or=.b_neo$OR, m2b_lo=.b_neo$lo, m2b_hi=.b_neo$hi, m2b_p=.b_neo$p,

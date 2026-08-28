@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-# Builds manuscript/figureS2.{png,pdf}: the HPV type by tier grid, assigned
+# Builds manuscript/figureS3.{png,pdf}: the HPV type by tier grid, assigned
 # against detection tier. Laid out landscape, types across and tiers down, so
 # each tier reads as one line: the unselected-skin line of the detection panel
 # is then the reservoir claim directly, a long run of pale cells across beta and
@@ -24,7 +24,7 @@ old <- theme_set(theme_minimal(base_size = 10))
 source(here("manuscript/_paths.R"))
 
 TLAB <- c(unselected_skin = "Unselected skin", neoplasia = "Neoplasia", EV = "EV",
-          control_productive = "Productive controls", peri_lesional = "Peri-lesional",
+          control_productive = "Productive controls",
           cell_line = "Cell line", engineered = "Engineered",
           non_permissive_tissue = "Non-permissive", other = "Site not recorded")
 TORD <- names(TLAB)
@@ -63,7 +63,7 @@ TYPE_ORDER <- both %>% group_by(type, genus) %>%
 
 d <- both %>%
   mutate(id = factor(id, levels = c("assigned", "detected"),
-                     labels = c("Assigned", "Detection tier")),
+                     labels = c("Assigned", "Detection level")),
          tier = factor(tier, levels = TORD)) %>%
   complete(id, tier, nesting(genus, type)) %>%
   left_join(tier_n %>% mutate(tier = factor(tier, levels = TORD)), by = "tier") %>%
@@ -104,7 +104,7 @@ p <- ggplot(d, aes(type, fct_rev(tier), fill = pct)) +
         strip.text.y = element_text(angle = 0), strip.text = element_text(size = 9),
         panel.spacing.x = unit(2, "pt"), legend.key.height = unit(1.1, "cm"))
 
-ggsave(here("manuscript/figureS2.png"), p, width = 13.5, height = 6.8, dpi = 200, bg = "white")
-ggsave(here("manuscript/figureS2.pdf"), p, width = 13.5, height = 6.8)
-cat(sprintf("figureS2: %d types, %d assigned cells, %d detection cells; prevalence %.3f%% to %.1f%%\n",
+ggsave(here("manuscript/figureS3.png"), p, width = 13.5, height = 6.8, dpi = 200, bg = "white")
+ggsave(here("manuscript/figureS3.pdf"), p, width = 13.5, height = 6.8)
+cat(sprintf("figureS3: %d types, %d assigned cells, %d detection cells; prevalence %.3f%% to %.1f%%\n",
             n_distinct(both$type), nrow(assigned), nrow(detected), LIM[1], LIM[2]))

@@ -59,7 +59,9 @@ TISSUES <- list(
   Skin    = c("human skin metagenome", "skin metagenome"),
   Vaginal = c("vaginal metagenome", "human vaginal metagenome"),
   Gut     = c("human gut metagenome", "gut metagenome"))
-GEN_LEVELS <- c("Alpha", "Beta", "Gamma", "Mu", "Nu", "Unresolved", "Novel")
+# Unresolved is not a genus but the residue, so it sits last in the legend and
+# at the bottom of each stack, after the named genera and the novel clusters.
+GEN_LEVELS <- c("Alpha", "Beta", "Gamma", "Mu", "Nu", "Novel", "Unresolved")
 
 # The skin-metagenome taxid also covers environmental transit surfaces and
 # non-human animal skin; drop those (build_skin_run_exclusions.py writes the table).
@@ -91,7 +93,10 @@ top_types <- imap_dfr(TISSUES, function(scis, tis) {
   nlib <- n_distinct(lc$library)
   lc %>% filter(!is.na(type)) %>% distinct(library, type, genus) %>%
     count(type, genus, name = "libs") %>% mutate(tissue = tis, n_lib = nlib, prop = libs / nlib) %>%
-    slice_max(libs, n = 10)
+    # Generate more than any figure shows, so the display cut is a figure-level
+    # choice rather than baked into the table: Figure 5 goes deeper than the
+    # supplement, because it has to reach HPV2.
+    slice_max(libs, n = 20, with_ties = TRUE)
 })
 
 write_csv(reservoir %>% mutate(prop = round(prop, 4)), file.path(outdir, "reservoir_by_tissue_genus.csv"))
@@ -102,41 +107,76 @@ write_csv(top_types %>% mutate(prop = round(prop, 4)) %>%
 # ---- figure ----
 gcol <- c(Alpha = "#1B9E77", Beta = "#D95F02", Gamma = "#7570B3", Mu = "#E7298A",
           Nu = "#66A61E", Unresolved = "grey70", Novel = "grey40")
-tis_lab <- reservoir %>% distinct(tissue, n_lib) %>%
-  mutate(lab = sprintf("%s\n(n=%d)", tissue, n_lib)) %>%
-  arrange(factor(tissue, names(TISSUES)))
-lab_map <- deframe(tis_lab %>% select(tissue, lab))
 
-# normalise each body site to 100%: composition of genus detections (a library
-# with a co-infection contributes to more than one genus, so raw library-
-# prevalences sum above 100%; here we show their relative composition).
-pA <- reservoir %>% filter(genus != "Novel_any") %>%
-  group_by(tissue) %>% mutate(comp = libs / sum(libs)) %>% ungroup() %>%
-  mutate(genus = factor(genus, GEN_LEVELS),
-         tissue = factor(lab_map[tissue], lab_map[names(TISSUES)])) %>%
-  ggplot(aes(tissue, comp, fill = genus)) +
-  geom_col(width = .72, colour = "white", linewidth = .2) +
-  scale_fill_manual(values = gcol, name = "Genus", drop = FALSE) +
-  scale_y_continuous(labels = scales::percent, expand = expansion(c(0, .02))) +
-  labs(x = NULL, y = "Genus composition\n(% of type detections)",
-       title = "DNA reservoir genus tropism by body site")
+# Marko, two points on this figure.
+#
+# "Legends don't merge". They did not merge because the two panels observe
+# different genus sets, so their guides render different keys and patchwork
+# declines to collect them: panel A carries six genera, panel B only the three
+# that reach a body site's top ten. With drop = FALSE the missing levels are
+# listed but drawn without a swatch, which is what makes panel B's legend look
+# broken. Two fixes, and both are needed.
+#
+#   1. Restrict the scale to genera the data actually contain, so no key is
+#      drawn for a level nothing uses. Nu is in GEN_LEVELS but absent
+#      everywhere, and was rendering as a bare label in both panels.
+#   2. Draw the guide once. An invisible ghost layer does not work here: alpha
+#      = 0 makes the key glyph transparent as well, which reproduces the bare
+#      label. Panel A observes every genus, so it carries the legend and panel B
+#      simply suppresses its own.
+#
+# "Gut is a contamination/experimental artefact". Agreed, and the text says so:
+# its top types interleave mucosal alpha with cutaneous beta, which is the
+# signature of a collection route that crosses perianal skin, not of a gut
+# niche. So the main figure carries the two sites the tropism argument actually
+# needs, and the three-site version keeps gut in the supplement, where it reads
+# as a route-of-collection control rather than as a third reservoir.
+MAIN_SITES <- c("Skin", "Vaginal")
+ALL_SITES  <- names(TISSUES)
 
-pB <- top_types %>%
-  mutate(genus = factor(genus, GEN_LEVELS),
-         row = fct_reorder(paste0("HPV", type, "__", tissue), libs),
-         tissue = factor(lab_map[tissue], lab_map[names(TISSUES)])) %>%
-  ggplot(aes(prop, row, fill = genus)) +
-  geom_col(width = .78, colour = "white", linewidth = .2) +
-  facet_wrap(~ tissue, scales = "free_y") +
-  scale_y_discrete(labels = function(x) str_remove(x, "__.*")) +
-  scale_fill_manual(values = gcol, name = "Genus", drop = FALSE) +
-  scale_x_continuous(labels = scales::percent) +
-  labs(x = "% of body-site HPV+ libraries", y = NULL,
-       title = "Top 10 types per body site")
+make_fig <- function(sites) {
+  res <- reservoir %>% filter(tissue %in% sites)
+  tt  <- top_types %>% filter(tissue %in% sites)
+  gen_present <- intersect(GEN_LEVELS, union(res$genus, tt$genus))
+  lab_map <- res %>% distinct(tissue, n_lib) %>%
+    mutate(lab = sprintf("%s\n(n=%d)", tissue, n_lib)) %>%
+    arrange(factor(tissue, sites)) %>% select(tissue, lab) %>% deframe()
 
-fig <- (pA / pB) + plot_layout(heights = c(1, 1.35), guides = "collect") +
-  plot_annotation(tag_levels = "A") & theme(plot.tag = element_text(face = "plain"))
-ggsave(file.path(outdir, "figure_reservoir_by_tissue.png"), fig,
+  # normalise each body site to 100%: composition of genus detections (a library
+  # with a co-infection contributes to more than one genus, so raw library-
+  # prevalences sum above 100%; here we show their relative composition).
+  pA <- res %>% filter(genus != "Novel_any") %>%
+    group_by(tissue) %>% mutate(comp = libs / sum(libs)) %>% ungroup() %>%
+    mutate(genus = factor(genus, gen_present),
+           tissue = factor(lab_map[tissue], lab_map[sites])) %>%
+    ggplot(aes(tissue, comp, fill = genus)) +
+    geom_col(width = .72, colour = "white", linewidth = .2) +
+    scale_fill_manual(values = gcol, name = "Genus", limits = gen_present, drop = FALSE) +
+    scale_y_continuous(labels = scales::percent, expand = expansion(c(0, .02))) +
+    labs(x = NULL, y = "Genus composition\n(% of type detections)",
+         title = "DNA reservoir genus tropism by body site")
+
+  pB <- tt %>%
+    mutate(genus = factor(genus, gen_present),
+           row = fct_reorder(paste0("HPV", type, "__", tissue), libs),
+           tissue = factor(lab_map[tissue], lab_map[sites])) %>%
+    ggplot(aes(prop, row, fill = genus)) +
+    geom_col(width = .78, colour = "white", linewidth = .2) +
+    facet_wrap(~ tissue, scales = "free_y") +
+    scale_y_discrete(labels = function(x) str_remove(x, "__.*")) +
+    scale_fill_manual(values = gcol, name = "Genus", limits = gen_present, drop = FALSE) +
+    scale_x_continuous(labels = scales::percent) +
+    guides(fill = "none") +
+    labs(x = "% of body-site HPV+ libraries", y = NULL,
+         title = "Top 10 types per body site")
+
+  (pA / pB) + plot_layout(heights = c(1, 1.35), guides = "collect") +
+    plot_annotation(tag_levels = "A") & theme(plot.tag = element_text(face = "plain"))
+}
+
+ggsave(file.path(outdir, "figure_reservoir_by_tissue.png"), make_fig(MAIN_SITES),
+       width = 8, height = 9, dpi = 300, bg = "white")
+ggsave(file.path(outdir, "figure_reservoir_by_tissue_all_sites.png"), make_fig(ALL_SITES),
        width = 10, height = 9, dpi = 300, bg = "white")
 
 wide <- reservoir %>% filter(genus %in% c("Alpha", "Beta", "Gamma")) %>%

@@ -80,7 +80,7 @@ build_bayes_table <- function(stats, bget){
 })
 .type_cat <- read_tsv(type_catalogue_tsv(), show_col_types = FALSE)
 .tier_lab <- c(unselected_skin = "Unselected skin", control_productive = "Productive controls",
-               EV = "EV", peri_lesional = "Peri-lesional mucosa",
+               EV = "EV",
                non_permissive_tissue = "Non-permissive tissue",
                engineered = "Engineered cells",
                # "other" is the residual tier: 99% of it carries no site keyword
@@ -121,7 +121,6 @@ build_type_table <- function(){
     mutate(!!.hdr_N("unselected_skin")    := .np(raw$unselected_skin,    "unselected_skin"),
            !!.hdr_N("control_productive") := .np(raw$control_productive, "control_productive"),
            !!.hdr_N("EV")                 := .np(raw$EV,                 "EV"),
-           !!.hdr_N("peri_lesional")      := .np(raw$peri_lesional,      "peri_lesional"),
            !!.hdr_N("neoplasia")          := .np(raw$neoplasia,          "neoplasia"),
            !!.hdr_N("cell_line")          := .np(raw$cell_line,          "cell_line"),
            !!.hdr_N("other")              := .np(raw$other,              "other"),
@@ -169,8 +168,6 @@ build_prod_table <- function(){
 # but sub-threshold samples, i.e. below the breadth>=0.10 & depth>=2 assignment
 # cutoff. `trace_types.tsv` is a one-time BAM re-map; genus from the complete
 # PaVE lookup (`type_genus.csv`). Detection-tier, low-coverage, not productive.
-# Peri-lesional mucosa contributes no trace calls (all 15 libraries clear the
-# assignment threshold and therefore appear in Table S1), so it has no column here.
 .trace_tiers <- c("unselected_skin","neoplasia","control_productive","EV","other","cell_line")
 # Raw trace count matrix (type × tier), filtered to Total >= 2. Shared by the
 # display builder and the caption CrI lookups so both see identical counts.
@@ -253,12 +250,15 @@ ciT <- function(type, tc) prev_ci(kT(type, tc), tc)
     mutate(coverage_breadth = as.double(coverage_breadth), mean_depth = as.double(mean_depth),
            type = gsub("(REF|nr)$", "", hpv_reference))
   rp <- read_tsv(rpm_per_sample_tsv(), show_col_types = FALSE) %>% select(srr_id, tier, study)
+  # The aggregated type calls exist for every library the pipeline ran, the ones
+  # excluded in bin/hpv_rpm_contrast.R included. Join inner, not left: an excluded
+  # library must contribute neither a row to Table S7 nor a denominator to `cf`.
+  ty <- ty %>% inner_join(rp, by = c("sample_id" = "srr_id"))
   k  <- ty %>% count(sample_id, name = "n_types")
-  list(types = ty %>% left_join(k, by = "sample_id") %>%
-                      left_join(rp, by = c("sample_id" = "srr_id")),
+  list(types = ty %>% left_join(k, by = "sample_id"),
        n_typed = nrow(k))
 })
-.coinf_tier_order <- c("control_productive", "EV", "peri_lesional", "neoplasia",
+.coinf_tier_order <- c("control_productive", "EV", "neoplasia",
                        "non_permissive_tissue", "engineered",
                        "unselected_skin", "other", "cell_line")
 build_coinf_table <- function(){
@@ -272,7 +272,7 @@ build_coinf_table <- function(){
               .groups = "drop") %>%
     mutate(tier = factor(tier, levels = .coinf_tier_order)) %>%
     arrange(tier, desc(dom_depth)) %>%
-    transmute(Library = sample_id, Tier = .tier_lab[as.character(tier)], Study = study,
+    transmute(Library = sample_id, `Sample group` = .tier_lab[as.character(tier)], Study = study,
               `Assigned types (coverage breadth, mean depth), ordered by depth` = types)
 }
 # Co-infection counts quoted in the caption and in the Results paragraph.
@@ -370,3 +370,19 @@ build_e2_table <- function(
       `Contigs ≥7 kb (n)`  = comma(n_ge7kb),
       `E2 intact, ≥7 kb`   = paste0(p1(pct_E2_given_E1_ge7kb), "%"))
 }
+
+## ── Figure 5: DNA reservoir numbers ─────────────────────────────────────────
+# manuscript/figure_reservoir.R persists every number its caption and Results
+# text quote, so the prose and the plotted bars cannot drift apart.
+.reservoir_nums <- readr::read_tsv(here("manuscript/reservoir_numbers.tsv"),
+                                   show_col_types = FALSE)
+rv  <- function(key) .reservoir_nums$value[.reservoir_nums$key == key]
+rvn <- function(key) as.numeric(rv(key))
+
+## ── Figure S4: sub-threshold trace decomposition ────────────────────────────
+# trace_decomposition/figure_trace_decomposition.R persists every number its
+# caption and the Results sentences quote, on the same principle as above.
+.trace_nums <- readr::read_tsv(here("trace_decomposition/trace_numbers.tsv"),
+                               show_col_types = FALSE)
+tr  <- function(key) .trace_nums$value[.trace_nums$key == key]
+trn <- function(key) as.numeric(tr(key))

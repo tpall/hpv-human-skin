@@ -1,13 +1,13 @@
-group,cat,n,frac
-"Alla läve
-jälg (nahk/vähk)",Geenideta (k-meeri müra),155,0.5575539568345323
-"Alla läve
-jälg (nahk/vähk)","Varajane (E-geenid, L1 puudub)",77,0.27697841726618705
-"Alla läve
-jälg (nahk/vähk)",Produktiivne (≥3 L1-lugemit),46,0.16546762589928057
-"Produktiivsed
-kontrollid (tüükad/EV)",Geenideta (k-meeri müra),2,0.037037037037037035
-"Produktiivsed
-kontrollid (tüükad/EV)","Varajane (E-geenid, L1 puudub)",3,0.05555555555555555
-"Produktiivsed
-kontrollid (tüükad/EV)",Produktiivne (≥3 L1-lugemit),49,0.9074074074074074
+group,cat,n,frac,N
+"Below-floor trace
+(skin and neoplasia)",No gene-mapped reads,144,0.6260869565217392,230
+"Below-floor trace
+(skin and neoplasia)","Gene-mapped, not productive",57,0.24782608695652175,230
+"Below-floor trace
+(skin and neoplasia)",Productive (L1 ≥ 3 reads),29,0.12608695652173912,230
+"Productive controls
+(warts and EV)",No gene-mapped reads,2,0.037037037037037035,54
+"Productive controls
+(warts and EV)","Gene-mapped, not productive",3,0.05555555555555555,54
+"Productive controls
+(warts and EV)",Productive (L1 ≥ 3 reads),49,0.9074074074074074,54

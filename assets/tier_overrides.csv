@@ -36,29 +36,41 @@ sample,SRR25439062,is_cell_line,FALSE,SRA cell_line field holds sample label "L1
 # and are the four highest-RPM libraries in the skin tier.
 study,SRP394058,tier,EV,EV patient skin biopsies (Vahidnezhad JCI Insight); no diagnosis keyword in SRA metadata
 #
-# --- Condyloma-adjacent normal mucosa ---------------------------------------
+# --- Condyloma-adjacent normal mucosa (excluded) -----------------------------
 # SRP314958 (RNA-seq) and SRP314961 (MeRIP-seq input + IP) are the same five
 # donors: CA_1..CA_5 are condyloma acuminatum lesions (correctly in
-# control_productive), CON_1..CON_5 are the matched adjacent tissue. Their
-# metadata reads source_name="Skin or mucosa", tissue="adjcent mucocal tissues",
-# so the tissue matcher sees "Skin" and files them as unselected skin. They are
-# peri-lesional mucosa from condyloma patients and must not sit in the
-# prevalence null: all 15 exceed the control-calibrated detection floor.
-sample,SRR14243750,tier,peri_lesional,CON_1 condyloma-adjacent mucosa (SRP314958 RNA-seq)
-sample,SRR14243751,tier,peri_lesional,CON_2 condyloma-adjacent mucosa (SRP314958 RNA-seq)
-sample,SRR14243752,tier,peri_lesional,CON_3 condyloma-adjacent mucosa (SRP314958 RNA-seq)
-sample,SRR14243753,tier,peri_lesional,CON_4 condyloma-adjacent mucosa (SRP314958 RNA-seq)
-sample,SRR14243754,tier,peri_lesional,CON_5 condyloma-adjacent mucosa (SRP314958 RNA-seq)
-sample,SRR14243789,tier,peri_lesional,CON_1 condyloma-adjacent mucosa (SRP314961 MeRIP input)
-sample,SRR14243790,tier,peri_lesional,CON_1 condyloma-adjacent mucosa (SRP314961 MeRIP IP)
-sample,SRR14243791,tier,peri_lesional,CON_2 condyloma-adjacent mucosa (SRP314961 MeRIP input)
-sample,SRR14243792,tier,peri_lesional,CON_2 condyloma-adjacent mucosa (SRP314961 MeRIP IP)
-sample,SRR14243793,tier,peri_lesional,CON_3 condyloma-adjacent mucosa (SRP314961 MeRIP input)
-sample,SRR14243794,tier,peri_lesional,CON_3 condyloma-adjacent mucosa (SRP314961 MeRIP IP)
-sample,SRR14243795,tier,peri_lesional,CON_4 condyloma-adjacent mucosa (SRP314961 MeRIP input)
-sample,SRR14243796,tier,peri_lesional,CON_4 condyloma-adjacent mucosa (SRP314961 MeRIP IP)
-sample,SRR14243797,tier,peri_lesional,CON_5 condyloma-adjacent mucosa (SRP314961 MeRIP input)
-sample,SRR14243798,tier,peri_lesional,CON_5 condyloma-adjacent mucosa (SRP314961 MeRIP IP)
+# control_productive and retained), CON_1..CON_5 are the matched adjacent
+# tissue. Their metadata reads source_name="Skin or mucosa",
+# tissue="adjcent mucocal tissues", so the tissue matcher sees "Skin" and files
+# them as unselected skin, where all 15 would clear the control-calibrated
+# detection floor and inflate the prevalence null.
+#
+# They are excluded rather than tiered. Tissue taken millimetres from a
+# productive lesion cannot separate independent infection from spillover out of
+# that lesion, so a peri-lesional detection is not evidence of presence without
+# disease; and 5 donors sequenced in 3 fractions each is one study and one
+# comparison, not a population that can carry a tier-level statistic. The
+# matched lesions remain in control_productive, so nothing is lost from the
+# productive contrast and the detection floor is unaffected.
+#
+# NB the exclusion must stay sample-scoped: a study-scoped rule on either
+# accession would also drop the 15 CA_* libraries, i.e. 15 of the 44 productive
+# controls the detection floor is calibrated on.
+sample,SRR14243750,exclude,TRUE,CON_1 condyloma-adjacent mucosa (SRP314958 RNA-seq)
+sample,SRR14243751,exclude,TRUE,CON_2 condyloma-adjacent mucosa (SRP314958 RNA-seq)
+sample,SRR14243752,exclude,TRUE,CON_3 condyloma-adjacent mucosa (SRP314958 RNA-seq)
+sample,SRR14243753,exclude,TRUE,CON_4 condyloma-adjacent mucosa (SRP314958 RNA-seq)
+sample,SRR14243754,exclude,TRUE,CON_5 condyloma-adjacent mucosa (SRP314958 RNA-seq)
+sample,SRR14243789,exclude,TRUE,CON_1 condyloma-adjacent mucosa (SRP314961 MeRIP input)
+sample,SRR14243790,exclude,TRUE,CON_1 condyloma-adjacent mucosa (SRP314961 MeRIP IP)
+sample,SRR14243791,exclude,TRUE,CON_2 condyloma-adjacent mucosa (SRP314961 MeRIP input)
+sample,SRR14243792,exclude,TRUE,CON_2 condyloma-adjacent mucosa (SRP314961 MeRIP IP)
+sample,SRR14243793,exclude,TRUE,CON_3 condyloma-adjacent mucosa (SRP314961 MeRIP input)
+sample,SRR14243794,exclude,TRUE,CON_3 condyloma-adjacent mucosa (SRP314961 MeRIP IP)
+sample,SRR14243795,exclude,TRUE,CON_4 condyloma-adjacent mucosa (SRP314961 MeRIP input)
+sample,SRR14243796,exclude,TRUE,CON_4 condyloma-adjacent mucosa (SRP314961 MeRIP IP)
+sample,SRR14243797,exclude,TRUE,CON_5 condyloma-adjacent mucosa (SRP314961 MeRIP input)
+sample,SRR14243798,exclude,TRUE,CON_5 condyloma-adjacent mucosa (SRP314961 MeRIP IP)
 study,ERP022968,tissue_category,nahk,"ArrayExpress E-MTAB-5678: titles are AK_1..AK_29 and diagnoses are actinic keratosis/cSCC/normal; actinic keratosis is by definition cutaneous. SRA carries no tissue_source, so keyword classification cannot reach it."
 study,ERP106532,tissue_category,nahk,"ArrayExpress E-MTAB-6430 (Univ. of Queensland): diagnoses are actinic keratosis and squamous cell carcinoma; titles are bare Sample N with no tissue_source, so the site is unreachable by keyword."
 study,SRP572392,exclude,TRUE,"16S rRNA amplicon libraries from urine (433 runs). Not RNA-seq and outside the assay's domain: a 16S amplicon library contains no HPV sequence that could be detected regardless of infection status, so all 433 are structural zeros (0/433 with any HPV read) that deflate the null background rate every skin comparison is measured against. Excluded, not relabelled."

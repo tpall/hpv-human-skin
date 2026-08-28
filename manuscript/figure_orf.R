@@ -48,17 +48,12 @@ PRODUCTIVE_L1 <- 3          # the manuscript's productive criterion
 # the in-vitro material. The panel then reads as three families rather than
 # seven arbitrary categories, and the contrast the figure exists to show is the
 # strongest one on it.
-TIER_COLS <- c(
-  control_productive = "#b2182b",   # productive: deep red
-  EV                 = "#ef6548",   #             mid red
-  peri_lesional      = "#fdae61",   #             orange
-  neoplasia          = "#2166ac",   # primary, quiet: deep blue
-  unselected_skin    = "#74add1",   #                 mid blue
-  cell_line          = "#4d4d4d",   # in vitro: dark grey
-  engineered         = "#9e9e9e")   #           light grey
+# Sample-group colours come from manuscript/_palette.R so that Figures 2, S1 and
+# 3C name the same group with the same colour.
+source(here("manuscript/_palette.R"))
 
 TLAB <- c(control_productive = "Productive\ncontrols", EV = "EV",
-          peri_lesional = "Peri-lesional", neoplasia = "Neoplasia",
+          neoplasia = "Neoplasia",
           unselected_skin = "Unselected\nskin", cell_line = "Cell line",
           engineered = "Engineered")
 
@@ -143,13 +138,21 @@ ec <- d %>%
   group_by(srr_id, tier, part) %>% summarise(n = sum(n), .groups = "drop") %>%
   pivot_wider(names_from = part, values_from = n, values_fill = 0)
 
-pC <- ggplot(ec, aes(early + 1, L1 + 1, colour = tier)) +
+# Overplotting, not hue, is what made this panel hard to read: 217 unselected-skin
+# and 98 cell-line points were drawn in whatever order the table happened to be in,
+# on top of the small groups that carry the argument. Draw the big masses first,
+# and outline each point in white so overlapping ones stay countable.
+ec <- ec %>% mutate(.draw = match(as.character(tier), GROUP_DRAW_ORDER)) %>%
+  arrange(.draw)
+
+pC <- ggplot(ec, aes(early + 1, L1 + 1, fill = fct_inorder(as.character(tier)))) +
   geom_hline(yintercept = PRODUCTIVE_L1 + 1, linetype = 2, colour = "grey35") +
   annotate("text", x = Inf, y = PRODUCTIVE_L1 + 1, hjust = 1.05, vjust = -0.6,
            label = "productive threshold (L1 \u2265 3)", size = 3, colour = "grey35") +
-  geom_point(alpha = 0.65, size = 1.6) +
+  geom_point(shape = 21, colour = "white", stroke = 0.25, alpha = 0.9, size = 2.1) +
   scale_x_log10() + scale_y_log10() +
-  scale_colour_manual(values = TIER_COLS, labels = TLAB, name = NULL) +
+  scale_fill_manual(values = GROUP_COLS, labels = TLAB, name = NULL,
+                    breaks = intersect(names(TLAB), as.character(ec$tier))) +
   labs(x = "Early-region reads + 1", y = "L1 major-capsid reads + 1") +
   theme(legend.position = "right", legend.key.size = unit(0.4, "cm"))
 

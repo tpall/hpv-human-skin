@@ -64,4 +64,6 @@ bget  <- function(m) as.list(bayes[bayes$model == m, ])
 ::: {#refs}
 :::
 
+# Supplementary Material {.unnumbered}
+
 {{< include _supplement.qmd >}}

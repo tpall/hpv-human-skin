@@ -11,8 +11,10 @@
 #
 #   bin/rebuild_reframe_fixed.sh [outdir]
 #
-# Acceptance check: 10,849 rows = 987 lesion + 9,862 null. (11,282 before the
-# SRP572392 exclusion removed 433 16S-amplicon libraries; see tier_overrides.csv.)
+# Acceptance check: 10,834 rows = 972 lesion + 9,862 null. (11,282 before the
+# two exclusions in tier_overrides.csv: 433 16S-amplicon libraries from
+# SRP572392, and the 15 condyloma-adjacent CON_* libraries of
+# SRP314958/SRP314961.)
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
@@ -49,12 +51,12 @@ Rscript bin/hpv_rpm_contrast.R \
   --outdir       "$OUTDIR"
 
 n=$(( $(wc -l < "$OUTDIR/hpv_rpm_per_sample.tsv") - 1 ))
-echo "rows: $n (expected 10849)"
-[ "$n" -eq 10849 ] || echo "WARNING: row count differs from the published cohort" >&2
+echo "rows: $n (expected 10834)"
+[ "$n" -eq 10834 ] || echo "WARNING: row count differs from the published cohort" >&2
 
 # Everything downstream of the tier table. These are NOT rebuilt by the
 # manuscript render: figure2/figureS1 are copies of this script's plots,
-# figure4 and figureS2 come from separate scripts, and bayes_summary.rds is read from disk by
+# figure4 and figureS3 come from separate scripts, and bayes_summary.rds is read from disk by
 # manuscript.qmd, so a stale one silently keeps the old posteriors.
 if [ "$OUTDIR" = "results_reframe_fixed" ]; then
   cp "$OUTDIR/hpv_rpm_contrast.png"        manuscript/figure2.png
@@ -63,7 +65,19 @@ if [ "$OUTDIR" = "results_reframe_fixed" ]; then
   cp "$OUTDIR/depth_matched_detection.pdf" manuscript/figureS1.pdf
   echo "refreshed manuscript/figure2.{png,pdf}, figureS1.{png,pdf}"
   Rscript manuscript/figure_genus.R >/dev/null && echo "refreshed manuscript/figure4.{png,pdf}"
-  Rscript manuscript/figure_type_grid.R >/dev/null && echo "refreshed manuscript/figureS2.{png,pdf}"
+  Rscript manuscript/figure_type_grid.R >/dev/null && echo "refreshed manuscript/figureS3.{png,pdf}"
   Rscript manuscript/bayesian_models.R >/dev/null && echo "refit manuscript/bayes_summary.{rds,tsv}"
+  Rscript manuscript/figure_bayes.R >/dev/null &&
+    echo "refreshed manuscript/figureS5.{png,pdf}"
+  # figureS2 reads the per-sample table and calibrates its own floor from it, and
+  # figure5/figureS4 reach it through the type catalogue, so both go stale on a
+  # cohort change exactly as silently as bayes_summary.rds does.
+  python3 trace_decomposition/decompose_trace.py >/dev/null &&
+    Rscript trace_decomposition/figure_trace_decomposition.R >/dev/null &&
+    echo "refreshed manuscript/figureS2.{png,pdf} + trace_numbers.tsv"
+  Rscript dna_rna_triangulation/shen_skin_dna_vs_rna.R >/dev/null 2>&1 &&
+    Rscript dna_rna_triangulation/skin_dna_vs_rna_corrected.R >/dev/null 2>&1 &&
+    Rscript manuscript/figure_reservoir.R >/dev/null &&
+    echo "refreshed manuscript/figure5.{png,pdf}, figureS4.{png,pdf} + reservoir_numbers.tsv"
   echo "now re-render: quarto render manuscript/manuscript.qmd"
 fi

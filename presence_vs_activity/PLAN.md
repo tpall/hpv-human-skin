@@ -45,6 +45,15 @@ Status: DONE (`../dna_rna_triangulation/`). Skin is beta/gamma commensal,
 vaginal is 84% alpha mucosal, gut is a mixture. Recovered from DNA alone, which
 validates the composition read-out before anything is asked of it.
 
+> **Boundary note, 2026-08-27.** This result is also in paper 1, and has been
+> since Figure 5 landed (`@shenpv2026` is cited there). The note in this plan
+> that no Shen/Logan content had reached `../manuscript/` was true on 2026-08-05
+> and is not true now. Under the figure plan agreed on 2026-08-27
+> (`../skin_paper_v2/PLAN_figures_2026-08-27.md`) paper 1 **demotes** the
+> body-site figure to its supplement, where it is a read-out control rather than
+> a headline result, so R1 stays available to this paper as a result. What paper
+> 1 keeps is a skin-only main figure. See the note under R2.
+
 **R2. Skin: presence does not predict productivity.**
 Status: SURVIVES, with a host axis added. The objection was that the DNA side is
 100% surface swabs while the RNA side is bulk tissue, so the two axes differ in
@@ -62,6 +71,26 @@ productive signal in our biopsy RNA, the productive types are alpha wart viruses
 that are DNA-rare or absent, and only HPV2 occupies the abundant-and-productive
 corner. It remains a composition comparison across cohorts, since no paired skin
 specimens exist (5.5c), so the wording must stay at that strength.
+
+> **Boundary note, 2026-08-27.** The per-type scatter that carries this
+> composition finding (DNA abundance against RNA productivity, empty
+> abundant-and-productive corner, HPV2 the sole exception) **moves to paper 1**,
+> as panel B of its rebuilt Figure 5. Paper 1 already asserted the finding in
+> prose ("the types are where the two modalities meet, and they do not agree")
+> without illustrating it, so this gives the sentence its picture.
+>
+> What this paper keeps: the genus-shift panel (composition across DNA skin
+> reservoir, RNA skin present, RNA productive), which is the cleanest statement
+> of the presence-versus-activity framing and is deliberately not going to paper
+> 1. `../dna_rna_triangulation/shen_skin_dna_vs_rna.R` continues to build the
+> two-panel triangulation figure unchanged; paper 1 rebuilds its own panel from
+> `skin_dna_vs_rna_types_corrected.csv` inside `figure_reservoir.R`.
+>
+> Why this is survivable: R2 was never this paper on its own. The paper is skin
+> **contrasted with** cervix (R3), and a published, citable skin pole makes the
+> methodological headline easier to land, not harder. The 6,396-library cervical
+> run, where the novelty sits, is untouched. R2's wording here should shift to
+> cite paper 1 for the skin pole rather than re-derive it.
 
 **R3. Cervix and vagina: presence does predict productivity.**
 Status: NEEDS THE RUN (section 6), but now has a paired core. 22 cervical
