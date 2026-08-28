@@ -36,10 +36,17 @@ assets/kraken2_db/*.kmer_distrib
 .DS_Store
 Thumbs.db
 
+# R / RStudio session artifacts. Per-user state, not project content: .Rhistory
+# and .RData are whatever happened to be in one console, and the .Rproj file
+# records one person's editor settings.
+.Rhistory
+.RData
+.Rproj.user/
+*.Rproj
+
 # Claude Code
 CLAUDE.md
 .claude/
-.Rproj.user
 
 # Rendered reports (re-generated from .md)
 reports/*.html
