@@ -158,7 +158,7 @@ pC <- ggplot(ec, aes(early + 1, L1 + 1, fill = fct_inorder(as.character(tier))))
 
 # Panels carry a bare A/B/C tag only; the descriptions live in the legend.
 fig <- pA / pB / pC + plot_layout(heights = c(1.15, 0.85, 1.2)) +
-  plot_annotation(tag_levels = "A") &
+  plot_annotation(tag_levels = "a") &
   theme(plot.tag = element_text(face = "bold", size = 13))
 ggsave(here("manuscript/figure3.png"), fig, width = 9, height = 11.5, dpi = 300, bg = "white")
 ggsave(here("manuscript/figure3.pdf"), fig, width = 9, height = 11.5)

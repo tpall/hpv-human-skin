@@ -1,17 +1,38 @@
-## Data Availability Statement {.unnumbered}
+## Affiliations {.unnumbered}
 
-The complete analysis pipeline, comprising the Nextflow workflow, the per-process software environments and container definitions, the reference-construction and SRA-discovery scripts, and the downstream R analysis and statistical-inference code, is openly available at <https://github.com/tpall/hpv-human-skin>. All sequencing data analyzed here are public and were obtained from the NCBI Sequence Read Archive; the per-cohort lists of accessions (SRR/SRX), with assigned tissue category, diagnosis, and cell-line/engineered annotations, are provided as Supplementary Data. Reference genomes were retrieved from the Papillomavirus Episteme (PaVE; <https://pave.niaid.nih.gov>) and NCBI RefSeq. No new sequencing data were generated.
+<!-- The YAML author block renders affiliations in HTML but pandoc drops them
+     from the .docx byline, and the .docx is the submission artifact. Listed
+     here so they survive; at submission they move to the journal's title page. -->
+
+1. Institute of Biomedicine and Translational Medicine, University of Tartu, Tartu, Estonia
+2. Institute of Technology, University of Tartu, Tartu, Estonia
+
+Taavi Päll^1^, Alla Piirsoo^2^, Marko Piirsoo^2^
+
+Correspondence: Taavi Päll, Institute of Biomedicine and Translational Medicine, Biomeedikum, Ravila 19, 50411 Tartu, Estonia. Email: taavi.pall@ut.ee. Telephone: +372 737 4185
 
 ## ORCiDs {.unnumbered}
 
 <!-- One line per author, in the author-list order, as: Given Family: https://orcid.org/0000-0000-0000-0000 -->
-[To be completed: ORCiD for each author.]
+Taavi Päll: <https://orcid.org/0000-0001-7606-675X>
+
+Alla Piirsoo: [to be completed]
+
+Marko Piirsoo: [to be completed]
+
+## Ethics Statement {.unnumbered}
+
+This study analyzed only publicly archived, de-identified human sequencing data retrieved from the NCBI Sequence Read Archive, and generated no new human or animal material. Institutional review board approval and informed consent were therefore not required for the work reported here. Ethical approval and participant consent for the primary studies were the responsibility of their submitting investigators and are recorded in the corresponding BioProject entries.
+
+## Data Availability Statement {.unnumbered}
+
+The complete analysis pipeline, comprising the Nextflow workflow, the per-process software environments and container definitions, the reference-construction and SRA-discovery scripts, and the downstream R analysis and statistical-inference code, is openly available at <https://github.com/tpall/hpv-human-skin>. All sequencing data analyzed here are public and were obtained from the NCBI Sequence Read Archive; the per-cohort lists of accessions (SRR/SRX), with assigned tissue category, diagnosis, and cell-line/engineered annotations, are provided as Supplementary Data. Reference genomes were retrieved from the Papillomavirus Episteme (PaVE; <https://pave.niaid.nih.gov>) and NCBI RefSeq. No new sequencing data were generated.
 
 ## Conflict of Interest {.unnumbered}
 
-[To be completed. If none: "The authors state no conflict of interest."]
+The authors state no conflict of interest.
 
-## Acknowledgements {.unnumbered}
+## Acknowledgments {.unnumbered}
 
 This research was supported by the Estonian Research Council grant (PRG2707).
 

@@ -59,7 +59,9 @@ j <- read_tsv(JX, show_col_types = FALSE) %>%
 pB <- ggplot(j, aes(n_junctions, frac_top)) +
   annotate("rect", xmin = -Inf, xmax = Inf, ymin = JXCUT, ymax = Inf,
            fill = "#c0392b", alpha = 0.06) +
-  geom_hline(yintercept = JXCUT, linetype = "dashed", colour = "#c0392b") +
+  # Reference lines are grey throughout (as in figure_orf.R and figure_bayes.R):
+  # dashed already sets them apart, and red here collided with "integrated".
+  geom_hline(yintercept = JXCUT, linetype = "dashed", colour = "grey35") +
   geom_point(aes(shape = tier, colour = state), size = 2.6) +
   scale_x_log10(labels = scales::comma) +
   scale_colour_manual(values = c(integrated = "#c0392b", episomal = "#2c6fbb"),
@@ -80,9 +82,12 @@ cx_med <- cx %>% group_by(tier) %>% summarise(m = median(log2_e1e2), .groups = "
 
 pC <- ggplot(cx, aes(tier, log2_e1e2)) +
   geom_hline(yintercept = 0, linetype = "dashed", colour = "grey55") +
-  geom_line(data = cx_med, aes(tier, m, group = 1), colour = "#c0392b", linewidth = 0.8) +
-  geom_point(data = cx_med, aes(tier, m), colour = "#c0392b", size = 3) +
-  geom_jitter(width = 0.12, height = 0, size = 1.6, alpha = 0.6, colour = "grey30") +
+  # Libraries first so the medians sit on top: the jitter used to be drawn last
+  # and overplotted the trend. Seeded, so the panel is reproducible from the table.
+  geom_point(position = position_jitter(width = 0.12, height = 0, seed = 1),
+             shape = 1, size = 1.7, colour = "grey55") +
+  geom_line(data = cx_med, aes(tier, m, group = 1), colour = "grey15", linewidth = 0.8) +
+  geom_point(data = cx_med, aes(tier, m), shape = 18, size = 4, colour = "grey15") +
   scale_x_discrete(labels = CLAB) +
   labs(x = NULL, y = expression(log[2]~"(E1 / E2)")) +
   theme(axis.text.x = element_text(size = 9))
@@ -91,7 +96,7 @@ pC <- ggplot(cx, aes(tier, log2_e1e2)) +
 # legend, not burned into the image, both because journals typeset it that way
 # and because a title inside the figure cannot be edited at proof.
 fig <- (pA / (pB | pC)) + plot_layout(heights = c(1, 0.95)) +
-  plot_annotation(tag_levels = "A") &
+  plot_annotation(tag_levels = "a") &
   theme(plot.tag = element_text(face = "bold", size = 13))
 
 ggsave(here("manuscript/figure1.png"), fig, width = 9.5, height = 7.6, dpi = 300, bg = "white")

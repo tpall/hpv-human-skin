@@ -1,6 +1,27 @@
 ---
 title: "Cutaneous HPV is transcriptionally quiet in skin and carcinoma but productive in warts: a depth-controlled re-mining of public RNA-seq"
-author: "[Authors to be added]"
+author:
+  - name: Taavi Päll
+    email: taavi.pall@ut.ee
+    orcid: 0000-0001-7606-675X
+    corresponding: true
+    affiliations:
+      - ref: 1
+  - name: Alla Piirsoo
+    affiliations:
+      - ref: 2
+  - name: Marko Piirsoo
+    affiliations:
+      - ref: 2
+affiliations:
+  - id: 1
+    name: Institute of Biomedicine and Translational Medicine, University of Tartu
+    city: Tartu
+    country: Estonia
+  - id: 2
+    name: Institute of Technology, University of Tartu
+    city: Tartu
+    country: Estonia
 date: last-modified
 bibliography: references.bib
 crossref:

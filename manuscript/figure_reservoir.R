@@ -103,7 +103,7 @@ make_fig <- function(sites) {
     labs(x = "% of that site's HPV+ DNA libraries", y = NULL)
 
   (pA / pB) + plot_layout(heights = c(1, 1.6), guides = "collect") +
-    plot_annotation(tag_levels = "A") &
+    plot_annotation(tag_levels = "a") &
     theme(plot.tag = element_text(face = "bold"), legend.position = "right")
 }
 
@@ -217,7 +217,7 @@ make_fig5 <- function() {
     theme(plot.margin = margin(t = 30, r = 6, b = 6, l = 6))
 
   (pA | pB) + plot_layout(widths = c(1, 1.35), guides = "collect") +
-    plot_annotation(tag_levels = "A") &
+    plot_annotation(tag_levels = "a") &
     theme(plot.tag = element_text(face = "bold"), legend.position = "right")
 }
 
