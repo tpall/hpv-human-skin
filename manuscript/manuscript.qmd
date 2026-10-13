@@ -54,6 +54,9 @@ format:
     tbl-cap-location: top
 ---
 
+<!-- RETIRED 2026-10-13: manuscript_short.qmd is the only live version (the JID submission).
+     This long form is no longer kept in sync with the short sections; do not port edits here. -->
+
 ```{r}
 #| label: setup
 #| include: false
