@@ -13,6 +13,7 @@ author:
     affiliations:
       - ref: 2
   - name: Marko Piirsoo
+    orcid: 0000-0002-9447-1350
     affiliations:
       - ref: 2
 affiliations:
