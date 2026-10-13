@@ -34,7 +34,7 @@ The authors state no conflict of interest.
 
 ## Acknowledgments {.unnumbered}
 
-This research was supported by the Estonian Research Council grant (PRG2707).
+This research was supported by the Estonian Research Council grant PRG2707, held by Kristi Huik, whom we thank for supporting this work.
 
 This research was co-financed through the DURABLE project. The DURABLE project has been co-funded by the European Union, under the EU4Health Programme (EU4H), Project no. 101102733. Views and opinions expressed are however those of the authors only and do not necessarily reflect those of the European Union or the European Health and Digital Executive Agency. Neither the European Union nor the granting authority can be held responsible for them.
 
@@ -44,8 +44,12 @@ The computations were performed on the High Performance Computing Center of the 
 
 <!-- CRediT taxonomy: https://credit.niso.org/ . Use author initials, e.g.
      Conceptualization: AB, CD; Data Curation: AB; Formal Analysis: AB, EF; ... -->
-<!-- AP proposed her roles 2026-10-12 without lead/equal/supporting levels; TP confirmed AP Conceptualization 2026-10-13. Levels for AP and all TP/MP roles still to be set. -->
-[To be completed, CRediT-compliant.] Conceptualization: AP; Data Curation: ; Formal Analysis: ; Funding Acquisition: ; Investigation: ; Methodology: ; Project Administration: ; Resources: ; Software: ; Supervision: ; Validation: AP; Visualization: ; Writing - Original Draft Preparation: ; Writing - Review and Editing: AP.
+<!-- DRAFT 2026-10-13, needs sign-off from all three authors before submission.
+     AP proposed Conceptualization, Validation and Writing - Review & Editing on
+     2026-10-12 without levels; the levels below are TP's proposal, not her words.
+     Funding Acquisition is omitted: PRG2707 is held by Kristi Huik, who is not an
+     author, and CRediT covers authors only. She is thanked in the Acknowledgments. -->
+Conceptualization: MP (lead), AP (equal), TP (equal); Data Curation: TP (lead); Formal Analysis: TP (lead); Investigation: TP (lead); Methodology: TP (lead); Project Administration: TP (lead); Software: TP (lead); Supervision: MP (lead), AP (supporting); Validation: AP (lead), TP (supporting); Visualization: TP (lead); Writing - Original Draft Preparation: TP (lead); Writing - Review and Editing: AP (equal), MP (equal), TP (equal).
 
 ## Declaration of Generative AI Use {.unnumbered}
 
