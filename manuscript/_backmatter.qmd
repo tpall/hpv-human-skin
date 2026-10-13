@@ -5,7 +5,7 @@
      here so they survive; at submission they move to the journal's title page. -->
 
 1. Institute of Biomedicine and Translational Medicine, University of Tartu, Tartu, Estonia
-2. Institute of Technology, University of Tartu, Tartu, Estonia
+2. Institute of Bioengineering, University of Tartu, Tartu, Estonia
 
 Taavi Päll^1^, Alla Piirsoo^2^, Marko Piirsoo^2^
 
@@ -16,7 +16,7 @@ Correspondence: Taavi Päll, Institute of Biomedicine and Translational Medicine
 <!-- One line per author, in the author-list order, as: Given Family: https://orcid.org/0000-0000-0000-0000 -->
 Taavi Päll: <https://orcid.org/0000-0001-7606-675X>
 
-Alla Piirsoo: [to be completed]
+Alla Piirsoo: <https://orcid.org/0000-0001-6843-7127>
 
 Marko Piirsoo: [to be completed]
 
@@ -44,4 +44,5 @@ The computations were performed on the High Performance Computing Center of the 
 
 <!-- CRediT taxonomy: https://credit.niso.org/ . Use author initials, e.g.
      Conceptualization: AB, CD; Data Curation: AB; Formal Analysis: AB, EF; ... -->
-[To be completed, CRediT-compliant.] Conceptualization: ; Data Curation: ; Formal Analysis: ; Funding Acquisition: ; Investigation: ; Methodology: ; Project Administration: ; Resources: ; Software: ; Supervision: ; Validation: ; Visualization: ; Writing - Original Draft Preparation: ; Writing - Review and Editing: .
+<!-- AP proposed her roles 2026-10-12 without lead/equal/supporting levels; levels for AP and all TP/MP roles still to be set. -->
+[To be completed, CRediT-compliant.] Conceptualization: AP; Data Curation: ; Formal Analysis: ; Funding Acquisition: ; Investigation: ; Methodology: ; Project Administration: ; Resources: ; Software: ; Supervision: ; Validation: AP; Visualization: ; Writing - Original Draft Preparation: ; Writing - Review and Editing: AP.

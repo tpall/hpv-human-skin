@@ -8,6 +8,7 @@ author:
     affiliations:
       - ref: 1
   - name: Alla Piirsoo
+    orcid: 0000-0001-6843-7127
     affiliations:
       - ref: 2
   - name: Marko Piirsoo
@@ -19,7 +20,7 @@ affiliations:
     city: Tartu
     country: Estonia
   - id: 2
-    name: Institute of Technology, University of Tartu
+    name: Institute of Bioengineering, University of Tartu
     city: Tartu
     country: Estonia
 date: last-modified
