@@ -44,7 +44,7 @@ The computations were performed on the High Performance Computing Center of the 
 
 <!-- CRediT taxonomy: https://credit.niso.org/ . Use author initials, e.g.
      Conceptualization: AB, CD; Data Curation: AB; Formal Analysis: AB, EF; ... -->
-<!-- AP proposed her roles 2026-10-12 without lead/equal/supporting levels, and Conceptualization with a question mark: confirm it with her. Levels for AP and all TP/MP roles still to be set. -->
+<!-- AP proposed her roles 2026-10-12 without lead/equal/supporting levels; TP confirmed AP Conceptualization 2026-10-13. Levels for AP and all TP/MP roles still to be set. -->
 [To be completed, CRediT-compliant.] Conceptualization: AP; Data Curation: ; Formal Analysis: ; Funding Acquisition: ; Investigation: ; Methodology: ; Project Administration: ; Resources: ; Software: ; Supervision: ; Validation: AP; Visualization: ; Writing - Original Draft Preparation: ; Writing - Review and Editing: AP.
 
 ## Declaration of Generative AI Use {.unnumbered}
