@@ -490,6 +490,11 @@ stats <- lapply(list(
   e1e2_cl_n=.ecrit("cell_line","n"),
   e1e2_ev_pct=.epct("EV"),
   e1e2_ctrl_pct=.epct("control_productive"),
+  # EV junction load: raw chimeric counts scale with viral depth and are highest
+  # in the episomal EV libraries, which is why CLUSTERING (frac_top) is the
+  # discriminating statistic. Quoted in Results, so derived here rather than typed.
+  ev_jx_min=if (is.null(.jx)) NA_real_ else min(.jx$n_junctions[.jx$tier=="EV"]),
+  ev_jx_sites_min=if (is.null(.jx)) NA_real_ else min(.jx$n_sites[.jx$tier=="EV"]),
   # cervical graded series (external validation)
   cxg_norm=.cx("hpv16_normal_epithelium"), cxg_hsil=.cx("hpv16_hsil"),
   cxg_scc=.cx("hpv16_scc"),
