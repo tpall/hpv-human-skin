@@ -709,3 +709,203 @@ rather than by a type list; there is no room for a list, and the main text and
 
 JID-countable total unchanged at 3,891: the Abstract is excluded from the count,
 and the Methods rephrase was word-neutral.
+
+## Round 5 of TP comments, on draft o (4 comments + 1 tracked change) -> draft p (2026-11-03)
+
+**Tracked change, Figure S3 caption: "upper panel" -> "left", "lower panel" ->
+"right".** Correct, and it exposed more than it fixed. The figure was transposed
+to portrait for comment 97 but the caption still described the old orientation
+throughout: it said "Columns are HPV types ... rows are sample groups" when the
+figure now has types as rows, sample groups as columns, and the two catalogs
+side by side. Four further sentences read the wrong way ("concentrated in two
+rows", "the unselected-skin row is pale", "runs almost the full width", "the
+length of that row"). All corrected against the rendered PNG.
+
+**Comment 95 ("use more concise language") and comment 100 ("there is a simpler
+and straighter way to say this, also other places in supp fig captions, use the
+iso-24495 skill").** All six supplementary figure captions rewritten with the
+skill, reader taken as a referee skimming the supplement. No number, condition
+or hedge dropped.
+
+| Caption | Before | After |
+|---|---|---|
+| suppfig-depth | 151 | 116 |
+| suppfig-trace | 185 | 156 |
+| suppfig-types | 357 | 312 |
+| suppfig-reservoir-gut | 303 | 282 |
+| suppfig-bayes | 185 | 164 |
+| suppfig-cohort-flow | 146 | 140 |
+| **total** | **1,327** | **1,170** |
+
+One substantive fix fell out of the rewrite: in the reservoir caption "Its
+composition is a mixture of mucosal alpha and cutaneous beta" followed "Only
+skin is carried into the main figure", so "Its" pointed at skin when the
+sentence is about the gut site. Now named outright.
+
+**Comment 104: "good!"** No action. (Anchored on the cohort-flow figure.)
+
+**Comment 106, on HPV18 in Table S1: "check column width, hpv type must fit into
+one line."** Pandoc derives column widths from the width of the source markdown
+columns, so Table S1's first column took 51% of the table and the type columns
+were left with as little as 2%, which wrapped the type names. `widen_columns()`
+in `docx_table_rules.py` now gives every column at least the width of its
+longest unbreakable word, hands the slack back in proportion to the original
+widths, and scales the whole set down if the minimums cannot fit. All 9 tables
+rebalanced; every column now clears its longest word with margin (Table S1's
+narrowest is 0.53 in for "Total", needing 0.43 in).
+
+Two bugs of mine surfaced while doing it, both now fixed in
+`docx_table_rules.py`:
+
+- `<w:t[^>]*>` also matches `<w:tc>`, `<w:tcPr/>` and `<w:tbl>`, so the
+  longest-word measurement was reading markup as text and every column came out
+  needing 2,400 to 3,200 twips. The pattern now requires a space or an immediate
+  close after the element name. The word counts reported earlier are unaffected:
+  body paragraphs carry no other `w:t*` element, and the counts recompute
+  identically.
+- Pandoc wraps each table and its caption in a one-cell outer table, so a
+  non-greedy `<w:tbl>...</w:tbl>` match runs from the wrapper to the inner
+  table's close. `shrink_cells` was therefore setting the table captions to 8 pt
+  as well as the cells, in every draft since l. Both passes now split the
+  wrapper off with `inner_table()` and touch only the data table, so captions
+  are back at 12 pt.
+
+JID-countable total unchanged at 3,891 (supplementary captions are excluded).
+Abstract 200 words.
+
+### Draft p edit picked up, and the review pack built on draft q (2026-11-03)
+
+While packaging p for review, two things turned up in the file itself.
+
+First, TP had already made a tracked deletion in p at 14:59, cutting the last
+sentence of the Figure S5 caption: "The axis spans five orders of magnitude
+because that contrast genuinely does." Applied to `_supplement.qmd`. The pack is
+therefore built on draft q, which is p plus that one cut and nothing else. The
+commented copy of p is kept as `hpv_manuscript_2026-11-03p_TP.docx`.
+
+Second, p's submission copy had been resaved by Word, which renames the
+script-written page-number footer part from `footer_jid.xml` to `footer1.xml`
+and reassigns its relationship id. Harmless in itself, but it means the file was
+no longer the script's output. Worth knowing for future packs: build the archive
+from a fresh render rather than from a docx that has been open in Word. The q
+copies are clean (checked: `footer_jid.xml` present, no comments, no tracked
+changes, line numbers in the editing copy and none in the submission copy).
+
+`hpv_manuscript_2026-11-03q_review.zip`, 4.0 MB, 17 files: README, both docx,
+this log, 11 figure PDFs, 2 Supplementary Data tables. The README gives the
+denominator correction with its before/after table, the length position, and
+six open points to comment on.
+
+---
+
+## Round 6: supplement cross-reference audit and legend copy-edit (draft r, 2026-11-03)
+
+Source: `supplement_copyedit_q.md`, an external audit of draft q. Applied in full except
+where noted. Verified every checkable claim against the source and the rendered docx before
+acting; one claim was a false positive and was not acted on.
+
+### Cross-references: two orphaned supplementary figures
+
+Figure S5 (`@suppfig-bayes`) was cited in no file at all, and Figure S6
+(`@suppfig-cohort-flow`) only in the supplementary Methods, so neither was reachable from
+the main text. Both now have a main-text citation at the anchor each already had:
+
+- Methods, "Cohort.": `... 10,295 returned a result (Figure S6).` The reader who meets the
+  three cohort numbers for the first time is who that diagram is for.
+- Methods, "Confounder control and statistics.": `... as a robustness check (Table S3, Figure S5).`
+
+### Four errors corrected
+
+1. **Figure S3's worked example was arithmetically wrong.** It read "three libraries is 23%
+   of the EV group". EV is N=10, and under the caption's own estimator (Beta-Binomial
+   posterior mean, Beta(0.5, 0.5) prior) three of ten is 31.8%. 23% is what *two* of ten
+   gives, which is what Table S1's EV column prints in four rows (HPV14, HPV25, HPV47,
+   HPV9). One count was carrying a percentage computed from a different count, in the
+   sentence whose only job is to teach the reader how to read the fill scale. Now 32%.
+2. **The Data Availability Statement miscounted its own tables**, introducing the third item
+   named as "A second Supplementary Data table". Recast to "Two further Supplementary Data
+   tables accompany them. The first ... The second ...".
+3. **Two sentences in the supplementary Methods began with a numeral** (1,261 and 410),
+   which JID style and the house rules both forbid. Recast as "Of the 11,556 libraries that
+   entered the sweep, 1,261 returned ..." and "Of these, 410 were downloaded but ...".
+4. **A third sentence-initial numeral, in the main text**, which the audit missed: Methods,
+   "Cohort." opened "11,556 libraries entered the screen". Recast as "Of the 11,556
+   libraries that entered the screen, 10,295 returned a result", which is also where the
+   Figure S6 citation went.
+
+### Not acted on: one false positive
+
+The audit reported "space before a period, four instances in the main text, three in the
+supplement", read as inline-R artifacts. All seven are `P = .49`, `P = .0055` and the like,
+which is JID's own convention of dropping the leading zero from a p-value. The check caught
+space-plus-period and misread it. Nothing to fix.
+
+### Legends brought under JID's 125-word limit
+
+Five of six supplementary legends were over. All six now comply:
+
+| Legend | Before | After |
+|---|---:|---:|
+| Figure S1 | 106 | 106 |
+| Figure S2 | 141 | 82 |
+| Figure S3 | 302 | 125 |
+| Figure S4 | 260 | 116 |
+| Figure S5 | 145 | 116 |
+| Figure S6 | 129 | 120 |
+| **Total** | **1,083** | **665** |
+
+418 words left the legends. 263 of them moved into prose rather than being cut, because
+they were the only place their content appears:
+
+- **Figure S2's late-read fractions** (57 gene-mapped non-productive libraries, 52 early-only,
+  5 L2-only, median late-read fraction 0 against 0.367) into a new subsection, "What the
+  gene-level split shows" (50 words). Put in the supplement rather than in the Results
+  paragraph that cites Figure S2, since the supplement is outside JID's word limit and the
+  main text is already over it.
+- **Figure S4's whole interpretive half** (the vaginal positive control, the gut
+  collection-route reading, the novel-cluster fractions) into a new subsection, "What the
+  vaginal and gut sites establish" (144 words). Figure S4 was the one item with no prose
+  section to defer to, so its caption had been carrying the entire argument.
+- **Figure S3's commensal-reservoir reading** into the existing "What the detection level
+  adds" (69 words), which already had the adjacent fact (40 of 51 resolved skin calls are
+  cutaneous beta/gamma/nu) but not the interpretation.
+
+The remaining 155 words were duplication:
+
+- The Table S1 / Table S6 / Figure S3 relationship had been stated four times. The precise
+  version (Table S6's note, with the 325-library count) stays; Figure S3's caption keeps the
+  partition clause because a reader of the figure alone needs it; Table S1's note and Table
+  S6's caption are now bare pointers.
+- The estimator was defined three times. Defined once in Table S1's note; Table S6's note
+  now says "the estimator of Table S1"; Figure S3's caption keeps the eight-word
+  parenthetical, since the fill scale is unreadable without it.
+- Figure S3's caption restated three things already in "What the assigned-type catalog
+  shows" and in Figure 4's caption. Cut.
+- Figure S5's Student-t(3) sentence was internally tangled: it called the item "the
+  Student-t(3) row" while explaining that it is not a row, because "row" meant a row of the
+  figure in its first use and a row of the table in its second. Replaced with the one thing
+  a reader of the figure needs, which is why the figure has a line the table does not.
+- Figure S6 lost "and neither is a filtered version of the other", which "not nested"
+  already carries.
+
+### Effect
+
+Main text 3,891 to 3,897 words (+6, all in Methods, from the two citations and the
+"Cohort." recast). Abstract unchanged at 200. Supplement 4,631 to 4,474 rendered words.
+Legends and supplementary material are both outside JID's word limit, so the +6 is the only
+change that touches the count.
+
+### Still open from the audit
+
+Two mechanical items in its §7 were out of scope for this round: inconsistent thousands
+separators in running text (needs an eye, not a regex, since accessions are correctly left
+bare), and seven supplementary sentences over 50 words, four of them in "Read download and
+quality control".
+
+### Packaged for review
+
+`hpv_manuscript_2026-11-03r_review.zip`, 4.0 MB, 17 files: README, both docx,
+this log, 11 figure PDFs, 2 Supplementary Data tables. The figure PDFs are
+unchanged from the draft q pack, since no figure code changed this round, only
+the captions. The README gives the two orphaned cross-references, the four
+errors, the legend table before and after, and the open points.
