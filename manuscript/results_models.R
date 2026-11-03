@@ -548,9 +548,9 @@ stats <- lapply(list(
   m2b_or_cut=.bcut$OR, m2b_lo_cut=.bcut$lo, m2b_hi_cut=.bcut$hi, m2b_p_cut=.bcut$p,
   m3_neo_pct_cut=round(.m3nc$pct,1), m3_neo_n_cut=.m3nc$n, m3_neo_prod_cut=.m3nc$prod,
   m3_or_cut=.f3c$estimate, m3_lo_cut=.f3c$conf.int[1], m3_hi_cut=.f3c$conf.int[2], m3_p_cut=.f3c$p.value,
-  trace_n=nrow(.tt), trace_resolved=sum(.tt$trace_ok), trace_ntypes=n_distinct(.tres$top_ref),
-  trace_skin_n=nrow(.tskin), trace_skin_cut=sum(.tskin$genus_short %in% c("beta","gamma","nu")),
-  trace_ctrl_resolved=sum(.tres$tier == "control_productive", na.rm=TRUE),
+  detection_n=nrow(.tt), detection_resolved=sum(.tt$trace_ok), detection_ntypes=n_distinct(.tres$top_ref),
+  detection_skin_n=nrow(.tskin), detection_skin_cut=sum(.tskin$genus_short %in% c("beta","gamma","nu")),
+  detection_ctrl_resolved=sum(.tres$tier == "control_productive", na.rm=TRUE),
   # Library completeness
   spot_n=.sr("n"), spot_med=.sr("med"), spot_p05=.sr("p05"),
   spot_tier_lo=.sr("tier_lo"), spot_tier_hi=.sr("tier_hi"),

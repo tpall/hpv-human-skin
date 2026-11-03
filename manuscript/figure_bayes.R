@@ -33,7 +33,7 @@ rows <- tribble(
   "M2b_neoplasia_vs_skin_floor",         "Neoplasia vs unselected skin, floor (M2)",
   "M2b_depth",                           "Sequencing depth, per 10× reads, floor (M2)",
   "M2d_depth_within_neoplasia",          "Sequencing depth within neoplasia, floor (M2)",
-  "M2a_neoplasia_vs_skin_any",           "Neoplasia vs unselected skin, any-HPV / trace (M2)",
+  "M2a_neoplasia_vs_skin_any",           "Neoplasia vs unselected skin, any-HPV (M2)",
   "M3_controls_vs_neoplasia",            "Productive controls vs neoplasia, productive (M3)")
 
 d <- rows %>% left_join(b, by = "model") %>%

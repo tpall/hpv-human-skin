@@ -173,7 +173,7 @@ make_fig5 <- function() {
     # with clip = "off" they draw in the top margin instead and the axis stops
     # where the data does.
     annotate("text", x = colx, y = nrow_d + 0.95, size = 2.5, colour = "grey25",
-             fontface = "bold", label = c("assigned", "trace")) +
+             fontface = "bold", label = c("assigned", "detection")) +
     annotate("text", x = mean(colx), y = nrow_d + 1.75, size = 2.6, colour = "grey25",
              label = "RNA detections in unselected skin") +
     scale_fill_manual(values = gcol, name = "Genus", limits = gen_present, drop = FALSE) +

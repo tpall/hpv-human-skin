@@ -1010,3 +1010,78 @@ sentence does check out against supplementary_data_ethics_provenance.tsv (36 stu
 libraries, 17 with a named committee, 12 unrecoverable contributing 284 libraries), but the
 proposed one-sentence form accounted for only 29 of the 36 studies, leaving 7 for a reader
 to wonder about, which draft g's longer enumeration did not.
+
+---
+
+## Round 8: the "trace" terminology decision (draft t, 2026-11-03)
+
+TP asked to settle this. It had been carried as an open point since the draft-g pack.
+
+### First, a correction to the open-points list
+
+Every pack since g has said the word "trace" reaches the title. It does not. The title is
+"Cutaneous HPV is transcriptionally inactive in skin and carcinoma but productive in warts",
+with no "trace" in it. The word reaches the Abstract (once) and one Results heading. The
+claim was repeated from the earlier list without being checked.
+
+### The three senses, measured
+
+| | Meaning | Criterion | Libraries | Magnitude |
+|---|---|---|---|---|
+| A | any papillomavirus read | RPM > 0 | 2,405 of 8,206 skin + neoplasia (29.3%) | median 0.053 RPM |
+| B | HPV-positive but below the detection floor | >= 10 Kraken2 reads and RPM < 13.2 | 230 | 0.05 to 13.2 RPM |
+| C | a type call below the assignment threshold | breadth < 0.10 or depth < 2 | 325, cohort-wide | not a burden axis |
+
+The "about 250-fold" is A's median non-zero library (0.053 RPM) against B's ceiling (13.2
+RPM), a factor of 249. A and B also differ tenfold in population size, because A counts
+single reads and B requires the 10-read positivity threshold. C is not on the same axis at
+all: it is about whether a type call is confident enough to assign, so a library can be a
+sense-C detection while sitting far above the sense-B floor.
+
+### Decision: "trace" means B and nothing else
+
+Chosen by TP, 2026-11-03. B is the paper's object, the thing the gene-level decomposition
+is about, and it is what the Abstract's single use means. The other two senses already had
+better names in the manuscript's own text: it calls A "the background of the assay", and
+Figure 4 and Figure S3 already label C "Detection level". So this promotes existing
+vocabulary rather than inventing any.
+
+- **A becomes "any-HPV"**, defined at the point the positivity threshold is given:
+  "including libraries below the HPV-positivity threshold of 10 reads (any-HPV)".
+  Nine prose uses changed, including the three "trace OR" model labels.
+- **B keeps "trace"**, now defined where the floor is defined: "the 5th percentile of
+  productive controls from primary tissue; HPV below it we call trace."
+- **C becomes "detection-level"**, eight prose uses.
+
+### Also changed, because the labels are drawn into the figures
+
+- **Figure 5** panel a headed its two columns "assigned" and "trace" (sense C). Now
+  "assigned" and "detection". `figure_reservoir.R` edited, figure5.{png,pdf} regenerated.
+- **Figure S5 and Table S3** carried the contrast label "Neoplasia vs unselected skin,
+  any-HPV / trace (M2)". Now "any-HPV (M2)". `figure_bayes.R` and `_helpers.R` edited,
+  figureS5.{png,pdf} regenerated.
+- Figures 4 and S3 needed nothing: they already said "Assigned" and "Detection level".
+
+### The code collision, fixed
+
+`stats$trace_n` was 325 (sense C) while `tr("trace_n")` was 230 (sense B): two names, two
+populations. The sense-C family is renamed to `detection_*` (`detection_n`,
+`detection_resolved`, `detection_ntypes`, `detection_skin_n`, `detection_skin_cut`,
+`detection_ctrl_resolved`), along with `build_detection_table()`, `detection_elig()`,
+`detection_elig_str()` and the crossref label `supptbl-detection`. The sense-B `tr()`
+namespace keeps "trace", which is now correct.
+
+Internal plumbing is deliberately not renamed: `trace_types.tsv`, `trace_numbers.tsv`,
+`trace_decomposition/`, `.trace_counts`, `.trace_tiers`, `.trace_eligible_N`, `trace_ok`.
+These never reach a reader and renaming a data file buys nothing.
+
+The retired `_results.qmd` and `_discussion.qmd` are untouched, per the standing rule.
+Three aliases in `_helpers.R` (`build_trace_table`, `trace_elig`, `trace_elig_str`) keep
+them runnable. Their `@supptbl-trace` references are now stale, which is harmless because
+the full version is not rendered.
+
+### Effect
+
+Main text 3,892 to 3,899 words (+7, all in the two definitions). Abstract unchanged at 200,
+and its single use of "trace" is sense B, so it needed no edit. No number, interval or
+result changes.

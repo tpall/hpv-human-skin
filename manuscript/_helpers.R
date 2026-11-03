@@ -56,7 +56,7 @@ build_bayes_table <- function(stats, bget){
     "Neoplasia vs unselected skin, floor (M2)",              stats$m2b_or,       stats$m2b_p,        "M2b_neoplasia_vs_skin_floor",
     "Sequencing depth, per 10× reads, floor (M2)",           stats$m2b_l10_or,   stats$m2b_l10_p,    "M2b_depth",
     "Sequencing depth within neoplasia, floor (M2)",         stats$neo_depth_or, stats$neo_depth_p,  "M2d_depth_within_neoplasia",
-    "Neoplasia vs unselected skin, any-HPV / trace (M2)",    stats$m2a_or,       stats$m2a_p,        "M2a_neoplasia_vs_skin_any",
+    "Neoplasia vs unselected skin, any-HPV (M2)",    stats$m2a_or,       stats$m2a_p,        "M2a_neoplasia_vs_skin_any",
     "Productive controls vs neoplasia, productive (M3)",     stats$m3_or,        stats$m3_p,         "M3_controls_vs_neoplasia")
   purrr::pmap_dfr(rows, function(contrast, freqor, freqp, bmodel){
     b <- bget(bmodel)
@@ -191,7 +191,7 @@ build_prod_table <- function(){
   x %>% mutate(Total = rowSums(across(all_of(.trace_tiers)))) %>%
     filter(Total >= 2) %>% arrange(desc(Total), desc(unselected_skin))
 }
-build_trace_table <- function(){
+build_detection_table <- function(){
   x <- .trace_counts()
   tibble(`HPV type` = x$type, Genus = x$Genus) %>%
     mutate(!!.hdr_N("unselected_skin")    := .np(x$unselected_skin,    "unselected_skin"),
@@ -224,11 +224,11 @@ build_trace_table <- function(){
   rp %>% mutate(assigned = map_lgl(srr_id, ~ .x %in% assigned && has_call(.x))) %>%
     filter(!assigned) %>% count(tier) %>% { setNames(.$n, .$tier) }
 })
-trace_elig <- function(tc) unname(coalesce(.trace_eligible_N[tc], 0L))
+detection_elig <- function(tc) unname(coalesce(.trace_eligible_N[tc], 0L))
 # Human-readable "Unselected skin 196, Cell line 35, ..." for the caption, ordered
 # as the table columns are, and using the display labels rather than the raw keys.
-trace_elig_str <- function(tiers = .trace_tiers)
-  paste(sprintf("%s %d", .tier_lab[tiers], vapply(tiers, trace_elig, integer(1))),
+detection_elig_str <- function(tiers = .trace_tiers)
+  paste(sprintf("%s %d", .tier_lab[tiers], vapply(tiers, detection_elig, integer(1))),
         collapse = ", ")
 # Trace-count lookup for caption CrIs.
 kT  <- function(type, tc){ x <- .trace_counts(); v <- x[[tc]][x$type == type]
@@ -433,4 +433,12 @@ eth <- function(key) {
 .trace_nums <- readr::read_tsv(here("trace_decomposition/trace_numbers.tsv"),
                                show_col_types = FALSE)
 tr  <- function(key) .trace_nums$value[.trace_nums$key == key]
+
+# Sense-C aliases. "trace" now means only the sub-threshold population (sense B,
+# the tr() namespace above); the below-assignment type catalogue is "detection
+# level". These aliases keep the retired full version (_results.qmd,
+# _discussion.qmd) runnable without porting prose into it.
+build_trace_table <- build_detection_table
+trace_elig        <- detection_elig
+trace_elig_str    <- detection_elig_str
 trn <- function(key) as.numeric(tr(key))
