@@ -331,6 +331,7 @@ secondary use, for which the deposit terms are the exemption basis.
 
 Our own exemption basis (first paragraph) is unchanged and still carries the VERIFY
 comment for the University of Tartu Research Ethics Committee.
+[Superseded 2026-11-03: there is no such committee to ask. See Round 7.]
 
 Also narrowed, for consistency: the Methods approvals paragraph no longer promises
 "the per-study approvals of the primary studies", and the Data Availability
@@ -376,6 +377,7 @@ personal data even stripped of identifiers, so this asserts a legal conclusion a
 genomic data. Supporting facts now stated in the text: all deposits are open access
 rather than controlled, and no individual-level information beyond archive annotation
 was used. Confirming with the UT Research Ethics Committee is still recommended.
+[Superseded 2026-11-03: there is no such committee to ask. See Round 7.]
 
 ### Majors verified and fixed
 
@@ -909,3 +911,87 @@ this log, 11 figure PDFs, 2 Supplementary Data tables. The figure PDFs are
 unchanged from the draft q pack, since no figure code changed this round, only
 the captions. The README gives the two orphaned cross-references, the four
 errors, the legend table before and after, and the open points.
+
+---
+
+## Round 7: regressions from round 6, a diction pass, and the ethics position (draft s, 2026-11-03)
+
+Sources: `draft_r_fixes.md`, `diction_pass_r.md`, `ethics_readme_fix.md`, three external
+reviews of draft r. Every checkable claim was verified against the source and the rendered
+drafts before acting. One was taken as stated by TP, one was declined.
+
+### Three defects introduced by round 6, all now fixed
+
+These were mine, created an hour earlier by the legend cuts.
+
+1. **A double colon in Figure S3's caption**: "as one grid: they partition one cohort: a
+   library either clears ...". The conjunction was lost when three words were trimmed to
+   reach 125. Restored ("one cohort, so a library"), paid for by "32% of the EV group,
+   0.04% of unselected skin".
+2. **The moved Figure S4 passage opened "This figure"**, which had an antecedent inside
+   Figure S4's caption and none in a subsection that never names the figure.
+3. **The moved Figure S2 passage opened "Of the 57 gene-mapped but non-productive
+   libraries"**, a definite article on a set the subsection never introduces, and it named
+   neither Figure S2 nor the 230-library denominator.
+
+Both passages resolved only by sitting next to the caption they came from. Open point 6 is
+whether to move figure legends to the end per JID's section order; if that happens, both
+referents break. Each now names its figure, which costs three words and survives reordering.
+"What the detection level adds" already did this and was the model.
+
+### Diction pass
+
+- **"licenses"** ("This figure licenses the skin composition ... to be read as biology").
+  Replication licensing (origin licensing, MCM2-7, Cdt1, Cdc6) is standard vocabulary in
+  this field, and this is a papillomavirus paper that reads genome replication state from
+  E1:E2 with E1 the viral helicase. Using "license" for "warrants" attaches a second meaning
+  to a word the field already owns. Now "@suppfig-reservoir-gut is the positive control for
+  the composition read-out: ... so the skin composition in @fig-reservoir can be read as
+  biology", which also fixes defect 2 above.
+- **Two metaphorical uses of "axis"**, "the presence axis" (supplementary Methods) and "the
+  DNA axis" ("Why the E2 statistic cannot read genome state"). Both breach the decision
+  recorded at comment 19, "axis now only for plot axes", restated at comment 34. Now
+  "presence data" and "DNA evidence". The four genuine plot-axis uses stay.
+- **Five inanimate-agent constructions**: "This table exists because" (deleted, the
+  substance starts at "Poly-A capture"), "Table S8 is reported because the inference is an
+  inviting one to draw" (recast), "SRP565659 makes the point under internal control",
+  "the capsid burst the controls are there to show", "which is the criterion working".
+- Left alone: "manufacture" in "Library chemistry does not manufacture the productivity
+  contrast", which is the precise verb for an artefactually created effect, and "buys" in
+  the Figure S5 caption.
+
+### Ethics: the position is settled, and the committee question is closed
+
+TP, 2026-11-03: the University of Tartu research ethics committee no longer exists, and the
+Estonian committee now sits under ETAG. Because this work reanalyzes published, anonymized
+sequencing libraries, it needs no ethics approval and that committee has nothing to decide
+on. The recommendation to "confirm the position with the University of Tartu Research Ethics
+Committee" is therefore not pending, it is unavailable, and the comment block in
+`_backmatter.qmd` now records that. The two earlier log lines carrying the old
+recommendation are marked superseded rather than rewritten, since they are dated records.
+The Ethics Statement itself needed no change: it names no committee and rests on GDPR
+Article 2 with Recital 26.
+
+### Only SRA is named as the source
+
+TP asked to name only the SRA, and the code agrees. `modules/local/sra_download/main.nf`
+fetches every library with `prefetch` followed by `fasterq-dump`; there is no ENA or EBI
+endpoint anywhere in the pipeline. The cohorts do contain accessions issued by the other
+INSDC members (1,194 ERR and 55 DRR in the prevalence sweep, 102 ERR and 19 DRR in the
+lesion cohorts), but those runs are mirrored into the SRA and that is where we downloaded
+them from. Naming the SRA alone is therefore both accurate and more complete than before,
+since the old wording named the ENA but not the DDBJ. Changed in the Ethics Statement and in
+the matching Methods sentence, which states the same fact and would otherwise contradict it.
+
+### Declined
+
+`ethics_readme_fix.md` proposed restoring the committee-coverage enumeration (36 source
+studies, 17 naming a committee, 284 of 559 libraries with no recoverable committee) to the
+Ethics Statement, reporting that the one-paragraph cut had removed it by accident. Verified:
+the numbers are in draft g and absent from draft r. But the removal was deliberate and the
+reasoning is in `_backmatter.qmd`, dated 2026-11-02: requirement (ii) is addressed to reuse
+of patient data, so the statement "no longer tallies committee coverage ... without the
+manuscript asserting coverage we do not have". The data still ship in
+`supplementary_data_ethics_provenance.tsv` and the Data Availability Statement still points
+at it. Not reversed without TP. Two further notes: the report's "51%" appears in neither
+draft, and `cut_plan_r3.md`, cited as the do-not-cut authority, is not in the repository.
