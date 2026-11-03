@@ -32,3 +32,22 @@ apply_cellline_overrides <- function(fl) {
   fl %>% dplyr::left_join(cellline_overrides(), by = "srr_id") %>%
     dplyr::mutate(is_cell_line = dplyr::coalesce(ovr, is_cell_line)) %>% dplyr::select(-ovr)
 }
+
+# Libraries whose Kraken2 report file is empty produced no screening result at
+# all. Two causes, measured 2026-11-03: fastp discarded every read (410 in the
+# sweep, all "too_short_reads", because params.fastp_min_length = 36 meets an R1
+# of 26 to 33 bp, the barcode mate of 10x-style chemistry, and fastp in paired
+# mode drops the pair when either mate fails), or the library was never
+# downloaded (851, scattered 10 to 22 per 100-library chunk across 85 chunks,
+# i.e. per-accession download failures rather than failed chunks).
+#
+# results_full_v2/metadata/hpv_status.tsv records all of them as "HPV-" with a
+# read count of 0, so leaving them in counts a library that was never screened
+# as a negative observation and deflates every positivity rate. They are
+# therefore dropped from the positivity denominator. The depth-normalized burden
+# analysis never had the problem: bin/hpv_rpm_contrast.R reads the report files
+# themselves, and an empty one yields no RPM row.
+unscreened_ids <- function(dir = "results_full_v2/aggregated") {
+  f <- list.files(here::here(dir), pattern = "_kraken2_report\\.txt$", full.names = TRUE)
+  sub("_kraken2_report\\.txt$", "", basename(f[file.size(f) == 0]))
+}

@@ -1,0 +1,24 @@
+<!-- JID title page (Information for Authors, "Title Page", read 2026-11-02): full names with
+     numbered affiliations after the names; city and country of the work; corresponding author's
+     address, telephone and email; short title of 45 characters or fewer including spaces;
+     up to 5 keywords NOT already in the title (articles are also indexed by title); and the
+     nonstandard abbreviations, which belong on the title page. ORCiDs stay in the back matter,
+     where JID's section order puts them. The author metadata was removed from the YAML of
+     manuscript_short.qmd so the pandoc docx writer emits no byline: it duplicated these names
+     and dropped the affiliations (TP comment 0, 2026-11-02). -->
+
+Taavi Päll^1^, Alla Piirsoo^2^ and Marko Piirsoo^2^
+
+^1^Institute of Biomedicine and Translational Medicine, University of Tartu, Tartu, Estonia; ^2^Institute of Bioengineering, University of Tartu, Tartu, Estonia
+
+The work was done in Tartu, Estonia.
+
+**Corresponding author:** Taavi Päll, Institute of Biomedicine and Translational Medicine, Biomeedikum, Ravila 19, 50411 Tartu, Estonia. Telephone: +372 737 4185. Email: taavi.pall@ut.ee
+
+**Short title:** Cutaneous HPV transcription in skin and cSCC
+
+**Keywords:** beta-papillomavirus; actinic keratosis; epidermodysplasia verruciformis; viral integration; cell line contamination
+
+**Abbreviations:** AK, actinic keratosis; AUC, area under the receiver operating characteristic curve; CI, confidence interval; cSCC, cutaneous squamous cell carcinoma; EV, epidermodysplasia verruciformis; HPV, human papillomavirus; HSIL, high-grade squamous intraepithelial lesion; OR, odds ratio; PaVE, Papillomavirus Episteme; RNA-seq, RNA sequencing; RPM, reads per million; SRA, Sequence Read Archive
+
+{{< pagebreak >}}

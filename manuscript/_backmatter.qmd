@@ -1,17 +1,74 @@
-## Affiliations {.unnumbered}
+## Ethics Statement {.unnumbered}
 
-<!-- The YAML author block renders affiliations in HTML but pandoc drops them
-     from the .docx byline, and the .docx is the submission artifact. Listed
-     here so they survive; at submission they move to the journal's title page. -->
+<!-- JID requires, for reanalysis or secondary analysis of published patient data
+     (Information for Authors, read 2026-11-02): (i) a list of all data sources with
+     repository names, accession numbers and direct links, plus a description of how
+     the data were obtained and any preprocessing; (ii) the name of the ethics
+     committee(s) that approved the original data collection; and (iii) a statement on
+     whether informed consent was collected and whether it covered secondary use, or
+     the exemption basis if not. The guide also requires approvals and consent to be
+     stated in the Methods, which _methods_brief.qmd now does.
 
-1. Institute of Biomedicine and Translational Medicine, University of Tartu, Tartu, Estonia
-2. Institute of Bioengineering, University of Tartu, Tartu, Estonia
+     TP's decision, 2026-11-02: requirement (ii) is addressed to reuse of patient
+     data. This work uses open-access sequencing libraries with public metadata, so
+     the statement does not recite the originating studies' ethics permits and no
+     longer tallies committee coverage. Requirement (i) is met in full, and the
+     per-study committee and consent statements compiled by `ethics_audit/` remain in
+     supplementary_data_ethics_provenance.tsv, so the information can be produced if
+     an editor asks without the manuscript asserting coverage we do not have (for
+     284 of 559 lesion libraries no committee is recoverable from public records).
+     The eth() helpers in _helpers.R are now unused by the manuscript text; they are
+     kept so the coverage figures can be quoted in a reply to the editor.
 
-Taavi Päll^1^, Alla Piirsoo^2^, Marko Piirsoo^2^
+     TP's position on the risk, if it is queried: these are human reads from lesion
+     biopsies, so an editor may read them as published patient data even though the
+     deposits are open access. -->
 
-Correspondence: Taavi Päll, Institute of Biomedicine and Translational Medicine, Biomeedikum, Ravila 19, 50411 Tartu, Estonia. Email: taavi.pall@ut.ee. Telephone: +372 737 4185
+This study generated no new human or animal material. It reanalyzes anonymous human sequencing data from the open-access tiers of the NCBI Sequence Read Archive and the European Nucleotide Archive; no library was held under controlled access. We used no identifiable private information, did not attempt to re-identify participants, and used no individual-level data beyond each record's own archive annotation. Anonymous data fall outside the material scope of Regulation (EU) 2016/679 (Article 2, Recital 26), which does not cover anonymous information even when it is processed for research. The work involved no human subjects, so it required no ethics committee review or participant consent, and none was sought. Approval and consent for the original collection were the submitting investigators' responsibility; no archive record states whether that consent covered secondary use, which anonymous data do not require.
+
+<!-- TP's decision, 2026-11-02, on the round-3 review package: rest the exemption on
+     GDPR Article 2 with Recital 26 and call the data "anonymous" throughout, in
+     place of the unattributed basis the earlier draft asserted. The two must move
+     together: Recital 26 exempts anonymous information only, so citing it while
+     calling the data "de-identified" would concede the point it is cited to make.
+
+     The risk, if a reviewer or editor queries it: "anonymous" is a stronger
+     characterisation than "de-identified", and raw human sequencing reads are widely
+     treated as personal data even stripped of identifiers, so this asserts a legal
+     conclusion about genomic data rather than describing the files. The supporting
+     facts, which the sentence states, are that every deposit is open access rather
+     than controlled, and that we used no individual-level information beyond the
+     archive's own sample annotation.
+
+     Still worth doing before submission: confirm the position with the University of
+     Tartu Research Ethics Committee. Some journals ask for a waiver in writing, and
+     a confirmation costs nothing. -->
+
+<!-- TP comments 16 and 17 on draft k: paragraphs 2 and 3 deleted. Comment 16, on the
+     source-list paragraph: "can be removed, as all this is also in the next chapter.
+     it's only function is to say that keep reading, there is exactly same info in the
+     next paragraph." Comment 17, on the secondary-use paragraph: "what's the function
+     of this sentence, i think this can be remove as it's redundant with previous."
+
+     Both correct. The Data Availability Statement describes the source list and the
+     provenance table in full, so paragraph 2 was a signpost; paragraph 1 already said
+     consent was not required, so paragraph 3 restated it.
+
+     Two clauses could not simply go, because they are JID requirements in their own
+     right and appear nowhere else: who was responsible for approving the original
+     collection, and whether the original consent covered secondary use. Both are now
+     the last sentence of paragraph 1, which keeps the section compliant at one
+     paragraph. Dropped as genuinely redundant: the deposit-terms argument (the
+     anonymity basis already carries it) and "This basis applies to every source
+     study" (nothing limited it to a subset). -->
+
+## Data Availability Statement {.unnumbered}
+
+The complete analysis pipeline, comprising the Nextflow workflow, the per-process software environments and container definitions, the reference-construction and SRA-discovery scripts, and the downstream R analysis and statistical-inference code, is openly available at <https://github.com/tpall/hpv-human-skin>. All sequencing data analyzed here are public and were obtained from the NCBI Sequence Read Archive; the per-cohort lists of accessions (SRR/SRX), with assigned tissue category, diagnosis, and cell-line/engineered annotations, are provided as Supplementary Data. A further table (`supplementary_data_unscreened_libraries.tsv`, built by `bin/build_unscreened_table.py`) lists every library that entered the prevalence sweep but returned no screening result, with its cause, so the positivity denominator can be reconstructed from the accession lists. A second Supplementary Data table (`supplementary_data_ethics_provenance.tsv`) gives, for each source study contributing a lesion or neoplasia library, the study and BioProject accession, a direct link to the archive record, the diagnoses represented, the originating publication where one could be identified, and that publication's approval and consent statements where it reports them; the scripts that compiled it from the public archive and Europe PMC records are in `manuscript/ethics_audit/` in the repository above. Reference genomes were retrieved from the Papillomavirus Episteme (PaVE; <https://pave.niaid.nih.gov>) and NCBI RefSeq. No new sequencing data were generated.
 
 ## ORCiDs {.unnumbered}
+
+<!-- JID section order (2026-11-02): Ethics, Data Availability, ORCiDs, Conflict of Interest. Affiliations moved to _titlepage.qmd. -->
 
 <!-- One line per author, in the author-list order, as: Given Family: https://orcid.org/0000-0000-0000-0000 -->
 Taavi Päll: <https://orcid.org/0000-0001-7606-675X>
@@ -19,14 +76,6 @@ Taavi Päll: <https://orcid.org/0000-0001-7606-675X>
 Alla Piirsoo: <https://orcid.org/0000-0001-6843-7127>
 
 Marko Piirsoo: <https://orcid.org/0000-0002-9447-1350>
-
-## Ethics Statement {.unnumbered}
-
-This study analyzed only publicly archived, de-identified human sequencing data retrieved from the NCBI Sequence Read Archive, and generated no new human or animal material. Institutional review board approval and informed consent were therefore not required for the work reported here. Ethical approval and participant consent for the primary studies were the responsibility of their submitting investigators and are recorded in the corresponding BioProject entries.
-
-## Data Availability Statement {.unnumbered}
-
-The complete analysis pipeline, comprising the Nextflow workflow, the per-process software environments and container definitions, the reference-construction and SRA-discovery scripts, and the downstream R analysis and statistical-inference code, is openly available at <https://github.com/tpall/hpv-human-skin>. All sequencing data analyzed here are public and were obtained from the NCBI Sequence Read Archive; the per-cohort lists of accessions (SRR/SRX), with assigned tissue category, diagnosis, and cell-line/engineered annotations, are provided as Supplementary Data. Reference genomes were retrieved from the Papillomavirus Episteme (PaVE; <https://pave.niaid.nih.gov>) and NCBI RefSeq. No new sequencing data were generated.
 
 ## Conflict of Interest {.unnumbered}
 

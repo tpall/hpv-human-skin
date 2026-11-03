@@ -1,0 +1,1262 @@
+srr_id	study	tissue_category	diagnosis	layout	batch	cause	reads_submitted	read1_mean_length	read2_mean_length	reads_after_filtering
+ERR12352480	ERP155847	muu	unspecified	PAIRED	chunk_0058	not_downloaded				
+ERR12352481	ERP155847	muu	unspecified	PAIRED	chunk_0074	not_downloaded				
+ERR12352482	ERP155847	muu	unspecified	PAIRED	chunk_0121	not_downloaded				
+ERR12352483	ERP155847	muu	unspecified	PAIRED	chunk_0109	not_downloaded				
+ERR12352484	ERP155847	muu	unspecified	PAIRED	chunk_0006	length_filtered	258033298	28	90	0
+ERR12352485	ERP155847	muu	unspecified	PAIRED	chunk_0110	not_downloaded				
+ERR12352486	ERP155847	muu	unspecified	PAIRED	chunk_0016	length_filtered	205530544	28	90	0
+ERR12352487	ERP155847	muu	unspecified	PAIRED	chunk_0095	not_downloaded				
+ERR13074011	ERP148386	muu	unspecified	SINGLE	chunk_0105	not_downloaded				
+ERR13074012	ERP148386	muu	unspecified	PAIRED	chunk_0026	length_filtered	426391540	28	90	0
+ERR13074013	ERP148386	muu	unspecified	SINGLE	chunk_0009	length_filtered	345470615	28		0
+ERR13074014	ERP148386	muu	unspecified	SINGLE	chunk_0078	not_downloaded				
+ERR13074015	ERP148386	muu	unspecified	SINGLE	chunk_0121	not_downloaded				
+ERR13074016	ERP148386	muu	unspecified	PAIRED	chunk_0033	length_filtered	331933996	28	90	0
+ERR13074017	ERP148386	muu	unspecified	SINGLE	chunk_0085	not_downloaded				
+ERR13074018	ERP148386	muu	unspecified	SINGLE	chunk_0019	length_filtered	308890378	28		0
+ERR13074019	ERP148386	muu	unspecified	PAIRED	chunk_0005	length_filtered	377903242	28	90	0
+ERR13074020	ERP148386	muu	unspecified	PAIRED	chunk_0026	length_filtered	426399974	28	90	0
+ERR13074021	ERP148386	muu	unspecified	PAIRED	chunk_0049	not_downloaded				
+ERR13074022	ERP148386	muu	unspecified	SINGLE	chunk_0019	length_filtered	317930989	28		0
+ERR13074023	ERP148386	muu	unspecified	PAIRED	chunk_0050	not_downloaded				
+ERR13074024	ERP148386	muu	unspecified	SINGLE	chunk_0070	not_downloaded				
+ERR13074025	ERP148386	muu	unspecified	PAIRED	chunk_0017	length_filtered	348478022	28	90	0
+ERR13074026	ERP148386	muu	unspecified	SINGLE	chunk_0097	not_downloaded				
+ERR13074027	ERP148386	muu	unspecified	PAIRED	chunk_0005	length_filtered	377805316	28	90	0
+ERR13074028	ERP148386	muu	unspecified	SINGLE	chunk_0082	not_downloaded				
+ERR13074029	ERP148386	muu	unspecified	SINGLE	chunk_0085	not_downloaded				
+ERR13074030	ERP148386	muu	unspecified	SINGLE	chunk_0031	length_filtered	421571655	28		0
+ERR13074031	ERP148386	muu	unspecified	SINGLE	chunk_0028	length_filtered	302989878	28		0
+ERR13074032	ERP148386	muu	unspecified	PAIRED	chunk_0017	length_filtered	349049118	28	90	0
+ERR13074033	ERP148386	muu	unspecified	SINGLE	chunk_0075	not_downloaded				
+ERR13074034	ERP148386	muu	unspecified	SINGLE	chunk_0023	length_filtered	264976507	28		0
+ERR13074035	ERP148386	muu	unspecified	PAIRED	chunk_0085	not_downloaded				
+ERR13074036	ERP148386	muu	unspecified	PAIRED	chunk_0073	not_downloaded				
+ERR13074037	ERP148386	muu	unspecified	SINGLE	chunk_0013	length_filtered	388852899	28		0
+ERR13074038	ERP148386	muu	unspecified	PAIRED	chunk_0050	not_downloaded				
+ERR13074039	ERP148386	muu	unspecified	SINGLE	chunk_0106	not_downloaded				
+ERR13074040	ERP148386	muu	unspecified	PAIRED	chunk_0061	not_downloaded				
+ERR13074041	ERP148386	muu	unspecified	SINGLE	chunk_0103	not_downloaded				
+ERR13074042	ERP148386	muu	unspecified	SINGLE	chunk_0100	not_downloaded				
+ERR13074043	ERP148386	muu	unspecified	PAIRED	chunk_0007	length_filtered	357712446	28	90	0
+ERR13074044	ERP148386	muu	unspecified	PAIRED	chunk_0085	not_downloaded				
+ERR13074045	ERP148386	muu	unspecified	PAIRED	chunk_0033	length_filtered	330146240	28	90	0
+ERR13074046	ERP148386	muu	unspecified	SINGLE	chunk_0055	not_downloaded				
+ERR13074047	ERP148386	muu	unspecified	PAIRED	chunk_0049	not_downloaded				
+ERR13074048	ERP148386	muu	unspecified	PAIRED	chunk_0006	length_filtered	358370934	28	90	0
+ERR13074049	ERP148386	muu	unspecified	PAIRED	chunk_0026	length_filtered	347934482	28	90	0
+ERR13074050	ERP148386	muu	unspecified	PAIRED	chunk_0026	length_filtered	346406852	28	90	0
+ERR13074051	ERP148386	muu	unspecified	SINGLE	chunk_0109	not_downloaded				
+ERR13074052	ERP148386	muu	unspecified	SINGLE	chunk_0108	not_downloaded				
+ERR13074053	ERP148386	muu	unspecified	PAIRED	chunk_0073	not_downloaded				
+ERR13074054	ERP148386	muu	unspecified	SINGLE	chunk_0095	not_downloaded				
+ERR13074055	ERP148386	muu	unspecified	PAIRED	chunk_0007	length_filtered	357185836	28	90	0
+ERR13074056	ERP148386	muu	unspecified	PAIRED	chunk_0006	length_filtered	357985200	28	90	0
+ERR13074057	ERP148386	muu	unspecified	PAIRED	chunk_0061	not_downloaded				
+ERR14098136	ERP167400	muu	unspecified	PAIRED	chunk_0007	length_filtered	149971424	28	98	0
+ERR14098137	ERP167400	muu	unspecified	PAIRED	chunk_0014	length_filtered	397744798	28	98	0
+ERR14098138	ERP167400	muu	unspecified	PAIRED	chunk_0052	not_downloaded				
+ERR14098139	ERP167400	muu	unspecified	PAIRED	chunk_0007	length_filtered	156121556	28	98	0
+ERR14098140	ERP167400	muu	unspecified	PAIRED	chunk_0107	not_downloaded				
+ERR14098142	ERP167400	muu	unspecified	PAIRED	chunk_0014	length_filtered	1111184870	28	98	0
+ERR14098143	ERP167400	muu	unspecified	PAIRED	chunk_0107	not_downloaded				
+ERR14098144	ERP167400	muu	unspecified	PAIRED	chunk_0007	length_filtered	160189542	28	98	0
+ERR14098145	ERP167400	muu	unspecified	PAIRED	chunk_0053	not_downloaded				
+ERR14098146	ERP167400	muu	unspecified	PAIRED	chunk_0006	length_filtered	667535182	28	98	0
+ERR14098147	ERP167400	muu	unspecified	PAIRED	chunk_0025	length_filtered	143283570	28	98	0
+ERR14098148	ERP167400	muu	unspecified	PAIRED	chunk_0006	length_filtered	178834216	28	98	0
+ERR14098149	ERP167400	muu	unspecified	PAIRED	chunk_0045	not_downloaded				
+ERR14098150	ERP167400	muu	unspecified	PAIRED	chunk_0041	not_downloaded				
+ERR14098151	ERP167400	muu	unspecified	PAIRED	chunk_0045	not_downloaded				
+ERR14098152	ERP167400	muu	unspecified	PAIRED	chunk_0121	not_downloaded				
+ERR14098153	ERP167400	muu	unspecified	PAIRED	chunk_0031	length_filtered	323482586	28	98	0
+ERR14098154	ERP167400	muu	unspecified	PAIRED	chunk_0025	length_filtered	403971016	28	98	0
+ERR14098155	ERP167400	muu	unspecified	PAIRED	chunk_0031	length_filtered	510513808	28	98	0
+ERR14098156	ERP167400	muu	unspecified	PAIRED	chunk_0015	length_filtered	582146474	28	98	0
+ERR14098157	ERP167400	muu	unspecified	PAIRED	chunk_0052	not_downloaded				
+ERR14098158	ERP167400	muu	unspecified	PAIRED	chunk_0014	length_filtered	192414004	28	98	0
+ERR14098159	ERP167400	muu	unspecified	PAIRED	chunk_0086	not_downloaded				
+ERR14098160	ERP167400	muu	unspecified	PAIRED	chunk_0025	length_filtered	79961618	28	98	0
+ERR14098161	ERP167400	muu	unspecified	PAIRED	chunk_0053	not_downloaded				
+ERR14098162	ERP167400	muu	unspecified	PAIRED	chunk_0086	not_downloaded				
+ERR14098164	ERP167400	muu	unspecified	PAIRED	chunk_0107	not_downloaded				
+ERR14098165	ERP167400	muu	unspecified	PAIRED	chunk_0107	not_downloaded				
+ERR14098166	ERP167400	muu	unspecified	PAIRED	chunk_0045	not_downloaded				
+ERR14098167	ERP167400	muu	unspecified	PAIRED	chunk_0006	length_filtered	248716190	28	98	0
+ERR14098168	ERP167400	muu	unspecified	PAIRED	chunk_0096	not_downloaded				
+ERR14098169	ERP167400	muu	unspecified	PAIRED	chunk_0096	not_downloaded				
+ERR14098170	ERP167400	muu	unspecified	PAIRED	chunk_0052	not_downloaded				
+ERR14098171	ERP167400	muu	unspecified	PAIRED	chunk_0107	not_downloaded				
+ERR14098172	ERP167400	muu	unspecified	PAIRED	chunk_0086	not_downloaded				
+ERR14098173	ERP167400	muu	unspecified	PAIRED	chunk_0045	not_downloaded				
+ERR14098174	ERP167400	muu	unspecified	PAIRED	chunk_0121	not_downloaded				
+ERR14098175	ERP167400	muu	unspecified	PAIRED	chunk_0045	not_downloaded				
+ERR14098176	ERP167400	muu	unspecified	PAIRED	chunk_0086	not_downloaded				
+ERR14098177	ERP167400	muu	unspecified	PAIRED	chunk_0086	not_downloaded				
+ERR14098178	ERP167400	muu	unspecified	PAIRED	chunk_0007	length_filtered	164910560	28	98	0
+ERR14098179	ERP167400	muu	unspecified	PAIRED	chunk_0007	length_filtered	145306764	28	98	0
+ERR16663753	ERP188894	muu	unspecified	PAIRED	chunk_0036	length_filtered	290725986	28	91	0
+ERR16663754	ERP188894	muu	unspecified	PAIRED	chunk_0069	not_downloaded				
+ERR16663755	ERP188894	muu	unspecified	PAIRED	chunk_0032	length_filtered	259481978	28	91	0
+ERR16663756	ERP188894	muu	unspecified	PAIRED	chunk_0075	not_downloaded				
+ERR16663757	ERP188894	muu	unspecified	PAIRED	chunk_0070	not_downloaded				
+ERR16663758	ERP188894	muu	unspecified	PAIRED	chunk_0013	length_filtered	285198514	28	91	0
+ERR16663759	ERP188894	muu	unspecified	PAIRED	chunk_0055	not_downloaded				
+ERR16663760	ERP188894	muu	unspecified	PAIRED	chunk_0026	length_filtered	249238758	28	91	0
+ERR16663761	ERP188894	muu	unspecified	PAIRED	chunk_0020	length_filtered	256638198	28	91	0
+ERR16663762	ERP188894	muu	unspecified	PAIRED	chunk_0012	length_filtered	349350934	28	91	0
+ERR16663763	ERP188894	muu	unspecified	PAIRED	chunk_0075	not_downloaded				
+ERR16663764	ERP188894	muu	unspecified	PAIRED	chunk_0020	length_filtered	1133440864	28	91	0
+ERR16663765	ERP188894	muu	unspecified	PAIRED	chunk_0007	length_filtered	241493480	28	91	0
+ERR16663766	ERP188894	muu	unspecified	PAIRED	chunk_0070	not_downloaded				
+ERR16663767	ERP188894	muu	unspecified	PAIRED	chunk_0036	length_filtered	215273080	28	91	0
+ERR16663768	ERP188894	muu	unspecified	PAIRED	chunk_0013	length_filtered	248158330	28	91	0
+ERR16663769	ERP188894	muu	unspecified	PAIRED	chunk_0111	not_downloaded				
+ERR16663770	ERP188894	muu	unspecified	PAIRED	chunk_0093	not_downloaded				
+ERR16663771	ERP188894	muu	unspecified	PAIRED	chunk_0078	not_downloaded				
+ERR16663772	ERP188894	muu	unspecified	PAIRED	chunk_0036	length_filtered	328060934	28	91	0
+ERR16663773	ERP188894	muu	unspecified	PAIRED	chunk_0032	length_filtered	337532892	28	91	0
+ERR16663774	ERP188894	muu	unspecified	PAIRED	chunk_0111	not_downloaded				
+ERR16663775	ERP188894	muu	unspecified	PAIRED	chunk_0105	not_downloaded				
+ERR16663776	ERP188894	muu	unspecified	PAIRED	chunk_0020	length_filtered	290365014	28	91	0
+ERR16663777	ERP188894	muu	unspecified	PAIRED	chunk_0013	length_filtered	57870	28	91	0
+ERR16663778	ERP188894	muu	unspecified	PAIRED	chunk_0011	length_filtered	229976988	28	91	0
+ERR16663779	ERP188894	muu	unspecified	PAIRED	chunk_0069	not_downloaded				
+ERR16663780	ERP188894	muu	unspecified	PAIRED	chunk_0013	length_filtered	1117242096	28	91	0
+ERR16663781	ERP188894	muu	unspecified	PAIRED	chunk_0007	length_filtered	248898864	28	91	0
+ERR16663782	ERP188894	muu	unspecified	PAIRED	chunk_0098	not_downloaded				
+ERR16663783	ERP188894	muu	unspecified	PAIRED	chunk_0019	length_filtered	249149248	28	91	0
+ERR16663784	ERP188894	muu	unspecified	PAIRED	chunk_0007	length_filtered	219299038	28	91	0
+ERR16663785	ERP188894	muu	unspecified	PAIRED	chunk_0069	not_downloaded				
+ERR16663786	ERP188894	muu	unspecified	PAIRED	chunk_0111	not_downloaded				
+ERR16663787	ERP188894	muu	unspecified	PAIRED	chunk_0105	not_downloaded				
+ERR16663788	ERP188894	muu	unspecified	PAIRED	chunk_0007	length_filtered	230717904	28	91	0
+ERR16663789	ERP188894	muu	unspecified	PAIRED	chunk_0098	not_downloaded				
+ERR16663790	ERP188894	muu	unspecified	PAIRED	chunk_0032	length_filtered	1100549160	28	91	0
+ERR16663791	ERP188894	muu	unspecified	PAIRED	chunk_0013	length_filtered	304007186	28	91	0
+ERR16663792	ERP188894	muu	unspecified	PAIRED	chunk_0020	length_filtered	301785948	28	91	0
+ERR16663793	ERP188894	muu	unspecified	PAIRED	chunk_0019	length_filtered	283762652	28	91	0
+ERR16663794	ERP188894	muu	unspecified	PAIRED	chunk_0111	not_downloaded				
+ERR16663795	ERP188894	muu	unspecified	PAIRED	chunk_0105	not_downloaded				
+ERR16663796	ERP188894	muu	unspecified	PAIRED	chunk_0011	length_filtered	312504096	28	91	0
+ERR16663797	ERP188894	muu	unspecified	PAIRED	chunk_0032	length_filtered	255527336	28	91	0
+ERR16663798	ERP188894	muu	unspecified	PAIRED	chunk_0011	length_filtered	334398344	28	91	0
+ERR16663799	ERP188894	muu	unspecified	PAIRED	chunk_0110	not_downloaded				
+ERR16663800	ERP188894	muu	unspecified	PAIRED	chunk_0019	length_filtered	215766678	28	91	0
+ERR16663801	ERP188894	muu	unspecified	PAIRED	chunk_0012	length_filtered	281087102	28	91	0
+ERR16663802	ERP188894	muu	unspecified	PAIRED	chunk_0075	not_downloaded				
+ERR16663803	ERP188894	muu	unspecified	PAIRED	chunk_0078	not_downloaded				
+ERR16663804	ERP188894	muu	unspecified	PAIRED	chunk_0026	length_filtered	277718092	28	91	0
+ERR16663805	ERP188894	muu	unspecified	PAIRED	chunk_0069	not_downloaded				
+ERR16663806	ERP188894	muu	unspecified	PAIRED	chunk_0093	not_downloaded				
+ERR16663807	ERP188894	muu	unspecified	PAIRED	chunk_0098	not_downloaded				
+ERR16663808	ERP188894	muu	unspecified	PAIRED	chunk_0011	length_filtered	1181119318	28	91	0
+ERR16663809	ERP188894	muu	unspecified	PAIRED	chunk_0036	length_filtered	273565194	28	91	0
+ERR16663810	ERP188894	muu	unspecified	PAIRED	chunk_0070	not_downloaded				
+ERR16663811	ERP188894	muu	unspecified	PAIRED	chunk_0036	length_filtered	1107625194	28	91	0
+ERR16663812	ERP188894	muu	unspecified	PAIRED	chunk_0093	not_downloaded				
+ERR16663813	ERP188894	muu	unspecified	PAIRED	chunk_0019	length_filtered	287647766	28	91	0
+ERR16663814	ERP188894	muu	unspecified	PAIRED	chunk_0070	not_downloaded				
+ERR16663815	ERP188894	muu	unspecified	PAIRED	chunk_0032	length_filtered	248006954	28	91	0
+ERR16663816	ERP188894	muu	unspecified	PAIRED	chunk_0012	length_filtered	1167096296	28	91	0
+ERR16663817	ERP188894	muu	unspecified	PAIRED	chunk_0013	length_filtered	5066	28	91	0
+ERR16663818	ERP188894	muu	unspecified	PAIRED	chunk_0105	not_downloaded				
+ERR16663819	ERP188894	muu	unspecified	PAIRED	chunk_0098	not_downloaded				
+ERR16663820	ERP188894	muu	unspecified	PAIRED	chunk_0110	not_downloaded				
+ERR16663821	ERP188894	muu	unspecified	PAIRED	chunk_0093	not_downloaded				
+ERR16663822	ERP188894	muu	unspecified	PAIRED	chunk_0019	length_filtered	1036338344	28	91	0
+ERR16663823	ERP188894	muu	unspecified	PAIRED	chunk_0026	length_filtered	243025038	28	91	0
+ERR16663824	ERP188894	muu	unspecified	PAIRED	chunk_0055	not_downloaded				
+ERR16663825	ERP188894	muu	unspecified	PAIRED	chunk_0013	length_filtered	279878066	28	91	0
+ERR16663826	ERP188894	muu	unspecified	PAIRED	chunk_0098	not_downloaded				
+ERR16663827	ERP188894	muu	unspecified	PAIRED	chunk_0110	not_downloaded				
+ERR16663828	ERP188894	muu	unspecified	PAIRED	chunk_0075	not_downloaded				
+ERR16663829	ERP188894	muu	unspecified	PAIRED	chunk_0078	not_downloaded				
+ERR16663830	ERP188894	muu	unspecified	PAIRED	chunk_0013	length_filtered	28784	28	91	0
+ERR16663831	ERP188894	muu	unspecified	PAIRED	chunk_0055	not_downloaded				
+ERR16663832	ERP188894	muu	unspecified	PAIRED	chunk_0078	not_downloaded				
+ERR16663833	ERP188894	muu	unspecified	PAIRED	chunk_0111	not_downloaded				
+ERR16663834	ERP188894	muu	unspecified	PAIRED	chunk_0110	not_downloaded				
+ERR16663835	ERP188894	muu	unspecified	PAIRED	chunk_0078	not_downloaded				
+ERR16663836	ERP188894	muu	unspecified	PAIRED	chunk_0013	length_filtered	197604	28	91	0
+ERR16663837	ERP188894	muu	unspecified	PAIRED	chunk_0012	length_filtered	275237396	28	91	0
+ERR16663838	ERP188894	muu	unspecified	PAIRED	chunk_0055	not_downloaded				
+ERR16663839	ERP188894	muu	unspecified	PAIRED	chunk_0105	not_downloaded				
+ERR16663840	ERP188894	muu	unspecified	PAIRED	chunk_0026	length_filtered	169679888	28	91	0
+ERR16663841	ERP188894	muu	unspecified	PAIRED	chunk_0012	length_filtered	261420864	28	91	0
+ERR16663842	ERP188894	muu	unspecified	PAIRED	chunk_0075	not_downloaded				
+ERR16663843	ERP188894	muu	unspecified	PAIRED	chunk_0013	length_filtered	105884	28	91	0
+ERR16663844	ERP188894	muu	unspecified	PAIRED	chunk_0093	not_downloaded				
+ERR16663845	ERP188894	muu	unspecified	PAIRED	chunk_0020	length_filtered	284651704	28	91	0
+ERR16663846	ERP188894	muu	unspecified	PAIRED	chunk_0011	length_filtered	304239890	28	91	0
+ERR16663847	ERP188894	muu	unspecified	PAIRED	chunk_0007	length_filtered	940409286	28	91	0
+ERR16663848	ERP188894	muu	unspecified	PAIRED	chunk_0055	not_downloaded				
+ERR16663849	ERP188894	muu	unspecified	PAIRED	chunk_0070	not_downloaded				
+ERR16663850	ERP188894	muu	unspecified	PAIRED	chunk_0069	not_downloaded				
+ERR16663851	ERP188894	muu	unspecified	PAIRED	chunk_0026	length_filtered	939661776	28	91	0
+ERR16663852	ERP188894	muu	unspecified	PAIRED	chunk_0110	not_downloaded				
+SRR26161354	SRP462992	nahk	healthy; control	PAIRED	chunk_0070	not_downloaded				
+SRR26161355	SRP462992	nahk	healthy; control	PAIRED	chunk_0006	length_filtered	2224202356	26	71	0
+SRR26161356	SRP462992	nahk	lichen	PAIRED	chunk_0016	length_filtered	1357746282	26	71	0
+SRR26161357	SRP462992	nahk	lichen	PAIRED	chunk_0051	not_downloaded				
+SRR26161358	SRP462992	nahk	healthy; control	PAIRED	chunk_0028	length_filtered	581528300	26	71	0
+SRR26161360	SRP462992	nahk	lichen	PAIRED	chunk_0052	not_downloaded				
+SRR26161361	SRP462992	nahk	lichen	PAIRED	chunk_0091	not_downloaded				
+SRR27807298	SRP487156	nahk	psoriasis	PAIRED	chunk_0074	not_downloaded				
+SRR27807352	SRP487156	nahk	psoriasis	PAIRED	chunk_0096	not_downloaded				
+SRR27807361	SRP487156	nahk	psoriasis	PAIRED	chunk_0009	length_filtered	594792	33	33	0
+SRR27807368	SRP487156	nahk	psoriasis	PAIRED	chunk_0015	length_filtered	425522	33	33	0
+SRR27807369	SRP487156	nahk	psoriasis	PAIRED	chunk_0102	not_downloaded				
+SRR27807370	SRP487156	nahk	psoriasis	PAIRED	chunk_0027	length_filtered	367462	33	33	0
+SRR27807487	SRP487156	nahk	psoriasis	PAIRED	chunk_0023	length_filtered	678720	33	33	0
+SRR27807503	SRP487156	nahk	psoriasis	PAIRED	chunk_0069	not_downloaded				
+SRR27807504	SRP487156	nahk	psoriasis	PAIRED	chunk_0082	not_downloaded				
+SRR27807505	SRP487156	nahk	psoriasis	PAIRED	chunk_0025	length_filtered	707786	33	33	0
+SRR27807510	SRP487156	nahk	psoriasis	PAIRED	chunk_0095	not_downloaded				
+SRR27807511	SRP487156	nahk	psoriasis	PAIRED	chunk_0049	not_downloaded				
+SRR27807512	SRP487156	nahk	psoriasis	PAIRED	chunk_0121	not_downloaded				
+SRR27807513	SRP487156	nahk	psoriasis	PAIRED	chunk_0069	not_downloaded				
+SRR27807514	SRP487156	nahk	psoriasis	PAIRED	chunk_0093	not_downloaded				
+SRR27807517	SRP487156	nahk	psoriasis	PAIRED	chunk_0082	not_downloaded				
+SRR27807518	SRP487156	nahk	psoriasis	PAIRED	chunk_0035	length_filtered	484780	33	33	0
+SRR27807519	SRP487156	nahk	psoriasis	PAIRED	chunk_0122	not_downloaded				
+SRR27807520	SRP487156	nahk	psoriasis	PAIRED	chunk_0018	length_filtered	697072	33	33	0
+SRR27807521	SRP487156	nahk	psoriasis	PAIRED	chunk_0088	not_downloaded				
+SRR27807522	SRP487156	nahk	psoriasis	PAIRED	chunk_0052	not_downloaded				
+SRR27807523	SRP487156	nahk	psoriasis	PAIRED	chunk_0092	not_downloaded				
+SRR27807535	SRP487156	nahk	psoriasis	PAIRED	chunk_0054	not_downloaded				
+SRR27807536	SRP487156	nahk	psoriasis	PAIRED	chunk_0051	not_downloaded				
+SRR27807537	SRP487156	nahk	psoriasis	PAIRED	chunk_0121	not_downloaded				
+SRR27807538	SRP487156	nahk	psoriasis	PAIRED	chunk_0083	not_downloaded				
+SRR27807556	SRP487156	nahk	psoriasis	PAIRED	chunk_0114	not_downloaded				
+SRR27807557	SRP487156	nahk	psoriasis	PAIRED	chunk_0077	not_downloaded				
+SRR27807558	SRP487156	nahk	psoriasis	PAIRED	chunk_0057	not_downloaded				
+SRR27807559	SRP487156	nahk	psoriasis	PAIRED	chunk_0093	not_downloaded				
+SRR27807564	SRP487156	nahk	psoriasis	PAIRED	chunk_0112	not_downloaded				
+SRR27807565	SRP487156	nahk	psoriasis	PAIRED	chunk_0001	length_filtered	208392	33	33	0
+SRR27807566	SRP487156	nahk	psoriasis	PAIRED	chunk_0045	not_downloaded				
+SRR27807567	SRP487156	nahk	psoriasis	PAIRED	chunk_0115	not_downloaded				
+SRR27807568	SRP487156	nahk	psoriasis	PAIRED	chunk_0122	not_downloaded				
+SRR27807599	SRP487156	nahk	psoriasis	PAIRED	chunk_0033	length_filtered	770862	33	33	0
+SRR27807614	SRP487156	nahk	psoriasis	PAIRED	chunk_0117	not_downloaded				
+SRR27808351	SRP487156	nahk	psoriasis	PAIRED	chunk_0047	not_downloaded				
+SRR27808744	SRP487156	nahk	healthy	PAIRED	chunk_0080	not_downloaded				
+SRR27808901	SRP487156	nahk	healthy	PAIRED	chunk_0041	not_downloaded				
+SRR27808906	SRP487156	nahk	healthy	PAIRED	chunk_0081	not_downloaded				
+SRR27808907	SRP487156	nahk	healthy	PAIRED	chunk_0039	not_downloaded				
+SRR27808908	SRP487156	nahk	healthy	PAIRED	chunk_0098	not_downloaded				
+SRR27808919	SRP487156	nahk	healthy	PAIRED	chunk_0072	not_downloaded				
+SRR27808954	SRP487156	nahk	healthy	PAIRED	chunk_0063	not_downloaded				
+SRR27808970	SRP487156	nahk	healthy	PAIRED	chunk_0119	not_downloaded				
+SRR27808971	SRP487156	nahk	healthy	PAIRED	chunk_0094	not_downloaded				
+SRR27808972	SRP487156	nahk	healthy	PAIRED	chunk_0001	length_filtered	123682	33	33	0
+SRR27808977	SRP487156	nahk	healthy	PAIRED	chunk_0121	not_downloaded				
+SRR27808978	SRP487156	nahk	healthy	PAIRED	chunk_0084	not_downloaded				
+SRR27808979	SRP487156	nahk	healthy	PAIRED	chunk_0009	length_filtered	505646	33	33	0
+SRR27808980	SRP487156	nahk	healthy	PAIRED	chunk_0024	length_filtered	405870	33	33	0
+SRR27808981	SRP487156	nahk	healthy	PAIRED	chunk_0046	not_downloaded				
+SRR27808984	SRP487156	nahk	healthy	PAIRED	chunk_0024	length_filtered	185424	33	33	0
+SRR27808985	SRP487156	nahk	healthy	PAIRED	chunk_0081	not_downloaded				
+SRR27808986	SRP487156	nahk	healthy	PAIRED	chunk_0039	not_downloaded				
+SRR27808987	SRP487156	nahk	healthy	PAIRED	chunk_0055	not_downloaded				
+SRR27808988	SRP487156	nahk	healthy	PAIRED	chunk_0106	not_downloaded				
+SRR27808989	SRP487156	nahk	healthy	PAIRED	chunk_0101	not_downloaded				
+SRR27808990	SRP487156	nahk	healthy	PAIRED	chunk_0051	not_downloaded				
+SRR27809007	SRP487156	nahk	psoriasis	PAIRED	chunk_0112	not_downloaded				
+SRR27809008	SRP487156	nahk	psoriasis	PAIRED	chunk_0107	not_downloaded				
+SRR27809028	SRP487156	nahk	psoriasis	PAIRED	chunk_0027	length_filtered	1326318	33	33	0
+SRR27809029	SRP487156	nahk	psoriasis	PAIRED	chunk_0097	not_downloaded				
+SRR27809030	SRP487156	nahk	psoriasis	PAIRED	chunk_0089	not_downloaded				
+SRR27809031	SRP487156	nahk	psoriasis	PAIRED	chunk_0005	length_filtered	1187600	33	33	0
+SRR27809032	SRP487156	nahk	psoriasis	PAIRED	chunk_0041	not_downloaded				
+SRR27809033	SRP487156	nahk	psoriasis	PAIRED	chunk_0109	not_downloaded				
+SRR27809034	SRP487156	nahk	psoriasis	PAIRED	chunk_0060	not_downloaded				
+SRR27809037	SRP487156	nahk	psoriasis	PAIRED	chunk_0098	not_downloaded				
+SRR27809038	SRP487156	nahk	psoriasis	PAIRED	chunk_0016	length_filtered	731392	33	33	0
+SRR27809039	SRP487156	nahk	psoriasis	PAIRED	chunk_0050	not_downloaded				
+SRR27809040	SRP487156	nahk	psoriasis	PAIRED	chunk_0091	not_downloaded				
+SRR27809041	SRP487156	nahk	psoriasis	PAIRED	chunk_0023	length_filtered	915680	33	33	0
+SRR27809042	SRP487156	nahk	psoriasis	PAIRED	chunk_0087	not_downloaded				
+SRR27809043	SRP487156	nahk	psoriasis	PAIRED	chunk_0031	length_filtered	826682	33	33	0
+SRR27809044	SRP487156	nahk	psoriasis	PAIRED	chunk_0042	not_downloaded				
+SRR27809050	SRP487156	nahk	psoriasis	PAIRED	chunk_0022	length_filtered	1077574	33	33	0
+SRR27809051	SRP487156	nahk	psoriasis	PAIRED	chunk_0089	not_downloaded				
+SRR27809052	SRP487156	nahk	psoriasis	PAIRED	chunk_0045	not_downloaded				
+SRR27809053	SRP487156	nahk	psoriasis	PAIRED	chunk_0093	not_downloaded				
+SRR27809057	SRP487156	nahk	psoriasis	PAIRED	chunk_0037	length_filtered	663790	33	33	0
+SRR27809058	SRP487156	nahk	psoriasis	PAIRED	chunk_0080	not_downloaded				
+SRR27809059	SRP487156	nahk	psoriasis	PAIRED	chunk_0061	not_downloaded				
+SRR27809060	SRP487156	nahk	psoriasis	PAIRED	chunk_0023	length_filtered	375322	33	33	0
+SRR27809061	SRP487156	nahk	psoriasis	PAIRED	chunk_0102	not_downloaded				
+SRR27809062	SRP487156	nahk	psoriasis	PAIRED	chunk_0117	not_downloaded				
+SRR27809064	SRP487156	nahk	psoriasis	PAIRED	chunk_0052	not_downloaded				
+SRR27809065	SRP487156	nahk	psoriasis	PAIRED	chunk_0080	not_downloaded				
+SRR27809066	SRP487156	nahk	psoriasis	PAIRED	chunk_0017	length_filtered	708830	33	33	0
+SRR27809067	SRP487156	nahk	psoriasis	PAIRED	chunk_0097	not_downloaded				
+SRR27809068	SRP487156	nahk	psoriasis	PAIRED	chunk_0034	length_filtered	650798	33	33	0
+SRR27809069	SRP487156	nahk	psoriasis	PAIRED	chunk_0024	length_filtered	1013246	33	33	0
+SRR27809070	SRP487156	nahk	psoriasis	PAIRED	chunk_0048	not_downloaded				
+SRR27809071	SRP487156	nahk	psoriasis	PAIRED	chunk_0094	not_downloaded				
+SRR27810111	SRP487156	nahk	psoriasis	PAIRED	chunk_0114	not_downloaded				
+SRR27810112	SRP487156	nahk	psoriasis	PAIRED	chunk_0116	not_downloaded				
+SRR27810113	SRP487156	nahk	psoriasis	PAIRED	chunk_0102	not_downloaded				
+SRR27810114	SRP487156	nahk	psoriasis	PAIRED	chunk_0031	length_filtered	568832	33	33	0
+SRR27810115	SRP487156	nahk	psoriasis	PAIRED	chunk_0031	length_filtered	386470	33	33	0
+SRR27810139	SRP487156	nahk	psoriasis	PAIRED	chunk_0067	not_downloaded				
+SRR27810140	SRP487156	nahk	psoriasis	PAIRED	chunk_0114	not_downloaded				
+SRR27810141	SRP487156	nahk	psoriasis	PAIRED	chunk_0045	not_downloaded				
+SRR27810155	SRP487156	nahk	psoriasis	PAIRED	chunk_0011	length_filtered	1180792	33	33	0
+SRR27810156	SRP487156	nahk	psoriasis	PAIRED	chunk_0067	not_downloaded				
+SRR27810157	SRP487156	nahk	psoriasis	PAIRED	chunk_0068	not_downloaded				
+SRR27810158	SRP487156	nahk	psoriasis	PAIRED	chunk_0056	not_downloaded				
+SRR27810159	SRP487156	nahk	psoriasis	PAIRED	chunk_0110	not_downloaded				
+SRR27810160	SRP487156	nahk	psoriasis	PAIRED	chunk_0024	length_filtered	1383716	33	33	0
+SRR27810231	SRP487156	nahk	psoriasis	PAIRED	chunk_0076	not_downloaded				
+SRR27810232	SRP487156	nahk	psoriasis	PAIRED	chunk_0115	not_downloaded				
+SRR27810238	SRP487156	nahk	psoriasis	PAIRED	chunk_0027	length_filtered	773508	33	33	0
+SRR27810239	SRP487156	nahk	psoriasis	PAIRED	chunk_0017	length_filtered	790026	33	33	0
+SRR27810240	SRP487156	nahk	psoriasis	PAIRED	chunk_0110	not_downloaded				
+SRR27810241	SRP487156	nahk	psoriasis	PAIRED	chunk_0077	not_downloaded				
+SRR27810245	SRP487156	nahk	psoriasis	PAIRED	chunk_0103	not_downloaded				
+SRR27810246	SRP487156	nahk	psoriasis	PAIRED	chunk_0022	length_filtered	1018826	33	33	0
+SRR27810247	SRP487156	nahk	psoriasis	PAIRED	chunk_0023	length_filtered	798442	33	33	0
+SRR27810248	SRP487156	nahk	psoriasis	PAIRED	chunk_0093	not_downloaded				
+SRR27810249	SRP487156	nahk	psoriasis	PAIRED	chunk_0072	not_downloaded				
+SRR27810250	SRP487156	nahk	psoriasis	PAIRED	chunk_0118	not_downloaded				
+SRR27810258	SRP487156	nahk	psoriasis	PAIRED	chunk_0087	not_downloaded				
+SRR27810259	SRP487156	nahk	psoriasis	PAIRED	chunk_0036	length_filtered	883424	33	33	0
+SRR27810261	SRP487156	nahk	psoriasis	PAIRED	chunk_0118	not_downloaded				
+SRR27810262	SRP487156	nahk	psoriasis	PAIRED	chunk_0061	not_downloaded				
+SRR27810263	SRP487156	nahk	psoriasis	PAIRED	chunk_0085	not_downloaded				
+SRR27810264	SRP487156	nahk	psoriasis	PAIRED	chunk_0072	not_downloaded				
+SRR27810265	SRP487156	nahk	psoriasis	PAIRED	chunk_0008	length_filtered	683462	33	33	0
+SRR27810266	SRP487156	nahk	psoriasis	PAIRED	chunk_0056	not_downloaded				
+SRR27810267	SRP487156	nahk	psoriasis	PAIRED	chunk_0026	length_filtered	711970	33	33	0
+SRR27810268	SRP487156	nahk	psoriasis	PAIRED	chunk_0059	not_downloaded				
+SRR27810660	SRP487156	nahk	psoriasis	PAIRED	chunk_0083	not_downloaded				
+SRR27810661	SRP487156	nahk	psoriasis	PAIRED	chunk_0088	not_downloaded				
+SRR27810662	SRP487156	nahk	psoriasis	PAIRED	chunk_0118	not_downloaded				
+SRR27810663	SRP487156	nahk	psoriasis	PAIRED	chunk_0081	not_downloaded				
+SRR27810664	SRP487156	nahk	psoriasis	PAIRED	chunk_0118	not_downloaded				
+SRR27810668	SRP487156	nahk	psoriasis	PAIRED	chunk_0042	not_downloaded				
+SRR27810669	SRP487156	nahk	psoriasis	PAIRED	chunk_0023	length_filtered	454236	33	33	0
+SRR27810670	SRP487156	nahk	psoriasis	PAIRED	chunk_0077	not_downloaded				
+SRR27810671	SRP487156	nahk	psoriasis	PAIRED	chunk_0060	not_downloaded				
+SRR27810672	SRP487156	nahk	psoriasis	PAIRED	chunk_0006	length_filtered	706682	33	33	0
+SRR27810673	SRP487156	nahk	psoriasis	PAIRED	chunk_0097	not_downloaded				
+SRR27810879	SRP487156	nahk	psoriasis	PAIRED	chunk_0039	not_downloaded				
+SRR27810880	SRP487156	nahk	psoriasis	PAIRED	chunk_0097	not_downloaded				
+SRR27810881	SRP487156	nahk	psoriasis	PAIRED	chunk_0026	length_filtered	917940	33	33	0
+SRR27810882	SRP487156	nahk	psoriasis	PAIRED	chunk_0013	length_filtered	690554	33	33	0
+SRR27810929	SRP487156	nahk	psoriasis	PAIRED	chunk_0121	not_downloaded				
+SRR27810930	SRP487156	nahk	psoriasis	PAIRED	chunk_0115	not_downloaded				
+SRR27810934	SRP487156	nahk	psoriasis	PAIRED	chunk_0072	not_downloaded				
+SRR27810935	SRP487156	nahk	psoriasis	PAIRED	chunk_0115	not_downloaded				
+SRR27810936	SRP487156	nahk	psoriasis	PAIRED	chunk_0018	length_filtered	1685032	33	33	0
+SRR27810937	SRP487156	nahk	psoriasis	PAIRED	chunk_0086	not_downloaded				
+SRR27810938	SRP487156	nahk	psoriasis	PAIRED	chunk_0094	not_downloaded				
+SRR27810939	SRP487156	nahk	psoriasis	PAIRED	chunk_0070	not_downloaded				
+SRR27810940	SRP487156	nahk	psoriasis	PAIRED	chunk_0018	length_filtered	974752	33	33	0
+SRR27810941	SRP487156	nahk	psoriasis	PAIRED	chunk_0063	not_downloaded				
+SRR27810942	SRP487156	nahk	psoriasis	PAIRED	chunk_0102	not_downloaded				
+SRR27810943	SRP487156	nahk	psoriasis	PAIRED	chunk_0018	length_filtered	977066	33	33	0
+SRR27810950	SRP487156	nahk	psoriasis	PAIRED	chunk_0052	not_downloaded				
+SRR27810959	SRP487156	nahk	psoriasis	PAIRED	chunk_0028	length_filtered	806818	33	33	0
+SRR27810960	SRP487156	nahk	psoriasis	PAIRED	chunk_0109	not_downloaded				
+SRR27810961	SRP487156	nahk	psoriasis	PAIRED	chunk_0022	length_filtered	910722	33	33	0
+SRR27810962	SRP487156	nahk	psoriasis	PAIRED	chunk_0057	not_downloaded				
+SRR27810963	SRP487156	nahk	psoriasis	PAIRED	chunk_0072	not_downloaded				
+SRR27810964	SRP487156	nahk	psoriasis	PAIRED	chunk_0088	not_downloaded				
+SRR27810965	SRP487156	nahk	psoriasis	PAIRED	chunk_0072	not_downloaded				
+SRR27810968	SRP487156	nahk	psoriasis	PAIRED	chunk_0004	length_filtered	293368	33	33	0
+SRR27810969	SRP487156	nahk	psoriasis	PAIRED	chunk_0085	not_downloaded				
+SRR27810970	SRP487156	nahk	psoriasis	PAIRED	chunk_0064	not_downloaded				
+SRR27810971	SRP487156	nahk	psoriasis	PAIRED	chunk_0059	not_downloaded				
+SRR27810972	SRP487156	nahk	psoriasis	PAIRED	chunk_0056	not_downloaded				
+SRR27810973	SRP487156	nahk	psoriasis	PAIRED	chunk_0082	not_downloaded				
+SRR27810974	SRP487156	nahk	psoriasis	PAIRED	chunk_0099	not_downloaded				
+SRR27810977	SRP487156	nahk	psoriasis	PAIRED	chunk_0008	length_filtered	795102	33	33	0
+SRR27810978	SRP487156	nahk	psoriasis	PAIRED	chunk_0089	not_downloaded				
+SRR27810979	SRP487156	nahk	psoriasis	PAIRED	chunk_0033	length_filtered	881644	33	33	0
+SRR27810980	SRP487156	nahk	psoriasis	PAIRED	chunk_0028	length_filtered	565874	33	33	0
+SRR27810981	SRP487156	nahk	psoriasis	PAIRED	chunk_0101	not_downloaded				
+SRR27810986	SRP487156	nahk	psoriasis	PAIRED	chunk_0013	length_filtered	788300	33	33	0
+SRR27810987	SRP487156	nahk	psoriasis	PAIRED	chunk_0011	length_filtered	1046720	33	33	0
+SRR27810988	SRP487156	nahk	psoriasis	PAIRED	chunk_0114	not_downloaded				
+SRR27810989	SRP487156	nahk	psoriasis	PAIRED	chunk_0090	not_downloaded				
+SRR27810990	SRP487156	nahk	psoriasis	PAIRED	chunk_0026	length_filtered	624178	33	33	0
+SRR27810995	SRP487156	nahk	psoriasis	PAIRED	chunk_0100	not_downloaded				
+SRR27810996	SRP487156	nahk	healthy	PAIRED	chunk_0112	not_downloaded				
+SRR27810997	SRP487156	nahk	healthy	PAIRED	chunk_0122	not_downloaded				
+SRR27810998	SRP487156	nahk	healthy	PAIRED	chunk_0082	not_downloaded				
+SRR27810999	SRP487156	nahk	healthy	PAIRED	chunk_0083	not_downloaded				
+SRR27811000	SRP487156	nahk	healthy	PAIRED	chunk_0041	not_downloaded				
+SRR27811001	SRP487156	nahk	healthy	PAIRED	chunk_0066	not_downloaded				
+SRR27811002	SRP487156	nahk	healthy	PAIRED	chunk_0024	length_filtered	542616	33	33	0
+SRR27811003	SRP487156	nahk	healthy	PAIRED	chunk_0024	length_filtered	642604	33	33	0
+SRR27811004	SRP487156	nahk	healthy	PAIRED	chunk_0083	not_downloaded				
+SRR27811005	SRP487156	nahk	healthy	PAIRED	chunk_0114	not_downloaded				
+SRR27811006	SRP487156	nahk	healthy	PAIRED	chunk_0066	not_downloaded				
+SRR27811007	SRP487156	nahk	healthy	PAIRED	chunk_0026	length_filtered	367850	33	33	0
+SRR27811008	SRP487156	nahk	healthy	PAIRED	chunk_0015	length_filtered	419684	33	33	0
+SRR27811009	SRP487156	nahk	healthy	PAIRED	chunk_0093	not_downloaded				
+SRR27811010	SRP487156	nahk	healthy	PAIRED	chunk_0117	not_downloaded				
+SRR27811011	SRP487156	nahk	healthy	PAIRED	chunk_0094	not_downloaded				
+SRR27811012	SRP487156	nahk	healthy	PAIRED	chunk_0104	not_downloaded				
+SRR27811013	SRP487156	nahk	healthy	PAIRED	chunk_0027	length_filtered	406304	33	33	0
+SRR27811014	SRP487156	nahk	healthy	PAIRED	chunk_0100	not_downloaded				
+SRR27811015	SRP487156	nahk	healthy	PAIRED	chunk_0080	not_downloaded				
+SRR27811016	SRP487156	nahk	healthy	PAIRED	chunk_0061	not_downloaded				
+SRR27811017	SRP487156	nahk	healthy	PAIRED	chunk_0030	length_filtered	462798	33	33	0
+SRR27811018	SRP487156	nahk	healthy	PAIRED	chunk_0117	not_downloaded				
+SRR27811019	SRP487156	nahk	healthy	PAIRED	chunk_0094	not_downloaded				
+SRR27811020	SRP487156	nahk	healthy	PAIRED	chunk_0102	not_downloaded				
+SRR27811021	SRP487156	nahk	healthy	PAIRED	chunk_0007	length_filtered	161846	33	33	0
+SRR27811022	SRP487156	nahk	healthy	PAIRED	chunk_0055	not_downloaded				
+SRR27811024	SRP487156	nahk	healthy	PAIRED	chunk_0090	not_downloaded				
+SRR27811025	SRP487156	nahk	healthy	PAIRED	chunk_0074	not_downloaded				
+SRR27811026	SRP487156	nahk	healthy	PAIRED	chunk_0063	not_downloaded				
+SRR27811027	SRP487156	nahk	healthy	PAIRED	chunk_0014	length_filtered	294790	33	33	0
+SRR27811028	SRP487156	nahk	healthy	PAIRED	chunk_0045	not_downloaded				
+SRR27811029	SRP487156	nahk	healthy	PAIRED	chunk_0020	length_filtered	568746	33	33	0
+SRR27811030	SRP487156	nahk	healthy	PAIRED	chunk_0073	not_downloaded				
+SRR27811032	SRP487156	nahk	healthy	PAIRED	chunk_0104	not_downloaded				
+SRR27811033	SRP487156	nahk	healthy	PAIRED	chunk_0022	length_filtered	396576	33	33	0
+SRR27811034	SRP487156	nahk	healthy	PAIRED	chunk_0049	not_downloaded				
+SRR27811035	SRP487156	nahk	healthy	PAIRED	chunk_0021	length_filtered	638362	33	33	0
+SRR27811036	SRP487156	nahk	healthy	PAIRED	chunk_0067	not_downloaded				
+SRR27811037	SRP487156	nahk	healthy	PAIRED	chunk_0086	not_downloaded				
+SRR27811045	SRP487156	nahk	psoriasis	PAIRED	chunk_0117	not_downloaded				
+SRR27811046	SRP487156	nahk	psoriasis	PAIRED	chunk_0007	length_filtered	1609882	33	33	0
+SRR27811047	SRP487156	nahk	psoriasis	PAIRED	chunk_0092	not_downloaded				
+SRR27811048	SRP487156	nahk	psoriasis	PAIRED	chunk_0090	not_downloaded				
+SRR27811049	SRP487156	nahk	psoriasis	PAIRED	chunk_0044	not_downloaded				
+SRR27811050	SRP487156	nahk	psoriasis	PAIRED	chunk_0027	length_filtered	787108	33	33	0
+SRR27811054	SRP487156	nahk	psoriasis	PAIRED	chunk_0044	not_downloaded				
+SRR27811063	SRP487156	nahk	psoriasis	PAIRED	chunk_0033	length_filtered	675580	33	33	0
+SRR27811064	SRP487156	nahk	psoriasis	PAIRED	chunk_0049	not_downloaded				
+SRR27811065	SRP487156	nahk	psoriasis	PAIRED	chunk_0056	not_downloaded				
+SRR27811066	SRP487156	nahk	psoriasis	PAIRED	chunk_0035	length_filtered	768310	33	33	0
+SRR27811067	SRP487156	nahk	psoriasis	PAIRED	chunk_0099	not_downloaded				
+SRR27811068	SRP487156	nahk	psoriasis	PAIRED	chunk_0094	not_downloaded				
+SRR27811069	SRP487156	nahk	psoriasis	PAIRED	chunk_0069	not_downloaded				
+SRR27811070	SRP487156	nahk	psoriasis	PAIRED	chunk_0056	not_downloaded				
+SRR27811071	SRP487156	nahk	psoriasis	PAIRED	chunk_0092	not_downloaded				
+SRR27811072	SRP487156	nahk	psoriasis	PAIRED	chunk_0064	not_downloaded				
+SRR27811073	SRP487156	nahk	psoriasis	PAIRED	chunk_0096	not_downloaded				
+SRR27811074	SRP487156	nahk	psoriasis	PAIRED	chunk_0112	not_downloaded				
+SRR27811079	SRP487156	nahk	psoriasis	PAIRED	chunk_0018	length_filtered	685082	33	33	0
+SRR27811080	SRP487156	nahk	psoriasis	PAIRED	chunk_0110	not_downloaded				
+SRR27811081	SRP487156	nahk	psoriasis	PAIRED	chunk_0120	not_downloaded				
+SRR27811090	SRP487156	nahk	psoriasis	PAIRED	chunk_0059	not_downloaded				
+SRR27811091	SRP487156	nahk	psoriasis	PAIRED	chunk_0058	not_downloaded				
+SRR27811092	SRP487156	nahk	psoriasis	PAIRED	chunk_0101	not_downloaded				
+SRR27811093	SRP487156	nahk	psoriasis	PAIRED	chunk_0061	not_downloaded				
+SRR27811094	SRP487156	nahk	psoriasis	PAIRED	chunk_0008	length_filtered	1024360	33	33	0
+SRR27811095	SRP487156	nahk	psoriasis	PAIRED	chunk_0068	not_downloaded				
+SRR27811096	SRP487156	nahk	psoriasis	PAIRED	chunk_0053	not_downloaded				
+SRR27811099	SRP487156	nahk	psoriasis	PAIRED	chunk_0106	not_downloaded				
+SRR27811100	SRP487156	nahk	psoriasis	PAIRED	chunk_0094	not_downloaded				
+SRR27811101	SRP487156	nahk	psoriasis	PAIRED	chunk_0080	not_downloaded				
+SRR27811102	SRP487156	nahk	psoriasis	PAIRED	chunk_0100	not_downloaded				
+SRR27811103	SRP487156	nahk	psoriasis	PAIRED	chunk_0119	not_downloaded				
+SRR27811108	SRP487156	nahk	psoriasis	PAIRED	chunk_0003	length_filtered	1079066	33	33	0
+SRR27811109	SRP487156	nahk	psoriasis	PAIRED	chunk_0109	not_downloaded				
+SRR27811110	SRP487156	nahk	psoriasis	PAIRED	chunk_0001	length_filtered	1254402	33	33	0
+SRR27811126	SRP487156	nahk	psoriasis	PAIRED	chunk_0100	not_downloaded				
+SRR27811127	SRP487156	nahk	psoriasis	PAIRED	chunk_0001	length_filtered	655938	33	33	0
+SRR27811128	SRP487156	nahk	psoriasis	PAIRED	chunk_0033	length_filtered	809396	33	33	0
+SRR27811135	SRP487156	nahk	psoriasis	PAIRED	chunk_0088	not_downloaded				
+SRR27811144	SRP487156	nahk	psoriasis	PAIRED	chunk_0121	not_downloaded				
+SRR27811151	SRP487156	nahk	psoriasis	PAIRED	chunk_0086	not_downloaded				
+SRR27811152	SRP487156	nahk	psoriasis	PAIRED	chunk_0040	not_downloaded				
+SRR27811153	SRP487156	nahk	psoriasis	PAIRED	chunk_0091	not_downloaded				
+SRR27811154	SRP487156	nahk	psoriasis	PAIRED	chunk_0120	not_downloaded				
+SRR27811155	SRP487156	nahk	psoriasis	PAIRED	chunk_0049	not_downloaded				
+SRR27811156	SRP487156	nahk	psoriasis	PAIRED	chunk_0120	not_downloaded				
+SRR27811157	SRP487156	nahk	psoriasis	PAIRED	chunk_0056	not_downloaded				
+SRR27811158	SRP487156	nahk	psoriasis	PAIRED	chunk_0055	not_downloaded				
+SRR27811159	SRP487156	nahk	psoriasis	PAIRED	chunk_0114	not_downloaded				
+SRR27811160	SRP487156	nahk	psoriasis	PAIRED	chunk_0019	length_filtered	765850	33	33	0
+SRR27811161	SRP487156	nahk	psoriasis	PAIRED	chunk_0072	not_downloaded				
+SRR27811162	SRP487156	nahk	psoriasis	PAIRED	chunk_0111	not_downloaded				
+SRR27811163	SRP487156	nahk	psoriasis	PAIRED	chunk_0117	not_downloaded				
+SRR27811164	SRP487156	nahk	psoriasis	PAIRED	chunk_0099	not_downloaded				
+SRR27811165	SRP487156	nahk	psoriasis	PAIRED	chunk_0013	length_filtered	294494	33	33	0
+SRR27811171	SRP487156	nahk	psoriasis	PAIRED	chunk_0055	not_downloaded				
+SRR27811172	SRP487156	nahk	psoriasis	PAIRED	chunk_0056	not_downloaded				
+SRR27811181	SRP487156	nahk	psoriasis	PAIRED	chunk_0079	not_downloaded				
+SRR27811182	SRP487156	nahk	psoriasis	PAIRED	chunk_0117	not_downloaded				
+SRR27811183	SRP487156	nahk	psoriasis	PAIRED	chunk_0072	not_downloaded				
+SRR27811184	SRP487156	nahk	psoriasis	PAIRED	chunk_0068	not_downloaded				
+SRR27811185	SRP487156	nahk	psoriasis	PAIRED	chunk_0103	not_downloaded				
+SRR27811186	SRP487156	nahk	psoriasis	PAIRED	chunk_0057	not_downloaded				
+SRR27811187	SRP487156	nahk	psoriasis	PAIRED	chunk_0084	not_downloaded				
+SRR27811189	SRP487156	nahk	psoriasis	PAIRED	chunk_0115	not_downloaded				
+SRR27811190	SRP487156	nahk	psoriasis	PAIRED	chunk_0098	not_downloaded				
+SRR27811191	SRP487156	nahk	psoriasis	PAIRED	chunk_0005	length_filtered	176556	33	33	0
+SRR27811192	SRP487156	nahk	psoriasis	PAIRED	chunk_0089	not_downloaded				
+SRR27811193	SRP487156	nahk	psoriasis	PAIRED	chunk_0117	not_downloaded				
+SRR27811194	SRP487156	nahk	psoriasis	PAIRED	chunk_0119	not_downloaded				
+SRR27811198	SRP487156	nahk	psoriasis	PAIRED	chunk_0109	not_downloaded				
+SRR27811199	SRP487156	nahk	psoriasis	PAIRED	chunk_0080	not_downloaded				
+SRR27811200	SRP487156	nahk	psoriasis	PAIRED	chunk_0111	not_downloaded				
+SRR27811201	SRP487156	nahk	psoriasis	PAIRED	chunk_0022	length_filtered	746808	33	33	0
+SRR27811202	SRP487156	nahk	psoriasis	PAIRED	chunk_0033	length_filtered	248436	33	33	0
+SRR27811207	SRP487156	nahk	psoriasis	PAIRED	chunk_0122	not_downloaded				
+SRR27811208	SRP487156	nahk	psoriasis	PAIRED	chunk_0085	not_downloaded				
+SRR27811209	SRP487156	nahk	psoriasis	PAIRED	chunk_0069	not_downloaded				
+SRR27811216	SRP487156	nahk	psoriasis	PAIRED	chunk_0083	not_downloaded				
+SRR27811234	SRP487156	nahk	psoriasis	PAIRED	chunk_0059	not_downloaded				
+SRR27811235	SRP487156	nahk	psoriasis	PAIRED	chunk_0076	not_downloaded				
+SRR27811236	SRP487156	nahk	psoriasis	PAIRED	chunk_0079	not_downloaded				
+SRR27811237	SRP487156	nahk	psoriasis	PAIRED	chunk_0006	length_filtered	520620	33	33	0
+SRR27811238	SRP487156	nahk	psoriasis	PAIRED	chunk_0007	length_filtered	256504	33	33	0
+SRR27811239	SRP487156	nahk	psoriasis	PAIRED	chunk_0059	not_downloaded				
+SRR27811243	SRP487156	nahk	psoriasis	PAIRED	chunk_0061	not_downloaded				
+SRR27811244	SRP487156	nahk	psoriasis	PAIRED	chunk_0108	not_downloaded				
+SRR27811245	SRP487156	nahk	psoriasis	PAIRED	chunk_0088	not_downloaded				
+SRR27811246	SRP487156	nahk	psoriasis	PAIRED	chunk_0090	not_downloaded				
+SRR27811252	SRP487156	nahk	psoriasis	PAIRED	chunk_0012	length_filtered	293326	33	33	0
+SRR27811253	SRP487156	nahk	psoriasis	PAIRED	chunk_0055	not_downloaded				
+SRR27811262	SRP487156	nahk	psoriasis	PAIRED	chunk_0020	length_filtered	409418	33	33	0
+SRR27811263	SRP487156	nahk	psoriasis	PAIRED	chunk_0112	not_downloaded				
+SRR27811264	SRP487156	nahk	psoriasis	PAIRED	chunk_0008	length_filtered	210488	33	33	0
+SRR27811265	SRP487156	nahk	psoriasis	PAIRED	chunk_0052	not_downloaded				
+SRR27811266	SRP487156	nahk	psoriasis	PAIRED	chunk_0099	not_downloaded				
+SRR27811267	SRP487156	nahk	psoriasis	PAIRED	chunk_0019	length_filtered	350382	33	33	0
+SRR27811268	SRP487156	nahk	psoriasis	PAIRED	chunk_0015	length_filtered	230008	33	33	0
+SRR27811269	SRP487156	nahk	psoriasis	PAIRED	chunk_0088	not_downloaded				
+SRR27811270	SRP487156	nahk	psoriasis	PAIRED	chunk_0114	not_downloaded				
+SRR27811271	SRP487156	nahk	psoriasis	PAIRED	chunk_0059	not_downloaded				
+SRR27811272	SRP487156	nahk	psoriasis	PAIRED	chunk_0052	not_downloaded				
+SRR27811273	SRP487156	nahk	psoriasis	PAIRED	chunk_0016	length_filtered	239466	33	33	0
+SRR27811274	SRP487156	nahk	psoriasis	PAIRED	chunk_0063	not_downloaded				
+SRR27811275	SRP487156	nahk	psoriasis	PAIRED	chunk_0034	length_filtered	479622	33	33	0
+SRR27811279	SRP487156	nahk	psoriasis	PAIRED	chunk_0018	length_filtered	517776	33	33	0
+SRR27811280	SRP487156	nahk	psoriasis	PAIRED	chunk_0019	length_filtered	766432	33	33	0
+SRR27811281	SRP487156	nahk	psoriasis	PAIRED	chunk_0055	not_downloaded				
+SRR27811282	SRP487156	nahk	psoriasis	PAIRED	chunk_0078	not_downloaded				
+SRR27811288	SRP487156	nahk	psoriasis	PAIRED	chunk_0028	length_filtered	605126	33	33	0
+SRR27811289	SRP487156	nahk	psoriasis	PAIRED	chunk_0070	not_downloaded				
+SRR27811298	SRP487156	nahk	psoriasis	PAIRED	chunk_0015	length_filtered	476344	33	33	0
+SRR27811299	SRP487156	nahk	psoriasis	PAIRED	chunk_0008	length_filtered	646034	33	33	0
+SRR27811300	SRP487156	nahk	psoriasis	PAIRED	chunk_0053	not_downloaded				
+SRR27811301	SRP487156	nahk	psoriasis	PAIRED	chunk_0105	not_downloaded				
+SRR27811302	SRP487156	nahk	psoriasis	PAIRED	chunk_0041	not_downloaded				
+SRR27811303	SRP487156	nahk	psoriasis	PAIRED	chunk_0056	not_downloaded				
+SRR27811304	SRP487156	nahk	psoriasis	PAIRED	chunk_0086	not_downloaded				
+SRR27811306	SRP487156	nahk	psoriasis	PAIRED	chunk_0014	length_filtered	115482	33	33	0
+SRR27811307	SRP487156	nahk	psoriasis	PAIRED	chunk_0067	not_downloaded				
+SRR27811308	SRP487156	nahk	psoriasis	PAIRED	chunk_0095	not_downloaded				
+SRR27811309	SRP487156	nahk	psoriasis	PAIRED	chunk_0097	not_downloaded				
+SRR27811310	SRP487156	nahk	psoriasis	PAIRED	chunk_0089	not_downloaded				
+SRR27811311	SRP487156	nahk	psoriasis	PAIRED	chunk_0020	length_filtered	205334	33	33	0
+SRR27811315	SRP487156	nahk	psoriasis	PAIRED	chunk_0015	length_filtered	1837494	33	33	0
+SRR27811316	SRP487156	nahk	psoriasis	PAIRED	chunk_0052	not_downloaded				
+SRR27811317	SRP487156	nahk	psoriasis	PAIRED	chunk_0072	not_downloaded				
+SRR27811318	SRP487156	nahk	psoriasis	PAIRED	chunk_0055	not_downloaded				
+SRR27811324	SRP487156	nahk	psoriasis	PAIRED	chunk_0080	not_downloaded				
+SRR27811325	SRP487156	nahk	psoriasis	PAIRED	chunk_0008	length_filtered	189180	33	33	0
+SRR27811342	SRP487156	nahk	psoriasis	PAIRED	chunk_0088	not_downloaded				
+SRR27811343	SRP487156	nahk	psoriasis	PAIRED	chunk_0111	not_downloaded				
+SRR27811344	SRP487156	nahk	psoriasis	PAIRED	chunk_0011	length_filtered	141180	33	33	0
+SRR27811345	SRP487156	nahk	psoriasis	PAIRED	chunk_0114	not_downloaded				
+SRR27811346	SRP487156	nahk	psoriasis	PAIRED	chunk_0040	not_downloaded				
+SRR27811347	SRP487156	nahk	psoriasis	PAIRED	chunk_0075	not_downloaded				
+SRR28602455	SRP500578	nahk	unspecified	PAIRED	chunk_0064	not_downloaded				
+SRR28602456	SRP500578	nahk	unspecified	PAIRED	chunk_0064	not_downloaded				
+SRR28602457	SRP500578	nahk	unspecified	PAIRED	chunk_0064	not_downloaded				
+SRR28602458	SRP500578	nahk	unspecified	PAIRED	chunk_0064	not_downloaded				
+SRR28602459	SRP500578	nahk	unspecified	PAIRED	chunk_0067	not_downloaded				
+SRR28602460	SRP500578	nahk	unspecified	PAIRED	chunk_0067	not_downloaded				
+SRR28602461	SRP500578	nahk	unspecified	PAIRED	chunk_0067	not_downloaded				
+SRR28602462	SRP500578	nahk	unspecified	PAIRED	chunk_0067	not_downloaded				
+SRR28602463	SRP500578	nahk	unspecified	PAIRED	chunk_0034	length_filtered	570324278	28	89	0
+SRR28602464	SRP500578	nahk	unspecified	PAIRED	chunk_0034	length_filtered	571979462	28	89	0
+SRR28602465	SRP500578	nahk	unspecified	PAIRED	chunk_0034	length_filtered	566938592	28	89	0
+SRR28602466	SRP500578	nahk	unspecified	PAIRED	chunk_0034	length_filtered	568045478	28	89	0
+SRR28602467	SRP500578	nahk	unspecified	PAIRED	chunk_0087	not_downloaded				
+SRR28602468	SRP500578	nahk	unspecified	PAIRED	chunk_0087	not_downloaded				
+SRR28602469	SRP500578	nahk	unspecified	PAIRED	chunk_0087	not_downloaded				
+SRR28602470	SRP500578	nahk	unspecified	PAIRED	chunk_0087	not_downloaded				
+SRR28602471	SRP500578	nahk	unspecified	PAIRED	chunk_0061	not_downloaded				
+SRR28602472	SRP500578	nahk	unspecified	PAIRED	chunk_0061	not_downloaded				
+SRR28602473	SRP500578	nahk	unspecified	PAIRED	chunk_0061	not_downloaded				
+SRR28602474	SRP500578	nahk	unspecified	PAIRED	chunk_0061	not_downloaded				
+SRR28602475	SRP500578	nahk	unspecified	PAIRED	chunk_0100	not_downloaded				
+SRR28602476	SRP500578	nahk	unspecified	PAIRED	chunk_0100	not_downloaded				
+SRR28602477	SRP500578	nahk	unspecified	PAIRED	chunk_0100	not_downloaded				
+SRR28602478	SRP500578	nahk	unspecified	PAIRED	chunk_0100	not_downloaded				
+SRR28602479	SRP500578	nahk	unspecified	PAIRED	chunk_0091	not_downloaded				
+SRR28602480	SRP500578	nahk	unspecified	PAIRED	chunk_0091	not_downloaded				
+SRR28602481	SRP500578	nahk	unspecified	PAIRED	chunk_0091	not_downloaded				
+SRR28602482	SRP500578	nahk	unspecified	PAIRED	chunk_0091	not_downloaded				
+SRR28602483	SRP500578	nahk	unspecified	PAIRED	chunk_0035	length_filtered	577894714	28	89	0
+SRR28602484	SRP500578	nahk	unspecified	PAIRED	chunk_0035	length_filtered	584177696	28	89	0
+SRR28602485	SRP500578	nahk	unspecified	PAIRED	chunk_0035	length_filtered	593041892	28	89	0
+SRR28602486	SRP500578	nahk	unspecified	PAIRED	chunk_0035	length_filtered	590446270	28	89	0
+SRR28602487	SRP500578	nahk	unspecified	PAIRED	chunk_0039	not_downloaded				
+SRR28602488	SRP500578	nahk	unspecified	PAIRED	chunk_0039	not_downloaded				
+SRR28602489	SRP500578	nahk	unspecified	PAIRED	chunk_0039	not_downloaded				
+SRR28602490	SRP500578	nahk	unspecified	PAIRED	chunk_0039	not_downloaded				
+SRR28602491	SRP500578	nahk	unspecified	PAIRED	chunk_0003	length_filtered	557984096	28	101	0
+SRR28602492	SRP500578	nahk	unspecified	PAIRED	chunk_0003	length_filtered	560299584	28	101	0
+SRR28602493	SRP500578	nahk	unspecified	PAIRED	chunk_0003	length_filtered	562567254	28	101	0
+SRR28602494	SRP500578	nahk	unspecified	PAIRED	chunk_0003	length_filtered	563063738	28	101	0
+SRR28602495	SRP500578	nahk	unspecified	PAIRED	chunk_0104	not_downloaded				
+SRR28602496	SRP500578	nahk	unspecified	PAIRED	chunk_0104	not_downloaded				
+SRR28602497	SRP500578	nahk	unspecified	PAIRED	chunk_0104	not_downloaded				
+SRR28602498	SRP500578	nahk	unspecified	PAIRED	chunk_0104	not_downloaded				
+SRR28602499	SRP500578	nahk	unspecified	PAIRED	chunk_0017	length_filtered	330106882	28	101	0
+SRR28602500	SRP500578	nahk	unspecified	PAIRED	chunk_0017	length_filtered	333185270	28	101	0
+SRR28602501	SRP500578	nahk	unspecified	PAIRED	chunk_0017	length_filtered	333512110	28	101	0
+SRR28602502	SRP500578	nahk	unspecified	PAIRED	chunk_0017	length_filtered	332153840	28	101	0
+SRR28758729	SRP503154	nahk	unspecified	PAIRED	chunk_0097	not_downloaded				
+SRR28758730	SRP503154	nahk	unspecified	PAIRED	chunk_0104	not_downloaded				
+SRR28758742	SRP503154	nahk	unspecified	PAIRED	chunk_0040	not_downloaded				
+SRR28758743	SRP503154	nahk	unspecified	PAIRED	chunk_0040	not_downloaded				
+SRR28758744	SRP503154	nahk	unspecified	PAIRED	chunk_0040	not_downloaded				
+SRR28849434	SRP504975	nahk	unspecified	PAIRED	chunk_0113	not_downloaded				
+SRR28849435	SRP504975	nahk	unspecified	PAIRED	chunk_0113	not_downloaded				
+SRR28849436	SRP504975	nahk	unspecified	PAIRED	chunk_0113	not_downloaded				
+SRR28849437	SRP504975	nahk	unspecified	PAIRED	chunk_0113	not_downloaded				
+SRR28849438	SRP504975	nahk	unspecified	PAIRED	chunk_0031	length_filtered	14646750	26	60	0
+SRR28849439	SRP504975	nahk	unspecified	PAIRED	chunk_0031	length_filtered	14136698	26	60	0
+SRR28849440	SRP504975	nahk	unspecified	PAIRED	chunk_0031	length_filtered	14812056	26	60	0
+SRR28849441	SRP504975	nahk	unspecified	PAIRED	chunk_0031	length_filtered	14263180	26	60	0
+SRR28849442	SRP504975	nahk	unspecified	PAIRED	chunk_0032	length_filtered	18012792	26	60	0
+SRR28849443	SRP504975	nahk	unspecified	PAIRED	chunk_0032	length_filtered	17477764	26	60	0
+SRR28849444	SRP504975	nahk	unspecified	PAIRED	chunk_0032	length_filtered	18251098	26	60	0
+SRR28849445	SRP504975	nahk	unspecified	PAIRED	chunk_0032	length_filtered	17639132	26	60	0
+SRR28849446	SRP504975	nahk	unspecified	PAIRED	chunk_0063	not_downloaded				
+SRR28849447	SRP504975	nahk	unspecified	PAIRED	chunk_0063	not_downloaded				
+SRR28849448	SRP504975	nahk	unspecified	PAIRED	chunk_0063	not_downloaded				
+SRR28849449	SRP504975	nahk	unspecified	PAIRED	chunk_0063	not_downloaded				
+SRR28849450	SRP504975	nahk	unspecified	PAIRED	chunk_0024	length_filtered	14331972	26	60	0
+SRR28849451	SRP504975	nahk	unspecified	PAIRED	chunk_0024	length_filtered	13938170	26	60	0
+SRR28849452	SRP504975	nahk	unspecified	PAIRED	chunk_0024	length_filtered	14363910	26	60	0
+SRR28849453	SRP504975	nahk	unspecified	PAIRED	chunk_0024	length_filtered	14294126	26	60	0
+SRR28849454	SRP504975	nahk	unspecified	PAIRED	chunk_0106	not_downloaded				
+SRR28849455	SRP504975	nahk	unspecified	PAIRED	chunk_0106	not_downloaded				
+SRR28849456	SRP504975	nahk	unspecified	PAIRED	chunk_0106	not_downloaded				
+SRR28849457	SRP504975	nahk	unspecified	PAIRED	chunk_0106	not_downloaded				
+SRR28849458	SRP504975	nahk	unspecified	PAIRED	chunk_0115	not_downloaded				
+SRR28849459	SRP504975	nahk	unspecified	PAIRED	chunk_0115	not_downloaded				
+SRR28849460	SRP504975	nahk	unspecified	PAIRED	chunk_0115	not_downloaded				
+SRR28849461	SRP504975	nahk	unspecified	PAIRED	chunk_0115	not_downloaded				
+SRR28849462	SRP504975	nahk	unspecified	PAIRED	chunk_0102	not_downloaded				
+SRR28849463	SRP504975	nahk	unspecified	PAIRED	chunk_0102	not_downloaded				
+SRR28849464	SRP504975	nahk	unspecified	PAIRED	chunk_0102	not_downloaded				
+SRR28849465	SRP504975	nahk	unspecified	PAIRED	chunk_0102	not_downloaded				
+SRR28849466	SRP504975	nahk	unspecified	PAIRED	chunk_0070	not_downloaded				
+SRR28849467	SRP504975	nahk	unspecified	PAIRED	chunk_0070	not_downloaded				
+SRR28849468	SRP504975	nahk	unspecified	PAIRED	chunk_0070	not_downloaded				
+SRR28849469	SRP504975	nahk	unspecified	PAIRED	chunk_0070	not_downloaded				
+SRR28849470	SRP504975	nahk	unspecified	PAIRED	chunk_0003	length_filtered	14836604	26	60	0
+SRR28849471	SRP504975	nahk	unspecified	PAIRED	chunk_0003	length_filtered	14354896	26	60	0
+SRR28849472	SRP504975	nahk	unspecified	PAIRED	chunk_0003	length_filtered	14856252	26	60	0
+SRR28849473	SRP504975	nahk	unspecified	PAIRED	chunk_0003	length_filtered	14638266	26	60	0
+SRR28849474	SRP504975	nahk	unspecified	PAIRED	chunk_0122	not_downloaded				
+SRR28849475	SRP504975	nahk	unspecified	PAIRED	chunk_0122	not_downloaded				
+SRR28849476	SRP504975	nahk	unspecified	PAIRED	chunk_0122	not_downloaded				
+SRR28849477	SRP504975	nahk	unspecified	PAIRED	chunk_0122	not_downloaded				
+SRR28849478	SRP504975	nahk	unspecified	PAIRED	chunk_0049	not_downloaded				
+SRR28849479	SRP504975	nahk	unspecified	PAIRED	chunk_0049	not_downloaded				
+SRR28849480	SRP504975	nahk	unspecified	PAIRED	chunk_0049	not_downloaded				
+SRR28849481	SRP504975	nahk	unspecified	PAIRED	chunk_0049	not_downloaded				
+SRR28849482	SRP504975	nahk	unspecified	PAIRED	chunk_0083	not_downloaded				
+SRR28849483	SRP504975	nahk	unspecified	PAIRED	chunk_0083	not_downloaded				
+SRR28849484	SRP504975	nahk	unspecified	PAIRED	chunk_0083	not_downloaded				
+SRR28849485	SRP504975	nahk	unspecified	PAIRED	chunk_0083	not_downloaded				
+SRR28908458	SRP505904	nahk	unspecified	PAIRED	chunk_0062	not_downloaded				
+SRR28908459	SRP505904	nahk	unspecified	PAIRED	chunk_0053	not_downloaded				
+SRR28908460	SRP505904	nahk	unspecified	PAIRED	chunk_0079	not_downloaded				
+SRR28908461	SRP505904	nahk	unspecified	PAIRED	chunk_0072	not_downloaded				
+SRR28908462	SRP505904	nahk	unspecified	PAIRED	chunk_0024	length_filtered	79728814	29	89	0
+SRR28908463	SRP505904	nahk	unspecified	PAIRED	chunk_0120	not_downloaded				
+SRR28908464	SRP505904	nahk	unspecified	PAIRED	chunk_0043	not_downloaded				
+SRR28908465	SRP505904	nahk	unspecified	PAIRED	chunk_0021	length_filtered	84599610	29	89	0
+SRR28908466	SRP505904	nahk	unspecified	PAIRED	chunk_0098	not_downloaded				
+SRR28908467	SRP505904	nahk	unspecified	PAIRED	chunk_0045	not_downloaded				
+SRR28908468	SRP505904	nahk	unspecified	PAIRED	chunk_0084	not_downloaded				
+SRR28908469	SRP505904	nahk	unspecified	PAIRED	chunk_0012	length_filtered	80945416	29	89	0
+SRR28908470	SRP505904	nahk	unspecified	PAIRED	chunk_0110	not_downloaded				
+SRR28908471	SRP505904	nahk	unspecified	PAIRED	chunk_0101	not_downloaded				
+SRR28908472	SRP505904	nahk	unspecified	PAIRED	chunk_0041	not_downloaded				
+SRR28908473	SRP505904	nahk	unspecified	PAIRED	chunk_0035	length_filtered	82332230	29	89	0
+SRR28908474	SRP505904	nahk	unspecified	PAIRED	chunk_0066	not_downloaded				
+SRR28908475	SRP505904	nahk	unspecified	PAIRED	chunk_0116	not_downloaded				
+SRR28908476	SRP505904	nahk	unspecified	PAIRED	chunk_0119	not_downloaded				
+SRR28908477	SRP505904	nahk	unspecified	PAIRED	chunk_0038	length_filtered	79576440	29	89	0
+SRR28908478	SRP505904	nahk	unspecified	PAIRED	chunk_0112	not_downloaded				
+SRR28908479	SRP505904	nahk	unspecified	PAIRED	chunk_0006	length_filtered	82698954	29	89	0
+SRR28908480	SRP505904	nahk	unspecified	PAIRED	chunk_0080	not_downloaded				
+SRR28908481	SRP505904	nahk	unspecified	PAIRED	chunk_0023	length_filtered	79454404	29	89	0
+SRR28908482	SRP505904	nahk	unspecified	PAIRED	chunk_0115	not_downloaded				
+SRR28908483	SRP505904	nahk	unspecified	PAIRED	chunk_0038	length_filtered	68376952	29	89	0
+SRR28908484	SRP505904	nahk	unspecified	PAIRED	chunk_0030	length_filtered	77377440	29	89	0
+SRR28908485	SRP505904	nahk	unspecified	PAIRED	chunk_0007	length_filtered	81248410	29	89	0
+SRR28908486	SRP505904	nahk	unspecified	PAIRED	chunk_0018	length_filtered	78413330	29	89	0
+SRR28908487	SRP505904	nahk	unspecified	PAIRED	chunk_0051	not_downloaded				
+SRR28908488	SRP505904	nahk	unspecified	PAIRED	chunk_0059	not_downloaded				
+SRR28908489	SRP505904	nahk	unspecified	PAIRED	chunk_0045	not_downloaded				
+SRR28908490	SRP505904	nahk	unspecified	PAIRED	chunk_0064	not_downloaded				
+SRR28908491	SRP505904	nahk	unspecified	PAIRED	chunk_0020	length_filtered	391781482	29	89	0
+SRR28908492	SRP505904	nahk	unspecified	PAIRED	chunk_0034	length_filtered	8091628	29	89	0
+SRR28908493	SRP505904	nahk	unspecified	PAIRED	chunk_0100	not_downloaded				
+SRR28908494	SRP505904	nahk	unspecified	PAIRED	chunk_0079	not_downloaded				
+SRR28908495	SRP505904	nahk	unspecified	PAIRED	chunk_0077	not_downloaded				
+SRR28908496	SRP505904	nahk	unspecified	PAIRED	chunk_0107	not_downloaded				
+SRR28908497	SRP505904	nahk	unspecified	PAIRED	chunk_0035	length_filtered	81907346	29	89	0
+SRR28908498	SRP505904	nahk	unspecified	PAIRED	chunk_0104	not_downloaded				
+SRR28908499	SRP505904	nahk	unspecified	PAIRED	chunk_0010	length_filtered	78552398	29	89	0
+SRR28908500	SRP505904	nahk	unspecified	PAIRED	chunk_0119	not_downloaded				
+SRR28908501	SRP505904	nahk	unspecified	PAIRED	chunk_0022	length_filtered	81684204	29	89	0
+SRR28908502	SRP505904	nahk	unspecified	PAIRED	chunk_0112	not_downloaded				
+SRR28908503	SRP505904	nahk	unspecified	PAIRED	chunk_0052	not_downloaded				
+SRR28908504	SRP505904	nahk	unspecified	PAIRED	chunk_0104	not_downloaded				
+SRR28908505	SRP505904	nahk	unspecified	PAIRED	chunk_0118	not_downloaded				
+SRR28908506	SRP505904	nahk	unspecified	PAIRED	chunk_0101	not_downloaded				
+SRR28908507	SRP505904	nahk	unspecified	PAIRED	chunk_0078	not_downloaded				
+SRR28908508	SRP505904	nahk	unspecified	PAIRED	chunk_0059	not_downloaded				
+SRR28908509	SRP505904	nahk	unspecified	PAIRED	chunk_0092	not_downloaded				
+SRR28908510	SRP505904	nahk	unspecified	PAIRED	chunk_0009	length_filtered	78282072	29	89	0
+SRR28908511	SRP505904	nahk	unspecified	PAIRED	chunk_0034	length_filtered	74339760	29	89	0
+SRR28908512	SRP505904	nahk	unspecified	PAIRED	chunk_0044	not_downloaded				
+SRR28908513	SRP505904	nahk	unspecified	PAIRED	chunk_0032	length_filtered	74268480	29	89	0
+SRR28908514	SRP505904	nahk	unspecified	PAIRED	chunk_0094	not_downloaded				
+SRR28908515	SRP505904	nahk	unspecified	PAIRED	chunk_0096	not_downloaded				
+SRR28908516	SRP505904	nahk	unspecified	PAIRED	chunk_0119	not_downloaded				
+SRR28908517	SRP505904	nahk	unspecified	PAIRED	chunk_0032	length_filtered	74682462	29	89	0
+SRR28908518	SRP505904	nahk	unspecified	PAIRED	chunk_0045	not_downloaded				
+SRR28908519	SRP505904	nahk	unspecified	PAIRED	chunk_0059	not_downloaded				
+SRR28908520	SRP505904	nahk	unspecified	PAIRED	chunk_0088	not_downloaded				
+SRR28908521	SRP505904	nahk	unspecified	PAIRED	chunk_0118	not_downloaded				
+SRR28908522	SRP505904	nahk	unspecified	PAIRED	chunk_0105	not_downloaded				
+SRR28908523	SRP505904	nahk	unspecified	PAIRED	chunk_0041	not_downloaded				
+SRR28908524	SRP505904	nahk	unspecified	PAIRED	chunk_0106	not_downloaded				
+SRR28908525	SRP505904	nahk	unspecified	PAIRED	chunk_0085	not_downloaded				
+SRR28908526	SRP505904	nahk	unspecified	PAIRED	chunk_0074	not_downloaded				
+SRR28908527	SRP505904	nahk	unspecified	PAIRED	chunk_0023	length_filtered	81483980	29	89	0
+SRR28908528	SRP505904	nahk	unspecified	PAIRED	chunk_0029	length_filtered	81995774	29	89	0
+SRR28908529	SRP505904	nahk	unspecified	PAIRED	chunk_0081	not_downloaded				
+SRR28908530	SRP505904	nahk	unspecified	PAIRED	chunk_0092	not_downloaded				
+SRR28908531	SRP505904	nahk	unspecified	PAIRED	chunk_0047	not_downloaded				
+SRR28908532	SRP505904	nahk	unspecified	PAIRED	chunk_0016	length_filtered	62495790	29	89	0
+SRR28908533	SRP505904	nahk	unspecified	PAIRED	chunk_0102	not_downloaded				
+SRR28908534	SRP505904	nahk	unspecified	PAIRED	chunk_0002	length_filtered	65669058	29	89	0
+SRR28908535	SRP505904	nahk	unspecified	PAIRED	chunk_0103	not_downloaded				
+SRR28908536	SRP505904	nahk	unspecified	PAIRED	chunk_0109	not_downloaded				
+SRR28908537	SRP505904	nahk	unspecified	PAIRED	chunk_0067	not_downloaded				
+SRR28908538	SRP505904	nahk	unspecified	PAIRED	chunk_0049	not_downloaded				
+SRR28908539	SRP505904	nahk	unspecified	PAIRED	chunk_0046	not_downloaded				
+SRR28908540	SRP505904	nahk	unspecified	PAIRED	chunk_0039	not_downloaded				
+SRR28908541	SRP505904	nahk	unspecified	PAIRED	chunk_0035	length_filtered	81475790	29	89	0
+SRR28908542	SRP505904	nahk	unspecified	PAIRED	chunk_0077	not_downloaded				
+SRR28908543	SRP505904	nahk	unspecified	PAIRED	chunk_0091	not_downloaded				
+SRR28908544	SRP505904	nahk	unspecified	PAIRED	chunk_0093	not_downloaded				
+SRR28908545	SRP505904	nahk	unspecified	PAIRED	chunk_0042	not_downloaded				
+SRR28908546	SRP505904	nahk	unspecified	PAIRED	chunk_0075	not_downloaded				
+SRR28908547	SRP505904	nahk	unspecified	PAIRED	chunk_0019	length_filtered	438531626	29	89	0
+SRR28908548	SRP505904	nahk	unspecified	PAIRED	chunk_0011	length_filtered	71486410	29	89	0
+SRR28908549	SRP505904	nahk	unspecified	PAIRED	chunk_0052	not_downloaded				
+SRR28908550	SRP505904	nahk	unspecified	PAIRED	chunk_0109	not_downloaded				
+SRR28908551	SRP505904	nahk	unspecified	PAIRED	chunk_0080	not_downloaded				
+SRR28908552	SRP505904	nahk	unspecified	PAIRED	chunk_0023	length_filtered	78868896	29	89	0
+SRR28908553	SRP505904	nahk	unspecified	PAIRED	chunk_0065	not_downloaded				
+SRR28908554	SRP505904	nahk	unspecified	PAIRED	chunk_0054	not_downloaded				
+SRR28908555	SRP505904	nahk	unspecified	PAIRED	chunk_0088	not_downloaded				
+SRR28908556	SRP505904	nahk	unspecified	PAIRED	chunk_0082	not_downloaded				
+SRR28908557	SRP505904	nahk	unspecified	PAIRED	chunk_0101	not_downloaded				
+SRR28908558	SRP505904	nahk	unspecified	PAIRED	chunk_0039	not_downloaded				
+SRR28908559	SRP505904	nahk	unspecified	PAIRED	chunk_0017	length_filtered	76056506	29	89	0
+SRR28908560	SRP505904	nahk	unspecified	PAIRED	chunk_0021	length_filtered	75224974	29	89	0
+SRR28908561	SRP505904	nahk	unspecified	PAIRED	chunk_0002	length_filtered	75233158	29	89	0
+SRR28908562	SRP505904	nahk	unspecified	PAIRED	chunk_0008	length_filtered	14810874	29	89	0
+SRR28908563	SRP505904	nahk	unspecified	PAIRED	chunk_0050	not_downloaded				
+SRR28908564	SRP505904	nahk	unspecified	PAIRED	chunk_0035	length_filtered	79268466	29	89	0
+SRR28908565	SRP505904	nahk	unspecified	PAIRED	chunk_0102	not_downloaded				
+SRR28908566	SRP505904	nahk	unspecified	PAIRED	chunk_0004	length_filtered	74070446	29	89	0
+SRR28908567	SRP505904	nahk	unspecified	PAIRED	chunk_0059	not_downloaded				
+SRR28908568	SRP505904	nahk	unspecified	PAIRED	chunk_0039	not_downloaded				
+SRR28908569	SRP505904	nahk	unspecified	PAIRED	chunk_0034	length_filtered	93973844	29	89	0
+SRR28908570	SRP505904	nahk	unspecified	PAIRED	chunk_0017	length_filtered	90238032	29	89	0
+SRR28908571	SRP505904	nahk	unspecified	PAIRED	chunk_0007	length_filtered	86469964	29	89	0
+SRR28908572	SRP505904	nahk	unspecified	PAIRED	chunk_0085	not_downloaded				
+SRR28908573	SRP505904	nahk	unspecified	PAIRED	chunk_0122	not_downloaded				
+SRR28908574	SRP505904	nahk	unspecified	PAIRED	chunk_0119	not_downloaded				
+SRR28908575	SRP505904	nahk	unspecified	PAIRED	chunk_0099	not_downloaded				
+SRR28908576	SRP505904	nahk	unspecified	PAIRED	chunk_0121	not_downloaded				
+SRR28908577	SRP505904	nahk	unspecified	PAIRED	chunk_0036	length_filtered	66590380	29	89	0
+SRR28908578	SRP505904	nahk	unspecified	PAIRED	chunk_0099	not_downloaded				
+SRR28908579	SRP505904	nahk	unspecified	PAIRED	chunk_0100	not_downloaded				
+SRR28908580	SRP505904	nahk	unspecified	PAIRED	chunk_0071	not_downloaded				
+SRR28908581	SRP505904	nahk	unspecified	PAIRED	chunk_0069	not_downloaded				
+SRR28908582	SRP505904	nahk	unspecified	PAIRED	chunk_0097	not_downloaded				
+SRR28908583	SRP505904	nahk	unspecified	PAIRED	chunk_0122	not_downloaded				
+SRR28908584	SRP505904	nahk	unspecified	PAIRED	chunk_0081	not_downloaded				
+SRR28908585	SRP505904	nahk	unspecified	PAIRED	chunk_0027	length_filtered	75943904	29	89	0
+SRR28908586	SRP505904	nahk	unspecified	PAIRED	chunk_0037	length_filtered	80036436	29	89	0
+SRR28908587	SRP505904	nahk	unspecified	PAIRED	chunk_0048	not_downloaded				
+SRR28908588	SRP505904	nahk	unspecified	PAIRED	chunk_0100	not_downloaded				
+SRR28908589	SRP505904	nahk	unspecified	PAIRED	chunk_0099	not_downloaded				
+SRR28908590	SRP505904	nahk	unspecified	PAIRED	chunk_0005	length_filtered	46984976	29	89	0
+SRR28908591	SRP505904	nahk	unspecified	PAIRED	chunk_0024	length_filtered	98699950	29	89	0
+SRR28908592	SRP505904	nahk	unspecified	PAIRED	chunk_0034	length_filtered	79060342	29	89	0
+SRR28908593	SRP505904	nahk	unspecified	PAIRED	chunk_0021	length_filtered	74463484	29	89	0
+SRR28908594	SRP505904	nahk	unspecified	PAIRED	chunk_0001	length_filtered	73570288	29	89	0
+SRR28908595	SRP505904	nahk	unspecified	PAIRED	chunk_0039	not_downloaded				
+SRR28908596	SRP505904	nahk	unspecified	PAIRED	chunk_0088	not_downloaded				
+SRR28908597	SRP505904	nahk	unspecified	PAIRED	chunk_0014	length_filtered	72413114	29	89	0
+SRR28908598	SRP505904	nahk	unspecified	PAIRED	chunk_0018	length_filtered	72356890	29	89	0
+SRR28908599	SRP505904	nahk	unspecified	PAIRED	chunk_0096	not_downloaded				
+SRR28908600	SRP505904	nahk	unspecified	PAIRED	chunk_0074	not_downloaded				
+SRR28908601	SRP505904	nahk	unspecified	PAIRED	chunk_0068	not_downloaded				
+SRR28908602	SRP505904	nahk	unspecified	PAIRED	chunk_0115	not_downloaded				
+SRR28908603	SRP505904	nahk	unspecified	PAIRED	chunk_0016	length_filtered	69998666	29	89	0
+SRR28908604	SRP505904	nahk	unspecified	PAIRED	chunk_0053	not_downloaded				
+SRR28908605	SRP505904	nahk	unspecified	PAIRED	chunk_0111	not_downloaded				
+SRR28908606	SRP505904	nahk	unspecified	PAIRED	chunk_0120	not_downloaded				
+SRR28908607	SRP505904	nahk	unspecified	PAIRED	chunk_0112	not_downloaded				
+SRR28908608	SRP505904	nahk	unspecified	PAIRED	chunk_0010	length_filtered	76834972	29	89	0
+SRR28908609	SRP505904	nahk	unspecified	PAIRED	chunk_0110	not_downloaded				
+SRR28908610	SRP505904	nahk	unspecified	PAIRED	chunk_0083	not_downloaded				
+SRR28908611	SRP505904	nahk	unspecified	PAIRED	chunk_0058	not_downloaded				
+SRR28908612	SRP505904	nahk	unspecified	PAIRED	chunk_0091	not_downloaded				
+SRR28908613	SRP505904	nahk	unspecified	PAIRED	chunk_0085	not_downloaded				
+SRR28908614	SRP505904	nahk	unspecified	PAIRED	chunk_0054	not_downloaded				
+SRR28908615	SRP505904	nahk	unspecified	PAIRED	chunk_0027	length_filtered	66483654	29	89	0
+SRR28908616	SRP505904	nahk	unspecified	PAIRED	chunk_0079	not_downloaded				
+SRR28908617	SRP505904	nahk	unspecified	PAIRED	chunk_0057	not_downloaded				
+SRR28908618	SRP505904	nahk	unspecified	PAIRED	chunk_0075	not_downloaded				
+SRR28908619	SRP505904	nahk	unspecified	PAIRED	chunk_0107	not_downloaded				
+SRR28908620	SRP505904	nahk	unspecified	PAIRED	chunk_0037	length_filtered	63096212	29	89	0
+SRR28908621	SRP505904	nahk	unspecified	PAIRED	chunk_0007	length_filtered	63174348	29	89	0
+SRR28908622	SRP505904	nahk	unspecified	PAIRED	chunk_0074	not_downloaded				
+SRR28908623	SRP505904	nahk	unspecified	PAIRED	chunk_0001	length_filtered	64732488	29	89	0
+SRR28908624	SRP505904	nahk	unspecified	PAIRED	chunk_0038	length_filtered	63992464	29	89	0
+SRR28908625	SRP505904	nahk	unspecified	PAIRED	chunk_0033	length_filtered	61256696	29	89	0
+SRR28908626	SRP505904	nahk	unspecified	PAIRED	chunk_0121	not_downloaded				
+SRR28908627	SRP505904	nahk	unspecified	PAIRED	chunk_0122	not_downloaded				
+SRR28908628	SRP505904	nahk	unspecified	PAIRED	chunk_0106	not_downloaded				
+SRR28908629	SRP505904	nahk	unspecified	PAIRED	chunk_0079	not_downloaded				
+SRR28908630	SRP505904	nahk	unspecified	PAIRED	chunk_0122	not_downloaded				
+SRR28908631	SRP505904	nahk	unspecified	PAIRED	chunk_0033	length_filtered	63713514	29	89	0
+SRR28908632	SRP505904	nahk	unspecified	PAIRED	chunk_0066	not_downloaded				
+SRR28908633	SRP505904	nahk	unspecified	PAIRED	chunk_0032	length_filtered	87153250	29	89	0
+SRR28908634	SRP505904	nahk	unspecified	PAIRED	chunk_0099	not_downloaded				
+SRR28908635	SRP505904	nahk	unspecified	PAIRED	chunk_0047	not_downloaded				
+SRR28908636	SRP505904	nahk	unspecified	PAIRED	chunk_0010	length_filtered	67564410	29	89	0
+SRR28908637	SRP505904	nahk	unspecified	PAIRED	chunk_0063	not_downloaded				
+SRR28908638	SRP505904	nahk	unspecified	PAIRED	chunk_0032	length_filtered	65376810	29	89	0
+SRR28908639	SRP505904	nahk	unspecified	PAIRED	chunk_0080	not_downloaded				
+SRR28908640	SRP505904	nahk	unspecified	PAIRED	chunk_0068	not_downloaded				
+SRR28908641	SRP505904	nahk	unspecified	PAIRED	chunk_0114	not_downloaded				
+SRR28908642	SRP505904	nahk	unspecified	PAIRED	chunk_0093	not_downloaded				
+SRR28908643	SRP505904	nahk	unspecified	PAIRED	chunk_0095	not_downloaded				
+SRR28908644	SRP505904	nahk	unspecified	PAIRED	chunk_0031	length_filtered	73893098	29	89	0
+SRR28908645	SRP505904	nahk	unspecified	PAIRED	chunk_0029	length_filtered	79248762	29	89	0
+SRR28908646	SRP505904	nahk	unspecified	PAIRED	chunk_0028	length_filtered	75643626	29	89	0
+SRR28908647	SRP505904	nahk	unspecified	PAIRED	chunk_0056	not_downloaded				
+SRR28908648	SRP505904	nahk	unspecified	PAIRED	chunk_0076	not_downloaded				
+SRR28908649	SRP505904	nahk	unspecified	PAIRED	chunk_0082	not_downloaded				
+SRR28908650	SRP505904	nahk	unspecified	PAIRED	chunk_0100	not_downloaded				
+SRR28908651	SRP505904	nahk	unspecified	PAIRED	chunk_0016	length_filtered	83126948	29	89	0
+SRR28908652	SRP505904	nahk	unspecified	PAIRED	chunk_0023	length_filtered	87427820	29	89	0
+SRR28908653	SRP505904	nahk	unspecified	PAIRED	chunk_0081	not_downloaded				
+SRR28908654	SRP505904	nahk	unspecified	PAIRED	chunk_0089	not_downloaded				
+SRR28908655	SRP505904	nahk	unspecified	PAIRED	chunk_0060	not_downloaded				
+SRR28908656	SRP505904	nahk	unspecified	PAIRED	chunk_0047	not_downloaded				
+SRR28908657	SRP505904	nahk	unspecified	PAIRED	chunk_0066	not_downloaded				
+SRR28908658	SRP505904	nahk	unspecified	PAIRED	chunk_0010	length_filtered	77971664	29	89	0
+SRR28908659	SRP505904	nahk	unspecified	PAIRED	chunk_0078	not_downloaded				
+SRR28908660	SRP505904	nahk	unspecified	PAIRED	chunk_0033	length_filtered	76101104	29	89	0
+SRR28908661	SRP505904	nahk	unspecified	PAIRED	chunk_0020	length_filtered	73056032	29	89	0
+SRR28908662	SRP505904	nahk	unspecified	PAIRED	chunk_0109	not_downloaded				
+SRR28908663	SRP505904	nahk	unspecified	PAIRED	chunk_0021	length_filtered	75933320	29	89	0
+SRR28908664	SRP505904	nahk	unspecified	PAIRED	chunk_0122	not_downloaded				
+SRR28908665	SRP505904	nahk	unspecified	PAIRED	chunk_0086	not_downloaded				
+SRR28908666	SRP505904	nahk	unspecified	PAIRED	chunk_0026	length_filtered	86220894	29	89	0
+SRR28908667	SRP505904	nahk	unspecified	PAIRED	chunk_0061	not_downloaded				
+SRR28908668	SRP505904	nahk	unspecified	PAIRED	chunk_0056	not_downloaded				
+SRR28908669	SRP505904	nahk	unspecified	PAIRED	chunk_0044	not_downloaded				
+SRR28908670	SRP505904	nahk	unspecified	PAIRED	chunk_0063	not_downloaded				
+SRR28908671	SRP505904	nahk	unspecified	PAIRED	chunk_0116	not_downloaded				
+SRR28908672	SRP505904	nahk	unspecified	PAIRED	chunk_0090	not_downloaded				
+SRR28908673	SRP505904	nahk	unspecified	PAIRED	chunk_0101	not_downloaded				
+SRR28908674	SRP505904	nahk	unspecified	PAIRED	chunk_0006	length_filtered	67837714	29	89	0
+SRR28908675	SRP505904	nahk	unspecified	PAIRED	chunk_0110	not_downloaded				
+SRR28908676	SRP505904	nahk	unspecified	PAIRED	chunk_0107	not_downloaded				
+SRR28908677	SRP505904	nahk	unspecified	PAIRED	chunk_0122	not_downloaded				
+SRR28908678	SRP505904	nahk	unspecified	PAIRED	chunk_0071	not_downloaded				
+SRR28908679	SRP505904	nahk	unspecified	PAIRED	chunk_0120	not_downloaded				
+SRR28908680	SRP505904	nahk	unspecified	PAIRED	chunk_0119	not_downloaded				
+SRR28908681	SRP505904	nahk	unspecified	PAIRED	chunk_0004	length_filtered	64787964	29	89	0
+SRR28908682	SRP505904	nahk	unspecified	PAIRED	chunk_0028	length_filtered	63198030	29	89	0
+SRR28908683	SRP505904	nahk	unspecified	PAIRED	chunk_0054	not_downloaded				
+SRR28908684	SRP505904	nahk	unspecified	PAIRED	chunk_0009	length_filtered	99373076	29	89	0
+SRR28908685	SRP505904	nahk	unspecified	PAIRED	chunk_0039	not_downloaded				
+SRR28908686	SRP505904	nahk	unspecified	PAIRED	chunk_0079	not_downloaded				
+SRR28908687	SRP505904	nahk	unspecified	PAIRED	chunk_0061	not_downloaded				
+SRR28908688	SRP505904	nahk	unspecified	PAIRED	chunk_0084	not_downloaded				
+SRR28908689	SRP505904	nahk	unspecified	PAIRED	chunk_0118	not_downloaded				
+SRR28908690	SRP505904	nahk	unspecified	PAIRED	chunk_0087	not_downloaded				
+SRR28908691	SRP505904	nahk	unspecified	PAIRED	chunk_0016	length_filtered	83539856	29	89	0
+SRR28908692	SRP505904	nahk	unspecified	PAIRED	chunk_0052	not_downloaded				
+SRR28908693	SRP505904	nahk	unspecified	PAIRED	chunk_0060	not_downloaded				
+SRR28908694	SRP505904	nahk	unspecified	PAIRED	chunk_0045	not_downloaded				
+SRR28908695	SRP505904	nahk	unspecified	PAIRED	chunk_0080	not_downloaded				
+SRR28908696	SRP505904	nahk	unspecified	PAIRED	chunk_0076	not_downloaded				
+SRR28908697	SRP505904	nahk	unspecified	PAIRED	chunk_0069	not_downloaded				
+SRR28908698	SRP505904	nahk	unspecified	PAIRED	chunk_0121	not_downloaded				
+SRR28908699	SRP505904	nahk	unspecified	PAIRED	chunk_0100	not_downloaded				
+SRR28908700	SRP505904	nahk	unspecified	PAIRED	chunk_0019	length_filtered	76141052	29	89	0
+SRR28908701	SRP505904	nahk	unspecified	PAIRED	chunk_0095	not_downloaded				
+SRR28908702	SRP505904	nahk	unspecified	PAIRED	chunk_0054	not_downloaded				
+SRR28908703	SRP505904	nahk	unspecified	PAIRED	chunk_0111	not_downloaded				
+SRR28908704	SRP505904	nahk	unspecified	PAIRED	chunk_0109	not_downloaded				
+SRR28908705	SRP505904	nahk	unspecified	PAIRED	chunk_0081	not_downloaded				
+SRR28908706	SRP505904	nahk	unspecified	PAIRED	chunk_0103	not_downloaded				
+SRR28908707	SRP505904	nahk	unspecified	PAIRED	chunk_0054	not_downloaded				
+SRR28908708	SRP505904	nahk	unspecified	PAIRED	chunk_0075	not_downloaded				
+SRR28908709	SRP505904	nahk	unspecified	PAIRED	chunk_0110	not_downloaded				
+SRR28908710	SRP505904	nahk	unspecified	PAIRED	chunk_0072	not_downloaded				
+SRR28908711	SRP505904	nahk	unspecified	PAIRED	chunk_0094	not_downloaded				
+SRR28908712	SRP505904	nahk	unspecified	PAIRED	chunk_0043	not_downloaded				
+SRR28908713	SRP505904	nahk	unspecified	PAIRED	chunk_0016	length_filtered	76525060	29	89	0
+SRR28908714	SRP505904	nahk	unspecified	PAIRED	chunk_0106	not_downloaded				
+SRR28908715	SRP505904	nahk	unspecified	PAIRED	chunk_0034	length_filtered	73728380	29	89	0
+SRR28908716	SRP505904	nahk	unspecified	PAIRED	chunk_0075	not_downloaded				
+SRR28908717	SRP505904	nahk	unspecified	PAIRED	chunk_0087	not_downloaded				
+SRR28908718	SRP505904	nahk	unspecified	PAIRED	chunk_0042	not_downloaded				
+SRR28908719	SRP505904	nahk	unspecified	PAIRED	chunk_0004	length_filtered	76188266	29	89	0
+SRR28908720	SRP505904	nahk	unspecified	PAIRED	chunk_0025	length_filtered	74840844	29	89	0
+SRR28908721	SRP505904	nahk	unspecified	PAIRED	chunk_0122	not_downloaded				
+SRR28908722	SRP505904	nahk	unspecified	PAIRED	chunk_0024	length_filtered	71158866	29	89	0
+SRR28908723	SRP505904	nahk	unspecified	PAIRED	chunk_0083	not_downloaded				
+SRR28908724	SRP505904	nahk	unspecified	PAIRED	chunk_0009	length_filtered	73149740	29	89	0
+SRR28908725	SRP505904	nahk	unspecified	PAIRED	chunk_0013	length_filtered	73669970	29	89	0
+SRR28908726	SRP505904	nahk	unspecified	PAIRED	chunk_0114	not_downloaded				
+SRR28908727	SRP505904	nahk	unspecified	PAIRED	chunk_0023	length_filtered	62133876	29	89	0
+SRR28908728	SRP505904	nahk	unspecified	PAIRED	chunk_0024	length_filtered	59835060	29	89	0
+SRR28908729	SRP505904	nahk	unspecified	PAIRED	chunk_0100	not_downloaded				
+SRR28908730	SRP505904	nahk	unspecified	PAIRED	chunk_0044	not_downloaded				
+SRR28908731	SRP505904	nahk	unspecified	PAIRED	chunk_0102	not_downloaded				
+SRR28908732	SRP505904	nahk	unspecified	PAIRED	chunk_0037	length_filtered	62042568	29	89	0
+SRR28908733	SRP505904	nahk	unspecified	PAIRED	chunk_0074	not_downloaded				
+SRR28908734	SRP505904	nahk	unspecified	PAIRED	chunk_0089	not_downloaded				
+SRR28908735	SRP505904	nahk	unspecified	PAIRED	chunk_0109	not_downloaded				
+SRR28908736	SRP505904	nahk	unspecified	PAIRED	chunk_0115	not_downloaded				
+SRR28908737	SRP505904	nahk	unspecified	PAIRED	chunk_0042	not_downloaded				
+SRR28908738	SRP505904	nahk	unspecified	PAIRED	chunk_0011	length_filtered	63857532	29	89	0
+SRR28908739	SRP505904	nahk	unspecified	PAIRED	chunk_0036	length_filtered	67556404	29	89	0
+SRR28908740	SRP505904	nahk	unspecified	PAIRED	chunk_0033	length_filtered	547191818	29	89	0
+SRR28908741	SRP505904	nahk	unspecified	PAIRED	chunk_0057	not_downloaded				
+SRR28908742	SRP505904	nahk	unspecified	PAIRED	chunk_0093	not_downloaded				
+SRR28908743	SRP505904	nahk	unspecified	PAIRED	chunk_0103	not_downloaded				
+SRR28908744	SRP505904	nahk	unspecified	PAIRED	chunk_0093	not_downloaded				
+SRR28908745	SRP505904	nahk	unspecified	PAIRED	chunk_0057	not_downloaded				
+SRR28908746	SRP505904	nahk	unspecified	PAIRED	chunk_0114	not_downloaded				
+SRR28908747	SRP505904	nahk	unspecified	PAIRED	chunk_0028	length_filtered	71550802	29	89	0
+SRR28908748	SRP505904	nahk	unspecified	PAIRED	chunk_0048	not_downloaded				
+SRR28908749	SRP505904	nahk	unspecified	PAIRED	chunk_0110	not_downloaded				
+SRR28908750	SRP505904	nahk	unspecified	PAIRED	chunk_0028	length_filtered	72192302	29	89	0
+SRR28908751	SRP505904	nahk	unspecified	PAIRED	chunk_0044	not_downloaded				
+SRR28908752	SRP505904	nahk	unspecified	PAIRED	chunk_0112	not_downloaded				
+SRR28908753	SRP505904	nahk	unspecified	PAIRED	chunk_0049	not_downloaded				
+SRR28908754	SRP505904	nahk	unspecified	PAIRED	chunk_0064	not_downloaded				
+SRR28908755	SRP505904	nahk	unspecified	PAIRED	chunk_0060	not_downloaded				
+SRR28908756	SRP505904	nahk	unspecified	PAIRED	chunk_0048	not_downloaded				
+SRR28908757	SRP505904	nahk	unspecified	PAIRED	chunk_0103	not_downloaded				
+SRR28908758	SRP505904	nahk	unspecified	PAIRED	chunk_0069	not_downloaded				
+SRR28908759	SRP505904	nahk	unspecified	PAIRED	chunk_0047	not_downloaded				
+SRR28908760	SRP505904	nahk	unspecified	PAIRED	chunk_0026	length_filtered	81352728	29	89	0
+SRR28908761	SRP505904	nahk	unspecified	PAIRED	chunk_0039	not_downloaded				
+SRR28908762	SRP505904	nahk	unspecified	PAIRED	chunk_0097	not_downloaded				
+SRR28908763	SRP505904	nahk	unspecified	PAIRED	chunk_0096	not_downloaded				
+SRR28908764	SRP505904	nahk	unspecified	PAIRED	chunk_0104	not_downloaded				
+SRR28980740	SRP506780	nahk	unspecified	PAIRED	chunk_0108	not_downloaded				
+SRR28980741	SRP506780	nahk	unspecified	PAIRED	chunk_0108	not_downloaded				
+SRR28980742	SRP506780	nahk	unspecified	PAIRED	chunk_0108	not_downloaded				
+SRR28980743	SRP506780	nahk	unspecified	PAIRED	chunk_0108	not_downloaded				
+SRR28980744	SRP506780	nahk	unspecified	PAIRED	chunk_0108	not_downloaded				
+SRR28980745	SRP506780	nahk	unspecified	PAIRED	chunk_0108	not_downloaded				
+SRR28980746	SRP506780	nahk	unspecified	PAIRED	chunk_0108	not_downloaded				
+SRR28980747	SRP506780	nahk	unspecified	PAIRED	chunk_0108	not_downloaded				
+SRR28980748	SRP506780	nahk	unspecified	PAIRED	chunk_0108	not_downloaded				
+SRR28980749	SRP506780	nahk	unspecified	PAIRED	chunk_0108	not_downloaded				
+SRR28980750	SRP506780	nahk	unspecified	PAIRED	chunk_0108	not_downloaded				
+SRR28980751	SRP506780	nahk	unspecified	PAIRED	chunk_0108	not_downloaded				
+SRR28980752	SRP506780	nahk	unspecified	PAIRED	chunk_0108	not_downloaded				
+SRR28980753	SRP506780	nahk	unspecified	PAIRED	chunk_0108	not_downloaded				
+SRR28980754	SRP506780	nahk	unspecified	PAIRED	chunk_0108	not_downloaded				
+SRR28980755	SRP506780	nahk	unspecified	PAIRED	chunk_0108	not_downloaded				
+SRR28980756	SRP506780	nahk	unspecified	PAIRED	chunk_0108	not_downloaded				
+SRR28980757	SRP506780	nahk	unspecified	PAIRED	chunk_0108	not_downloaded				
+SRR28980758	SRP506780	nahk	unspecified	PAIRED	chunk_0108	not_downloaded				
+SRR28980759	SRP506780	nahk	unspecified	PAIRED	chunk_0108	not_downloaded				
+SRR29016033	SRP507504	muu	unspecified	PAIRED	chunk_0033	length_filtered	1799162628	28	90	0
+SRR29016048	SRP507504	nahk	unspecified	PAIRED	chunk_0096	not_downloaded				
+SRR29016059	SRP507504	nahk	unspecified	PAIRED	chunk_0062	not_downloaded				
+SRR29016060	SRP507504	muu	unspecified	PAIRED	chunk_0054	not_downloaded				
+SRR29016071	SRP507504	muu	unspecified	PAIRED	chunk_0064	not_downloaded				
+SRR29016103	SRP507504	nahk	unspecified	PAIRED	chunk_0057	not_downloaded				
+SRR29016115	SRP507504	nahk	unspecified	PAIRED	chunk_0043	not_downloaded				
+SRR29016125	SRP507504	nahk	unspecified	PAIRED	chunk_0101	not_downloaded				
+SRR29016126	SRP507504	nahk	unspecified	PAIRED	chunk_0027	length_filtered	1626445922	28	90	0
+SRR29147789	SRP509495	nahk	control	PAIRED	chunk_0015	length_filtered	119246252	20	64	0
+SRR29147790	SRP509495	nahk	control	PAIRED	chunk_0036	length_filtered	180843756	20	64	0
+SRR29251216	SRP511102	nahk	unspecified	PAIRED	chunk_0005	length_filtered	396174232	28	91	0
+SRR29251217	SRP511102	nahk	unspecified	PAIRED	chunk_0005	length_filtered	403666614	28	91	0
+SRR29251218	SRP511102	nahk	unspecified	PAIRED	chunk_0052	not_downloaded				
+SRR29251219	SRP511102	nahk	unspecified	PAIRED	chunk_0052	not_downloaded				
+SRR29251220	SRP511102	nahk	unspecified	PAIRED	chunk_0063	not_downloaded				
+SRR29251221	SRP511102	nahk	unspecified	PAIRED	chunk_0063	not_downloaded				
+SRR29251222	SRP511102	nahk	unspecified	PAIRED	chunk_0069	not_downloaded				
+SRR29251223	SRP511102	nahk	unspecified	PAIRED	chunk_0069	not_downloaded				
+SRR29251224	SRP511102	nahk	unspecified	PAIRED	chunk_0029	length_filtered	492542602	28	91	0
+SRR29251225	SRP511102	nahk	unspecified	PAIRED	chunk_0030	length_filtered	501151840	28	91	0
+SRR29251226	SRP511102	nahk	unspecified	PAIRED	chunk_0012	length_filtered	624713818	28	91	0
+SRR29251227	SRP511102	nahk	unspecified	PAIRED	chunk_0012	length_filtered	625938624	28	91	0
+SRR30049699	SRP523311	nahk	unspecified	PAIRED	chunk_0022	length_filtered	295832626	28	151	0
+SRR30049701	SRP523311	nahk	unspecified	PAIRED	chunk_0107	not_downloaded				
+SRR30163271	SRP524761	nahk	unspecified	PAIRED	chunk_0117	not_downloaded				
+SRR30163272	SRP524761	nahk	unspecified	PAIRED	chunk_0009	length_filtered	214851870	28	90	0
+SRR30163274	SRP524761	nahk	unspecified	PAIRED	chunk_0021	length_filtered	437597396	28	90	0
+SRR30163275	SRP524761	nahk	unspecified	PAIRED	chunk_0022	length_filtered	178669076	28	90	0
+SRR30315333	SRP527592	nahk	unspecified	PAIRED	chunk_0072	not_downloaded				
+SRR30315334	SRP527592	nahk	unspecified	PAIRED	chunk_0030	length_filtered	334272704	26	91	0
+SRR30315335	SRP527592	nahk	unspecified	PAIRED	chunk_0017	length_filtered	528531940	26	91	0
+SRR30315336	SRP527592	nahk	unspecified	PAIRED	chunk_0036	length_filtered	489705294	26	91	0
+SRR30315337	SRP527592	nahk	unspecified	PAIRED	chunk_0020	length_filtered	518913914	26	90	0
+SRR30315338	SRP527592	nahk	unspecified	PAIRED	chunk_0026	length_filtered	138617736	26	91	0
+SRR30315339	SRP527592	nahk	unspecified	PAIRED	chunk_0119	not_downloaded				
+SRR30315340	SRP527592	nahk	unspecified	PAIRED	chunk_0083	not_downloaded				
+SRR30315341	SRP527592	nahk	unspecified	PAIRED	chunk_0065	not_downloaded				
+SRR30315342	SRP527592	nahk	unspecified	PAIRED	chunk_0037	length_filtered	373346528	26	90	0
+SRR30656150	SRP532477	nahk	healthy; control	PAIRED	chunk_0058	not_downloaded				
+SRR30656151	SRP532477	nahk	healthy; control	PAIRED	chunk_0089	not_downloaded				
+SRR30656152	SRP532477	nahk	healthy; control	PAIRED	chunk_0089	not_downloaded				
+SRR30656153	SRP532477	nahk	unspecified	PAIRED	chunk_0018	length_filtered	1384320358	26	76	0
+SRR30656154	SRP532477	nahk	healthy; control	PAIRED	chunk_0032	length_filtered	2224202356	26	71	0
+SRR30656155	SRP532477	nahk	healthy; control	PAIRED	chunk_0092	not_downloaded				
+SRR30656156	SRP532477	nahk	unspecified	PAIRED	chunk_0020	length_filtered	1525802286	26	76	0
+SRR30656157	SRP532477	nahk	unspecified	PAIRED	chunk_0085	not_downloaded				
+SRR31152803	SRP541858	nahk	unspecified	PAIRED	chunk_0071	not_downloaded				
+SRR31152805	SRP541858	nahk	unspecified	PAIRED	chunk_0080	not_downloaded				
+SRR31152807	SRP541858	nahk	unspecified	PAIRED	chunk_0080	not_downloaded				
+SRR31152810	SRP541858	nahk	unspecified	PAIRED	chunk_0064	not_downloaded				
+SRR31152812	SRP541858	nahk	unspecified	PAIRED	chunk_0024	length_filtered	979069464	28	151	0
+SRR31152814	SRP541858	nahk	unspecified	PAIRED	chunk_0113	not_downloaded				
+SRR31152819	SRP541858	nahk	unspecified	PAIRED	chunk_0086	not_downloaded				
+SRR31152821	SRP541858	nahk	unspecified	PAIRED	chunk_0053	not_downloaded				
+SRR31152823	SRP541858	nahk	unspecified	PAIRED	chunk_0075	not_downloaded				
+SRR31152824	SRP541858	nahk	unspecified	PAIRED	chunk_0038	not_downloaded				
+SRR31152826	SRP541858	nahk	unspecified	PAIRED	chunk_0106	not_downloaded				
+SRR31152831	SRP541858	nahk	unspecified	PAIRED	chunk_0060	not_downloaded				
+SRR31152833	SRP541858	nahk	unspecified	PAIRED	chunk_0089	not_downloaded				
+SRR31152835	SRP541858	nahk	unspecified	PAIRED	chunk_0055	not_downloaded				
+SRR31152837	SRP541858	nahk	unspecified	PAIRED	chunk_0074	not_downloaded				
+SRR31152839	SRP541858	nahk	unspecified	PAIRED	chunk_0107	not_downloaded				
+SRR31152842	SRP541858	nahk	unspecified	PAIRED	chunk_0099	not_downloaded				
+SRR31298433	SRP544221	muu	cancer	PAIRED	chunk_0010	length_filtered	80389874	28	92	0
+SRR31298434	SRP544221	muu	cancer	PAIRED	chunk_0010	length_filtered	78305870	28	92	0
+SRR31298435	SRP544221	muu	cancer	PAIRED	chunk_0010	length_filtered	80269694	28	92	0
+SRR31298436	SRP544221	muu	cancer	PAIRED	chunk_0010	length_filtered	78350282	28	92	0
+SRR31298437	SRP544221	muu	cancer	PAIRED	chunk_0010	length_filtered	81523460	28	92	0
+SRR31298438	SRP544221	muu	cancer	PAIRED	chunk_0010	length_filtered	79358878	28	92	0
+SRR31298439	SRP544221	muu	cancer	PAIRED	chunk_0010	length_filtered	76420702	28	92	0
+SRR31298440	SRP544221	muu	cancer	PAIRED	chunk_0010	length_filtered	74356170	28	92	0
+SRR32190083	SRP560902	nahk	unspecified	PAIRED	chunk_0004	length_filtered	435393202	28	90	0
+SRR32190120	SRP560902	nahk	unspecified	PAIRED	chunk_0083	not_downloaded				
+SRR32190121	SRP560902	nahk	unspecified	PAIRED	chunk_0120	not_downloaded				
+SRR32362893	SRP564236	muu	unspecified	PAIRED	chunk_0003	length_filtered	797576170	28	91	0
+SRR32362894	SRP564236	muu	unspecified	PAIRED	chunk_0081	not_downloaded				
+SRR32362895	SRP564236	muu	unspecified	PAIRED	chunk_0014	length_filtered	775201766	28	91	0
+SRR32362896	SRP564236	muu	unspecified	PAIRED	chunk_0005	length_filtered	955115038	28	91	0
+SRR32362897	SRP564236	muu	unspecified	PAIRED	chunk_0045	not_downloaded				
+SRR32362898	SRP564236	muu	unspecified	PAIRED	chunk_0026	length_filtered	826772144	28	91	0
+SRR32362899	SRP564236	muu	unspecified	PAIRED	chunk_0076	not_downloaded				
+SRR32483344	SRP566230	nahk	unspecified	PAIRED	chunk_0082	not_downloaded				
+SRR32483345	SRP566230	nahk	unspecified	PAIRED	chunk_0071	not_downloaded				
+SRR32565593	SRP567801	nahk	unspecified	PAIRED	chunk_0055	not_downloaded				
+SRR32565594	SRP567801	nahk	unspecified	PAIRED	chunk_0103	not_downloaded				
+SRR32565595	SRP567801	nahk	unspecified	PAIRED	chunk_0032	length_filtered	641610938	28	90	0
+SRR32565596	SRP567801	nahk	unspecified	PAIRED	chunk_0070	not_downloaded				
+SRR32565597	SRP567801	nahk	unspecified	PAIRED	chunk_0071	not_downloaded				
+SRR32565598	SRP567801	nahk	unspecified	PAIRED	chunk_0038	not_downloaded				
+SRR32565599	SRP567801	nahk	unspecified	PAIRED	chunk_0001	length_filtered	834369446	28	120	0
+SRR32565600	SRP567801	nahk	unspecified	PAIRED	chunk_0040	not_downloaded				
+SRR32565601	SRP567801	muu	unspecified	PAIRED	chunk_0021	length_filtered	686850806	28	90	0
+SRR32565602	SRP567801	muu	unspecified	PAIRED	chunk_0058	not_downloaded				
+SRR32565603	SRP567801	muu	unspecified	PAIRED	chunk_0055	not_downloaded				
+SRR32565604	SRP567801	muu	unspecified	PAIRED	chunk_0077	not_downloaded				
+SRR32565605	SRP567801	muu	unspecified	PAIRED	chunk_0060	not_downloaded				
+SRR32565606	SRP567801	muu	unspecified	PAIRED	chunk_0082	not_downloaded				
+SRR32565607	SRP567801	nahk	unspecified	PAIRED	chunk_0031	length_filtered	752188596	28	120	0
+SRR32565608	SRP567801	nahk	unspecified	PAIRED	chunk_0003	length_filtered	643506412	28	120	0
+SRR32565609	SRP567801	nahk	unspecified	PAIRED	chunk_0012	length_filtered	654174232	28	90	0
+SRR32571762	SRP567948	nahk	melanoma; cancer	PAIRED	chunk_0083	not_downloaded				
+SRR32576587	SRP568102	nahk	melanoma; tumor	PAIRED	chunk_0106	not_downloaded				
+SRR32576588	SRP568102	nahk	melanoma; tumor	PAIRED	chunk_0105	not_downloaded				
+SRR32576589	SRP568102	nahk	melanoma; tumor	PAIRED	chunk_0107	not_downloaded				
+SRR32576590	SRP568102	nahk	melanoma; tumor	PAIRED	chunk_0012	length_filtered	346194408	35	51	0
+SRR32960351	SRP462992	nahk	lichen	PAIRED	chunk_0094	not_downloaded				
+SRR33534620	SRP559768	nahk	unspecified	PAIRED	chunk_0031	length_filtered	1566089800	26	90	0
+SRR33534637	SRP559768	nahk	unspecified	PAIRED	chunk_0002	length_filtered	67333714	26	90	0
+SRR33534646	SRP559768	nahk	unspecified	PAIRED	chunk_0087	not_downloaded				
+SRR33534655	SRP559768	nahk	unspecified	PAIRED	chunk_0014	length_filtered	57274026	26	90	0
+SRR33534668	SRP559768	nahk	unspecified	PAIRED	chunk_0120	not_downloaded				
+SRR33534692	SRP559768	nahk	unspecified	PAIRED	chunk_0060	not_downloaded				
+SRR33534712	SRP559768	nahk	unspecified	PAIRED	chunk_0090	not_downloaded				
+SRR33534721	SRP559768	nahk	unspecified	PAIRED	chunk_0031	length_filtered	1455056116	26	90	0
+SRR33534761	SRP559768	nahk	unspecified	PAIRED	chunk_0114	not_downloaded				
+SRR33534795	SRP559768	nahk	unspecified	PAIRED	chunk_0033	length_filtered	68091432	26	90	0
+SRR33534809	SRP559768	nahk	unspecified	PAIRED	chunk_0040	not_downloaded				
+SRR33534871	SRP559768	nahk	unspecified	PAIRED	chunk_0059	not_downloaded				
+SRR33681838	SRP559768	nahk	unspecified	PAIRED	chunk_0021	length_filtered	146365966	28	90	0
+SRR33681848	SRP559768	nahk	unspecified	PAIRED	chunk_0016	length_filtered	1695948116	26	90	0
+SRR33681939	SRP559768	nahk	unspecified	PAIRED	chunk_0007	length_filtered	90902188	26	90	0
+SRR33681961	SRP559768	nahk	unspecified	PAIRED	chunk_0069	not_downloaded				
+SRR33681977	SRP559768	nahk	unspecified	PAIRED	chunk_0113	not_downloaded				
+SRR33681996	SRP559768	nahk	unspecified	PAIRED	chunk_0061	not_downloaded				
+SRR33681997	SRP559768	nahk	unspecified	PAIRED	chunk_0100	not_downloaded				
+SRR33681998	SRP559768	nahk	unspecified	PAIRED	chunk_0118	not_downloaded				
+SRR33682003	SRP559768	nahk	unspecified	PAIRED	chunk_0068	not_downloaded				
+SRR33682004	SRP559768	nahk	unspecified	PAIRED	chunk_0119	not_downloaded				
+SRR33682069	SRP559768	nahk	unspecified	PAIRED	chunk_0079	not_downloaded				
+SRR33682070	SRP559768	nahk	unspecified	PAIRED	chunk_0028	length_filtered	2403984276	28	90	0
+SRR33682094	SRP559768	nahk	unspecified	PAIRED	chunk_0018	length_filtered	113229280	26	90	0
+SRR33682100	SRP559768	nahk	unspecified	PAIRED	chunk_0016	length_filtered	2293717794	26	90	0
+SRR33979737	SRP592079	nahk	unspecified	PAIRED	chunk_0098	not_downloaded				
+SRR34327376	SRP596554	nahk	unspecified	PAIRED	chunk_0048	not_downloaded				
+SRR34327377	SRP596554	nahk	unspecified	PAIRED	chunk_0074	not_downloaded				
+SRR34713487	SRP603524	nahk	unspecified	PAIRED	chunk_0058	not_downloaded				
+SRR34713488	SRP603524	nahk	unspecified	PAIRED	chunk_0023	length_filtered	381059130	28	151	0
+SRR34713505	SRP603524	nahk	unspecified	PAIRED	chunk_0044	not_downloaded				
+SRR34713506	SRP603524	nahk	unspecified	PAIRED	chunk_0072	not_downloaded				
+SRR34713509	SRP603524	nahk	unspecified	PAIRED	chunk_0052	not_downloaded				
+SRR34713510	SRP603524	nahk	unspecified	PAIRED	chunk_0002	length_filtered	251118432	28	151	0
+SRR34713528	SRP603524	nahk	unspecified	PAIRED	chunk_0111	not_downloaded				
+SRR34735146	SRP603972	muu	unspecified	PAIRED	chunk_0024	length_filtered	116285712	26	98	0
+SRR34735147	SRP603972	muu	unspecified	PAIRED	chunk_0024	length_filtered	97516692	26	98	0
+SRR34735148	SRP603972	muu	unspecified	PAIRED	chunk_0009	length_filtered	130722386	26	98	0
+SRR34735149	SRP603972	muu	unspecified	PAIRED	chunk_0009	length_filtered	108764654	26	98	0
+SRR34792336	SRP605302	nahk	unspecified	PAIRED	chunk_0044	not_downloaded				
+SRR34792337	SRP605302	nahk	unspecified	PAIRED	chunk_0077	not_downloaded				
+SRR34792339	SRP605302	nahk	unspecified	PAIRED	chunk_0020	length_filtered	692342688	28	151	0
+SRR34792340	SRP605302	nahk	unspecified	PAIRED	chunk_0013	length_filtered	849953732	28	151	0
+SRR34792341	SRP605302	nahk	unspecified	PAIRED	chunk_0102	not_downloaded				
+SRR34792342	SRP605302	nahk	unspecified	PAIRED	chunk_0091	not_downloaded				
+SRR35001231	SRP609118	nahk	healthy	PAIRED	chunk_0086	not_downloaded				
+SRR35001232	SRP609118	nahk	healthy	PAIRED	chunk_0008	length_filtered	273332364	28	90	0
+SRR35056699	SRP610235	nahk	unspecified	PAIRED	chunk_0116	not_downloaded				
+SRR35056700	SRP610235	nahk	unspecified	PAIRED	chunk_0096	not_downloaded				
+SRR35056701	SRP610235	nahk	unspecified	PAIRED	chunk_0104	not_downloaded				
+SRR35056702	SRP610235	nahk	unspecified	PAIRED	chunk_0078	not_downloaded				
+SRR35056703	SRP610235	nahk	unspecified	PAIRED	chunk_0053	not_downloaded				
+SRR35056706	SRP610235	nahk	unspecified	PAIRED	chunk_0058	not_downloaded				
+SRR35056707	SRP610235	nahk	unspecified	PAIRED	chunk_0071	not_downloaded				
+SRR35056708	SRP610235	nahk	unspecified	PAIRED	chunk_0082	not_downloaded				
+SRR35056709	SRP610235	nahk	unspecified	PAIRED	chunk_0089	not_downloaded				
+SRR35056710	SRP610235	nahk	unspecified	PAIRED	chunk_0005	length_filtered	846464698	28	151	0
+SRR35056711	SRP610235	nahk	unspecified	PAIRED	chunk_0077	not_downloaded				
+SRR35056719	SRP610235	nahk	unspecified	PAIRED	chunk_0080	not_downloaded				
+SRR35056720	SRP610235	nahk	unspecified	PAIRED	chunk_0096	not_downloaded				
+SRR35056721	SRP610235	nahk	unspecified	PAIRED	chunk_0122	not_downloaded				
+SRR35056722	SRP610235	nahk	unspecified	PAIRED	chunk_0020	length_filtered	868941578	28	151	0
+SRR35056729	SRP610235	nahk	unspecified	PAIRED	chunk_0044	not_downloaded				
+SRR35056730	SRP610235	nahk	unspecified	PAIRED	chunk_0042	not_downloaded				
+SRR35056731	SRP610235	nahk	unspecified	PAIRED	chunk_0021	length_filtered	1125131566	28	151	0
+SRR35056732	SRP610235	nahk	unspecified	PAIRED	chunk_0071	not_downloaded				
+SRR35056733	SRP610235	nahk	unspecified	PAIRED	chunk_0055	not_downloaded				
+SRR35056734	SRP610235	nahk	unspecified	PAIRED	chunk_0017	length_filtered	845206884	28	151	0
+SRR35056735	SRP610235	nahk	unspecified	PAIRED	chunk_0051	not_downloaded				
+SRR35056736	SRP610235	nahk	unspecified	PAIRED	chunk_0027	length_filtered	962124062	28	151	0
+SRR35056737	SRP610235	nahk	unspecified	PAIRED	chunk_0103	not_downloaded				
+SRR35056738	SRP610235	nahk	unspecified	PAIRED	chunk_0117	not_downloaded				
+SRR35056739	SRP610235	nahk	unspecified	PAIRED	chunk_0106	not_downloaded				
+SRR35570626	SRP609118	nahk	healthy	PAIRED	chunk_0008	length_filtered	256014864	28	90	0
+SRR36149664	SRP648028	nahk	unspecified	PAIRED	chunk_0086	not_downloaded				
+SRR36149666	SRP648028	nahk	unspecified	PAIRED	chunk_0068	not_downloaded				
+SRR36149668	SRP648028	nahk	unspecified	PAIRED	chunk_0078	not_downloaded				
+SRR36149670	SRP648028	nahk	unspecified	PAIRED	chunk_0060	not_downloaded				
+SRR36149673	SRP648028	nahk	unspecified	PAIRED	chunk_0072	not_downloaded				
+SRR36149674	SRP648028	nahk	unspecified	PAIRED	chunk_0052	not_downloaded				
+SRR36149676	SRP648028	nahk	unspecified	PAIRED	chunk_0066	not_downloaded				
+SRR36149677	SRP648028	nahk	unspecified	PAIRED	chunk_0017	length_filtered	447575380	28	90	0
+SRR36149679	SRP648028	nahk	unspecified	PAIRED	chunk_0079	not_downloaded				
+SRR36149682	SRP648028	nahk	unspecified	PAIRED	chunk_0004	length_filtered	27219570	28	90	0
+SRR36149684	SRP648028	nahk	unspecified	PAIRED	chunk_0050	not_downloaded				
+SRR36149686	SRP648028	nahk	unspecified	PAIRED	chunk_0075	not_downloaded				
+SRR36149690	SRP648028	nahk	unspecified	PAIRED	chunk_0100	not_downloaded				
+SRR36149692	SRP648028	nahk	unspecified	PAIRED	chunk_0066	not_downloaded				
+SRR36149696	SRP648028	nahk	unspecified	PAIRED	chunk_0098	not_downloaded				
+SRR36149707	SRP648028	nahk	unspecified	PAIRED	chunk_0121	not_downloaded				
+SRR36149708	SRP648028	nahk	unspecified	PAIRED	chunk_0036	length_filtered	390279018	28	90	0
+SRR36149717	SRP648028	nahk	unspecified	PAIRED	chunk_0029	length_filtered	452424486	28	90	0
+SRR36149718	SRP648028	nahk	unspecified	PAIRED	chunk_0004	length_filtered	437751146	28	90	0
+SRR36149723	SRP648028	nahk	unspecified	PAIRED	chunk_0017	length_filtered	463904602	28	90	0
+SRR36149725	SRP648028	nahk	unspecified	PAIRED	chunk_0079	not_downloaded				
+SRR36149736	SRP648028	nahk	unspecified	PAIRED	chunk_0033	length_filtered	417441578	28	90	0
+SRR36149740	SRP648028	nahk	unspecified	PAIRED	chunk_0024	length_filtered	474661234	28	90	0
+SRR36149741	SRP648028	nahk	unspecified	PAIRED	chunk_0055	not_downloaded				
+SRR36149746	SRP648028	nahk	unspecified	PAIRED	chunk_0086	not_downloaded				
+SRR36149752	SRP648028	nahk	unspecified	PAIRED	chunk_0065	not_downloaded				
+SRR36149765	SRP648028	nahk	unspecified	PAIRED	chunk_0050	not_downloaded				
+SRR36149769	SRP648028	nahk	unspecified	PAIRED	chunk_0019	length_filtered	458472374	28	90	0
+SRR36149772	SRP648028	nahk	unspecified	PAIRED	chunk_0114	not_downloaded				
+SRR36149778	SRP648028	nahk	unspecified	PAIRED	chunk_0099	not_downloaded				
+SRR36149779	SRP648028	nahk	unspecified	PAIRED	chunk_0024	length_filtered	8062042	28	90	0
+SRR36149782	SRP648028	nahk	unspecified	PAIRED	chunk_0047	not_downloaded				
+SRR36149783	SRP648028	nahk	unspecified	PAIRED	chunk_0042	not_downloaded				
+SRR36149786	SRP648028	nahk	unspecified	PAIRED	chunk_0079	not_downloaded				
+SRR36149792	SRP648028	nahk	unspecified	PAIRED	chunk_0070	not_downloaded				
+SRR36149798	SRP648028	nahk	unspecified	PAIRED	chunk_0011	length_filtered	484407880	28	90	0
+SRR36149809	SRP648028	nahk	unspecified	PAIRED	chunk_0003	length_filtered	445271608	28	90	0
+SRR36149814	SRP648028	nahk	unspecified	PAIRED	chunk_0037	length_filtered	426659068	28	90	0
+SRR36149815	SRP648028	nahk	unspecified	PAIRED	chunk_0010	length_filtered	12600362	28	90	0
+SRR36149819	SRP648028	nahk	unspecified	PAIRED	chunk_0085	not_downloaded				
+SRR36263542	SRP650465	nahk	unspecified	PAIRED	chunk_0073	not_downloaded				
+SRR36263544	SRP650465	nahk	unspecified	PAIRED	chunk_0073	not_downloaded				
+SRR36263553	SRP650465	nahk	unspecified	PAIRED	chunk_0116	not_downloaded				
+SRR36263556	SRP650465	nahk	unspecified	PAIRED	chunk_0100	not_downloaded				
+SRR36263558	SRP650465	nahk	unspecified	PAIRED	chunk_0053	not_downloaded				
+SRR36263563	SRP650465	nahk	unspecified	PAIRED	chunk_0110	not_downloaded				
+SRR36263569	SRP650465	nahk	unspecified	PAIRED	chunk_0091	not_downloaded				
+SRR36263571	SRP650465	nahk	unspecified	PAIRED	chunk_0086	not_downloaded				
+SRR36263573	SRP650465	nahk	unspecified	PAIRED	chunk_0040	not_downloaded				
+SRR36263575	SRP650465	nahk	unspecified	PAIRED	chunk_0029	length_filtered	857473048	28	151	0
+SRR36316038	SRP651531	nahk	unspecified	PAIRED	chunk_0113	not_downloaded				
+SRR36316039	SRP651531	nahk	unspecified	PAIRED	chunk_0034	length_filtered	15133466	28	91	0
+SRR36316040	SRP651531	nahk	unspecified	PAIRED	chunk_0105	not_downloaded				
+SRR36316041	SRP651531	nahk	unspecified	PAIRED	chunk_0048	not_downloaded				
+SRR37002732	SRP667839	muu	unspecified	PAIRED	chunk_0085	not_downloaded				
+SRR37002733	SRP667839	muu	unspecified	PAIRED	chunk_0018	length_filtered	1389828766	26	92	0
+SRR37002734	SRP667839	muu	unspecified	PAIRED	chunk_0006	length_filtered	105012924	26	92	0
+SRR37002735	SRP667839	muu	unspecified	PAIRED	chunk_0096	not_downloaded				
+SRR37002736	SRP667839	muu	unspecified	PAIRED	chunk_0067	not_downloaded				
+SRR37002737	SRP667839	muu	unspecified	PAIRED	chunk_0054	not_downloaded				
+SRR37002738	SRP667839	muu	unspecified	PAIRED	chunk_0042	not_downloaded				
+SRR37002739	SRP667839	muu	unspecified	PAIRED	chunk_0039	not_downloaded				
+SRR37002740	SRP667839	muu	unspecified	PAIRED	chunk_0091	not_downloaded				
+SRR37002741	SRP667839	muu	unspecified	PAIRED	chunk_0010	length_filtered	220227086	26	92	0
+SRR37002742	SRP667839	muu	unspecified	PAIRED	chunk_0019	length_filtered	813117752	26	92	0
+SRR37002743	SRP667839	muu	unspecified	PAIRED	chunk_0024	length_filtered	52152318	26	92	0
+SRR37002744	SRP667839	muu	unspecified	PAIRED	chunk_0012	length_filtered	156449580	26	92	0
+SRR37002745	SRP667839	muu	unspecified	PAIRED	chunk_0005	length_filtered	1059908170	26	92	0
+SRR37002746	SRP667839	muu	unspecified	PAIRED	chunk_0068	not_downloaded				
+SRR37002747	SRP667839	muu	unspecified	PAIRED	chunk_0118	not_downloaded				
+SRR37002748	SRP667839	muu	unspecified	PAIRED	chunk_0025	length_filtered	394798180	26	92	0
+SRR37002749	SRP667839	muu	unspecified	PAIRED	chunk_0010	length_filtered	1655302682	26	92	0
+SRR37002750	SRP667839	muu	unspecified	PAIRED	chunk_0094	not_downloaded				
+SRR37002751	SRP667839	muu	unspecified	PAIRED	chunk_0046	not_downloaded				
+SRR37002752	SRP667839	muu	unspecified	PAIRED	chunk_0007	length_filtered	1515766172	26	92	0
+SRR37002753	SRP667839	muu	unspecified	PAIRED	chunk_0005	length_filtered	120409502	26	92	0
+SRR37002754	SRP667839	muu	unspecified	PAIRED	chunk_0001	length_filtered	260941734	26	92	0
+SRR37002755	SRP667839	muu	unspecified	PAIRED	chunk_0077	not_downloaded				
+SRR37002756	SRP667839	muu	unspecified	PAIRED	chunk_0092	not_downloaded				
+SRR37002757	SRP667839	muu	unspecified	PAIRED	chunk_0115	not_downloaded				
+SRR37002758	SRP667839	muu	unspecified	PAIRED	chunk_0122	not_downloaded				

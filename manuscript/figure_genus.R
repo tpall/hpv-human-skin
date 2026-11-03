@@ -22,7 +22,10 @@ TIERS <- c("unselected_skin", "control_productive", "EV",
 GEN   <- c("alpha", "beta", "gamma", "mu", "nu")
 TLAB  <- c(unselected_skin = "Unselected\nskin", control_productive = "Productive\ncontrols",
            EV = "EV", neoplasia = "Neoplasia",
-           non_permissive_tissue = "Non-permissive\ntissue", engineered = "Engineered\ncells",
+           # Broken over three lines, not two: the strip is the width constraint
+           # (see the theme note below), and "Non-permissive" on one line sets the
+           # minimum strip width for the whole row.
+           non_permissive_tissue = "Non-\npermissive\ntissue", engineered = "Engineered\ncells",
            cell_line = "Cell line",
            # Matches bin/hpv_rpm_contrast.R and the Results text. 99% of this
            # tier carries no site keyword in its SRA metadata rather than an
@@ -97,7 +100,7 @@ p <- ggplot(pd, aes(Genus, mean_p)) +
              colour = "grey55", na.rm = TRUE) +
   geom_text(data = ~ filter(.x, k > 0), aes(y = hi_p, label = k), vjust = -.6,
             colour = INK,
-            size = 2.3, show.legend = FALSE) +
+            size = 3, show.legend = FALSE) +
   # Strips name the level and nothing else. A supplementary table number burned
   # into the image cannot be corrected at proof and goes silently wrong whenever
   # an item is inserted ahead of it, which is exactly what happened when the
@@ -110,19 +113,28 @@ p <- ggplot(pd, aes(Genus, mean_p)) +
   scale_y_log10(breaks = c(.01, .1, 1, 10, 100), labels = c("0", "0.1", "1", "10", "100"),
                 limits = c(FLOOR, 400)) +
   labs(x = "HPV genus", y = "Prevalence within sample group (%, log scale)") +
-  # theme_cowplot() is set globally above; the only override is to angle the
-  # genus labels, since five of them per facet collide across seven columns.
-  # Column-strip labels are the width constraint: nine facets across 10.5in
-  # leaves ~1.1in per strip, and at the default cowplot size "Non-permissive"
-  # and "Unselected skin" were clipped at both ends rather than wrapped.
-  # Every label is now at most two lines, and the strip text is sized to the
-  # longest of them.
-  theme(axis.text.x = element_text(angle = 45, hjust = 1),
-        strip.text.x = element_text(size = 9, lineheight = 0.9),
-        strip.text.y = element_text(size = 9))
+  # theme_cowplot() is set globally above. Two overrides matter here.
+  #
+  # The genus labels are angled, since five of them per facet collide across
+  # eight columns.
+  #
+  # Text size is set for the size this figure is READ at, not the size it is
+  # drawn at (TP comment 25, 2026-11-02: "strip text too small, difficult to
+  # read"). Word scales the image down to the ~6.5in text width, so on-page
+  # point size is size * 6.5 / width: at the old 9 pt across 10.5in the strips
+  # printed at about 5.6 pt. At 12 pt across 8in they print at about 9.8 pt.
+  # Column-strip width is the constraint on how far this can go: 8in over eight
+  # facets leaves about 1in per strip, which is why "Non-permissive" is broken
+  # across lines above rather than set on one, and why 11 pt rather than 12 pt:
+  # at 12 pt "Unselected" and "Engineered" were clipped at the strip edges.
+  theme(axis.text.x  = element_text(angle = 45, hjust = 1, size = 11),
+        axis.text.y  = element_text(size = 11),
+        axis.title   = element_text(size = 13),
+        strip.text.x = element_text(size = 11, lineheight = 0.9),
+        strip.text.y = element_text(size = 11))
 
-ggsave(here("manuscript/figure4.png"), p, width = 10.5, height = 6.4, dpi = 200)
-ggsave(here("manuscript/figure4.pdf"), p, width = 10.5, height = 6.4)
+ggsave(here("manuscript/figure4.png"), p, width = 8, height = 6.0, dpi = 200)
+ggsave(here("manuscript/figure4.pdf"), p, width = 8, height = 6.0)
 
 # The caption quotes prevalences from this figure. Persist them so _helpers.R
 # reads the same numbers the figure plots, rather than having them hand-typed.

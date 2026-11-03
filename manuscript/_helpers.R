@@ -12,7 +12,8 @@ sup <- function(n) paste(.superscript[strsplit(as.character(n),"")[[1]]], collap
 # P-value: decimal (2 sig figs) at or above 0.001, else a×10^b with unicode superscript.
 fp <- function(p){
   if (is.na(p)) return("NA")
-  if (p >= 0.001) return(formatC(signif(p, 2), format = "g"))
+  # JID style: no leading zero on P values (P = .28)
+  if (p >= 0.001) return(sub("^0\\.", ".", formatC(signif(p, 2), format = "g")))
   e <- floor(log10(p)); m <- p / 10^e
   paste0(formatC(m, format = "f", digits = 1), "×10", sup(e))
 }
@@ -378,6 +379,53 @@ build_e2_table <- function(
                                    show_col_types = FALSE)
 rv  <- function(key) .reservoir_nums$value[.reservoir_nums$key == key]
 rvn <- function(key) as.numeric(rv(key))
+
+## ── Counts that may legitimately be zero ────────────────────────────────────
+# A rendered "0 of the 10,834 libraries" reads as a typo or a pipeline failure
+# rather than as a result, so a zero count is spelled out. Use for any inline
+# count that can fall to zero. `cap = TRUE` for sentence-initial position.
+n_or_none <- function(n, cap = FALSE) {
+  n <- as.numeric(n)
+  if (length(n) != 1 || is.na(n)) stop("n_or_none(): need one non-missing value")
+  if (n == 0) return(if (cap) "None" else "none")
+  comma(n)
+}
+
+## ── Ethics provenance counts ────────────────────────────────────────────────
+# supplementary_data_ethics_provenance.tsv is built by ethics_audit/*.py from the
+# public archive and Europe PMC records, one row per source study contributing a
+# library with a recorded lesion or neoplasia diagnosis. The Ethics Statement
+# quotes these counts, so they are derived from the table rather than typed and
+# cannot drift from it. Rebuild the table (see ethics_audit/) if the cohort changes.
+.ethics_prov <- readr::read_tsv(
+  here("manuscript/supplementary_data_ethics_provenance.tsv"),
+  show_col_types = FALSE)
+
+# Number of studies with a given status, or of libraries when libs = TRUE.
+.eth_status <- function(status, libs = FALSE) {
+  rows <- .ethics_prov[.ethics_prov$Status %in% status, ]
+  if (libs) sum(as.numeric(rows[["Libraries used"]])) else nrow(rows)
+}
+
+eth <- function(key) {
+  switch(
+    key,
+    n_studies    = comma(nrow(.ethics_prov)),
+    n_libs       = comma(sum(as.numeric(.ethics_prov[["Libraries used"]]))),
+    named        = comma(.eth_status("COMMITTEE NAMED")),
+    named_libs   = comma(.eth_status("COMMITTEE NAMED", libs = TRUE)),
+    byref        = comma(.eth_status("COMMITTEE NAMED BY REFERENCE ONLY")),
+    byref_libs   = comma(.eth_status("COMMITTEE NAMED BY REFERENCE ONLY", libs = TRUE)),
+    vague        = comma(.eth_status("COMMITTEE NOT NAMED SPECIFICALLY")),
+    nocommittee  = comma(.eth_status("PUBLICATION NAMES NO COMMITTEE")),
+    nocommittee_libs = comma(.eth_status("PUBLICATION NAMES NO COMMITTEE", libs = TRUE)),
+    nonpatient   = comma(.eth_status("NOT PATIENT MATERIAL")),
+    nonpatient_libs = comma(.eth_status("NOT PATIENT MATERIAL", libs = TRUE)),
+    nopub        = comma(.eth_status("ORIGINATING PUBLICATION NOT IDENTIFIED")),
+    nopub_libs   = comma(.eth_status("ORIGINATING PUBLICATION NOT IDENTIFIED", libs = TRUE)),
+    stop("eth(): unknown key ", key)
+  )
+}
 
 ## ── Figure S4: sub-threshold trace decomposition ────────────────────────────
 # trace_decomposition/figure_trace_decomposition.R persists every number its

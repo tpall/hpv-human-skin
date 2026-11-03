@@ -140,3 +140,15 @@ study,ERP177859,tissue_category,nahk,"Study title: 'Spatial localisation of huma
 study,SRP403492,tissue_category,nahk,"PRJNA872116 paired skin-metagenome specimens (SRA ScientificName = ""skin metagenome""). Per-run title and tissue_source are empty, so keyword classification cannot reach them and they fall to muu. Selected for the paired presence-vs-activity test because their matched WGS libraries are HPV-positive in the Shen/Logan catalogue (presence_vs_activity/pairs_shen.tsv)."
 study,SRP157584,tissue_category,nahk,"PRJNA signature study ""The skin microbiome of DOCK8-deficient patients"". Skin swab metatranscriptomes registered under the skin-metagenome taxid; per-run title and tissue_source carry no site keyword so classification falls to muu. DOCK8 deficiency is the primary immunodeficiency defined by cutaneous viral disease, so this is the immunocompromised arm of the compartment test (presence_vs_activity/PLAN.md 5.5b)."
 study,SRP046152,tissue_category,nahk,Human skin swab metatranscriptomes under the skin-metagenome taxid; no site keyword in the per-run fields. Healthy arm of the compartment test (presence_vs_activity/PLAN.md 5.5b).
+#
+# Added 2026-11-02 after the JID ethics audit (manuscript/ethics_audit/). These four studies
+# carry a cSCC, carcinoma or actinic-keratosis diagnosis and were tiered as neoplasia, but the
+# material is not patient tissue. Left uncorrected they put 29 cultured or animal libraries into
+# the lesion stratum, which is the stratum the paper's argument rests on. The automatic
+# classifier cannot reach them: bin/cell_line_patterns.py has no HSC line name and no sg[A-Z]
+# CRISPR pattern, SRP528200's line name appears only in the SRA experiment_title, which
+# parse_metadata.py never reads, and SRP495320's SRA metadata asserts human skin throughout.
+study,SRP520129,is_cell_line,TRUE,"HSC5 cutaneous SCC cell line and mouse xenografts (PMID 39594744 states ""Informed Consent Statement: Not applicable""). Run titles read ""HSC5 cells, sgNeg, biol rep 1""; no HSC pattern and no sg[A-Z] pattern in cell_line_patterns.py"
+study,SRP495320,exclude,TRUE,"Animal study (PMID 38867481 states ""Informed Consent Statement: Not applicable"") deposited with titles P29_AK and tissue Skin, disease_state Actinic Keratosis. No pattern can reach it: every SRA field asserts human skin. Excluded rather than flagged as a cell line, because it is neither patient tissue nor a human line"
+study,SRP528200,is_cell_line,TRUE,"Organotypic 3D culture of SCC13 cells (SRA experiment_title ""RNA-Seq of 3D model of SCC13 cells""). The existing scc[\s-]?(4|9|13|25) pattern would match, but the per-run title is empty and experiment_title is not in detect_text"
+study,SRP055713,is_cell_line,TRUE,"Turku UT-SCC cutaneous SCC line panel (titles UT_SCC7/91/105/111/115/118, sample_type ""Derived from cSCC tumors""). Nine other UT-SCC studies are already tiered as cell_line; this one has no cell_line attribute populated and no siRNA label, so nothing matched"

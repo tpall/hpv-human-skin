@@ -1,30 +1,11 @@
 ---
-title: "Cutaneous HPV is transcriptionally quiet in skin and carcinoma but productive in warts: a depth-controlled re-mining of public RNA-seq"
-subtitle: "Short version, formatted to Journal of Investigative Dermatology limits"
-author:
-  - name: Taavi Päll
-    email: taavi.pall@ut.ee
-    orcid: 0000-0001-7606-675X
-    corresponding: true
-    affiliations:
-      - ref: 1
-  - name: Alla Piirsoo
-    orcid: 0000-0001-6843-7127
-    affiliations:
-      - ref: 2
-  - name: Marko Piirsoo
-    orcid: 0000-0002-9447-1350
-    affiliations:
-      - ref: 2
-affiliations:
-  - id: 1
-    name: Institute of Biomedicine and Translational Medicine, University of Tartu
-    city: Tartu
-    country: Estonia
-  - id: 2
-    name: Institute of Bioengineering, University of Tartu
-    city: Tartu
-    country: Estonia
+# JID title page: title <= 120 characters, sentence case (this one is 89). The subtitle
+# that said "Short version, formatted to JID limits" was an internal note and is gone.
+title: "Cutaneous HPV is transcriptionally inactive in skin and carcinoma but productive in warts"
+# Authors and affiliations are rendered by _titlepage.qmd, which gives the numbered
+# affiliations JID asks for. The pandoc docx byline duplicated the names on the page
+# and is suppressed (TP comment 0, 2026-11-02): keep author metadata out of the YAML
+# so the writer emits no byline. ORCiDs are listed in the back matter.
 date: last-modified
 bibliography: references.bib
 csl: journal-of-investigative-dermatology.csl
@@ -39,6 +20,9 @@ crossref:
       key: supptbl
       reference-prefix: "Table S"
       space-before-numbering: false
+      # captions above the table, as in the eluring manuscripts; tbl-cap-location
+      # does not reach the docx writer for a custom float type
+      caption-location: top
       latex-env: supptbl
 format:
   html:
@@ -49,6 +33,10 @@ format:
     theme: cosmo
     fig-cap-location: bottom
     tbl-cap-location: top
+  # Co-author copy styled like the eluring manuscripts: Times New Roman 11 pt, double
+  # spacing, continuous line numbering, bold 12 pt headings. reference.docx is copied
+  # from eluring (adult_centenarian/reports/assets). After rendering, run
+  # `python3 docx_table_rules.py manuscript_short.docx` for the ruled tables.
   docx:
     reference-doc: reference.docx
     toc: false
@@ -72,6 +60,8 @@ bayes <- readRDS(here("manuscript/bayes_summary.rds"))
 bget  <- function(m) as.list(bayes[bayes$model == m, ])
 ```
 
+{{< include _titlepage.qmd >}}
+
 {{< include _abstract_short.qmd >}}
 
 {{< include _introduction_short.qmd >}}
@@ -83,6 +73,8 @@ bget  <- function(m) as.list(bayes[bayes$model == m, ])
 {{< include _methods_brief.qmd >}}
 
 {{< include _backmatter.qmd >}}
+
+{{< pagebreak >}}
 
 ## References {.unnumbered}
 

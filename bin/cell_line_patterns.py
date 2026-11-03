@@ -174,6 +174,21 @@ IN_VITRO_PATTERNS = [
     r"\bcell[\s-]?culture\b",
     r"\bmonolayer\b",
     r"\bcultured\b",
+    # Experimental control arms. "control" and "normal" in the diagnosis field
+    # conflate two different things: a clinical description of the tissue, and
+    # the untreated arm of an in-vitro experiment. Reading the second as the
+    # first is how seven HPV16 libraries from SRP443217 ("vag bacteria
+    # supernatant non-treated control") entered a cervical cohort labelled
+    # normal/control while carrying the canonical integrated-line signature
+    # (E1 = E2 = L1 = 0, high E6/E7). "untreated" alone is not enough -- it is
+    # ordinary clinical language -- so each pattern requires culture context.
+    r"\b(?:non|un)[\s-]?treated[\s-]+(?:control|cells?|sample)",
+    r"\bvehicle[\s-]?(?:control|treated|only)\b",
+    r"\bmock[\s-]?(?:infect\w*|treat\w*|transfect\w*)",
+    r"\bco[\s-]?culture\w*",
+    r"\bsupernatant\b",
+    r"\bconditioned[\s-]?(?:medium|media)\b",
+    r"\bpassaged?[\s-]+(?:cells?|line)\b",
     # differentiation/treatment time-course in culture (requires the "day N"
     # so it can't match "well-differentiated <tumour>")
     r"\bdifferentiat\w*[\s-]?day[\s-]?\d+",

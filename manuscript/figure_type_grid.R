@@ -1,10 +1,16 @@
 #!/usr/bin/env Rscript
 # Builds manuscript/figureS3.{png,pdf}: the HPV type by tier grid, assigned
-# against detection tier. Laid out landscape, types across and tiers down, so
-# each tier reads as one line: the unselected-skin line of the detection panel
-# is then the reservoir claim directly, a long run of pale cells across beta and
-# gamma. Portrait it took 13 inches and the same claim had to be counted down a
-# column.
+# against detection tier. Portrait, types down and tiers across.
+#
+# This was landscape (13.5 x 6.8 in, types across) until TP commented on draft k,
+# 2026-11-02, that the axis text was too small to read. That is geometry, not a font
+# setting: Word scales an image to the ~6.5 in text width, so 66 type columns get
+# 6.5/66 = 0.0985 in each, about 7 pt. A label rotated 90 degrees occupies roughly
+# 1.2 x its font size in width, so no font above about 5.9 pt can fit, whatever size
+# the figure is drawn at. Widening the drawing makes it worse, because Word shrinks it
+# further. The 66 categories have to go on the axis with room for them, which on a
+# portrait page is the vertical one: 66 rows over about 8.5 in of panel is 0.13 in per
+# row, enough for 8.5 pt labels that print at 8.5 pt.
 #
 #   Rscript manuscript/figure_type_grid.R
 #
@@ -80,31 +86,32 @@ d <- d %>%
                           (log10(pct) - log10(LIM[1])) / (log10(LIM[2]) - log10(LIM[1])) < 0.55,
                           "grey15", "white"))
 
-p <- ggplot(d, aes(type, fct_rev(tier), fill = pct)) +
+p <- ggplot(d, aes(tier, fct_rev(type), fill = pct)) +
   geom_tile(colour = "white", linewidth = 0.3) +
-  geom_text(aes(label = lab, colour = lab_col), size = 3, show.legend = FALSE) +
-  facet_grid(id ~ genus, space = "free_x", scales = "free_x") +
+  geom_text(aes(label = lab, colour = lab_col), size = 2.6, show.legend = FALSE) +
+  facet_grid(genus ~ id, space = "free_y", scales = "free_y") +
   scale_fill_viridis_c("Prevalence\nwithin tier (%)", option = "mako", direction = -1,
                        trans = "log10", limits = LIM, begin = 0.12, end = 0.95,
                        breaks = c(0.03, 0.3, 3, 30),
                        labels = function(x) formatC(x, format = "g"),
                        na.value = "grey94") +
   scale_colour_identity() +
-  scale_y_discrete(labels = function(x)
+  scale_x_discrete(labels = function(x)
     sprintf("%s (n = %s)", TLAB[x],
             formatC(tier_n$tier_size[match(x, tier_n$tier)], format = "d", big.mark = ","))) +
   labs(x = NULL, y = NULL) +
-  # 66 type labels across roughly 10.8 in of panel leaves about 11.8 pt per
-  # column, so a rotated label can go to 9 pt before neighbours collide. Set at
-  # 8.5 to keep a margin, with the tier labels and cell counts raised to match
-  # rather than leaving the axis looking out of scale with the rest.
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 8.5),
-        axis.text.y = element_text(size = 9.5),
+  # Sizes are for the size this prints at, not the size it is drawn at. At 7 in wide
+  # Word scales by 6.5/7 = 0.93, so these land within a few tenths of a point of
+  # their nominal value. The tier labels are angled because eight of them, each
+  # carrying its own n, do not fit side by side across 6.5 in.
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 9.5),
+        axis.text.y = element_text(size = 8.5),
         axis.ticks = element_blank(), panel.grid = element_blank(),
-        strip.text.y = element_text(angle = 0), strip.text = element_text(size = 9),
-        panel.spacing.x = unit(2, "pt"), legend.key.height = unit(1.1, "cm"))
+        strip.text.y = element_text(angle = 0, size = 10),
+        strip.text.x = element_text(size = 10),
+        panel.spacing.y = unit(2, "pt"), legend.key.height = unit(1.1, "cm"))
 
-ggsave(here("manuscript/figureS3.png"), p, width = 13.5, height = 6.8, dpi = 200, bg = "white")
-ggsave(here("manuscript/figureS3.pdf"), p, width = 13.5, height = 6.8)
+ggsave(here("manuscript/figureS3.png"), p, width = 7, height = 9.6, dpi = 200, bg = "white")
+ggsave(here("manuscript/figureS3.pdf"), p, width = 7, height = 9.6)
 cat(sprintf("figureS3: %d types, %d assigned cells, %d detection cells; prevalence %.3f%% to %.1f%%\n",
             n_distinct(both$type), nrow(assigned), nrow(detected), LIM[1], LIM[2]))

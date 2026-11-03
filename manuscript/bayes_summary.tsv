@@ -1,6 +1,6 @@
 model	OR	lo	hi	p_gt1	rhat
-M1_engineered	4.5748	2.756	7.3596	1	1.0011
-M1_cell_line	5.2478	3.6476	7.3134	1	1.0011
+M1_engineered	4.0929	2.3783	6.6042	1	1.002
+M1_cell_line	4.2975	2.9529	6.006	1	1.002
 M2b_neoplasia_vs_skin_floor	12.3416	3.6998	39.3878	1	1.0022
 M2b_depth	1.5958	0.5992	5.4629	0.8088	1.0022
 M2c_controls_vs_skin_floor	8784.8797	2886.7072	30272.4873	1	1.001

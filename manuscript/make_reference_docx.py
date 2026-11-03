@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Generate reference.docx — the Word style template Quarto/Pandoc copies into
+"""SUPERSEDED 2026-11-02: reference.docx is now the eluring manuscripts' template
+(TNR 11 pt, bold 12 pt headings), copied from
+~/Projects/eluring/analyses/adult_centenarian/reports/assets/reference.docx.
+Running this script overwrites it with the older 12 pt style below.
+
+Generate reference.docx — the Word style template Quarto/Pandoc copies into
 the manuscript's .docx output (wired via `reference-doc:` in manuscript.qmd).
 
 Encodes a journal-standard manuscript spec:

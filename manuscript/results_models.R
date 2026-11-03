@@ -27,6 +27,22 @@ d1 <- st %>% left_join(fl, by="srr_id") %>%
          sample_class = factor(ifelse(is_cell_line,"cell_line",
                                 ifelse(is_engineered,"engineered","clinical")),
                                levels=c("clinical","engineered","cell_line")))
+# Libraries that returned no screening result are not negative observations:
+# see unscreened_ids() in _paths.R for the two causes and the evidence.
+.unscreened  <- unscreened_ids()
+n_submitted  <- nrow(d1)
+d1           <- d1 %>% filter(!srr_id %in% .unscreened)
+n_unscreened <- n_submitted - nrow(d1)
+cat(sprintf("Submitted to the screen: %d; returned no result (empty Kraken2 report): %d\n",
+            n_submitted, n_unscreened))
+# Split the two causes: a library with a fastp report was downloaded and lost
+# every read to the length filter; one without was never downloaded.
+.fastp_seen <- sub("_fastp\\.json$", "",
+  basename(list.files(here("results_full_v2/chunks"), "_fastp\\.json$", recursive=TRUE)))
+n_unscr_filtered <- sum(.unscreened %in% .fastp_seen)
+n_unscr_nodl     <- n_unscreened - n_unscr_filtered
+cat(sprintf("  of those, fastp kept 0 reads: %d; never downloaded: %d\n",
+            n_unscr_filtered, n_unscr_nodl))
 cat(sprintf("Screened libraries: %d\n", nrow(d1)))
 rates <- d1 %>% group_by(sample_class) %>%
   summarise(n=n(), pos=sum(hpv_pos), pct=round(100*mean(hpv_pos),2), .groups="drop") %>%
@@ -459,7 +475,9 @@ if (is.null(.spots)) {
 .m3c<-as.list(psum[psum$grp=="productive_controls (targeted warts/EV)",]); .m3n<-as.list(psum[psum$grp=="neoplasia (cSCC/AK)",])
 
 stats <- lapply(list(
-  n_screened=nrow(d1), n_targeted=.n_targeted, n_csc=.n_csc, panel_n=panel_n,
+  n_screened=nrow(d1), n_submitted=n_submitted, n_unscreened=n_unscreened,
+  n_unscr_filtered=n_unscr_filtered, n_unscr_nodl=n_unscr_nodl,
+  n_targeted=.n_targeted, n_csc=.n_csc, panel_n=panel_n,
   clin_pct=.rc$pct, clin_lo=.rc$ci_lo, clin_hi=.rc$ci_hi, clin_n=.rc$n, clin_pos=.rc$pos,
   eng_pct=.re$pct,  eng_lo=.re$ci_lo,  eng_hi=.re$ci_hi,  eng_n=.re$n,  eng_pos=.re$pos,
   cl_pct=.rl$pct,   cl_lo=.rl$ci_lo,   cl_hi=.rl$ci_hi,   cl_n=.rl$n,   cl_pos=.rl$pos,
