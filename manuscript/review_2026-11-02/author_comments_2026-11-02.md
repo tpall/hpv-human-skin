@@ -993,5 +993,20 @@ reasoning is in `_backmatter.qmd`, dated 2026-11-02: requirement (ii) is address
 of patient data, so the statement "no longer tallies committee coverage ... without the
 manuscript asserting coverage we do not have". The data still ship in
 `supplementary_data_ethics_provenance.tsv` and the Data Availability Statement still points
-at it. Not reversed without TP. Two further notes: the report's "51%" appears in neither
-draft, and `cut_plan_r3.md`, cited as the do-not-cut authority, is not in the repository.
+at it. Not reversed, and now closed: TP confirmed on 2026-11-03 that the current wording
+stands, namely "Approval and consent for the original collection were the submitting
+investigators' responsibility; no archive record states whether that consent covered
+secondary use, which anonymous data do not require." This is a decision, not an open point,
+and should not be reopened by a later audit of the same section.
+
+TP added, 2026-11-03: if this position does not fly with JID, the paper is published
+elsewhere. The statement is not weakened and no approval is manufactured to satisfy a
+reviewer. See the journal shortlist for the alternatives.
+
+Two further notes on that report: its "51%" appears in neither draft (284 of 559 is 50.8%,
+so the figure is right but was never in the text), and `cut_plan_r3.md`, cited as the
+do-not-cut authority, is not in the repository. For the record, every number in the proposed
+sentence does check out against supplementary_data_ethics_provenance.tsv (36 studies, 559
+libraries, 17 with a named committee, 12 unrecoverable contributing 284 libraries), but the
+proposed one-sentence form accounted for only 29 of the 36 studies, leaving 7 for a reader
+to wonder about, which draft g's longer enumeration did not.
