@@ -38,6 +38,12 @@ pp  <- function(x) sub("\\.0$", "", formatC(x, format = "f", digits = 1))
 p1  <- function(x) formatC(x, format = "f", digits = 1)      # always 1 decimal (floor, depth)
 comma <- function(x) formatC(round(x), format = "d", big.mark = ",")
 mreads <- function(x) paste0(p1(x), "M")                     # x already in millions
+# Small counts spelled out, so a computed value can sit in prose where house
+# style wants a word rather than a numeral (TP, 2026-11-04: the Abstract).
+# Anything above ten falls back to the grouped numeral.
+nword <- function(x){ i <- round(x)
+  w <- c("one","two","three","four","five","six","seven","eight","nine","ten")
+  if (i == 0) "zero" else if (i >= 1 && i <= 10) w[i] else comma(i) }
 
 ## ── Bayesian posterior formatting ───────────────────────────────────────────
 # Posterior OR with 95% credible interval, e.g. "1.9 [0.7, 4.3]".

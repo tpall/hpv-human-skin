@@ -1222,3 +1222,112 @@ subset are all the same 410 libraries and no screened library has a sub-36 nt fi
 Main text unchanged, abstract 200. The supplement moves 8,384 to 8,377 rendered words: the
 droplet cut pays for the 41 words the splits add. No number, interval or result moves.
 Figure S6 regenerated, no other figure touched.
+
+---
+
+## Round 11: HPV2, and what a risk label can and cannot see (drafts w and x, 2026-11-04)
+
+Out of a side question from TP: how often do warts become tumors, and is HPV2 special.
+
+### What the literature says, in one line each
+
+Transformation of common warts is case-level, not rates: no cohort or registry study follows
+wart-bearing people for skin cancer. In immunocompetent people a case-control study found no
+association (OR 1.5, 95% CI 0.6 to 3.7). In transplant recipients viral warts do track with
+cSCC (P < .001, Casabonne et al, 2009), and the documented transformations carry the wart's
+own type into the tumor (HPV1 in both wart and SCC). The high-risk warty condition is EV, 30
+to 70% lifetime SCC on sun-exposed skin, which is beta-HPV and a different disease.
+
+HPV2 is odd in three ways, none oncogenic: it is an alpha type (species 4, with HPV27 and
+HPV57) with cutaneous tropism; it turns up in 43% of anogenital warts in children aged 5 to
+12, which is why typing cannot be used as evidence of abuse; and its control depends on the
+T-cell CD28 pathway, the inborn error behind the "tree-man" phenotype (Beziat et al, Cell
+2021). No study assays HPV2 E6 or E7 against p53 or pRb. "No transforming activity" is an
+absence of experiments, not a negative result.
+
+### Added to the Discussion (draft w)
+
+One sentence at the end of the reservoir paragraph, with live counts:
+
+> The one abundant reservoir type our assay ever calls productive is HPV2 (@fig-reservoir b),
+> a principal cause of common warts [@breznik2020]: it is assigned in 7 of the 44 productive
+> controls and in none of the 7,800 unselected-skin libraries.
+
+This is external validation of the read-out at no analytical cost: the type the wart-typing
+literature nominates is the type that transcribes in our wart arm. New reference, Breznik et
+al, Front Cell Infect Microbiol 2020;10:4, 185 histologically confirmed warts from 121
+immunocompetent patients, HPV2/27/57 causative in about three-quarters.
+
+### Added to the Discussion (draft x)
+
+TP's point: calling HPV2 low-risk may be survivorship bias. The strong form is right, and it
+is the same circle the hit-and-run model sits in, so one clause now says it in the mechanism
+paragraph:
+
+> The risk labels carry the same limitation: a cutaneous type is classified as low-risk
+> because it is not found in tumors, which is the observation a hit-and-run virus would also
+> produce.
+
+Deliberately stopped there. The fuller argument, that clinical removal and immune clearance
+deny HPV2 the decades of persistence beta-HPV gets on sun-damaged skin, is untestable in a
+cross-sectional design and would draw a referee's objection without adding evidence.
+
+For the record, our data carries no HPV2 ghost either: 0 of 406 neoplasia libraries at the
+assigned level, and HPV2 does not reach @supptbl-detection's two-call cut, so at most one
+detection-level call anywhere. Cross-sectional RNA cannot separate "never there" from "there
+and gone", which the Discussion already states.
+
+### Effect
+
+Discussion 1,099 to 1,173 words, main text 3,899 to 3,973 against JID's suggested 3,500. The
+decision to submit over the suggested limit is from review round 2 and still stands, but this
+is the first round since then to add main-text words, and the Discussion is where they would
+come back from if anyone wants them back. Supplement, abstract (200) and all figures
+unchanged. One new reference.
+
+---
+
+## Round 12: number style, and two roundings corrected (drafts y and z, 2026-11-04)
+
+TP supplied the house rule: spell out one to nine, numerals for 10 and above, never start a
+sentence with a numeral, always numerals for measurements, percentages, decimals, money,
+dates, ages and scores. Applied document-wide, with one working distinction that the rule
+implies but does not spell out:
+
+- **Words** for numbers that count parts of the argument or of the document: three models,
+  three kinds of searches, six open reading frames, four-fold, six orders of magnitude, four
+  of the five studies, coinfection by two assigned types.
+- **Numerals** for anything that is data or a threshold: library and donor counts, reads,
+  depths, Ns, criteria (at least 5 combined E1 and E2 reads), and every member of a series in
+  which one number is 10 or more (20 with 2 types, 2 with 3, 4 with 4, 0 with 5).
+
+Both directions were applied, so this pass also turned some spelled words back into numerals
+(a 10-library cohort, 15 libraries, 5 donors, all 5 condyloma lesions, 3 libraries is 32% of
+the EV group) where they were data sitting next to numerals.
+
+New helper `nword()` in `_helpers.R` spells out a computed integer, so a value can be live and
+still read as a word.
+
+### Two roundings corrected, both caught by making the values live
+
+1. **"6 orders of magnitude lower" was 5.65.** Median viral load is 5,408 RPM in productive
+   controls against 0.012 RPM in cSCC/AK, and both numbers are printed in the Results, so the
+   claim was contradicted by arithmetic on our own sentence. Now "more than
+   `r nword(floor(log10(ctrl/neo)))` orders of magnitude lower", computed, in the Abstract and
+   the Results.
+2. **"4 times more deeply" was 3.70.** The Results already hedged this ("almost"), the Abstract
+   did not. Both now read "almost four times", computed from the two medians.
+
+### The Abstract stayed at 200 words
+
+The two fixes cost 3 words. Paid for by "exceeded it in only 1.5% of libraries" to "exceeded
+it in only 1.5%" (the sentence already says libraries), and "must account for" to "must
+explain". No claim, number or hedge was dropped.
+
+### Effect
+
+Main text 3,973 to 3,975 words, Abstract 200, supplement and figures unchanged except for the
+wording. Draft z is the complete pass; draft y was the Abstract-only version and is superseded.
+
+Note: the draft letter reached z today. From 2026-11-05 the suffix restarts at `a` each day
+(TP, 2026-11-04), since the date in the filename already disambiguates.
