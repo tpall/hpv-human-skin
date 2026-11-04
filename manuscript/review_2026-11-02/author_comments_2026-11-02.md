@@ -1151,3 +1151,74 @@ manuscript reports 2.41%; the span, not the midpoint, is the point.
 Main text unchanged at 3,899 words, abstract 200. The whole change is in the supplementary
 Methods and the Data Availability Statement, both outside the word limit. No number,
 interval or result moves.
+
+---
+
+## Round 10: the two mechanical items, and the droplet passage tightened (draft v, 2026-11-04)
+
+The two items left over from the draft-q audit (§7), plus a verbosity check on the round 9
+prose and the flowchart that has to agree with it.
+
+### Thousands separators: nothing to fix, and the audit item is withdrawn
+
+The audit reported "grouped (1,073, 1,261) alongside bare four-digit values". Checked against
+the rendered document rather than the source, every number of 1,000 or more in running text,
+in tables and in the supplement is grouped, in draft u and in draft q alike. The bare
+four-digit values the check saw are the postal code and telephone number on the title page,
+the EU grant number 101102733, a journal page number in the reference list, and `limit=9999`
+in the PaVE REST URL. None of them is a count. The item is closed as a false positive, which
+is the outcome the audit itself allowed for when it said the check "cannot tell them apart".
+
+### Sentences over 50 words: 19, not 7, and all of them split
+
+Measured on the rendered supplement, splitting on sentence-final punctuation, the supplement
+carried 19 sentences over 50 words, not 7. The audit's count of four in "Read download and
+quality control" was right; its total was low. All 19 are now split, and the longest
+supplementary sentence is exactly 50 words.
+
+| Section | Before | After |
+|---|---:|---|
+| Read download and quality control | 63, 62, 54, 53 | 4 split |
+| Cohort framing and depth-normalized burden analysis | 70, 67 | 5 sentences |
+| Independent DNA reservoir from public metagenomes | 67, 61, 55 | 6 sentences |
+| Cell-line, engineered, and contaminant flagging | 99 (one sentence, three axes) | 5 sentences |
+| Integration status | 51 | 2 sentences |
+| How far the co-infection table can be read | 66, 62, 53, 53 | 9 sentences |
+| Library chemistry does not manufacture the contrast | 67 | 2 sentences |
+| Table S6 note, Table S7 note, detection-level prose | 59, 54, 51 | 6 sentences |
+
+No claim, number, interval, condition or hedge was dropped: every split is a punctuation
+change plus the connective the new sentence needs. The one that is more than punctuation is
+the cell-line paragraph, where a single 99-word sentence defined all three annotation axes in
+nested parentheses; it is now one sentence per axis.
+
+The main text has 8 sentences over 50 words and was left alone, since it is inside the word
+limit and splitting adds words. The longest sentence in the document, 68 words, is in the
+Data Availability Statement, which is outside the limit and could be split for free if anyone
+wants it.
+
+### The round 9 droplet passage, 231 words to 183
+
+TP asked whether the new supplementary Methods prose describes the whole journey rather than
+the result. It partly did: it withheld the conclusion ("the loss is therefore confined to
+droplet chemistry") until after the evidence, so the reader carried three sentences of read
+geometry without knowing what they were for. The passage now states the finding first, all
+410 are droplet single-cell libraries, then gives the geometry, the sharpness check and the
+retained full-length case. Every number and the exactness claim survive, and the longest
+sentence in it is 43 words, down from 63.
+
+### The flowchart now says what the Methods says
+
+@suppfig-cohort-flow carried "1,261 returned no screening result: 410 lost every read to the
+36 nt length filter, 851 never downloaded", which was true before round 9 and incomplete
+after it. The loss box now reads "410 droplet single-cell libraries lost every read to the
+36 nt length filter". The word "droplet" is not typed into the figure on trust:
+`figure_cohort_flow.R` reads `manuscript/read_geometry_summary.tsv` and stops the build
+unless the length-filtered set, the sweep's sub-36 nt first-mate set and its unscreened
+subset are all the same 410 libraries and no screened library has a sub-36 nt first mate.
+
+### Effect
+
+Main text unchanged, abstract 200. The supplement moves 8,384 to 8,377 rendered words: the
+droplet cut pays for the 41 words the splits add. No number, interval or result moves.
+Figure S6 regenerated, no other figure touched.

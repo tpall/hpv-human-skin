@@ -32,6 +32,16 @@ fastp <- sub("_fastp\\.json$", "", basename(
 unscr <- unscreened_ids()
 n_filt <- sum(unscr %in% fastp); n_nodl <- length(unscr) - n_filt
 
+## the length-filtered set is droplet single-cell chemistry, and the figure says
+## so only because the read geometry says so: every one of them has a sub-36 nt
+## first mate (the barcode and UMI read), and no screened library has one. If
+## that ever stops being true the figure stops building rather than mislabeling.
+rg <- function(key) as.numeric(geom(key))
+stopifnot(rg("droplet_n") == n_filt,
+          rg("sweep_r1_below_min") == n_filt,
+          rg("sweep_r1_below_min_unscreened") == n_filt,
+          rg("screened_r1_below_min") == 0)
+
 cm <- function(x) formatC(x, format = "d", big.mark = ",")
 box <- function(x, y, label, kind) tibble(x, y, label, kind)
 
@@ -46,7 +56,7 @@ stages <- bind_rows(
   box(2.5, -0.42, sprintf("Depth-normalized burden cohort\n%s libraries", cm(b_null + b_les)), "stage"))
 
 losses <- bind_rows(
-  box(2.0, 4, sprintf("%s returned no screening\nresult: %s lost every read to\nthe %s nt length filter,\n%s never downloaded",
+  box(2.0, 4, sprintf("%s returned no screening\nresult: %s droplet single-cell\nlibraries lost every read to\nthe %s nt length filter,\n%s never downloaded",
                       cm(length(unscr)), cm(n_filt), 36, cm(n_nodl)), "loss"),
   box(5.15, 4, sprintf("%s returned no\nscreening result", cm(les["submitted"] - les["screened"])), "loss"),
   box(2.0, 2, sprintf("%s 16S rRNA amplicon\nlibraries excluded:\nno detectable HPV at all", cm(sweep["screened"] - b_null)), "loss"),
