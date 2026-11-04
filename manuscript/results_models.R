@@ -43,6 +43,19 @@ n_unscr_filtered <- sum(.unscreened %in% .fastp_seen)
 n_unscr_nodl     <- n_unscreened - n_unscr_filtered
 cat(sprintf("  of those, fastp kept 0 reads: %d; never downloaded: %d\n",
             n_unscr_filtered, n_unscr_nodl))
+
+# Full-length single-cell libraries (symmetric mates) are retained: unlike the
+# droplet libraries the length filter removes, they are not 3'-biased, so the
+# argument against droplet chemistry does not reach them. Counted so the Methods
+# can state how many are in the denominator and at what positivity.
+.sc_ids    <- read_csv(here("results_full_v2/metadata/samplesheet_enriched.csv"),
+                       show_col_types = FALSE) %>%
+  filter(tolower(as.character(is_single_cell)) == "true") %>% pull(srr_id)
+n_sc_kept  <- sum(d1$srr_id %in% .sc_ids)
+n_sc_pos   <- sum(d1$srr_id %in% .sc_ids & d1$hpv_pos)
+pct_sc_pos <- 100 * n_sc_pos / n_sc_kept
+cat(sprintf("Full-length single-cell retained: %d, HPV+ %d (%.2f%%)\n",
+            n_sc_kept, n_sc_pos, pct_sc_pos))
 cat(sprintf("Screened libraries: %d\n", nrow(d1)))
 rates <- d1 %>% group_by(sample_class) %>%
   summarise(n=n(), pos=sum(hpv_pos), pct=round(100*mean(hpv_pos),2), .groups="drop") %>%
@@ -477,6 +490,8 @@ if (is.null(.spots)) {
 stats <- lapply(list(
   n_screened=nrow(d1), n_submitted=n_submitted, n_unscreened=n_unscreened,
   n_unscr_filtered=n_unscr_filtered, n_unscr_nodl=n_unscr_nodl,
+  n_sc_kept=n_sc_kept, n_sc_pos=n_sc_pos, pct_sc_pos=pct_sc_pos,
+  pct_all_pos=100*sum(d1$hpv_pos)/nrow(d1),
   n_targeted=.n_targeted, n_csc=.n_csc, panel_n=panel_n,
   clin_pct=.rc$pct, clin_lo=.rc$ci_lo, clin_hi=.rc$ci_hi, clin_n=.rc$n, clin_pos=.rc$pos,
   eng_pct=.re$pct,  eng_lo=.re$ci_lo,  eng_hi=.re$ci_hi,  eng_n=.re$n,  eng_pos=.re$pos,

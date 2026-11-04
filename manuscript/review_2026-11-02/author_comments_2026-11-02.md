@@ -1085,3 +1085,69 @@ the full version is not rendered.
 Main text 3,892 to 3,899 words (+7, all in the two definitions). Abstract unchanged at 200,
 and its single use of "trace" is sense B, so it needed no edit. No number, interval or
 result changes.
+
+---
+
+## Round 9: the 410 short-read libraries (draft u, 2026-11-04)
+
+TP asked to settle the oldest open point. Describing it first changed the answer twice, so
+the record of what was wrong matters as much as the fix.
+
+### What I got wrong, and the correction
+
+I first reported that droplet libraries were in or out of the cohort depending on whether
+the submitter wrote "10x" in free text, because only 15 of the 410 carried
+`is_single_cell=true`, while 94 text-flagged libraries sat in the denominator. On that
+basis TP chose to exclude droplet libraries by read geometry and drop the 94 with them.
+
+That premise was false, and checking the screened side rather than inferring from the flag
+rate would have caught it:
+
+- **Every library in the sweep with a first mate under 36 nt is among the 410.** All of
+  them. No screened library has one: across the 3,193 screened libraries whose fastp report
+  survives, the shortest first mate averages exactly 36.0 nt. The cut is mechanically
+  perfect, because a 28 nt barcode read cannot pass a 36 nt filter.
+- **The 94 are not droplet libraries.** Their mates are symmetric at 150/150 nt, which is
+  full-length plate-based single-cell, flagged on protocol words. The argument against
+  droplet chemistry, that 3-prime-biased barcoded reads cannot carry the E1:E2 ratio, does
+  not reach them.
+
+So there was no inconsistency, and a geometry rule would have matched zero screened
+libraries. Droplet exclusion was already complete and deterministic; it was only described
+as an accident.
+
+### Decision
+
+TP, 2026-11-04: keep the 94 and say why. No data change, no rerun. The supplementary
+Methods now states the exclusion as the exact property it is:
+
+- the split of the 410 into `r geom("droplet_paired")` paired and `r geom("droplet_single")`
+  single-end, correcting the previous "each of them a paired library", which was wrong for 7;
+- the geometry, median 28 nt first mate against an 89 nt second mate;
+- the sharpness check, every sub-36 nt first mate unscreened and none screened, with the
+  3,193-library comparison and the 36.0 nt minimum;
+- why droplet chemistry is the chemistry this study has least use for;
+- that full-length single-cell libraries are a different case and are retained, 94 of them,
+  2 HPV-positive (2.1%) against 2.9% across all screened libraries.
+
+### New provenance artifact
+
+`bin/build_read_geometry_summary.py` writes `manuscript/read_geometry_summary.tsv`, twelve
+key/value rows read by `geom()` in `_paths.R`, so the Methods quotes measured numbers rather
+than asserting them and does not re-read 3,600 fastp reports at render time. Cited from the
+Data Availability Statement alongside `bin/build_unscreened_table.py`.
+
+### Why re-screening was not chosen
+
+Re-screening the 410 on the second mate alone would have cost 110.2 billion reads and a
+pipeline rerun. The bound says it could not have mattered: 403 of the 410 would land in the
+clinical row, and that row moves from 2.55% to between 2.45% (all 410 negative) and 2.57%
+(at the cohort rate), against a published interval of 2.12 to 2.74. The recomputation used
+raw samplesheet flags rather than the curated cell-line overrides, hence 2.55% where the
+manuscript reports 2.41%; the span, not the midpoint, is the point.
+
+### Effect
+
+Main text unchanged at 3,899 words, abstract 200. The whole change is in the supplementary
+Methods and the Data Availability Statement, both outside the word limit. No number,
+interval or result moves.

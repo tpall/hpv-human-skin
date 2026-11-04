@@ -51,3 +51,13 @@ unscreened_ids <- function(dir = "results_full_v2/aggregated") {
   f <- list.files(here::here(dir), pattern = "_kraken2_report\\.txt$", full.names = TRUE)
   sub("_kraken2_report\\.txt$", "", basename(f[file.size(f) == 0]))
 }
+
+# Read geometry behind the droplet exclusion, written by
+# bin/build_read_geometry_summary.py. Quoted in the supplementary Methods so the
+# claim that the exclusion is exact (every sub-36 nt first mate unscreened, none
+# screened) carries its own evidence rather than an assertion.
+geom <- function(key) {
+  g <- readr::read_tsv(here::here("manuscript/read_geometry_summary.tsv"),
+                       show_col_types = FALSE)
+  g$value[g$key == key]
+}
