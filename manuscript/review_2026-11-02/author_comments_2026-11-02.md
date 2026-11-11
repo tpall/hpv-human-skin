@@ -1331,3 +1331,40 @@ wording. Draft z is the complete pass; draft y was the Abstract-only version and
 
 Note: the draft letter reached z today. From 2026-11-05 the suffix restarts at `a` each day
 (TP, 2026-11-04), since the date in the filename already disambiguates.
+
+---
+
+## Round 13: the E1:E2 premise stated at the strength the evidence supports (draft aa, 2026-11-04)
+
+TP asked whether "E1 is thought to be encoded only on polycistronic early mRNAs that also
+encode E2" needed its hedge. The sentence carried three claims of different strength, and the
+hedge sat on the wrong one.
+
+1. **E1 and E2 lie in one early transcription unit.** Solid. HPV16 early transcripts initiate
+   at P97 and are processed at the early polyadenylation site downstream of E5, so both ORFs
+   are in the primary transcript; Sankovski et al. mapped the same architecture for the
+   beta-type HPV5, which is the relevant one for this cohort.
+2. **"Only" on mRNAs that also carry E2.** Inferential. It rests on transcript maps from a few
+   types in culture; no monocistronic E1 mRNA has been found, but no one has mapped the gamma
+   types this study counts.
+3. **"Encode" claims translation, and there the exception runs the other way.** HPV16 E2 is
+   translated efficiently from exactly the species that lost E1 (the 880-donor a, a' and d
+   splices), and E8^E2C initiates at its own promoter inside E1 (nt 1140 in HPV16), giving an
+   E2-region transcript with no E1 at all.
+
+The ratio needs only claim 1, so the sentence now says claim 1 and drops the hedge:
+
+> E1 and E2 lie in the same early transcription unit [@sankovski2014; @rehm2022jvi], so their
+> counts should track one another unless integration disrupts E2.
+
+The supplementary Methods said the same thing unhedged but with the weaker noun ("the same
+early transcript", singular); it now reads "the same early transcription unit" as well, so the
+two sections state one premise in one way.
+
+Worth recording for a referee question: the known exceptions deflate the ratio rather than
+inflate it. E8^E2C and the 880-spliced E2 mRNAs contribute E2-region reads without E1, so the
+cell-line separation (AUC 0.97) is conservative.
+
+### Effect
+
+Main text 3,975 to 3,970 words. Abstract, supplement and figures unchanged.

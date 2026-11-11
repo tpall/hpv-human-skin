@@ -55,9 +55,9 @@ The two-source procedure is necessary rather than merely convenient, and the gra
 ### Integration status: E1:E2 transcript ratio and virus–host junctions
 
 Integration of a papillomavirus genome disrupts the E2 open reading frame, which
-represses E6 and E7. Because E1 and E2 are encoded on the same early transcript,
-their read counts track one another unless that disruption has occurred, so their
-ratio reports integration from the transcript classification already computed for
+represses E6 and E7. Because E1 and E2 lie in the same early transcription
+unit, their read counts track one another unless that disruption has occurred, so
+their ratio reports integration from the transcript classification already computed for
 every library. Libraries with at least 5 combined E1 and E2 reads were scored
 as log~2~((E1 + 0.5)/(E2 + 0.5)); separation between groups was quantified as the
 area under the ranked ratio and by Wilcoxon rank-sum test. A ratio is undefined
