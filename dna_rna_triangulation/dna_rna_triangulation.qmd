@@ -169,10 +169,10 @@ nv <- function(tis) round(100 * rg$prop[rg$tissue == tis & rg$genus == "Novel_an
 nlib <- function(tis) format(rg$n_lib[rg$tissue == tis][1], big.mark = ",")
 ```
 
-![**The HPV DNA reservoir across body sites recovers known genus tropism.** (A) Genus composition of the HPV+ DNA reservoir (Shen; skin n=`r nlib("Skin")`, vaginal n=`r nlib("Vaginal")`, gut n=`r nlib("Gut")` libraries), normalised within body site (a co-infected library contributes to more than one genus, so this is the composition of type detections). Skin is a β/γ commensal reservoir, the vaginal reservoir is overwhelmingly α mucosal, and the gut is a mixture of both. (B) The ten most frequent types per body site, coloured by genus.](figure_reservoir_by_tissue.png){#fig-reservoir}
+![**The HPV DNA reservoir across body sites recovers known genus tropism.** (A) Genus composition of the HPV+ DNA reservoir (Shen; skin n=`r nlib("Skin")`, vaginal n=`r nlib("Vaginal")` libraries), normalised within body site (a co-infected library contributes to more than one genus, so this is the composition of type detections). Skin is a β/γ commensal reservoir and the vaginal reservoir is overwhelmingly α mucosal. (B) The ten most frequent types per body site, coloured by genus. The gut, a collection-route control rather than a third reservoir, is in @fig-reservoir-gut.](figure_reservoir_by_tissue.png){#fig-reservoir}
 
-The three body sites give three distinct, biologically expected reservoirs
-(@fig-reservoir):
+The two sites with a niche of their own give two distinct, biologically expected
+reservoirs (@fig-reservoir):
 
 - **Skin** is a Betapapillomavirus/Gammapapillomavirus commensal reservoir
   (β `r gp("Skin","Beta")`%, γ `r gp("Skin","Gamma")`% of detections, α only
@@ -181,17 +181,27 @@ The three body sites give three distinct, biologically expected reservoirs
   β `r gp("Vaginal","Beta")`%, γ `r gp("Vaginal","Gamma")`%); its top types are the
   classic mucosal set (HPV91, 51, 66, 67, 16, 90), mixing high- and low-risk α. This
   is the textbook mucosal niche, recovered here purely from DNA metagenome assembly.
-- **Gut** is a **mixture**: α `r gp("Gut","Alpha")`%, β `r gp("Gut","Beta")`%,
-  γ `r gp("Gut","Gamma")`%. Its top types interleave mucosal α (HPV16, HPV6, HPV56)
-  with cutaneous β skin types (HPV24, HPV124), exactly the signature of stool/gut
-  metagenomes picking up both mucosal shedding and **perianal-skin commensal β-HPV**,
-  the same collection-route contamination independently seen in rectal-swab gut
-  metagenomes (the eluring aging cohort).
 
 The novel-cluster fraction tracks how well each niche is catalogued: **`r nv("Skin")`%**
-of skin libraries and **`r nv("Gut")`%** of gut libraries carry an unclassified PV
-cluster, versus only **`r nv("Vaginal")`%** of vaginal libraries: the mucosal α types
-are exhaustively described, while the cutaneous β/γ reservoir is not.
+of skin libraries carry an unclassified PV cluster, versus only **`r nv("Vaginal")`%**
+of vaginal libraries: the mucosal α types are exhaustively described, while the
+cutaneous β/γ reservoir is not.
+
+The same tabulation for the **gut** is kept separate, and out of the main comparison,
+because it does not describe a gut niche (@fig-reservoir-gut). Gut libraries are a
+**mixture**: α `r gp("Gut","Alpha")`%, β `r gp("Gut","Beta")`%, γ `r gp("Gut","Gamma")`%,
+and their top types interleave mucosal α (HPV16, HPV6, HPV56) with cutaneous β skin
+types (HPV24, HPV124), exactly the signature of stool/gut metagenomes picking up both
+mucosal shedding and **perianal-skin commensal β-HPV**: collection-route carry-over,
+independently seen in rectal-swab gut metagenomes (the eluring aging cohort). Read that
+way it is a useful control, since it shows the assembly recovers the genus of whatever
+skin the sampling route touches, but it is not evidence of a third reservoir, so it
+belongs in the supplement. Its novel fraction (**`r nv("Gut")`%**) sits with skin's, as
+expected if its β/γ content is skin in origin.
+
+![**The gut DNA reservoir is a collection-route mixture, not a niche.** The three-site
+version of @fig-reservoir, with the gut (n=`r nlib("Gut")` libraries) included. Panels
+and colours as in @fig-reservoir.](figure_reservoir_by_tissue_all_sites.png){#fig-reservoir-gut}
 
 That the reservoir cleanly reconstructs the vaginal-α / skin-β/γ tropism from DNA alone
 validates the composition read-out used in Results 1–2: the skin reservoir's β/γ
