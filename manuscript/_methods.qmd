@@ -44,7 +44,7 @@ Because lesional libraries may simply be sequenced more deeply than unselected s
 
 ### Metadata corrections
 
-Because these rules read free-text metadata, they mis-file studies whose submitted fields are absent or misleading. Three such cases were found by inspecting every library that reached the detection floor, and corrected through an override table (`assets/tier_overrides.csv`) recording the accession, the corrected field and the evidence for each row. (i) A 10-library cohort of epidermodysplasia verruciformis skin biopsies [@saeidian2023] carries only `tissue=Skin`, so the diagnosis vocabulary never sees "verruciformis"; these were moved to `EV`, which otherwise held only immortalized EV *culture* models (retained under `cell_line`). (ii) Six libraries of HPV31-positive HaCaT (HaCaT31) cells expose only a knockdown label and `skin`, so no cell-line pattern can fire; the cell-line flag was set. (iii) One primary cutaneous wart carried a submitter sample label in the SRA `cell_line` attribute; the flag was cleared, returning it to `control_productive`. Together these corrections move 16 of the 11,282 libraries carrying an RPM measurement. Running the pipeline with the override table disabled reproduces the uncorrected assignment exactly, and both outputs are retained. The same `is_cell_line` corrections are applied to the positivity model, so cell-line status is defined identically wherever it is used.
+Because these rules read free-text metadata, they mis-file studies whose submitted fields are absent or misleading. Three such cases were found by inspecting every library that reached the detection floor, and corrected through an override table (`assets/tier_overrides.csv`) recording the accession, the corrected field and the evidence for each row. (i) A 10-library cohort of epidermodysplasia verruciformis skin biopsies [@saeidian2023] carries only `tissue=Skin`, so the diagnosis vocabulary never sees "verruciformis"; these were moved to `EV`, which otherwise held only immortalized EV *culture* models (retained under `cell_line`). (ii) Six libraries of HPV31-positive HaCaT (HaCaT31) cells expose only a knockdown label and `skin`, so no cell-line pattern can match; the cell-line flag was set. (iii) One primary cutaneous wart carried a submitter sample label in the SRA `cell_line` attribute; the flag was cleared, returning it to `control_productive`. Together these corrections move 16 of the 11,282 libraries carrying an RPM measurement. Running the pipeline with the override table disabled reproduces the uncorrected assignment exactly, and both outputs are retained. The same `is_cell_line` corrections are applied to the positivity model, so cell-line status is defined identically wherever it is used.
 
 ### Libraries excluded from the burden analysis
 
@@ -56,27 +56,22 @@ The two analyses are therefore fitted on different populations with different cl
 
 A control-calibrated detection floor was defined as the 5th-percentile RPM of non-cell-line productive controls (warts/condyloma); libraries below it were considered "not detected at control level". To separate group differences from depth, the fraction of libraries at or above the floor was also computed within matched total-read bins (<5M, 5–10M, 10–20M, 20–40M, >40M). The same per-sample table yielded the HPV-type × sample-group catalog. Logistic-regression models (positivity by sample class; productive-level detection by sample group with a log~10~ sequencing-depth covariate) and Fisher exact tests were fitted in R.
 
-As a robustness check, the positivity, depth-controlled detection and productivity models were refitted as Bayesian logistic regressions in rstanarm [@rstanarm], with four Markov chains of 2,000 iterations (convergence confirmed by $\hat{R} \le 1.004$ with no divergent transitions) and weakly informative priors, Normal(0, 2.5) on the log-odds coefficients and Normal(0, 5) on the intercept. Effects are summarized by the posterior median odds ratio, its 95% credible interval, and the posterior probability of a positive effect; the near-separated productive-controls-versus-skin contrast was also checked under a heavier-tailed Student-*t*(3) prior (@supptbl-bayes).
+As a robustness check, the positivity, depth-controlled detection and productivity models were refitted as Bayesian logistic regressions in rstanarm [@rstanarm], with four Markov chains of 2,000 iterations (all R-hat ≤ 1.004, no divergent transitions) and weakly informative priors, Normal(0, 2.5) on the log-odds coefficients and Normal(0, 5) on the intercept. Effects are summarized by the posterior median odds ratio, its 95% credible interval, and the posterior probability of a positive effect; the near-separated productive-controls-versus-skin contrast was also checked under a heavier-tailed Student-*t*(3) prior (@supptbl-bayes).
 
 ### Library-selection chemistry
 
-Sequencing depth bounds what a viral-transcript survey can detect, and RNA-selection chemistry bounds it in a second, independent way: poly-A capture recovers polyadenylated early transcripts efficiently but is inefficient for the rest of the viral pool, so two libraries of equal depth need not have equal power to detect HPV. Chemistry was therefore looked up for every library in the burden analysis and entered alongside depth. SRA RunInfo `LibrarySelection` was fetched for the exact accession set already analyzed, with no fresh search, so the cohort is unchanged (`bin/fetch_library_selection.py`). That field is authoritative where it carries a specific value ("PolyA", "Oligo-dT", "Inverse rRNA", "RANDOM") but is the generic "cDNA" for `r pp(stats$chem_cdna_pct)`% of libraries, so the free-text `LIBRARY_CONSTRUCTION_PROTOCOL` and `DESIGN_DESCRIPTION` records were fetched in a second pass and matched against curated poly-A and rRNA-depletion phrase sets (`bin/classify_library_chemistry.py`). Libraries whose text supports both calls, or neither, are held at `unspecified` rather than assigned, and the amplification chemistries that are neither selection (3'-barcoded droplet libraries, SMART template-switching) are kept as their own levels rather than pooled with poly-A capture. This resolved chemistry for `r comma(stats$chem_n)` of `r comma(stats$chem_total)` libraries (`r pp(stats$chem_pct)`%).
-
-The two-source procedure is necessary rather than merely convenient, and the graded cervical validation series is the demonstration: every one of its libraries is filed in SRA as `LibrarySelection = cDNA`, while its construction protocol reads "Ribosomal RNA was deleted". Run as a blind test, the classifier recovers rRNA depletion for 15/15 of them from protocol text alone, which is also the independent confirmation that the series is rRNA-depleted rather than poly-A-selected.
+Chemistry was recovered for every library in the burden analysis. SRA RunInfo `LibrarySelection` was downloaded for the accession set already analyzed (`bin/fetch_library_selection.py`), and is the generic "cDNA" for `r pp(stats$chem_cdna_pct)`% of libraries: every library of the graded cervical series is labeled "cDNA" while its construction protocol reads "Ribosomal RNA was deleted". The free-text `LIBRARY_CONSTRUCTION_PROTOCOL` and `DESIGN_DESCRIPTION` records were therefore fetched in a second pass and matched against curated poly-A and rRNA-depletion phrase sets (`bin/classify_library_chemistry.py`). Libraries whose text supported both calls, or neither, were labeled "unspecified". Neither 3'-barcoded droplet libraries nor SMART template-switching is a selection chemistry, and both were coded as separate levels. This resolved chemistry for `r comma(stats$chem_n)` of `r comma(stats$chem_total)` libraries (`r pp(stats$chem_pct)`%).
 
 ### Integration status: E1:E2 transcript ratio and virus–host junctions
 
-Integration of a papillomavirus genome disrupts the E2 open reading frame, which
-represses E6 and E7. Because E1 and E2 lie in the same early transcription unit,
-their read counts track one another unless that disruption has occurred. Libraries
-with at least 5 combined E1 and E2 reads were therefore scored as
+Libraries with at least 5 combined E1 and E2 reads were scored as
 log~2~((E1 + 0.5)/(E2 + 0.5)) from the transcript classification already computed
 for every library, and separation between groups was quantified as the area under
 the ranked ratio and by Wilcoxon rank-sum test. The ratio is undefined once the
 early region is lost apart from E6 and E7, so those libraries were called by a
 second criterion: at least 5 combined E6 and E7 reads, fewer than 5 combined E1
 and E2 reads, and no more than 5% of viral reads assigned to L1 or L2. A library
-was called integration-like if either criterion fired, and the two are reported
+was called integration-like if either criterion was met, and the two are reported
 separately.
 
 The ratio was validated against chimeric virus-host junctions in a subset of
@@ -86,18 +81,18 @@ chimeric detection enabled (`--chimSegmentMin 20`, `--chimJunctionOverhangMin 15
 and a junction was retained when one side fell on an HPV contig and the other on a
 human chromosome. Integration was scored by junction **clustering**, the fraction
 of a library's junctions falling at its single most-supported coordinate pair,
-rather than by junction count, which scales with viral depth and is largest in
-episomal libraries. Observed values were bimodal with an empty interval between
+rather than by junction count, which scales with viral depth. Observed values were bimodal with an empty interval between
 `r stats$jx_epi_range` and `r stats$jx_int_range`, and a threshold of 0.2 was
 placed within it. Integration was called in a library carrying as few as
 `r comma(stats$jx_pos_minreads)` HPV reads, which bounds the viral depth at which
 a negative call is informative.
 
 The ratio was validated externally on a graded cervical series (BioProject
-PRJNA612785, study SRP252916): HPV-negative normal cervical epithelium,
-HPV16-positive normal epithelium, HPV16-positive high-grade squamous
-intraepithelial lesion and HPV16-positive squamous carcinoma, six cases per arm,
-all paired-end and rRNA-depleted. These libraries were typed and scored with the
+PRJNA612785, study SRP252916): HPV-negative normal epithelium, and
+HPV16-positive normal epithelium, high-grade squamous intraepithelial lesion and
+squamous carcinoma, six cases per arm by design, all paired-end and rRNA-depleted.
+Of the HPV16-positive arms, `r stats$cxg_norm_n`, `r stats$cxg_hsil_n` and `r stats$cxg_scc_n` libraries
+carried enough viral gene reads to be scored (@fig-integration c). These libraries were typed and scored with the
 same pipeline, criteria and thresholds as the skin cohort, with the study's own
 design arms supplied in place of the group assignment
 (`bin/e1e2_integration_marker.R --groups`), so the marker was evaluated against

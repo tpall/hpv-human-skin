@@ -161,3 +161,53 @@ biopsies RNA-seq is run on." "Hair bulbs" became "plucked hairs", which is what 
 collected.
 
 Main text 4,062 to 4,061 rendered words. Abstract, Methods and supplement unchanged. No result moves.
+
+## Round d: external review of draft c (hpv_review_2026-11-25c.zip)
+
+Applied on TP's instruction; tracked copy `hpv_manuscript_2026-11-25d_jid_tracked.docx`
+(draft c as the base, 10 paragraphs, all revisions under TP's name).
+
+- **Abstract.** "We reanalyzed 10,834" is now "over 10,000": the burden rates run on 10,834 and
+  the four-fold odds and 2-3% on Table 1's 10,295, and the two sets are not nested. The reviewer's
+  own two-count sentence would have put the Abstract at 207. "genuine" dropped to hold 200.
+- **Introduction and Discussion, the 87-word set**, taken whole: the TP53/NOTCH example and the
+  Son mechanism sentence leave the Introduction (both stand in the Discussion), the limitation list
+  stops making one point twice, and seven wording cuts.
+- **Introduction P3 repair.** The reviewer's merged sentence read "four of the five examined
+  lesions without a comparison group"; it is now "Across these studies, ... four of the five had
+  no comparison group of unselected skin, so ...".
+- **Not taken:** the 33-word risk-label cut in Discussion P2 (TP's own point from round 11).
+
+| | draft c | draft d |
+|---|---:|---:|
+| Abstract | 200 | 200 |
+| Introduction | 690 | 624 |
+| Discussion | 1,207 | 1,187 |
+| **Main text** | **4,061** | **3,975** |
+
+Still open: "four of the five" sits in a paragraph that cites six studies.
+
+## Round d, continued: two reviewer notes (pre_supplement_fixes.md, supplement_cut_chemistry_integration.md)
+
+Same draft d, same tracked copy (19 paragraphs). Also in this draft, on TP's instruction: the
+Methods approvals sentence cut to "This work required no ethics committee review or participant
+consent (see Ethics Statement)." (-17 words).
+
+- **Depth claim (Methods).** "Sequencing depth entered every model" was false: M1 has no depth
+  term and M3 is a Fisher test. Now "was modeled ... in the detection models".
+- **Abstract**, held at 200: "controlling for cell-line origin, depth, and chemistry" is now
+  "modeling detection against depth and chemistry"; the four-fold odds briefly carried "n = 10,295", withdrawn by TP as unnecessary once the opening says "over 10,000";
+  "and did not differ" is now "; the two did not differ"; "instead", "only"
+  and "therefore" stay.
+- **Supplementary Methods, chemistry and integration subsections**, reviewer's text taken with two
+  departures: the sentence no longer opens on a numeral ("Neither 3'-barcoded droplet libraries nor
+  SMART template-switching ..."), and the 3, 6 and 6 are described as libraries with enough viral
+  gene reads to be scored, which is what `bin/e1e2_integration_marker.R` filters on (viral >= 5),
+  not E1 and E2 reads as the reviewer wrote.
+- **The 15/15 "blind test" sentence is deleted.** The reviewer is right that it is circular:
+  `RIBO_PAT` opens with the literal protocol string of that series.
+- **R-hat.** The clause was not broken in the source; it was a math object that text extraction
+  drops. Written as plain text now so it survives conversion.
+- "can fire" and "criterion fired" replaced.
+- **Not done:** the depth-adjusted M1 sensitivity refit on the 9,862 intersection (offered by the
+  reviewer, needs TP's call), and the near-separation clause (reviewer's own lowest priority).
