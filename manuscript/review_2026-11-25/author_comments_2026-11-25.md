@@ -211,3 +211,28 @@ consent (see Ethics Statement)." (-17 words).
 - "can fire" and "criterion fired" replaced.
 - **Not done:** the depth-adjusted M1 sensitivity refit on the 9,862 intersection (offered by the
   reviewer, needs TP's call), and the near-separation clause (reviewer's own lowest priority).
+
+## Round d, continued: Discussion cut for length (TP's decision, 2026-11-25)
+
+Discussion 1,187 to 955 words; main text 3,961 to 3,729. Tracked in the same copy.
+
+- **The contamination paragraph is deleted** ("Unadjusted analyses are distorted by
+  contamination..."). The HeLa point stands in the Introduction and the enrichment in the Results.
+- P2: the sentence repeating that the data cannot separate the models is cut, and the
+  "absence does not imply clearance" caveat is reduced to one clause leading into the risk-label
+  sentence, which stays (it needed that antecedent).
+- P3: the nine-valent vaccine sentence is cut.
+- P4: the species sentence and the novelty sentence are merged into one clause; the species
+  numbers (Betapapillomavirus 1, 5, 2) leave the Discussion.
+- P5: the eyebrow-hair concordance clause is cut.
+- P9: the single-cell closing sentence is cut.
+
+Seven references leave the list with these cuts: Wenande 2025, Oh 2026, Devitt 2019, Selitsky
+2020, Asplund 2019, Gihawi 2023, Cantalupo 2019.
+
+## Round d, continued: contamination is a control, not a finding (TP, 2026-11-25)
+
+TP: cell-line contamination is known in the field and not novel, so it is not argued in depth.
+The first Results heading is now "Cohort and HPV positivity by sample origin", and its two
+closing commentary sentences ("This is the signature of ..." and "Much of the apparent HPV
+signal ...") are cut. Results 1,650 to 1,614; main text 3,729 to 3,693.
