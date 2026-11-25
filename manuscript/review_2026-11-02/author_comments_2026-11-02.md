@@ -1368,3 +1368,182 @@ cell-line separation (AUC 0.97) is conservative.
 ### Effect
 
 Main text 3,975 to 3,970 words. Abstract, supplement and figures unchanged.
+
+---
+
+## Round 14: the supplementary Methods cut down, and the supplement titles made ordinary (draft 2026-11-11a)
+
+Eight comments on draft aa, saved as `hpv_manuscript_2026-11-04aa_TP.docx` before the render.
+
+| # | Anchor | Comment | Action |
+|---|---|---|---|
+| 83 | "Read download and quality control" | Too long, keep only relevant methods text, no detours and dead ends, remove slang, shorten radically, do not keep results that are in the main text. | Done. One 567-word paragraph became four, 388 words in total. |
+| 89 | "Cohort framing and depth-normalized burden analysis" | Way too long. | Done. One 500-word paragraph became three subsections, longest paragraph now 185 words. |
+| 98, 106, 115, 118, 120, 123 | six supplement headings | Descriptive titles. | Done, and the three the comments did not mark were changed too, so the set is consistent. |
+
+### What came out of "Read download and quality control"
+
+Dropped: the paired against single-end split of the 410 droplet libraries; the second argument
+for excluding them (3-prime-biased barcoded reads cannot give even early-region coverage, and
+their composition describes cells rather than libraries); the 851 never-downloaded libraries
+spread "across 85 of the 122 batches at 10 to 22 per batch of 100"; the note that the per-sample
+status table records them as zero-read negatives; and the count of HPV-positive full-length
+single-cell libraries, whose percentage is kept. Every other number, condition and hedge is
+still there, including the exactness claim and its scope ("over the 3,193 with a surviving
+fastp report").
+
+Slang and self-commentary removed: "fail-soft retry-then-ignore policy", "the informative second
+mate goes with it", "the chemistry this study has least use for", "the signature of per-accession
+download failures", "This matters more than it may appear", "The exclusion is exact rather than
+incidental".
+
+### A mislabelled population, exposed by the restructuring
+
+The completeness check read "across the `r comma(stats$spot_n)` screened libraries", but
+`spot_n` is computed on `rp`, the RPM table, so it is the 10,834 libraries of the burden
+analysis, not the 10,295 screened. In one 567-word paragraph the two numbers sat 200 words
+apart; in four paragraphs they ended up adjacent and disagreed. Now "In the 10,834 libraries of
+the burden analysis". **Open:** the 10,834 in the exclusions paragraph is still a hardcoded
+literal and would not follow a rerun.
+
+### What "Cohort framing and depth-normalized burden analysis" became
+
+Four subsections instead of one heading: "Sample groups and depth-normalized burden",
+"Metadata corrections", "Libraries excluded from the burden analysis" and "Statistical
+analysis". The models and the Bayesian robustness check now sit under a heading a reader can
+find them by, as in the eluring microbiome manuscript. Cut: the duplicate sentence that the
+burden analysis "pooled the lesion cohorts against the prevalence-sweep null and used the
+curated cell-line flags", and the prior commentary "applied directly to the log-odds scale
+rather than as flat or improper defaults". The override-disabled reproducibility sentence moved
+up to the overrides paragraph it belongs with.
+
+### Titles
+
+| Was | Now |
+|---|---|
+| What the gene-level split shows | Gene-level composition of the sub-threshold trace |
+| What the vaginal and gut sites establish | Vaginal and gut metagenomes as positive controls |
+| What the assigned-type catalog shows | HPV type distribution across sample groups |
+| Why the mucosal HPV16 cases are retained | Mucosal HPV16 cases in the neoplasia group |
+| Library chemistry does not manufacture the productivity contrast | Library-selection chemistry as an alternative explanation |
+| What the detection level adds | Type composition below the assignment threshold |
+| How far the co-infection table can be read | Limitations of the co-infection calls |
+| Above-floor HPV in tissue that cannot host it: two contaminated studies | Cross-contamination in two studies of non-permissive tissue |
+| Why the E2 statistic cannot read genome state | Limits of E2 integrity as a marker of genome state |
+
+Noun phrases, as in the eluring supplementary notes ("Genus composition", "Carrier taxonomy of
+the SCFA transferases", "Which depth measure each analysis needs"). The `{#sec-s-crosstalk}`
+label was kept; nothing cross-references it.
+
+### Stylistic issues carried over from the eluring microbiome review
+
+TP's own comments there (44, 45, 47, 54, 55, 60 on the 2026-11-04 tracked draft) and KH's 49
+("is this style your own? it runs through the Results and the Discussion") name one habit: terse
+announcement sentences and reader instructions in place of statements. The same habit was here,
+and three instances are gone.
+
+- "Three cautions govern how far @supptbl-coinf can be read." Deleted; the First/Second/Third
+  that followed carry the structure, and the heading now says it is a limitations section.
+- "Two consequences follow for how the any-HPV signal should be read." Deleted, same reason.
+- "That convergence is not a biological result." Folded into the sentence that explains why:
+  "That convergence is an artifact: an integrated genome cannot assemble across the virus-host
+  junction".
+- "@suppfig-reservoir-gut is the positive control for the composition read-out" opened a
+  paragraph by repeating its own caption and its own heading. Now "Applying the same procedure
+  to vaginal libraries recovers...".
+- "This is also the shape of the signal in @suppfig-types" and "So the gut is a useful control
+  too" rewritten as plain statements.
+
+Not carried over: KH's objection to "credible" as Bayesian wording. The same answer applies
+here as there, that the tables, the figure and the Methods use it throughout, so changing it in
+one place would make the sections disagree.
+
+### Effect
+
+Main text 3,970 words, unchanged: every cut was in the supplement, which is outside JID's
+limit. Abstract 200. Supplementary Methods prose 3,814 to 3,505 words and supplement prose
+3,184 to 3,118, counting body paragraphs only, not headings, captions or table chunks. The
+longest paragraph anywhere in the document is now 256 words, in the Introduction,
+so no supplementary paragraph is longer than the main text's longest, which was the point of
+TP's "match supp materials writing style to main text".
+
+Figure S3's legend came down from 127 words to under 125 in the same pass, which clears JID's
+legend limit; it was the only one over.
+
+---
+
+## Round 15: the screened/analyzed conflation, traced back and closed (draft 2026-11-11b)
+
+TP: "this has come up earlier, check review convos." It has, four times, and my round-14 note
+treated it as a new finding. The record:
+
+| Round | Where it surfaced | What was done |
+|---|---|---|
+| draft l to m | TP asked what caused the gap between Table 1's clinical count and the 10,834 of the burden analysis | Found the real defect: 1,261 never-screened libraries were being counted as HPV-negative. Established that the two populations are not nested and that the near-match of 10,913 and 10,834 is a coincidence. |
+| R3-2 (external pack) | Figure 2's legend | Fixed: it "called the burden cohort *screened* where the paper uses that word for the sweep". Exactly the error found again in round 14. |
+| draft m to n | the HPV8 reservoir sentence | Fixed a mismatched pair of denominators that read as a rate comparison: 10,834 against a skin denominator of 7,800 established three sentences earlier. |
+| draft n to o, comment 82 | TP: "maybe a box chart can visualize better how we came up with different numbers" | Figure S6 added, for this confusion specifically. |
+| round 14 | the completeness check in supplementary Methods | Fixed, but reported as new. |
+
+So the word "screened" has been misapplied to the burden cohort three separate times, and each
+time it was fixed where it was found. This round audited every occurrence instead.
+
+### The audit, and what it turned up in the Abstract
+
+Every use of "screen" in the six prose files was checked against the population its number is
+computed on. Two were wrong, and one of them is not a label problem.
+
+**The Abstract was quoting the positivity denominator as the whole study.** It opened "We
+reanalyzed `r comma(stats$n_screened)` public human RNA sequencing libraries", which is 10,295,
+the untargeted sweep alone. Measured directly against `hpv_rpm_per_sample.tsv` and
+`hpv_status.tsv`:
+
+| group | in the sweep's 10,295 | outside it |
+|---|---|---|
+| control_productive (warts, condyloma) | 0 | 44 |
+| EV | 0 | 10 |
+| neoplasia (cSCC, AK) | 92 | 314 |
+| unselected_skin | 7,669 | 131 |
+
+Every wart, every condyloma and every EV biopsy in the paper is outside the number the Abstract
+gave as the size of the study, and the Abstract's next two sentences report results from exactly
+those libraries. Now `r comma(stats$n_burden)`, the burden cohort (10,834), which is also the
+figure the Discussion already uses: "from all 10,834 we analyzed". Same word count, so the
+Abstract holds at 200.
+
+**"every Kraken2-screened library ... was scored as RPM"** described the burden population with
+the word reserved for the sweep. Now "every library that returned a Kraken2 report".
+
+The other seven uses are correct: all are tied to `stats$n_screened` and all are scoped to
+Table 1's denominator or to the libraries that returned a report.
+
+### Two new live stats, so the next sentence cannot get it wrong
+
+`results_models.R` now exports `n_burden` (10,834), `n_both` (9,862) and `n_either` (11,267)
+alongside `n_screened` (10,295), with a comment at the definition stating that the two
+populations are not nested and that a sentence about the whole study must not quote
+`n_screened`. "The analyzed cohort is 10,834 libraries" was a hardcoded literal and is now
+`r comma(stats$n_burden)`, with the overlap stated: "of which `r comma(stats$n_both)` are also
+among the libraries screened in the sweep".
+
+Re-running `results_models.R` changed no other value: a paragraph-level diff of the rendered
+draft a against draft b shows exactly three changed paragraphs, the Abstract and the two
+Methods sentences.
+
+### Remaining hardcoded literals in the prose
+
+A sweep for thousands-separated numerals across the six prose files returns four, and only one
+carries drift risk:
+
+- `_methods.qmd`, "16 of the 11,282 libraries carrying an RPM measurement". 11,282 is the RPM
+  table **before** the 448 exclusions, and `hpv_rpm_per_sample.tsv` is written post-exclusion
+  with 10,834 rows, so the number is not recoverable from any file `results_models.R` reads. It
+  would have to come from `bin/hpv_rpm_contrast.R`. The label is correct, but the value, and
+  the 16 beside it, would not follow a rerun. Same for the 433 and 15 in the exclusions
+  paragraph.
+- The other three are not counts: 2,000 MCMC iterations, and 18,558 and 4,100 in the
+  co-infection text, which are depths and a ratio bound.
+
+### Effect
+
+Abstract 200 words, main text 3,970, both unchanged. No figure changes.

@@ -489,6 +489,12 @@ if (is.null(.spots)) {
 
 stats <- lapply(list(
   n_screened=nrow(d1), n_submitted=n_submitted, n_unscreened=n_unscreened,
+  ## n_screened is the sweep alone (Table 1's denominator). n_burden is the burden
+  ## cohort, which adds the targeted lesion libraries: every wart, condyloma and EV
+  ## library is in n_burden and in none of n_screened. The two are not nested, so a
+  ## sentence about the whole study must not quote n_screened (reviews: R3-2, round m).
+  n_burden=nrow(rp), n_either=length(union(rp$srr_id, d1$srr_id)),
+  n_both=sum(rp$srr_id %in% d1$srr_id),
   n_unscr_filtered=n_unscr_filtered, n_unscr_nodl=n_unscr_nodl,
   n_sc_kept=n_sc_kept, n_sc_pos=n_sc_pos, pct_sc_pos=pct_sc_pos,
   pct_all_pos=100*sum(d1$hpv_pos)/nrow(d1),
