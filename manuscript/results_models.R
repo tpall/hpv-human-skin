@@ -421,6 +421,12 @@ if (is.null(.spots)) {
                   error=function(e) NULL)
 .ob <- function(tr, g) if (is.null(.orfb)) NA_real_ else
   .orfb$pct[.orfb$tier==tr & .orfb$gene==g]
+## `pct` above is a Beta-Binomial posterior mean, so it is not k/n: EV L1 is
+## 10/10 but 95.5%. The prose quotes k and n, the figure the posterior mean.
+.obk <- function(tr, g) if (is.null(.orfb)) NA_integer_ else
+  as.integer(.orfb$k[.orfb$tier==tr & .orfb$gene==g])
+.obn <- function(tr, g) if (is.null(.orfb)) NA_integer_ else
+  as.integer(.orfb$n[.orfb$tier==tr & .orfb$gene==g])
 .ocgrp <- function(tr, gs) if (is.null(.orfc)) NA_real_ else
   100*sum(.orfc$share[.orfc$tier==tr & .orfc$gene %in% gs])
 .ocn <- function(tr) if (is.null(.orfc)) NA_integer_ else
@@ -578,6 +584,8 @@ stats <- lapply(list(
   # ORF programme (figure 4)
   orf_n=.orfn,
   orf_ctrl_l1=.ob("control_productive","L1"), orf_ctrl_e2=.ob("control_productive","E2"),
+  orf_ctrl_l1_k=.obk("control_productive","L1"), orf_ctrl_l1_n=.obn("control_productive","L1"),
+  orf_ev_l1_k=.obk("EV","L1"), orf_ev_l1_n=.obn("EV","L1"),
   orf_ev_l1=.ob("EV","L1"), orf_neo_l1=.ob("neoplasia","L1"), orf_neo_e7=.ob("neoplasia","E7"),
   orf_skin_l1=.ob("unselected_skin","L1"), orf_skin_e6=.ob("unselected_skin","E6"),
   orf_cl_e6=.ob("cell_line","E6"), orf_cl_e7=.ob("cell_line","E7"),
