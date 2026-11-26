@@ -271,3 +271,8 @@ area of illumination (SRP413119, SRP413116); 23 pair a 26 to 28 nt barcode read 
 the droplet single-cell layout; 14 are 35 nt single-end libraries. The supplement gives the three
 classes. Tissue categories in both Supplementary Data tables are now in English (skin, anogenital,
 oral, other) in place of the pipeline's Estonian strings.
+
+TP, on draft e: "a library with any papillomavirus read is any-HPV" read as circular. any-HPV is a
+defined label, so the sentence now introduces it as one: "Results counted at the level of a single
+papillomavirus read, whether or not the library reaches the 10-read positivity threshold, are
+termed any-HPV." Results 1,616 to 1,622; main text 3,694.
