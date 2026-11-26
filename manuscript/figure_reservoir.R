@@ -172,10 +172,10 @@ make_fig5 <- function() {
     # room for them stretched the axis line into a bare stub over the top bar;
     # with clip = "off" they draw in the top margin instead and the axis stops
     # where the data does.
-    annotate("text", x = colx, y = nrow_d + 0.95, size = 2.5, colour = "grey25",
+    annotate("text", x = colx, y = nrow_d + 0.95, size = 3.1, colour = "grey25",
              fontface = "bold", label = c("assigned", "detection")) +
-    annotate("text", x = mean(colx), y = nrow_d + 1.75, size = 2.6, colour = "grey25",
-             label = "RNA detections in unselected skin") +
+    annotate("text", x = mean(colx), y = nrow_d + 1.85, size = 3.3, colour = "grey25",
+             label = "RNA calls in unselected skin") +
     scale_fill_manual(values = gcol, name = "Genus", limits = gen_present, drop = FALSE) +
     # Breaks stop where the bars stop. The tile strip lives further right on the
     # same axis, and ticks running under it would invite reading the cells off
@@ -210,8 +210,10 @@ make_fig5 <- function() {
     scale_colour_manual(values = gcol, name = "Genus", limits = gen_present, drop = FALSE) +
     scale_x_continuous(breaks = lval, labels = lbrk) +
     scale_y_continuous(breaks = lval, labels = lbrk) +
-    labs(x = "Skin DNA libraries carrying the type",
-         y = "Productive RNA libraries (warts and EV)") +
+    # The ticks are back-transformed counts on a log(n + 1) axis; say so on the
+    # axis, where a reader looks, and not only in the legend.
+    labs(x = expression("Skin DNA libraries carrying the type, " * log[10](italic(n) + 1)),
+         y = expression(atop("Productive RNA libraries", "(warts and EV), " * log[10](italic(n) + 1)))) +
     # Same top margin as panel A, whose margin holds the column headers, so the
     # two plotting regions start at the same height instead of stepping.
     theme(plot.margin = margin(t = 30, r = 6, b = 6, l = 6))

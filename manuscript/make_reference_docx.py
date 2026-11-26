@@ -5,7 +5,7 @@
 Running this script overwrites it with the older 12 pt style below.
 
 Generate reference.docx — the Word style template Quarto/Pandoc copies into
-the manuscript's .docx output (wired via `reference-doc:` in manuscript.qmd).
+the manuscript's .docx output (wired via `reference-doc:` in manuscript_short.qmd).
 
 Encodes a journal-standard manuscript spec:
   - Times New Roman, 12 pt body text

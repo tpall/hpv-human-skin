@@ -287,3 +287,72 @@ given for a second cut-off. The paragraph now opens on the reason (a read-count 
 crossed at a lower viral load by a deeper library, so groups sequenced at different depths need a
 depth-normalized measure), then gives the floor, trace and any-HPV in that order.
 Results 1,657; main text 3,729.
+
+TP, on draft e: "below-floor libraries" did not say which threshold. The 230 are HPV-positive
+libraries under the 13.2 RPM floor (`trace_decomposition/decompose_trace.py`), that is, the trace
+libraries as defined. All five uses (Results twice plus the lead-in, Discussion, supplement) now
+say "trace libraries", with "(HPV-positive but below the floor)" at the count.
+
+TP, on draft e: the "at least 20 viral reads" in the Figure 3 legend is a third read threshold with
+no reason given. It is a minimum denominator for a proportion, not a detection threshold
+(`MIN_COMP` in `figure_orf.R`: with one or two reads a single read would make a library 100% one
+gene). The legend now says "so that no single read decides a library's shares". The supplement
+heading "Gene-level composition of the sub-threshold trace" loses "sub-threshold", which
+contradicted the definition of trace.
+
+TP, edited in the tracked copy: the Figure 3 legend's conditioning sentence moves to the end and
+loses "so none is a prevalence statement": "All panels are conditional on HPV positivity and
+successful typing; group n is shown on each panel."
+
+TP, edited and commented in the tracked copy (saved 2026-11-26 10:51), ported to the sources:
+- "grouped here by the search that retrieved them," deleted from the typed-sample sentence.
+- "the types detected" is now "the HPV types detected".
+- Figure 4 legend: the sentence "Rows show the assigned-type catalog ... first two rows." deleted.
+- Comment kept in the tracked copy, on "The positivity threshold is a read count, so a deeply
+  sequenced library crosses it at a lower viral load than a shallow one.": could it be deleted if
+  the word count needs reducing? (It could: the next sentence carries the reason; 23 words.)
+
+Figure 5 rebuilt on TP's notes: panel a headers enlarged (and shortened to "RNA calls in unselected
+skin" so they fit), panel b axes now say "(n, log scale)".
+
+TP, in the tracked copy (saved 11:10): the clause "so that no single read decides a library's
+shares" removed from the Figure 3 legend again; ported. Figure 5 panel b axes now read
+"..., log10(n + 1)" on TP's wording, matching the legend.
+
+TP: Discussion P1's long sentence rewritten in two (TP offered three drafts; the applied text
+follows the third). "Lacked controls" was not true of the prior studies, which had cervical or
+cell-line positive controls or normal skin; the claim is now "lacked productive cutaneous controls,
+an unselected-skin denominator and a defined metric". One verb for thresholds throughout: a library
+"reaches" the floor or the positivity threshold ("crosses" in the Results and "exceeded" in the
+Abstract changed to match; the criteria are at-or-above).
+
+TP: Discussion P1 second sentence now opens "Here, across ...". Discussion P2 opened "This result
+does not settle the mechanism", with no mechanism named; it now says what is left open: "does not
+discriminate among the three models of beta-HPV in skin cancer, because each predicts ...".
+
+TP: Discussion P2's per-model sentence ("Hit-and-run predicts it because ...; protective immunity
+because ...; cis-restriction because ...") is folded into its opening sentence as citations, since
+Introduction P2 already gives each model's reason. "A fourth consideration" becomes "A further
+consideration". With this, the ultraviolet-mutation example (TP53/NOTCH, E6/E7 dispensability)
+is in neither the Introduction nor the Discussion.
+
+TP: the Discussion sentence "Splitting the trace libraries by viral gene answers both that
+requirement and the broader objection ..." was unclear in its synthesis. Rewritten to state the two
+objections to an L1 readout (differentiation; E6/E7 not capsid), what both predict (early-gene
+reads without late ones), what the trace libraries show (63% with no reads on any gene), and where
+the objections still stand (the 25% with gene reads, mostly early, below the L1 criterion).
+"Drop three" and the per-model sentence fold are logged above.
+
+TP: the HPV8 sentence sat in the Son paragraph for historical reasons (the vaccine clause used to
+be appended to it), not because HPV8 figures in Son et al. Moved to the end of the
+reservoir-versus-tumor paragraph, beside HPV2, with a four-word link: "HPV8, the reservoir type
+most often implicated in cSCC, is the converse case: ...".
+
+TP: the retired full version in the public repo was stale and confusing (the Data Availability
+Statement points readers there, and `manuscript_full.html` was a July render of an older draft).
+Deleted: `manuscript.qmd`, `_abstract.qmd`, `_introduction.qmd`, `_results.qmd`, `_discussion.qmd`,
+`manuscript_full.html`, `manuscript_full.md`. Git history keeps them. It was in any case a hybrid,
+since it included the live `_methods.qmd`, `_backmatter.qmd` and `_supplement.qmd`. Three pointers
+repointed at `manuscript_short.qmd` (`bin/rebuild_reframe_fixed.sh`, `_helpers.R`,
+`make_reference_docx.py`), and the three `build_trace_table`/`trace_elig` aliases kept only for the
+full version are gone; `trn()` stays, the supplement uses it. The short version still renders.

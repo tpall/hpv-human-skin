@@ -9,12 +9,12 @@ Depth does not explain the group difference in @fig-rpm. For each sample group, 
 ::: {#suppfig-trace}
 ![](figureS2.png)
 
-What the sub-threshold trace is made of. Every HPV-positive library below the control-calibrated detection floor (`r tr("floor")` RPM) in unselected skin and neoplasia (*n* = `r tr("trace_n")`), against the productive controls (warts and EV, *n* = `r tr("ctrl_n")`). Each library falls in exactly one of three classes, assigned in this order from the per-gene read counts the pipeline already writes: no reads on any HPV gene; gene-mapped reads below the productive threshold; productive (L1 ≥ 3 reads). Cell-line, engineered and site-unrecorded libraries are excluded, because the claim is about skin and neoplasia.
+What the trace is made of. Every HPV-positive library below the control-calibrated detection floor (`r tr("floor")` RPM) in unselected skin and neoplasia (*n* = `r tr("trace_n")`), against the productive controls (warts and EV, *n* = `r tr("ctrl_n")`). Each library falls in exactly one of three classes, assigned in this order from the per-gene read counts the pipeline already writes: no reads on any HPV gene; gene-mapped reads below the productive threshold; productive (L1 ≥ 3 reads). Cell-line, engineered and site-unrecorded libraries are excluded, because the claim is about skin and neoplasia.
 :::
 
-### Gene-level composition of the sub-threshold trace
+### Gene-level composition of the trace
 
-Of the `r tr("trace_n")` below-floor libraries in @suppfig-trace, the `r tr("trace_mid")` that are gene-mapped but non-productive split further: `r tr("trace_mid_early")` carry early-gene reads with the late program absent and `r tr("trace_mid_lateonly")` carry only L2 reads below the productive bar. The median late-read fraction across the trace is `r trn("trace_medlate")`, against `r trn("ctrl_medlate")` in the controls, where the differentiation-coupled capsid program is running.
+Of the `r tr("trace_n")` trace libraries in @suppfig-trace, the `r tr("trace_mid")` that are gene-mapped but non-productive split further: `r tr("trace_mid_early")` carry early-gene reads with the late program absent and `r tr("trace_mid_lateonly")` carry only L2 reads below the productive bar. The median late-read fraction across the trace is `r trn("trace_medlate")`, against `r trn("ctrl_medlate")` in the controls, where the differentiation-coupled capsid program is running.
 
 ::: {#suppfig-types}
 ![](figureS3.png)

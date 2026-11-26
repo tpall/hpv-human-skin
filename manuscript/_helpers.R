@@ -1,5 +1,5 @@
 # Formatting helpers + reproducible table builders for the manuscript inline R.
-# Sourced by the setup chunk in manuscript.qmd after results_models.R (which
+# Sourced by the setup chunk in manuscript_short.qmd after results_models.R (which
 # provides `stats`). Keeps display conventions in one place so every quoted
 # number is computed, not hand-typed.
 suppressPackageStartupMessages({library(tidyverse); library(here)})
@@ -440,11 +440,7 @@ eth <- function(key) {
                                show_col_types = FALSE)
 tr  <- function(key) .trace_nums$value[.trace_nums$key == key]
 
-# Sense-C aliases. "trace" now means only the sub-threshold population (sense B,
-# the tr() namespace above); the below-assignment type catalogue is "detection
-# level". These aliases keep the retired full version (_results.qmd,
-# _discussion.qmd) runnable without porting prose into it.
-build_trace_table <- build_detection_table
-trace_elig        <- detection_elig
-trace_elig_str    <- detection_elig_str
+# `tr()` reads the trace numbers as strings; `trn()` is the numeric form, used
+# where the supplement computes with one. The three build_trace_table/trace_elig
+# aliases that sat here went with the retired full version (deleted 2026-11-26).
 trn <- function(key) as.numeric(tr(key))

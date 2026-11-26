@@ -57,7 +57,7 @@ echo "rows: $n (expected 10834)"
 # Everything downstream of the tier table. These are NOT rebuilt by the
 # manuscript render: figure2/figureS1 are copies of this script's plots,
 # figure4 and figureS3 come from separate scripts, and bayes_summary.rds is read from disk by
-# manuscript.qmd, so a stale one silently keeps the old posteriors.
+# manuscript_short.qmd, so a stale one silently keeps the old posteriors.
 if [ "$OUTDIR" = "results_reframe_fixed" ]; then
   cp "$OUTDIR/hpv_rpm_contrast.png"        manuscript/figure2.png
   cp "$OUTDIR/hpv_rpm_contrast.pdf"        manuscript/figure2.pdf
@@ -79,5 +79,5 @@ if [ "$OUTDIR" = "results_reframe_fixed" ]; then
     Rscript dna_rna_triangulation/skin_dna_vs_rna_corrected.R >/dev/null 2>&1 &&
     Rscript manuscript/figure_reservoir.R >/dev/null &&
     echo "refreshed manuscript/figure5.{png,pdf}, figureS4.{png,pdf} + reservoir_numbers.tsv"
-  echo "now re-render: quarto render manuscript/manuscript.qmd"
+  echo "now re-render: quarto render manuscript/manuscript_short.qmd"
 fi
