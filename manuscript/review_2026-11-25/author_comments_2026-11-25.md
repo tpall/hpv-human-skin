@@ -466,3 +466,7 @@ Source: `referee_report_26g.md` and `review_issues_26g.csv` (6 items).
 - **R6-3, R6-5.** Figure S2 legend shortened; Figure S5 legend and the M3 row label corrected; both percentages in the productivity sentence are whole numbers.
 - **R6-4.** The ethics-provenance table is not rebuilt. The Data Availability Statement now describes it as covering each study the lesion searches retrieved, including studies later reclassified or excluded.
 - **R6-6.** Citation order of supplementary tables left as is.
+
+## Draft i: Results cut for length (2026-11-26)
+
+The draft h referee report (`referee_report_26h.md`) closed all round-6 items and raised nothing new. TP then chose six cuts in the Results from a proposed list of 17, each removing a restated definition, a repeated figure or a statistic that a figure or the Methods already carry: the log scale note on Figure 1c, the chemistry-resolution sentence (in the Methods), the floor-against-L1 explanation (shortened to one sentence), the first "49 of the 54" (kept in the productivity contrast), the E6 and L1 percentages for unselected skin (in Figure 3a), and the repeated "13% of trace libraries". Results 1,671 to 1,597 words; main text 3,815 to 3,741.
