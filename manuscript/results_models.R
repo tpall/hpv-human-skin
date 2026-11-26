@@ -253,7 +253,7 @@ if (is.null(.chem)) {
                 control_productive="Productive controls", EV="EV biopsies",
                 cell_line="Cell lines",
                 engineered="Engineered", non_permissive_tissue="Non-permissive tissue",
-                other="Other")
+                other="Site not recorded")
   chem_tbl <- rpc %>% count(tier, chem) %>% group_by(tier) %>%
     mutate(pct = 100*n/sum(n), N = sum(n)) %>% ungroup() %>%
     mutate(chem = .chemlab[as.character(chem)]) %>%
@@ -631,6 +631,37 @@ stats <- lapply(list(
   ribo_neo_maxreads=.cq("ribo_neo_maxreads"), ribo_floor=.cq("ribo_floor"),
   ribo_or=.cq("ribo_or"), ribo_lo=.cq("ribo_lo"), ribo_hi=.cq("ribo_hi"), ribo_p=.cq("ribo_p")
 ), unname)
+
+## Cervical series: libraries that pass the viral-read filter (cxg_*_n) need not
+## have the 5 E1+E2 reads a ratio requires. Figure 1c plots ratios, so its n is
+## the second count (review R4-7).
+.cxl <- tryCatch(read_tsv(here("results_cervix_graded_e1e2/e1e2_by_library.tsv"), show_col_types=FALSE),
+                 error=function(e) NULL)
+.cxr <- function(grp) if (is.null(.cxl)) NA_integer_ else sum(!is.na(.cxl$log2_e1e2[.cxl$tier==grp]))
+stats$cxg_norm_nr <- .cxr("hpv16_normal_epithelium")
+stats$cxg_hsil_nr <- .cxr("hpv16_hsil"); stats$cxg_scc_nr <- .cxr("hpv16_scc")
+
+## Targeted lesion libraries that returned no screening result (review R4-6).
+## Counted from the Kraken2 reports as figure_cohort_flow.R does; cause and
+## diagnosis from the Supplementary Data table (bin/build_unscreened_table.py).
+.lesrep <- unlist(lapply(c("results_lesions_wide","results_lesions_csc"), function(d)
+  list.files(here(d,"aggregated"), "_kraken2_report\\.txt$", full.names=TRUE)))
+.unl <- read_tsv(here("manuscript/supplementary_data_unscreened_libraries.tsv"), show_col_types=FALSE) %>%
+  filter(cohort=="lesion")
+stopifnot(nrow(.unl) == sum(file.size(.lesrep)==0), all(.unl$cause=="length_filtered"))
+stats$les_submitted   <- length(.lesrep)
+stats$les_unscr       <- nrow(.unl)
+stats$les_unscr_r1lo  <- floor(min(.unl$read1_mean_length))
+stats$les_unscr_r1hi  <- floor(max(.unl$read1_mean_length))
+## Read geometry: both mates short (spatial profiling), a short barcode read
+## beside a cDNA read (droplet single-cell), or a short single-end read.
+.r2 <- coalesce(.unl$read2_mean_length, 0)
+stats$les_unscr_pe_short <- sum(.unl$layout=="PAIRED" & .r2 < 36)
+stats$les_unscr_bc       <- sum(.unl$layout=="PAIRED" & .r2 >= 36)
+stats$les_unscr_se       <- sum(.unl$layout=="SINGLE")
+stopifnot(stats$les_unscr_pe_short + stats$les_unscr_bc + stats$les_unscr_se == nrow(.unl))
+stats$les_unscr_dx    <- sum(str_detect(tolower(coalesce(.unl$diagnosis,"")),
+                             "wart|condyloma|papilloma|squamous|carcinoma|scc|keratos|bowen|verruciform"))
 
 saveRDS(stats, here("manuscript/stats.rds"))
 cat("\nDONE: stats saved to manuscript/stats.rds\n")

@@ -90,7 +90,7 @@ p <- ggplot(d, aes(tier, fct_rev(type), fill = pct)) +
   geom_tile(colour = "white", linewidth = 0.3) +
   geom_text(aes(label = lab, colour = lab_col), size = 2.6, show.legend = FALSE) +
   facet_grid(genus ~ id, space = "free_y", scales = "free_y") +
-  scale_fill_viridis_c("Prevalence\nwithin tier (%)", option = "mako", direction = -1,
+  scale_fill_viridis_c("Prevalence\nwithin group (%)", option = "mako", direction = -1,
                        trans = "log10", limits = LIM, begin = 0.12, end = 0.95,
                        breaks = c(0.03, 0.3, 3, 30),
                        labels = function(x) formatC(x, format = "g"),

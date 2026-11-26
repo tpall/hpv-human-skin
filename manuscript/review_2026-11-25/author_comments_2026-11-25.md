@@ -236,3 +236,38 @@ TP: cell-line contamination is known in the field and not novel, so it is not ar
 The first Results heading is now "Cohort and HPV positivity by sample origin", and its two
 closing commentary sentences ("This is the signature of ..." and "Much of the apparent HPV
 signal ...") are cut. Results 1,650 to 1,614; main text 3,729 to 3,693.
+
+## Draft e (2026-11-26): referee report on draft d (referee_report_25d.md, review_issues_25d.csv)
+
+Twenty issues, all in text that predates draft d. Each was checked against the code, the result
+tables or the cited paper before it was acted on. Tracked copy:
+`hpv_manuscript_2026-11-26e_jid_tracked.docx` (draft c as the base).
+
+| ID | Verdict | Action |
+|---|---|---|
+| R4-1 | Confirmed: `ft` in `results_models.R` is productive controls against unselected skin (41/44 vs 7/7,800) | The Fisher OR now sits in its own sentence naming that contrast. The later "almost clean null" sentence, which repeated the 7 of 7,800, is cut to pay for it |
+| R4-2 | Confirmed from the PubMed abstract: Hultin 2019 found HPV RNA in 1 of 12 lesions | Introduction says so; Discussion P1 says "little or no transcription" |
+| R4-3 | Confirmed from the paper's own title ("High-Risk Human Papillomavirus E6/E7 mRNA") | "high-risk HPV" added in the Introduction; Fujimoto dropped from the Discussion P1 list |
+| R4-4 | The count cannot be settled from abstracts (Arron's transcriptome design is unverified) | "four of the five" is now "most", which holds under either reading; the last clause is narrowed to "none scored productive infection from capsid transcripts" |
+| R4-5 | Confirmed against `bin/hpv_rpm_contrast.R` and the per-sample table | Group list rewritten from the code: eight groups with live sizes, engineered second, non-permissive tissue assigned through the override table, the contamination rule stated as matching no library |
+| R4-6 | Confirmed, and the cause found: all 317 were length-filtered (read 1 of 26 to 35 nt), none a failed download; 280 belong to two studies without a diagnosis, 18 carried a lesion diagnosis | New paragraph in the supplementary Methods with live counts; `bin/build_unscreened_table.py` extended to the lesion cohorts and the Supplementary Data table rebuilt (1,261 sweep rows unchanged, 317 lesion rows added, new `cohort` column); Data Availability updated |
+| R4-7 | Confirmed: SRR11310307 passes the viral-read filter but has no ratio | Legend n is now 2, 6 and 6; the supplement gives both counts; Results state n = 2 beside 0.36 |
+| R4-8 | Confirmed: no integration-like call is reported anywhere | The two calling sentences are deleted; the ratio stays a continuous score |
+| R4-9 | Confirmed | "49 of the 54 wart, condyloma and EV libraries"; the 34-of-53 sentence says its population is defined by search |
+| R4-10 | Confirmed | "HPV positivity" in the Discussion; "Clinical primary tissue was HPV-positive in only 2-3%" in the Results; "primary tissue" in the Abstract |
+| R4-11 | Confirmed | Trace defined with both bounds; any-HPV glossed on the reads; "To interpret the any-HPV rate" |
+| R4-12 to R4-14 | Taken | E2 sentence rewritten; Discussion P5 split after the third reason; Introduction P2 ends at "to carcinoma." |
+| R4-15, R4-16 | Taken | Register replacements; HPV8 wording; "one actinic keratosis and one cSCC" (ERR1971044, ERR2274877 checked); "residual viral genomes" |
+| R4-17 | Mostly taken | Table S5 "Site not recorded"; Figure S3 key "within group" (figure rebuilt, the only figure that changed); 36 nt; seqkit citation; "Fisher exact tests run". Not done: P = .7 beside P = .49 |
+| R4-18 | Not done | Renumbering supplementary items this late is the larger risk, as the referee says |
+| R4-19 | Part | The three phrases are cut. The accession list the Data Availability Statement promised did not exist; it is now built by `bin/build_accession_table.py` (12,860 libraries, with screened status and sample group; its counts reproduce Figure S6) |
+| R4-20 | Open | CRediT line, with the pending sign-off |
+
+Main text 3,693 to 3,688 (Introduction 617, Results 1,616, Discussion 955, Methods 500). Abstract 200.
+
+Follow-up on R4-6 (TP asked whether the 317 are single-cell libraries): mostly not. By read
+geometry 280 have two mates of 27 to 28 nt and come from two spatial-profiling studies annotated by
+area of illumination (SRP413119, SRP413116); 23 pair a 26 to 28 nt barcode read with a cDNA read,
+the droplet single-cell layout; 14 are 35 nt single-end libraries. The supplement gives the three
+classes. Tissue categories in both Supplementary Data tables are now in English (skin, anogenital,
+oral, other) in place of the pipeline's Estonian strings.
