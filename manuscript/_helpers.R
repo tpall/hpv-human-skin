@@ -63,7 +63,7 @@ build_bayes_table <- function(stats, bget){
     "Sequencing depth, per 10× reads, floor (M2)",           stats$m2b_l10_or,   stats$m2b_l10_p,    "M2b_depth",
     "Sequencing depth within neoplasia, floor (M2)",         stats$neo_depth_or, stats$neo_depth_p,  "M2d_depth_within_neoplasia",
     "Neoplasia vs unselected skin, any-HPV (M2)",    stats$m2a_or,       stats$m2a_p,        "M2a_neoplasia_vs_skin_any",
-    "Productive controls vs neoplasia, productive (M3)",     stats$m3_or,        stats$m3_p,         "M3_controls_vs_neoplasia")
+    "Productive controls and EV vs neoplasia, productive (M3)",     stats$m3_or,        stats$m3_p,         "M3_controls_vs_neoplasia")
   purrr::pmap_dfr(rows, function(contrast, freqor, freqp, bmodel){
     b <- bget(bmodel)
     tibble(`Contrast (model)` = contrast,

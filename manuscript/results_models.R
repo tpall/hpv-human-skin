@@ -307,7 +307,7 @@ get_prod <- function(dir){
 # else in the paper. Until draft g the controls were every typed library of the
 # first targeted pull (results_lesions), 18 of which are cell lines by the
 # curated grouping, and the neoplasia arm was matched on diagnosis text.
-prod <- bind_rows(lapply(c("results_lesions", "results_lesions_wide", "results_lesions_csc"), get_prod)) %>%
+prod <- bind_rows(lapply(c("results_lesions", "results_lesions_wide", "results_lesions_csc", "results_full_v2"), get_prod)) %>%
   distinct(srr_id, .keep_all=TRUE) %>%
   inner_join(rp %>% select(srr_id, tier), by="srr_id") %>%
   mutate(grp=case_when(tier %in% c("control_productive","EV") ~ "productive_controls (targeted warts/EV)",

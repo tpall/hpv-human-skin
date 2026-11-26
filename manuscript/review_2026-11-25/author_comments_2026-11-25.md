@@ -456,3 +456,13 @@ Source: `referee_report_26f.md` and `review_issues_26f.csv` (13 items).
 - **R5-4 to R5-11.** Applied. Metadata corrections now list a third class (33 libraries from two cSCC cell-line studies) and give the two sensitivity figures (unselected skin without the 609; without the floor-inspected corrections, 17 of 7,800).
 - **Open.** R5-12 (the 34 of 53 clause, the Vandiver wording, citation order of supplementary tables) and R5-13 (cervical series chemistry) not applied.
 - **R5-12 and R5-13, applied later the same day.** The productivity contrast is now fitted on the curated sample groups: 49 of 54 wart, condyloma and EV libraries against 7 of 22 cSCC/AK (OR 20; Bayesian OR 18). Before, the control arm was the 53 typed libraries of the first targeted pull, 18 of which are cell lines. Discussion: "most lacked an unselected-skin denominator". Cervical series described as rRNA-depleted. Citation order of supplementary tables left as is.
+
+## Draft h: referee round 6 (2026-11-26)
+
+Source: `referee_report_26g.md` and `review_issues_26g.csv` (6 items).
+
+- **R6-1.** Figure S6 box now reads "15 condyloma-adjacent mucosa and 8 libraries of an animal study excluded", both counts computed; legend says three sets.
+- **R6-2.** The productivity contrast takes typed libraries from the untargeted sweep as well as the lesion cohorts: 9 of 26 cSCC/AK (35%) against 49 of 54, OR 18 (*P* = 3.8×10⁻⁷); with the mucosal high-risk cases out, 7 of 23 and OR 21.
+- **R6-3, R6-5.** Figure S2 legend shortened; Figure S5 legend and the M3 row label corrected; both percentages in the productivity sentence are whole numbers.
+- **R6-4.** The ethics-provenance table is not rebuilt. The Data Availability Statement now describes it as covering each study the lesion searches retrieved, including studies later reclassified or excluded.
+- **R6-6.** Citation order of supplementary tables left as is.

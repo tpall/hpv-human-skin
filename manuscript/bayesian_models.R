@@ -53,7 +53,7 @@ get_prod <- function(dir){
     filter(gene == "PRODUCTIVE_INFECTION") %>% transmute(srr_id = sample_id, productive = read_count == "yes")
 }
 # Curated sample groups, as in results_models.R (model 3).
-prod <- bind_rows(lapply(c("results_lesions", "results_lesions_wide", "results_lesions_csc"), get_prod)) %>%
+prod <- bind_rows(lapply(c("results_lesions", "results_lesions_wide", "results_lesions_csc", "results_full_v2"), get_prod)) %>%
   distinct(srr_id, .keep_all = TRUE) %>%
   inner_join(rp %>% select(srr_id, tier), by = "srr_id") %>%
   mutate(grp = case_when(tier %in% c("control_productive", "EV") ~ "productive_controls",
@@ -109,7 +109,7 @@ line("neoplasia vs skin (any)",  "1.7", or_summ(b2a, "tierneoplasia"))
 line("depth /10x reads (any)",   "4.6", or_summ(b2a, "l10c"))
 
 cat("\nPREMISE 3: Productive infection is more frequent in warts/EV than in neoplasia:\n")
-line("controls vs neoplasia",    "20", or_summ(b3, "grpproductive_controls"))
+line("controls vs neoplasia",    "18", or_summ(b3, "grpproductive_controls"))
 
 ## ── Persist posterior OR summaries (so a robustness paragraph can cite them) ──
 grab <- function(fit, term, tag) tibble::tibble(model = tag, !!!or_summ(fit, term))

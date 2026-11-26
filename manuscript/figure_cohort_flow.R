@@ -43,6 +43,15 @@ stopifnot(rg("droplet_n") == n_filt,
           rg("screened_r1_below_min") == 0)
 
 cm <- function(x) formatC(x, format = "d", big.mark = ",")
+
+## The lesion-arm exclusions, split by cause so the label cannot outlive the
+## override table: the animal study SRP495320, and the condyloma-adjacent mucosa.
+.full <- read_tsv(here("results_reframe_nooverride/hpv_rpm_per_sample.tsv"), show_col_types = FALSE)
+.kept <- read_tsv(rpm_per_sample_tsv(), show_col_types = FALSE)
+.out  <- .full %>% filter(cohort == "lesion", !srr_id %in% .kept$srr_id)
+n_animal   <- sum(.out$study == "SRP495320")
+n_adjacent <- sum(.out$study %in% c("SRP314958", "SRP314961"))
+stopifnot(n_animal + n_adjacent == nrow(.out), nrow(.out) == les["screened"] - b_les)
 box <- function(x, y, label, kind) tibble(x, y, label, kind)
 
 ## main column stages, then the losses that sit between them
@@ -60,7 +69,7 @@ losses <- bind_rows(
                       cm(length(unscr)), cm(n_filt), 36, cm(n_nodl)), "loss"),
   box(5.15, 4, sprintf("%s returned no\nscreening result", cm(les["submitted"] - les["screened"])), "loss"),
   box(2.0, 2, sprintf("%s 16S rRNA amplicon\nlibraries excluded:\nno detectable HPV at all", cm(sweep["screened"] - b_null)), "loss"),
-  box(5.15, 2, sprintf("%s condyloma-adjacent\nmucosa excluded", cm(les["screened"] - b_les)), "loss"))
+  box(5.15, 2, sprintf("%s condyloma-adjacent mucosa\nand %s libraries of an\nanimal study excluded", cm(n_adjacent), cm(n_animal)), "loss"))
 
 # the two columns converge on the burden cohort box rather than meeting in a
 # corner, so the join reads as one step and not as a stray horizontal arrow
