@@ -470,3 +470,10 @@ Source: `referee_report_26g.md` and `review_issues_26g.csv` (6 items).
 ## Draft i: Results cut for length (2026-11-26)
 
 The draft h referee report (`referee_report_26h.md`) closed all round-6 items and raised nothing new. TP then chose six cuts in the Results from a proposed list of 17, each removing a restated definition, a repeated figure or a statistic that a figure or the Methods already carry: the log scale note on Figure 1c, the chemistry-resolution sentence (in the Methods), the floor-against-L1 explanation (shortened to one sentence), the first "49 of the 54" (kept in the productivity contrast), the E6 and L1 percentages for unselected skin (in Figure 3a), and the repeated "13% of trace libraries". Results 1,671 to 1,597 words; main text 3,815 to 3,741.
+
+Later the same day, on TP's reading of the tracked copy:
+
+- **Chemistry paragraph.** "The imbalance of chemistry between groups would work against our negative result, not produce it" deleted as commentary; the direction is plain to the reader from the percentages.
+- **"Tabulated"** kept for the reservoir analysis, in preference to "summarized": it says exactly what was done to the published catalog.
+- **Data Availability Statement** cut from 230 to about 95 words. Script names and column lists are gone; the three tables are named Data S1 to S3 and stated to be in the repository with the code. JID sets no limit on the number of supplementary items and, for submissions from 1 December 2025, charges a flat page fee with no per-file charge (Information for Authors, read 2026-11-26). The tables stay as three separate text files.
+- **Supplement** stays in the one document during review; it becomes a separate file at submission.
