@@ -1,0 +1,25 @@
+srr_id	group	diagnosis	title
+SRR11310309	hpv16_hsil	hsil	GSM4412239: H16_1_Hs; Homo sapiens; RNA-Seq
+SRR11310310	hpv16_hsil	hsil	GSM4412240: H16_2_Hs; Homo sapiens; RNA-Seq
+SRR11310311	hpv16_hsil	hsil	GSM4412241: H16_3_Hs; Homo sapiens; RNA-Seq
+SRR11310312	hpv16_hsil	hsil	GSM4412242: H16_4_Hs; Homo sapiens; RNA-Seq
+SRR11310313	hpv16_hsil	hsil	GSM4412243: H16_5_Hs; Homo sapiens; RNA-Seq
+SRR11310314	hpv16_hsil	hsil	GSM4412244: H16_6_Hs; Homo sapiens; RNA-Seq
+SRR11310303	hpv16_normal_epithelium	infection	GSM4412233: H16_1_In; Homo sapiens; RNA-Seq
+SRR11310304	hpv16_normal_epithelium	infection	GSM4412234: H16_2_In; Homo sapiens; RNA-Seq
+SRR11310305	hpv16_normal_epithelium	infection	GSM4412235: H16_3_In; Homo sapiens; RNA-Seq
+SRR11310306	hpv16_normal_epithelium	infection	GSM4412236: H16_4_In; Homo sapiens; RNA-Seq
+SRR11310307	hpv16_normal_epithelium	infection	GSM4412237: H16_5_In; Homo sapiens; RNA-Seq
+SRR11310308	hpv16_normal_epithelium	infection	GSM4412238: H16_6_In; Homo sapiens; RNA-Seq
+SRR11310315	hpv16_scc	scc	GSM4412245: H16_1_SCC; Homo sapiens; RNA-Seq
+SRR11310316	hpv16_scc	scc	GSM4412246: H16_2_SCC; Homo sapiens; RNA-Seq
+SRR11310317	hpv16_scc	scc	GSM4412247: H16_3_SCC; Homo sapiens; RNA-Seq
+SRR11310318	hpv16_scc	scc	GSM4412248: H16_4_SCC; Homo sapiens; RNA-Seq
+SRR11310319	hpv16_scc	scc	GSM4412249: H16_5_SCC; Homo sapiens; RNA-Seq
+SRR11310320	hpv16_scc	scc	GSM4412250: H16_6_SCC; Homo sapiens; RNA-Seq
+SRR11310297	normal_hpv_negative	normal	GSM4412227: N_1_cv; Homo sapiens; RNA-Seq
+SRR11310298	normal_hpv_negative	normal	GSM4412228: N_2_cv; Homo sapiens; RNA-Seq
+SRR11310299	normal_hpv_negative	normal	GSM4412229: N_3_cv; Homo sapiens; RNA-Seq
+SRR11310300	normal_hpv_negative	normal	GSM4412230: N_4_cv; Homo sapiens; RNA-Seq
+SRR11310301	normal_hpv_negative	normal	GSM4412231: N_5_cv; Homo sapiens; RNA-Seq
+SRR11310302	normal_hpv_negative	normal	GSM4412232: N_6_cv; Homo sapiens; RNA-Seq

@@ -1,0 +1,321 @@
+---
+title: "The skin DNA HPV reservoir is transcriptionally silent"
+subtitle: "Cross-modality decoupling of HPV presence and activity, tested against Shen et al.'s petabase (Logan) papillomavirus survey"
+author: "Taavi Päll"
+date: "2026-07-28"
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    code-fold: true
+    embed-resources: true
+    theme: cosmo
+execute:
+  warning: false
+  message: false
+---
+
+```{r setup}
+library(tidyverse); library(here)
+s  <- read_csv(here("dna_rna_triangulation/skin_dna_vs_rna_summary.csv"), show_col_types = FALSE)
+ty <- read_csv(here("dna_rna_triangulation/skin_dna_vs_rna_types.csv"),   show_col_types = FALSE)
+gv <- read_csv(here("dna_rna_triangulation/skin_dna_vs_rna_genus.csv"),   show_col_types = FALSE)
+topdna  <- ty |> arrange(desc(dna_skin_libs)) |> slice(1:6)
+topprod <- ty |> filter(rna_productive > 0) |> arrange(desc(rna_productive)) |> slice(1:6)
+fmt_list <- function(x) paste(x, collapse = ", ")
+```
+
+## Summary
+
+Our RNA-seq survey argues that cutaneous HPV is **present but transcriptionally
+quiet** in most skin. That claim is built entirely on transcription, so a sceptic
+can ask whether the quiet majority is real or just an artefact of what got
+sequenced. Here we test it against a completely independent **DNA** dataset: Shen
+et al.'s petabase re-mining of the Logan/SRA assembly for papillomavirus L1
+(github.com/syueqiao/pvs_in_logan). The two datasets share **no libraries** (Logan
+is DNA metagenomes, ours is RNA-seq; the SRR sets are disjoint), so this is a
+composition comparison, not a per-library join. The result is a clean **decoupling
+of presence from activity**: the HPV types that dominate the skin DNA reservoir are
+the ones that are transcriptionally silent, and the transcriptionally productive
+types are minor or absent from the DNA reservoir. The quiet majority is not a
+sampling artefact; it is the genuinely dominant β/γ commensal DNA reservoir. Broadening
+the DNA reservoir to other body sites (Result 3) recovers the textbook tropism from DNA
+alone: vaginal is overwhelmingly α mucosal, skin is β/γ commensal, gut is a mixture of
+both, which validates the composition read-out and confirms the skin reservoir is real.
+A second RNA-activity axis, the anal transition zone (Result 4), closes the loop: its
+transcriptome is loudly productive α-HPV (100% of productive libraries were α, HPV16-led),
+while the cutaneous β types that contaminate anal/gut DNA stay silent, so presence and
+activity separate by genus and by site.
+
+## The two datasets and why they cannot be joined
+
+Shen et al. searched the whole Logan assembly (27 M SRA libraries) for
+papillomavirus L1 and released per-library RunInfo, a library-to-cluster master
+table, and a cluster-to-type demarcation. We restrict their set to the
+**`r s$n_skin_libs` human skin-metagenome libraries** that carry HPV (`ScientificName`
+= "human skin metagenome" / "skin metagenome"; the SRA structured `Body_Site` field
+is essentially unpopulated for these, so the metagenome source label is the tissue
+key). Because Logan is DNA and our survey is RNA-seq, the two SRR universes are
+**entirely disjoint** (0 shared libraries out of 12,200 ours and 8,722 HPV+ theirs).
+That rules out a per-library DNA-vs-RNA validation but makes Shen a genuinely
+independent, non-redundant DNA layer. We therefore compare **type/genus composition**:
+
+- **DNA presence**: for each HPV type, the number of skin-metagenome libraries
+  carrying it (Shen).
+- **RNA activity**: per-type library counts in our curated tiers: presence in
+  unselected skin, and *productive infection* (warts `control_productive` **plus**
+  epidermodysplasia verruciformis `EV`, the two contexts of genuine late-transcript
+  expression; EV is included so β-HPV, which is productive only in EV, is scored
+  fairly).
+
+Cluster-to-type mapping uses Shen's `best_hit_name` (e.g. "human papillomavirus 24"),
+joined to our `type_genus.csv`; genus keywords ("Gammapapillomavirus N") resolve the
+rest, and only libraries whose cluster is flagged novel/no-hit count toward the novel
+fraction.
+
+The skin set is selected by SRA `ScientificName` ("human skin metagenome" /
+"skin metagenome"), a taxid that is also used by studies swabbing *environmental*
+surfaces and non-human animal skin. Those libraries carry shed human corneocytes, so
+they are real deposition, but they are nobody's skin. `build_skin_run_exclusions.py`
+queries BioSample attributes for every skin run and drops 30 of them
+(23 Hong Kong transit-surface swabs, PRJNA413474; 4 dairy-farm udder epithelium,
+PRJNA512046; 3 `host = bovine` cutaneous wounds, PRJNA636289), leaving 1,938 runs.
+The exclusion table is written to `skin_run_exclusions.tsv` and is auditable per run.
+The exclusion barely moves the genus composition (α and the novel fraction
+unchanged), but it does move per-type ranks, because transit-surface deposition
+was inflating specific β/γ types: HPV17 loses 22 of 71 libraries and HPV147
+loses 11. Per-type ranks quoted from a pre-exclusion run are not valid.
+
+A second correction matters more for the type-level claims. PaVE names variants
+of a type with a trailing letter, so HPV38B is a subtype of HPV38, HPV14D of
+HPV14 and HPV57B of HPV57. Our typing panel carries the subtype labels while
+Shen's `best_hit_name` carries the bare type, so the two sides never joined and
+the subtype's libraries fell into `Unresolved`. Both sides are now normalised
+onto the parent type (`norm_type()`), which changes conclusions rather than
+cosmetics: HPV14 goes from zero to **58** skin-DNA libraries and HPV57 from zero
+to **13**, so neither belongs in the list of productive types with no DNA
+reservoir, where both previously appeared. That list is now nine types, not
+eleven. HPV38 gains its subtype's libraries as well (32 to 94), and all three
+move from `Unresolved` to their correct genus, which is why β rises to
+`r s$pct_beta`%.
+
+## Result 1: the genus of the reservoir flips from the genus of activity
+
+![**The skin DNA HPV reservoir is transcriptionally silent.** (A) Genus composition of the human skin-metagenome DNA reservoir (Shen; n = `r s$n_skin_libs` HPV+ libraries), of the types present in unselected skin (our RNA-seq), and of the types with productive infection (our RNA-seq, warts + EV). The dominant genus flips from β/γ in the DNA reservoir to α in the productive fraction. (B) Per-type DNA skin-metagenome frequency (Shen, x) against RNA productive-library count (this study, y), both on log(x+1) axes, coloured by genus; a handful of extreme types are labelled. The productive types (top-left, mostly α wart types) are DNA-rare or absent, the DNA-abundant types (bottom-right, β/γ) are transcriptionally silent, and the "abundant AND productive" corner is empty but for HPV2.](figure_dna_rna_triangulation.png){#fig-triangulation}
+
+The skin DNA reservoir is a β/γ commensal community: **`r s$pct_beta`%** of HPV+
+skin-metagenome libraries carry a Betapapillomavirus and **`r s$pct_gamma`%** a
+Gammapapillomavirus, against only **`r s$pct_alpha`%** carrying an Alphapapillomavirus
+(@fig-triangulation A, left). The transcriptionally productive fraction is the
+mirror image: it is dominated by **Alphapapillomavirus** (@fig-triangulation A,
+right). The genus that fills the reservoir is not the genus that is active.
+
+A striking side-note: **`r s$pct_novel`%** of skin-metagenome libraries carry a PV
+cluster that matches nothing in the reference databases, i.e. a candidate novel
+type. The cutaneous β/γ reservoir remains substantially under-catalogued even at
+petabase scale.
+
+## Result 2: presence and activity are decoupled at the type level
+
+Ranking types within each axis makes the decoupling explicit (@fig-triangulation B).
+The most DNA-abundant skin types are β/γ commensals that are transcriptionally
+silent: the top of the DNA ranking is
+`r fmt_list(sprintf("%s (%d libraries)", topdna$type, topdna$dna_skin_libs))`,
+and every one of them has essentially no productive-library signal. Conversely, the
+productive types are α wart viruses that are DNA-rare or entirely absent from the
+skin reservoir:
+`r fmt_list(sprintf("%s (%d productive)", topprod$type, topprod$rna_productive))`.
+The archetypal wart types **`r s$prod_zero_in_dna`** have **zero** detections across
+all `r s$n_skin_libs` skin-metagenome libraries.
+
+Of the top 20 types on each axis, only **`r s$overlap_top20`** are shared
+(`r s$overlap_types`), and they are the informative exceptions rather than a
+counter-example:
+
+- **HPV2** is the single α type that is both a frequent skin DNA resident and
+  productive (the "abundant AND productive" corner in @fig-triangulation B), the
+  common-wart virus that also persists as skin flora.
+- **HPV5, HPV17, HPV20** are the β EV-types: they are abundant in the DNA reservoir
+  *and* weakly productive, but their productivity comes from the EV context, i.e.
+  it is drawn *from* the commensal reservoir rather than decoupled from it.
+
+So the decoupling is genus- and context-specific: **α wart productivity is
+independent of the skin DNA reservoir, whereas the little β productivity that exists
+(in EV) is sampled from it.**
+
+```{r table}
+#| tbl-cap: "Top skin-DNA types and all productive types, DNA presence vs RNA activity."
+bind_rows(
+  ty |> arrange(desc(dna_skin_libs)) |> slice(1:12) |> mutate(panel = "Most DNA-abundant"),
+  ty |> filter(rna_productive > 0) |> arrange(desc(rna_productive)) |> mutate(panel = "Productive (warts + EV)")
+) |> distinct(type, .keep_all = TRUE) |>
+  transmute(Group = panel, Type = type, Genus = genus, `DNA skin libs` = dna_skin_libs,
+            `RNA skin` = rna_skin_present, `RNA productive` = rna_productive) |>
+  knitr::kable()
+```
+
+## Result 3: the reservoir across body sites recovers known tropism
+
+Our RNA-seq survey is skin-only (tissue categories: 9,037 skin, no vaginal or gut),
+so vaginal and gut cannot be given a matched RNA-activity axis. What they *can* show
+is the **DNA reservoir** itself, and comparing it across body sites is a strong
+internal check: if the petabase reservoir is real signal rather than noise, its genus
+composition should recover the textbook tropism of the papillomaviruses. It does.
+
+```{r reservoir}
+rg <- read_csv(here("dna_rna_triangulation/reservoir_by_tissue_genus.csv"), show_col_types = FALSE)
+gp <- function(tis, g) round(100 * rg$prop[rg$tissue == tis & rg$genus == g], 1)
+nv <- function(tis) round(100 * rg$prop[rg$tissue == tis & rg$genus == "Novel_any"], 1)
+nlib <- function(tis) format(rg$n_lib[rg$tissue == tis][1], big.mark = ",")
+```
+
+![**The HPV DNA reservoir across body sites recovers known genus tropism.** (A) Genus composition of the HPV+ DNA reservoir (Shen; skin n=`r nlib("Skin")`, vaginal n=`r nlib("Vaginal")` libraries), normalised within body site (a co-infected library contributes to more than one genus, so this is the composition of type detections). Skin is a β/γ commensal reservoir and the vaginal reservoir is overwhelmingly α mucosal. (B) The ten most frequent types per body site, coloured by genus. The gut, a collection-route control rather than a third reservoir, is in @fig-reservoir-gut.](figure_reservoir_by_tissue.png){#fig-reservoir}
+
+The two sites with a niche of their own give two distinct, biologically expected
+reservoirs (@fig-reservoir):
+
+- **Skin** is a Betapapillomavirus/Gammapapillomavirus commensal reservoir
+  (β `r gp("Skin","Beta")`%, γ `r gp("Skin","Gamma")`% of detections, α only
+  `r gp("Skin","Alpha")`%), the same composition analysed above.
+- **Vaginal** is overwhelmingly **Alphapapillomavirus** (α `r gp("Vaginal","Alpha")`%,
+  β `r gp("Vaginal","Beta")`%, γ `r gp("Vaginal","Gamma")`%); its top types are the
+  classic mucosal set (HPV91, 51, 66, 67, 16, 90), mixing high- and low-risk α. This
+  is the textbook mucosal niche, recovered here purely from DNA metagenome assembly.
+
+The novel-cluster fraction tracks how well each niche is catalogued: **`r nv("Skin")`%**
+of skin libraries carry an unclassified PV cluster, versus only **`r nv("Vaginal")`%**
+of vaginal libraries: the mucosal α types are exhaustively described, while the
+cutaneous β/γ reservoir is not.
+
+The same tabulation for the **gut** is kept separate, and out of the main comparison,
+because it does not describe a gut niche (@fig-reservoir-gut). Gut libraries are a
+**mixture**: α `r gp("Gut","Alpha")`%, β `r gp("Gut","Beta")`%, γ `r gp("Gut","Gamma")`%,
+and their top types interleave mucosal α (HPV16, HPV6, HPV56) with cutaneous β skin
+types (HPV24, HPV124), exactly the signature of stool/gut metagenomes picking up both
+mucosal shedding and **perianal-skin commensal β-HPV**: collection-route carry-over,
+independently seen in rectal-swab gut metagenomes (the eluring aging cohort). Read that
+way it is a useful control, since it shows the assembly recovers the genus of whatever
+skin the sampling route touches, but it is not evidence of a third reservoir, so it
+belongs in the supplement. Its novel fraction (**`r nv("Gut")`%**) sits with skin's, as
+expected if its β/γ content is skin in origin.
+
+![**The gut DNA reservoir is a collection-route mixture, not a niche.** The three-site
+version of @fig-reservoir, with the gut (n=`r nlib("Gut")` libraries) included. Panels
+and colours as in @fig-reservoir.](figure_reservoir_by_tissue_all_sites.png){#fig-reservoir-gut}
+
+That the reservoir cleanly reconstructs the vaginal-α / skin-β/γ tropism from DNA alone
+validates the composition read-out used in Results 1–2: the skin reservoir's β/γ
+dominance and the type-level presence/activity decoupling are not analysis artefacts.
+
+## Result 4: the anal niche, an independent RNA-activity axis
+
+The skin decoupling (Results 1–2) rests on a skin RNA-activity axis; the gut/vaginal
+comparisons (Result 3) could only show the DNA reservoir, because our RNA survey was
+skin-only. To close that gap for one of the two sites, we ran the HPV-typing pipeline
+over the anal/anorectal RNA-seq that the survey had never touched: a small, clean
+niche (anal squamous-cell-carcinoma lines are rare, so the cell-line burden that
+dominates cervical RNA is minimal here). This gives a genuine RNA-activity axis for the
+anal transition zone, to set against the mixed gut DNA reservoir of Result 3.
+
+```{r anal}
+ap  <- read_csv(here("dna_rna_triangulation/anorectal_pilot/anal_pilot_summary.csv"), show_col_types = FALSE)
+apt <- read_csv(here("dna_rna_triangulation/anorectal_pilot/anal_productive_types.csv"), show_col_types = FALSE)
+a <- function(k) ap$value[ap$metric == k]
+top_prod <- apt |> slice_max(productive_samples, n = 4)
+```
+
+Anal tissue is genuinely HPV-rich, unlike healthy skin. Of `r a("n_typed")` libraries
+typed, `r a("n_hpv_pos")` were HPV-positive (**`r a("pct_pos")`%**; `r a("pct_pos_scc_studies")`%
+across the anal-carcinoma studies), an order of magnitude above the 2–4% of primary
+skin. The `r a("n_cell_lines")` cell lines flagged by the curation were **all
+HPV-negative** (`r a("cell_line_pos")` positive), so the signal is clinical tissue, not
+contamination.
+
+And the activity is overwhelmingly productive α. Of `r a("n_productive")` libraries with
+late (L1/L2 capsid) transcripts (the productive-infection signal), **`r a("productive_alpha_pct")`%
+were Alphapapillomavirus**, led by
+`r paste(sprintf("%s (%d)", top_prod$type, top_prod$productive_samples), collapse = ", ")`.
+Every one of the `r a("n_productive_types")` productively-expressed types was α; no β or
+γ type reached productive expression in a single anal library.
+
+This completes the cross-modality decoupling for a second niche, and it does double duty. First it
+**reinforces** the decoupling: the anal transition zone sits directly against
+perianal skin, so the cutaneous β types that leak into gut/anal DNA metagenomes
+(Result 3: the gut reservoir was a mixture of mucosal α and cutaneous β such as HPV24
+and HPV124) are entirely **silent** in the anal transcriptome: present in DNA, absent
+from activity. Second, it supplies a **positive control** the skin analysis lacked:
+where the skin story is "present but quiet", the anal α-HPV is loudly productive
+(HPV16 alone drove `r a("hpv16_productive")` productive libraries), exactly as expected
+for the HPV16-driven anal carcinoma niche and mirroring the cervix. Presence and
+activity are decoupled by **genus and site**: mucosal α is productive where it resides
+(cervix, anus), cutaneous β/γ is a quiet DNA reservoir wherever it is found (skin, and
+as contamination in gut/anal DNA).
+
+## Caveats
+
+1. **The RNA side samples a different skin.** Our curated RNA-seq libraries skew
+   clinical/lesion (warts, EV, cSCC), so `RNA skin` = 0 for the β commensals partly
+   reflects the scarcity of healthy-skin RNA-seq, not only low β expression. The
+   direction (β/γ present-but-quiet, α productive) is robust and biologically
+   expected, but the magnitude of the "silent" column is inflated by RNA library
+   selection. The clean confirmation would restrict the RNA side to unselected skin.
+2. **Composition, not prevalence.** DNA counts are numerators among HPV+ skin
+   libraries; there is no all-skin-metagenome denominator, so "HPV24 is frequent"
+   means frequent *among HPV+ skin metagenomes*.
+3. **Subtype-letter matching.** A few types differ only by a subtype letter between
+   the two sources (e.g. DNA `HPV38B`/`HPV14D` vs RNA `HPV38`/`HPV14`) and so fail to
+   join; these appear as `Unresolved` in the DNA genus or as false zeros. The effect
+   is small and does not touch the α-vs-β/γ contrast.
+4. **DNA presence is not activity.** Logan L1 recovery scores the presence of the
+   episome, not its transcription; the whole point of the comparison is that these
+   two are different, but it means the DNA axis cannot itself speak to productivity.
+5. **The anal axis is a first-pass pilot.** Result 4 uses the pipeline's automatic
+   HPV-positive and productive calls before the per-sample tissue curation that the
+   main skin cohort received; ~82% of the accessions carry a generic tissue label and
+   an anal-carcinoma diagnosis rather than an explicit "anal" tissue field. The
+   α-productive signal is strong and unambiguous, but the exact counts will firm up
+   after tiering.
+
+## Conclusion
+
+An orthogonal, DNA-based, whole-SRA survey confirms and sharpens the present-but-quiet
+thesis: the transcriptionally silent majority of cutaneous HPV is the genuinely
+**dominant β/γ commensal DNA reservoir**, not an artefact of RNA sampling, and
+transcriptional productivity is confined to a distinct, DNA-minor set of α wart types
+(with EV-β productivity the lone strand drawn from the reservoir). A second niche, the
+anal transition zone, closes the loop from the other direction: its RNA is loudly
+productive α-HPV (HPV16-driven), while the cutaneous β types that contaminate anal DNA
+metagenomes stay silent, so presence and activity separate by genus and by site, not
+by chance. The reproducible scripts, tables and figures are in this directory
+(`shen_skin_dna_vs_rna.R`, `shen_reservoir_by_tissue.R`, `anorectal_pilot/`).
+
+## What the cervical/vaginal run would add
+
+The anal pilot is the smaller, cleaner half of the mucosal story; the cervical/vaginal
+set is the larger and more decisive one, and it is the natural next run
+(`../rna_extension_scoping/`, ~6,400 new curation-ready libraries). Three things it
+would resolve that the current work only implies:
+
+1. **The direct vaginal presence-vs-activity test.** Result 3 showed the vaginal DNA
+   reservoir is 84% α, dominated by HPV91/51/66/67/16/90. A vaginal RNA-activity axis
+   would ask, for the same tissue, whether those DNA-frequent types are the *productive*
+   ones, the exact within-tissue join we could only do for skin. The mucosal
+   prediction is that they largely coincide (unlike skin, where DNA-frequent β is
+   silent), which would make the cervix the clean contrast case to skin: a niche where
+   presence *does* predict activity.
+2. **A high-risk vs low-risk activity gradient.** With thousands of libraries spanning
+   normal cervix → CIN → carcinoma, the productive signal can be resolved by lesion
+   grade, testing whether high-risk α (HPV16/18/31/33/45) dominate productive
+   expression in disease while low-risk α (HPV6/11) and the many commensal mucosal
+   types stay quiet, the mucosal analogue of the skin β-reservoir story.
+3. **A real stress-test of the cell-line curation.** Cervical RNA-seq is ~62%
+   cell-line-tripped (HeLa/SiHa/CaSki), versus near-zero for anal. The anal pilot showed
+   the curation cleanly zeroed out its few cell lines; the cervical run is where that
+   machinery earns its keep at scale, and a clean α-productive tissue signal emerging
+   from behind the HeLa wall would be the strongest possible demonstration that the
+   contamination-aware framework works.
+
+The one operational lesson from this pilot: run the cervical set with the per-sample
+cell-line classifier and the SNP/contamination checks at full strength, and expect the
+tissue-curation step (not the typing) to be the real work, given how much of the
+cervical archive is immortalised-line material.

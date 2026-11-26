@@ -9,6 +9,7 @@ source(here("manuscript/_paths.R"))
 options(width=200)
 wilson <- function(x,n){ if(n==0) return(c(NA,NA)); p<-x/n; z<-1.96
   ctr<-(p+z^2/(2*n))/(1+z^2/n); hw<-z*sqrt(p*(1-p)/n+z^2/(4*n^2))/(1+z^2/n); c(ctr-hw,ctr+hw)}
+comma_ <- function(x) formatC(round(x), format="d", big.mark=",")
 ortab <- function(m){ s<-summary(m)$coefficients
   data.frame(term=rownames(s), OR=exp(s[,1]),
              lo=exp(s[,1]-1.96*s[,2]), hi=exp(s[,1]+1.96*s[,2]), p=s[,4], row.names=NULL)}
@@ -26,6 +27,35 @@ d1 <- st %>% left_join(fl, by="srr_id") %>%
          sample_class = factor(ifelse(is_cell_line,"cell_line",
                                 ifelse(is_engineered,"engineered","clinical")),
                                levels=c("clinical","engineered","cell_line")))
+# Libraries that returned no screening result are not negative observations:
+# see unscreened_ids() in _paths.R for the two causes and the evidence.
+.unscreened  <- unscreened_ids()
+n_submitted  <- nrow(d1)
+d1           <- d1 %>% filter(!srr_id %in% .unscreened)
+n_unscreened <- n_submitted - nrow(d1)
+cat(sprintf("Submitted to the screen: %d; returned no result (empty Kraken2 report): %d\n",
+            n_submitted, n_unscreened))
+# Split the two causes: a library with a fastp report was downloaded and lost
+# every read to the length filter; one without was never downloaded.
+.fastp_seen <- sub("_fastp\\.json$", "",
+  basename(list.files(here("results_full_v2/chunks"), "_fastp\\.json$", recursive=TRUE)))
+n_unscr_filtered <- sum(.unscreened %in% .fastp_seen)
+n_unscr_nodl     <- n_unscreened - n_unscr_filtered
+cat(sprintf("  of those, fastp kept 0 reads: %d; never downloaded: %d\n",
+            n_unscr_filtered, n_unscr_nodl))
+
+# Full-length single-cell libraries (symmetric mates) are retained: unlike the
+# droplet libraries the length filter removes, they are not 3'-biased, so the
+# argument against droplet chemistry does not reach them. Counted so the Methods
+# can state how many are in the denominator and at what positivity.
+.sc_ids    <- read_csv(here("results_full_v2/metadata/samplesheet_enriched.csv"),
+                       show_col_types = FALSE) %>%
+  filter(tolower(as.character(is_single_cell)) == "true") %>% pull(srr_id)
+n_sc_kept  <- sum(d1$srr_id %in% .sc_ids)
+n_sc_pos   <- sum(d1$srr_id %in% .sc_ids & d1$hpv_pos)
+pct_sc_pos <- 100 * n_sc_pos / n_sc_kept
+cat(sprintf("Full-length single-cell retained: %d, HPV+ %d (%.2f%%)\n",
+            n_sc_kept, n_sc_pos, pct_sc_pos))
 cat(sprintf("Screened libraries: %d\n", nrow(d1)))
 rates <- d1 %>% group_by(sample_class) %>%
   summarise(n=n(), pos=sum(hpv_pos), pct=round(100*mean(hpv_pos),2), .groups="drop") %>%
@@ -73,8 +103,8 @@ fish_hi <- if (ft$conf.int[2] > 1e12) Inf else ft$conf.int[2]
 cat(sprintf("OR=%.1f  95%%CI %.1f-%s  p=%.3g\n",
     ft$estimate, ft$conf.int[1], ifelse(is.finite(fish_hi),sprintf('%.1f',fish_hi),'Inf'), ft$p.value))
 
-## EV and peri-lesional mucosa: separated against skin, so Fisher exact rather
-## than a depth-adjusted glm (every peri-lesional library is above the floor).
+## EV is separated against skin (8/10 above the floor), so Fisher exact rather
+## than a depth-adjusted glm.
 fisher_vs_skin <- function(other){
   d <- rp %>% filter(tier %in% c("unselected_skin", other))
   if (n_distinct(d$tier) < 2) return(list(OR=NA, lo=NA, hi=NA, p=NA))
@@ -84,14 +114,186 @@ fisher_vs_skin <- function(other){
        hi=if (f$conf.int[2] > 1e12) Inf else f$conf.int[2], p=f$p.value)
 }
 ev_f  <- fisher_vs_skin("EV")
-per_f <- fisher_vs_skin("peri_lesional")
 cat(sprintf("\nEV vs unselected_skin (Fisher): OR=%.1f p=%.3g\n", ev_f$OR, ev_f$p))
-cat(sprintf("Peri-lesional vs unselected_skin (Fisher): OR=%s p=%.3g\n",
-            ifelse(is.finite(per_f$OR), sprintf('%.1f', per_f$OR), 'Inf'), per_f$p))
 
 ## Depth-only check within neoplasia: does deeper sequencing buy productive-level detection?
 cat("\nWithin neoplasia: detect ~ log10(reads):\n")
 mn <- glm(detect ~ l10, binomial, rp %>% filter(tier=="neoplasia")); mn_o <- ortab(mn); print(mn_o, digits=3)
+
+cat("\n######################################################################\n")
+cat("# MODEL 2b-split: Actinic keratosis vs cSCC within the neoplasia tier\n")
+cat("######################################################################\n")
+## The neoplasia tier pools AK with cSCC. That pooling has to be justified
+## rather than assumed, because a published hit-and-run mechanism for HPV8 is
+## built specifically on actinic keratosis. Split on the curated diagnosis text:
+## libraries naming both AK and carcinoma are held out as ambiguous rather than
+## assigned to either arm.
+.dxsplit <- function(d) dplyr::case_when(
+  d$tier != "neoplasia" ~ d$tier,
+  stringr::str_detect(d$diagnosis, "actinic") &
+    stringr::str_detect(d$diagnosis, "scc|carcinoma") ~ "neo_mixed",
+  stringr::str_detect(d$diagnosis, "actinic") ~ "neo_AK",
+  TRUE ~ "neo_cSCC")
+rps <- rp %>% mutate(dx = .dxsplit(.))
+.akc <- rps %>% filter(dx %in% c("neo_AK","neo_cSCC","neo_mixed")) %>% group_by(dx) %>%
+  summarise(n=n(), n_studies=n_distinct(study), med_reads=median(total_reads)/1e6,
+            pct_any=100*mean(any_hpv), n_floor=sum(detect), pct_floor=100*mean(detect),
+            med_rpm=median(rpm), .groups="drop")
+print(as.data.frame(.akc), digits=3)
+
+## Each arm against the unselected-skin null, and then against each other.
+.vs_skin <- function(arm, resp) {
+  d <- rps %>% filter(dx %in% c("unselected_skin", arm)) %>%
+    mutate(g = relevel(factor(dx), ref="unselected_skin"))
+  as.list(ortab(glm(as.formula(paste(resp, "~ g + l10")), binomial, d)) %>%
+          filter(term == paste0("g", arm)))
+}
+.ak_any <- .vs_skin("neo_AK","any_hpv");   .ak_fl <- .vs_skin("neo_AK","detect")
+.sc_any <- .vs_skin("neo_cSCC","any_hpv"); .sc_fl <- .vs_skin("neo_cSCC","detect")
+cat(sprintf("\nvs unselected skin: AK any OR %.2f (p=%.3g), floor OR %.1f (p=%.3g); cSCC any OR %.2f (p=%.3g), floor OR %.1f (p=%.3g)\n",
+    .ak_any$OR, .ak_any$p, .ak_fl$OR, .ak_fl$p, .sc_any$OR, .sc_any$p, .sc_fl$OR, .sc_fl$p))
+
+.ac <- rps %>% filter(dx %in% c("neo_AK","neo_cSCC")) %>%
+  mutate(g = relevel(factor(dx), ref="neo_cSCC"))
+.akvs <- as.list(ortab(glm(any_hpv ~ g + l10, binomial, .ac)) %>% filter(term=="gneo_AK"))
+.akvf <- fisher.test(table(.ac$dx, .ac$detect))
+cat(sprintf("AK vs cSCC directly: any OR %.2f (95%% CI %.2f-%.2f, p=%.3g); floor Fisher OR %.2f p=%.3g\n",
+    .akvs$OR, .akvs$lo, .akvs$hi, .akvs$p, .akvf$estimate, .akvf$p.value))
+
+## HPV8 specifically: the type the AK hit-and-run mechanism is built on. It is
+## in the reference panel, so its absence is a result rather than a blind spot.
+.tt_pre <- read_tsv(here("manuscript/trace_types.tsv"), show_col_types=FALSE)
+.h8_files <- unlist(lapply(c("results_full_v2","results_lesions","results_lesions_csc","results_lesions_wide"),
+  function(d) list.files(here(d,"aggregated"), "_hpv_types[.]tsv$", full.names=TRUE)))
+.h8_all <- map_dfr(.h8_files, ~ suppressMessages(read_tsv(.x, show_col_types=FALSE, col_types=cols(.default="c"))))
+.h8_typed <- sum(.h8_all$hpv_reference %in% c("HPV8REF","HPV8"))
+.h8_trace <- sum(.tt_pre$top_ref %in% c("HPV8REF","HPV8"), na.rm=TRUE)
+cat(sprintf("HPV8: %d assigned calls, %d trace best-hits across %d trace libraries\n",
+            .h8_typed, .h8_trace, nrow(.tt_pre)))
+
+cat("\n######################################################################\n")
+cat("# MODEL 2c: Library chemistry alongside depth\n")
+cat("######################################################################\n")
+## Depth is modelled throughout because it bounds what a viral-transcript survey
+## can see. RNA-selection chemistry is the counterpart: poly-A capture recovers
+## polyadenylated early transcripts but is inefficient for the rest of the viral
+## pool, so two libraries of equal depth need not have equal power to detect HPV.
+## Chemistry is called from SRA `LibrarySelection` where it carries a real value
+## and from the free-text construction protocol otherwise
+## (bin/fetch_library_selection.py, bin/classify_library_chemistry.py).
+.CHEMLV <- c("unspecified","polyA","rRNA_depleted","random_primed",
+             "template_switch","tenx_3prime")
+.chem <- tryCatch(read_tsv(here("results_reframe_fixed/library_chemistry.tsv"),
+                           show_col_types=FALSE), error=function(e) NULL)
+if (is.null(.chem)) {
+  cat("library_chemistry.tsv absent; chemistry covariate skipped\n")
+  .cq <- function(...) NA_real_
+  chem_tbl <- tibble(`Sample group` = character())   # @supptbl-chem renders only if filled
+} else {
+  rpc <- rp %>% left_join(.chem %>% select(srr_id, chemistry, library_selection), by="srr_id") %>%
+    mutate(chem=factor(coalesce(chemistry,"unspecified"), levels=.CHEMLV),
+           chem_known = chem != "unspecified")
+  cat(sprintf("Chemistry resolved for %d/%d libraries (%.1f%%)\n",
+      sum(rpc$chem_known), nrow(rpc), 100*mean(rpc$chem_known)))
+  .chempct <- function(tr, cl) 100*mean(rpc$chem[rpc$tier==tr]==cl)
+  cat("\nChemistry composition by tier (%):\n")
+  print(round(100*prop.table(table(rpc$tier, rpc$chem),1),1))
+
+  ## Chemistry effect on trace detection. Fitted among libraries whose chemistry
+  ## is known, so the estimate is not carried by the unspecified stratum, and
+  ## within the two tiers the headline contrast is drawn from, with a tier term:
+  ## chemistry mix differs sharply across tiers (cell lines are half poly-A, EV
+  ## is entirely random-primed), so an unstratified fit confounds the two.
+  ## Reference is poly-A, since the objection is about poly-A vs rRNA depletion.
+  .ck <- rpc %>% filter(chem_known, tier %in% c("unselected_skin","neoplasia")) %>%
+    mutate(chem=droplevels(chem),
+           tier=relevel(factor(as.character(tier)), ref="unselected_skin"))
+  .ock <- ortab(glm(any_hpv ~ chem + l10 + tier, binomial, .ck))
+  cat("\nany_hpv ~ chem + l10 + tier (skin+neoplasia, chemistry-known, ref = poly-A):\n")
+  print(.ock, digits=3)
+  ## Same term across the whole cohort, tier-adjusted, as a check that the null
+  ## is not an artefact of restricting to two tiers. It is modestly above one
+  ## there, carried by the non-cutaneous tiers.
+  .ockall <- ortab(glm(any_hpv ~ chem + l10 + tier, binomial,
+                       rpc %>% filter(chem_known) %>% mutate(chem=droplevels(chem))))
+  cat("\nSame, all tiers:\n"); print(.ockall %>% filter(grepl("chem", term)), digits=3)
+
+  ## Headline contrast re-fitted with the chemistry term.
+  .subc2 <- rpc %>% filter(tier %in% c("unselected_skin","neoplasia")) %>%
+    mutate(tier=relevel(factor(as.character(tier)), ref="unselected_skin"))
+  .a2 <- as.list(ortab(glm(any_hpv ~ tier + l10 + chem, binomial, .subc2)) %>%
+                 filter(term=="tierneoplasia"))
+  ## Productive-floor detections occur only in the poly-A and unspecified strata,
+  ## so the six-level factor is completely separated in the floor model. Collapse
+  ## to poly-A vs everything else, which is the contrast at issue.
+  .b2 <- as.list(ortab(glm(detect ~ tier + l10 + polya, binomial,
+                           .subc2 %>% mutate(polya = chem=="polyA"))) %>%
+                 filter(term=="tierneoplasia"))
+  cat(sprintf("\nTier term with chemistry: any-read OR %.2f (p=%.3g); floor OR %.2f (p=%.3g)\n",
+      .a2$OR, .a2$p, .b2$OR, .b2$p))
+
+  ## The sensitivity that settles it: restrict to rRNA-depleted libraries, the
+  ## chemistry most favourable to viral recovery. If the neoplasia deficit were a
+  ## poly-A artefact it would disappear here.
+  .rib <- .subc2 %>% filter(chem=="rRNA_depleted")
+  .s2 <- as.list(ortab(glm(any_hpv ~ tier + l10, binomial, .rib)) %>%
+                 filter(term=="tierneoplasia"))
+  .ribneo <- .rib %>% filter(tier=="neoplasia")
+  cat(sprintf("rRNA-depleted subset: %d libraries (%d skin, %d neoplasia from %d studies, median %.1fM, max %.1fM); %d above floor; tier OR %.2f (p=%.3g)\n",
+      nrow(.rib), sum(.rib$tier=="unselected_skin"), nrow(.ribneo),
+      n_distinct(.ribneo$study), median(.ribneo$total_reads)/1e6,
+      max(.ribneo$total_reads)/1e6, sum(.rib$detect), .s2$OR, .s2$p))
+
+  ## Supplementary table: chemistry composition by tier, in the display order and
+  ## tier labels used elsewhere in the manuscript.
+  .chemlab <- c(unspecified="Unspecified", polyA="Poly-A", rRNA_depleted="rRNA-depleted",
+                random_primed="Random-primed", template_switch="Template-switching",
+                tenx_3prime="3'-barcoded")
+  .tierlab <- c(unselected_skin="Unselected skin", neoplasia="Neoplasia (cSCC/AK)",
+                control_productive="Productive controls", EV="EV biopsies",
+                cell_line="Cell lines",
+                engineered="Engineered", non_permissive_tissue="Non-permissive tissue",
+                other="Site not recorded")
+  chem_tbl <- rpc %>% count(tier, chem) %>% group_by(tier) %>%
+    mutate(pct = 100*n/sum(n), N = sum(n)) %>% ungroup() %>%
+    mutate(chem = .chemlab[as.character(chem)]) %>%
+    select(-n) %>% pivot_wider(names_from=chem, values_from=pct, values_fill=0) %>%
+    mutate(`Sample group` = paste0(coalesce(.tierlab[tier], tier), " (", comma_(N), ")")) %>%
+    arrange(match(tier, names(.tierlab))) %>%
+    select(`Sample group`, all_of(unname(.chemlab))) %>%
+    mutate(across(-`Sample group`, ~ sub("\\.0$", "", formatC(.x, format="f", digits=1))))
+
+  .cqv <- list(
+    chem_n=sum(rpc$chem_known), chem_pct=100*mean(rpc$chem_known),
+    chem_total=nrow(rpc),
+    # Share filed under the generic "cDNA": the reason the free-text protocol
+    # pass is needed at all.
+    chem_cdna_pct=100*mean(coalesce(rpc$library_selection,"")=="cDNA"),
+    chem_neo_ribo=.chempct("neoplasia","rRNA_depleted"),
+    chem_skin_ribo=.chempct("unselected_skin","rRNA_depleted"),
+    chem_ctrl_ribo=.chempct("control_productive","rRNA_depleted"),
+    chem_neo_polya=.chempct("neoplasia","polyA"),
+    chem_skin_polya=.chempct("unselected_skin","polyA"),
+    chem_ribo_or=.ock$OR[.ock$term=="chemrRNA_depleted"],
+    chem_ribo_lo=.ock$lo[.ock$term=="chemrRNA_depleted"],
+    chem_ribo_hi=.ock$hi[.ock$term=="chemrRNA_depleted"],
+    chem_ribo_p =.ock$p [.ock$term=="chemrRNA_depleted"],
+    chem_tenx_or=.ock$OR[.ock$term=="chemtenx_3prime"],
+    chem_smart_or=.ock$OR[.ock$term=="chemtemplate_switch"],
+    chem_rand_or=.ock$OR[.ock$term=="chemrandom_primed"],
+    chem_ribo_or_all=.ockall$OR[.ockall$term=="chemrRNA_depleted"],
+    chem_ribo_lo_all=.ockall$lo[.ockall$term=="chemrRNA_depleted"],
+    chem_ribo_hi_all=.ockall$hi[.ockall$term=="chemrRNA_depleted"],
+    m2a_or_chem=.a2$OR, m2a_p_chem=.a2$p,
+    m2b_or_chem=.b2$OR, m2b_p_chem=.b2$p,
+    ribo_n=nrow(.rib), ribo_skin_n=sum(.rib$tier=="unselected_skin"),
+    ribo_neo_n=nrow(.ribneo), ribo_neo_studies=n_distinct(.ribneo$study),
+    ribo_neo_medreads=median(.ribneo$total_reads)/1e6,
+    ribo_neo_maxreads=max(.ribneo$total_reads)/1e6,
+    ribo_floor=sum(.rib$detect),
+    ribo_or=.s2$OR, ribo_lo=.s2$lo, ribo_hi=.s2$hi, ribo_p=.s2$p)
+  .cq <- function(k) .cqv[[k]]
+}
 
 cat("\n######################################################################\n")
 cat("# MODEL 3: Productive infection (L1>=3) among HPV+ typed samples\n")
@@ -101,16 +303,17 @@ get_prod <- function(dir){
   map_dfr(fs, ~ suppressMessages(read_tsv(.x, show_col_types=FALSE, col_types=cols(.default="c")))) %>%
     filter(gene=="PRODUCTIVE_INFECTION") %>% transmute(srr_id=sample_id, productive=read_count=="yes")
 }
-ctrl <- get_prod("results_lesions") %>% mutate(grp="productive_controls (targeted warts/EV)")
-csc  <- get_prod("results_lesions_csc")
-ss   <- read_csv(here("results_lesions_csc/lesions_samplesheet_full.csv"), show_col_types=FALSE) %>%
-  transmute(srr_id, diagnosis=tolower(coalesce(diagnosis,"")),
-            is_cell_line=toupper(as.character(is_cell_line))=="TRUE")
-csc2 <- csc %>% left_join(ss, by="srr_id") %>%
-  mutate(grp=case_when(is_cell_line ~ "cell_line",
-                       str_detect(diagnosis,"squamous|carcinoma|scc|keratos|bowen") ~ "neoplasia (cSCC/AK)",
-                       TRUE ~ "other_lesion"))
-prod <- bind_rows(ctrl %>% select(srr_id,productive,grp), csc2 %>% select(srr_id,productive,grp))
+# Groups are the curated sample groups of the burden analysis, as everywhere
+# else in the paper. Until draft g the controls were every typed library of the
+# first targeted pull (results_lesions), 18 of which are cell lines by the
+# curated grouping, and the neoplasia arm was matched on diagnosis text.
+prod <- bind_rows(lapply(c("results_lesions", "results_lesions_wide", "results_lesions_csc"), get_prod)) %>%
+  distinct(srr_id, .keep_all=TRUE) %>%
+  inner_join(rp %>% select(srr_id, tier), by="srr_id") %>%
+  mutate(grp=case_when(tier %in% c("control_productive","EV") ~ "productive_controls (targeted warts/EV)",
+                       tier == "neoplasia" ~ "neoplasia (cSCC/AK)",
+                       TRUE ~ as.character(tier))) %>%
+  select(srr_id, productive, grp)
 cat("Productive (L1>=3) rate among HPV+ typed samples, by group:\n")
 psum <- prod %>% group_by(grp) %>% summarise(n=n(), prod=sum(productive), pct=round(100*mean(productive),1), .groups="drop")
 print(psum)
@@ -141,7 +344,10 @@ if(n_distinct(pc$grp)==2){
 .rp2 <- rp %>% left_join(.dt, by="srr_id") %>% mutate(mucosal_hr=coalesce(mucosal_hr,FALSE))
 .cin <- .rp2 %>% filter(tier=="neoplasia", mucosal_hr) %>% arrange(desc(rpm))
 # Estonian tissue categories -> English for display only (pipeline keeps Estonian).
-.tissue_en <- c(nahk="Skin", anogenitaal="Anogenital", suuoos="Oral", muu="Other")
+# "muu" is the fall-through of the keyword classifier, i.e. no site keyword was
+# found in the SRA text -- it means "site not recorded", not "a different site".
+# Labelling it "Other" read as a positive finding about the tissue.
+.tissue_en <- c(nahk="Skin", anogenitaal="Anogenital", suuoos="Oral", muu="Unclassified")
 cin_tbl <- .cin %>% transmute(Accession=srr_id, Study=study, Type=sub("REF$","",dom_type),
                               Tissue=coalesce(.tissue_en[tissue_category], str_to_sentence(tissue_category)),
                               Diagnosis=diagnosis, RPM=round(rpm,1))
@@ -159,7 +365,7 @@ cat(sprintf("\nCIN check: %d mucosal-HR neoplasia cases (%s); neo floor -> %.2f%
     nrow(.cin), paste(.cin$srr_id,collapse=","), .neo_floor_cut, .bcut$OR, .bcut$p,
     .m3nc$pct, .m3nc$prod, .m3nc$n, .f3c$estimate, .f3c$p.value))
 
-## ── Trace-type detection catalogue summary (Table S5) ───────────────────────
+## ── Trace-type detection catalogue summary (Table S6) ───────────────────────
 .tt <- read_tsv(here("manuscript/trace_types.tsv"), show_col_types=FALSE) %>%
   mutate(trace_ok = !top_ref %in% c("NONE","NO_BAM") & top_reads>=5 & max_mapq>=20 &
                     top_reads/pmax(n_primary,1)>=0.5)
@@ -183,19 +389,123 @@ tc <- read_tsv(type_catalogue_tsv(), show_col_types=FALSE)
 .n_targeted <- nrow(read_tsv(here("results_lesions/aggregated/hpv_status.tsv"),     show_col_types=FALSE))
 .n_csc       <- nrow(read_tsv(here("results_lesions_csc/aggregated/hpv_status.tsv"), show_col_types=FALSE))
 
+## ── Library completeness: were whole libraries screened? ────────────────────
+## Reading only the leading N reads of a library is a known way to miss viral
+## signal, because a run submitted from a coordinate-sorted BAM emerges from the
+## SRA in reference order and its unmapped (hence viral) reads sit at the tail.
+## Nothing here subsamples, but the claim should be checkable rather than
+## asserted, so compare reads actually screened against the SRA spot count.
+.spots <- tryCatch(read_tsv(here("results_reframe_fixed/library_selection.tsv"),
+                            show_col_types=FALSE) %>%
+                     transmute(srr_id, spots=suppressWarnings(as.numeric(spots))),
+                   error=function(e) NULL)
+if (is.null(.spots)) {
+  .sr <- function(k) NA_real_
+} else {
+  .srd <- rp %>% inner_join(.spots, by="srr_id") %>%
+    filter(!is.na(spots), spots > 0) %>% mutate(ratio = total_reads/spots)
+  .srtier <- .srd %>% group_by(tier) %>% summarise(m=median(ratio), .groups="drop")
+  .srv <- list(n=nrow(.srd), med=100*median(.srd$ratio),
+               p05=100*quantile(.srd$ratio, .05),
+               tier_lo=100*min(.srtier$m), tier_hi=100*max(.srtier$m))
+  .sr <- function(k) .srv[[k]]
+  cat(sprintf("\nLibrary completeness: %d libraries, median %.1f%% of SRA spots screened (5th pctile %.1f%%); tier medians %.1f-%.1f%%\n",
+      .srv$n, .srv$med, .srv$p05, .srv$tier_lo, .srv$tier_hi))
+}
+
+## ── ORF programme (figure 4; manuscript/figure_orf.R) ───────────────────────
+## Read from disk so the caption quotes computed numbers. Absent on a machine
+## where the figure has not been built, in which case the entries are NA.
+.orfb <- tryCatch(read_tsv(here("manuscript/orf_breadth_by_tier.tsv"), show_col_types=FALSE),
+                  error=function(e) NULL)
+.orfc <- tryCatch(read_tsv(here("manuscript/orf_composition_by_tier.tsv"), show_col_types=FALSE),
+                  error=function(e) NULL)
+.ob <- function(tr, g) if (is.null(.orfb)) NA_real_ else
+  .orfb$pct[.orfb$tier==tr & .orfb$gene==g]
+## `pct` above is a Beta-Binomial posterior mean, so it is not k/n: EV L1 is
+## 10/10 but 95.5%. The prose quotes k and n, the figure the posterior mean.
+.obk <- function(tr, g) if (is.null(.orfb)) NA_integer_ else
+  as.integer(.orfb$k[.orfb$tier==tr & .orfb$gene==g])
+.obn <- function(tr, g) if (is.null(.orfb)) NA_integer_ else
+  as.integer(.orfb$n[.orfb$tier==tr & .orfb$gene==g])
+.ocgrp <- function(tr, gs) if (is.null(.orfc)) NA_real_ else
+  100*sum(.orfc$share[.orfc$tier==tr & .orfc$gene %in% gs])
+.ocn <- function(tr) if (is.null(.orfc)) NA_integer_ else
+  unique(.orfc$n_lib[.orfc$tier==tr])
+.orfn <- if (is.null(.orfb)) NA_integer_ else sum(.orfb$n[.orfb$gene=="E1"])
+
 ## ── Assemble the flat `stats` list quoted throughout the manuscript ──────────
 .rc <- as.list(rates[rates$sample_class=="clinical",]);   .re <- as.list(rates[rates$sample_class=="engineered",]); .rl <- as.list(rates[rates$sample_class=="cell_line",])
 .oe <- as.list(o1[o1$term=="sample_classengineered",]);   .ol <- as.list(o1[o1$term=="sample_classcell_line",])
 .tc_ctrl<-as.list(tiersum[tiersum$tier=="control_productive",]); .tc_neo<-as.list(tiersum[tiersum$tier=="neoplasia",])
 .tc_uns <-as.list(tiersum[tiersum$tier=="unselected_skin",]);    .tc_cl <-as.list(tiersum[tiersum$tier=="cell_line",]); .tc_oth<-as.list(tiersum[tiersum$tier=="other",])
-.tc_ev  <-as.list(tiersum[tiersum$tier=="EV",]);                 .tc_per<-as.list(tiersum[tiersum$tier=="peri_lesional",])
+.tc_ev  <-as.list(tiersum[tiersum$tier=="EV",])
+# Non-permissive tissue (cutaneous adipose): no stratified squamous compartment,
+# so it is a negative control for the trace background rather than a candidate site.
+.tc_npt<-as.list(tiersum[tiersum$tier=="non_permissive_tissue",])
+.tc_eng<-as.list(tiersum[tiersum$tier=="engineered",])
+
+## ── E1:E2 integration marker + E2 integrity in the DNA reservoir ─────────────
+## E1 and E2 sit on the same early transcript, so their counts should track;
+## integration disrupts E2 and inverts the ratio (bin/e1e2_integration_marker.R,
+## bin/e2_integrity_from_logan.sh). Read from disk so the text stays live.
+.e1e2 <- tryCatch(read_tsv(here("results_e1e2/e1e2_by_tier.tsv"), show_col_types=FALSE),
+                  error=function(e) NULL)
+.e1e2_disc <- tryCatch(nrow(read_tsv(here("results_e1e2/e1e2_discordant.tsv"), show_col_types=FALSE)),
+                       error=function(e) NA_integer_)
+.e2int <- tryCatch(read_tsv(here("dna_rna_triangulation/e2_integrity_by_site.tsv"), show_col_types=FALSE),
+                   error=function(e) NULL)
+
+## Virus-host junction pilot (rocket SLURM job 508305; results_junction/). Integration
+## is called from chimeric reads against a combined GRCh38+HPV index. The
+## discriminating statistic is CLUSTERING -- the fraction of a library's
+## junctions falling at its single most-supported site -- not the raw count,
+## which scales with viral depth and is highest in the episomal EV libraries.
+.jx <- tryCatch(read_tsv(here("results_junction/junction_summary.tsv"), show_col_types=FALSE),
+                error=function(e) NULL)
+.JXCUT <- 0.2          # integrated vs episomal; observed gap is 0.034 to 0.327
+.jxint <- function(tiers) if (is.null(.jx)) NA_integer_ else
+  sum(.jx$tier %in% tiers & .jx$frac_top >= .JXCUT)
+.jxn <- function(tiers) if (is.null(.jx)) NA_integer_ else sum(.jx$tier %in% tiers)
+.jxrange <- function(tiers, integrated=TRUE) {
+  if (is.null(.jx)) return("NA")
+  v <- .jx$frac_top[.jx$tier %in% tiers & (if (integrated) .jx$frac_top >= .JXCUT else .jx$frac_top < .JXCUT)]
+  if (!length(v)) return("NA")
+  sprintf("%.2f\u2013%.2f", min(v), max(v))
+}
+## External validation of the ratio on a graded cervical series (PRJNA612785 /
+## SRP252916, results_cervix_graded_e1e2/). Four arms of six, one rRNA-depleted
+## protocol: HPV-negative normal epithelium, HPV16-positive normal epithelium,
+## HPV16+ HSIL, HPV16+ squamous carcinoma. The arms come from the submitting
+## study, so the marker is scored against labels it had no hand in assigning,
+## in a tissue and a progression it was not developed on.
+.cxg <- tryCatch(read_tsv(here("results_cervix_graded_e1e2/e1e2_by_tier.tsv"), show_col_types=FALSE),
+                 error=function(e) NULL)
+.cx <- function(grp, col="median_log2")
+  if (is.null(.cxg) || !any(.cxg$tier==grp)) NA_real_ else .cxg[[col]][.cxg$tier==grp]
+
+.ef <- function(tier) if (is.null(.e1e2)) NA_real_ else .e1e2$fold[.e1e2$tier==tier]
+.epct <- function(tier) if (is.null(.e1e2)) NA_real_ else .e1e2$pct_integration_like[.e1e2$tier==tier]
+.ecrit <- function(tier, col) if (is.null(.e1e2)) NA_integer_ else .e1e2[[col]][.e1e2$tier==tier]
+.e2row <- function(site, set="ge7kb") if (is.null(.e2int)) NULL else
+  as.list(.e2int[.e2int$site==site & .e2int$contig_set==set,])
 .a_neo<-as.list(o2a[o2a$term=="tierneoplasia",]); .a_l10<-as.list(o2a[o2a$term=="l10",])
 .b_neo<-as.list(o2b[o2b$term=="tierneoplasia",]); .b_l10<-as.list(o2b[o2b$term=="l10",])
 .mn_l10<-as.list(mn_o[mn_o$term=="l10",])
 .m3c<-as.list(psum[psum$grp=="productive_controls (targeted warts/EV)",]); .m3n<-as.list(psum[psum$grp=="neoplasia (cSCC/AK)",])
 
 stats <- lapply(list(
-  n_screened=nrow(d1), n_targeted=.n_targeted, n_csc=.n_csc, panel_n=panel_n,
+  n_screened=nrow(d1), n_submitted=n_submitted, n_unscreened=n_unscreened,
+  ## n_screened is the sweep alone (Table 1's denominator). n_burden is the burden
+  ## cohort, which adds the targeted lesion libraries: every wart, condyloma and EV
+  ## library is in n_burden and in none of n_screened. The two are not nested, so a
+  ## sentence about the whole study must not quote n_screened (reviews: R3-2, round m).
+  n_burden=nrow(rp), n_either=length(union(rp$srr_id, d1$srr_id)),
+  n_both=sum(rp$srr_id %in% d1$srr_id),
+  n_unscr_filtered=n_unscr_filtered, n_unscr_nodl=n_unscr_nodl,
+  n_sc_kept=n_sc_kept, n_sc_pos=n_sc_pos, pct_sc_pos=pct_sc_pos,
+  pct_all_pos=100*sum(d1$hpv_pos)/nrow(d1),
+  n_targeted=.n_targeted, n_csc=.n_csc, panel_n=panel_n,
   clin_pct=.rc$pct, clin_lo=.rc$ci_lo, clin_hi=.rc$ci_hi, clin_n=.rc$n, clin_pos=.rc$pos,
   eng_pct=.re$pct,  eng_lo=.re$ci_lo,  eng_hi=.re$ci_hi,  eng_n=.re$n,  eng_pos=.re$pos,
   cl_pct=.rl$pct,   cl_lo=.rl$ci_lo,   cl_hi=.rl$ci_hi,   cl_n=.rl$n,   cl_pos=.rl$pos,
@@ -206,15 +516,53 @@ stats <- lapply(list(
   floor_rpm=floor_rpm,
   ctrl_n=.tc_ctrl$n, ctrl_pctfloor=.tc_ctrl$pct_floor, ctrl_medrpm=.tc_ctrl$med_rpm, ctrl_medreads=.tc_ctrl$med_reads,
   neo_n=.tc_neo$n,   neo_pctfloor=.tc_neo$pct_floor,   neo_medrpm=.tc_neo$med_rpm,   neo_medreads=.tc_neo$med_reads,
-  uns_n=.tc_uns$n,   uns_pctfloor=.tc_uns$pct_floor,   cl2_n=.tc_cl$n, oth_n=.tc_oth$n,
+  uns_n=.tc_uns$n,   uns_pctfloor=.tc_uns$pct_floor,   uns_pctany=.tc_uns$pct_any,
+  cl2_n=.tc_cl$n, oth_n=.tc_oth$n,
   # Absolute above-floor counts: the odds ratios above are large only because the
   # skin baseline is near zero, so the text quotes the raw fractions too.
   ctrl_pos_floor=.tc_ctrl$n_floor, neo_pos_floor=.tc_neo$n_floor, uns_pos_floor=.tc_uns$n_floor,
   neo_maxreads=.tc_neo$max_reads,
   ev_n=.tc_ev$n,     ev_pctfloor=.tc_ev$pct_floor,     ev_medrpm=.tc_ev$med_rpm,   ev_medreads=.tc_ev$med_reads,
   ev_or=ev_f$OR,     ev_lo=ev_f$lo,   ev_hi=ev_f$hi,   ev_p=ev_f$p,
-  per_n=.tc_per$n,   per_pctfloor=.tc_per$pct_floor,   per_medrpm=.tc_per$med_rpm,
-  per_or=per_f$OR,   per_lo=per_f$lo, per_hi=per_f$hi, per_p=per_f$p,
+  npt_n=.tc_npt$n,   npt_pctfloor=.tc_npt$pct_floor,   npt_pctany=.tc_npt$pct_any,
+  # NB: eng_n above is Model 1's engineered SAMPLE CLASS (whole sweep); this is
+  # the engineered TIER in the RPM table. Distinct denominators, distinct names.
+  engt_n=.tc_eng$n,  engt_pctfloor=.tc_eng$pct_floor,
+  e1e2_cl=.ef("cell_line"), e1e2_ctrl=.ef("control_productive"),
+  e1e2_neo=.ef("neoplasia"), e1e2_skin=.ef("unselected_skin"),
+  e1e2_disc=.e1e2_disc,
+  e1e2_cl_pct=.epct("cell_line"), e1e2_eng_pct=.epct("engineered"),
+  e1e2_cl_ratio=.ecrit("cell_line","n_ratio"), e1e2_cl_e67=.ecrit("cell_line","n_e67"),
+  e1e2_cl_n=.ecrit("cell_line","n"),
+  e1e2_ev_pct=.epct("EV"),
+  e1e2_ctrl_pct=.epct("control_productive"),
+  # EV junction load: raw chimeric counts scale with viral depth and are highest
+  # in the episomal EV libraries, which is why CLUSTERING (frac_top) is the
+  # discriminating statistic. Quoted in Results, so derived here rather than typed.
+  ev_jx_min=if (is.null(.jx)) NA_real_ else min(.jx$n_junctions[.jx$tier=="EV"]),
+  ev_jx_sites_min=if (is.null(.jx)) NA_real_ else min(.jx$n_sites[.jx$tier=="EV"]),
+  # cervical graded series (external validation)
+  cxg_norm=.cx("hpv16_normal_epithelium"), cxg_hsil=.cx("hpv16_hsil"),
+  cxg_scc=.cx("hpv16_scc"),
+  cxg_norm_n=.cx("hpv16_normal_epithelium","n"), cxg_hsil_n=.cx("hpv16_hsil","n"),
+  cxg_scc_n=.cx("hpv16_scc","n"),
+  cxg_norm_int=.cx("hpv16_normal_epithelium","n_ratio"),
+  cxg_hsil_int=.cx("hpv16_hsil","n_ratio"), cxg_scc_int=.cx("hpv16_scc","n_ratio"),
+  # Empirical detection limit: the shallowest library in which integration WAS
+  # called bounds what a negative can mean. Every negative cSCC library carries
+  # several-fold more viral reads than that, so the negatives are not depth-limited.
+  jx_pos_minreads=if (is.null(.jx)) NA else min(.jx$hpv_reads[.jx$frac_top >= .JXCUT]),
+  jx_neg_minfold=if (is.null(.jx)) NA else
+    min(.jx$hpv_reads[.jx$frac_top < .JXCUT & .jx$tier=="neoplasia"]) /
+    min(.jx$hpv_reads[.jx$frac_top >= .JXCUT]),
+  jx_n=if (is.null(.jx)) NA_integer_ else nrow(.jx),
+  jx_int_range=.jxrange(c("cell_line","neoplasia"), TRUE),
+  jx_epi_range=.jxrange(c("control_productive","EV","neoplasia"), FALSE),
+  jx_neo_n=.jxn("neoplasia"), jx_neo_int=.jxint("neoplasia"),
+  jx_neo_epi=.jxn("neoplasia") - .jxint("neoplasia"),
+  jx_cl_int=.jxint("cell_line"), jx_cl_n=.jxn("cell_line"),
+  e2_full_n=.e2row("skin")$n_E1, e2_full_ok=.e2row("skin")$n_E2_given_E1,
+  e2_vag_n=.e2row("vaginal")$n_E1, e2_vag_ok=.e2row("vaginal")$n_E2_given_E1,
   m2a_or=.a_neo$OR, m2a_lo=.a_neo$lo, m2a_hi=.a_neo$hi, m2a_p=.a_neo$p,
   m2a_l10_or=.a_l10$OR, m2a_l10_lo=.a_l10$lo, m2a_l10_hi=.a_l10$hi, m2a_l10_p=.a_l10$p,
   m2b_or=.b_neo$OR, m2b_lo=.b_neo$lo, m2b_hi=.b_neo$hi, m2b_p=.b_neo$p,
@@ -228,10 +576,186 @@ stats <- lapply(list(
   m2b_or_cut=.bcut$OR, m2b_lo_cut=.bcut$lo, m2b_hi_cut=.bcut$hi, m2b_p_cut=.bcut$p,
   m3_neo_pct_cut=round(.m3nc$pct,1), m3_neo_n_cut=.m3nc$n, m3_neo_prod_cut=.m3nc$prod,
   m3_or_cut=.f3c$estimate, m3_lo_cut=.f3c$conf.int[1], m3_hi_cut=.f3c$conf.int[2], m3_p_cut=.f3c$p.value,
-  trace_n=nrow(.tt), trace_resolved=sum(.tt$trace_ok), trace_ntypes=n_distinct(.tres$top_ref),
-  trace_skin_n=nrow(.tskin), trace_skin_cut=sum(.tskin$genus_short %in% c("beta","gamma","nu")),
-  trace_ctrl_resolved=sum(.tres$tier == "control_productive", na.rm=TRUE)
+  detection_n=nrow(.tt), detection_resolved=sum(.tt$trace_ok), detection_ntypes=n_distinct(.tres$top_ref),
+  detection_skin_n=nrow(.tskin), detection_skin_cut=sum(.tskin$genus_short %in% c("beta","gamma","nu")),
+  detection_ctrl_resolved=sum(.tres$tier == "control_productive", na.rm=TRUE),
+  # Library completeness
+  spot_n=.sr("n"), spot_med=.sr("med"), spot_p05=.sr("p05"),
+  spot_tier_lo=.sr("tier_lo"), spot_tier_hi=.sr("tier_hi"),
+  # ORF programme (figure 4)
+  orf_n=.orfn,
+  orf_ctrl_l1=.ob("control_productive","L1"), orf_ctrl_e2=.ob("control_productive","E2"),
+  orf_ctrl_l1_k=.obk("control_productive","L1"), orf_ctrl_l1_n=.obn("control_productive","L1"),
+  orf_ev_l1_k=.obk("EV","L1"), orf_ev_l1_n=.obn("EV","L1"),
+  orf_ev_l1=.ob("EV","L1"), orf_neo_l1=.ob("neoplasia","L1"), orf_neo_e7=.ob("neoplasia","E7"),
+  orf_skin_l1=.ob("unselected_skin","L1"), orf_skin_e6=.ob("unselected_skin","E6"),
+  orf_cl_e6=.ob("cell_line","E6"), orf_cl_e7=.ob("cell_line","E7"),
+  orf_cl_e2=.ob("cell_line","E2"), orf_cl_l2=.ob("cell_line","L2"),
+  orf_eng_e2=.ob("engineered","E2"), orf_eng_l2=.ob("engineered","L2"),
+  orfc_ctrl_late=.ocgrp("control_productive", c("L1","L2")),
+  orfc_ctrl_onco=.ocgrp("control_productive", c("E6","E7")),
+  orfc_cl_late=.ocgrp("cell_line", c("L1","L2")),
+  orfc_cl_onco=.ocgrp("cell_line", c("E6","E7")),
+  orfc_neo_late=.ocgrp("neoplasia", c("L1","L2")),
+  orfc_neo_onco=.ocgrp("neoplasia", c("E6","E7")),
+  orfc_skin_late=.ocgrp("unselected_skin", c("L1","L2")),
+  orfc_ctrl_n=.ocn("control_productive"), orfc_cl_n=.ocn("cell_line"),
+  orfc_neo_n=.ocn("neoplasia"), orfc_skin_n=.ocn("unselected_skin"),
+  # AK vs cSCC split (MODEL 2b-split)
+  ak_n=.akc$n[.akc$dx=="neo_AK"], ak_studies=.akc$n_studies[.akc$dx=="neo_AK"],
+  ak_medreads=.akc$med_reads[.akc$dx=="neo_AK"], ak_pctany=.akc$pct_any[.akc$dx=="neo_AK"],
+  ak_floor=.akc$n_floor[.akc$dx=="neo_AK"], ak_pctfloor=.akc$pct_floor[.akc$dx=="neo_AK"],
+  sc_n=.akc$n[.akc$dx=="neo_cSCC"], sc_studies=.akc$n_studies[.akc$dx=="neo_cSCC"],
+  sc_pctany=.akc$pct_any[.akc$dx=="neo_cSCC"],
+  sc_floor=.akc$n_floor[.akc$dx=="neo_cSCC"], sc_pctfloor=.akc$pct_floor[.akc$dx=="neo_cSCC"],
+  ak_or=.ak_any$OR, ak_p=.ak_any$p, ak_fl_or=.ak_fl$OR, ak_fl_p=.ak_fl$p,
+  sc_or=.sc_any$OR, sc_p=.sc_any$p, sc_fl_or=.sc_fl$OR, sc_fl_p=.sc_fl$p,
+  akvs_or=.akvs$OR, akvs_lo=.akvs$lo, akvs_hi=.akvs$hi, akvs_p=.akvs$p,
+  akvf_p=.akvf$p.value, mixed_n=.akc$n[.akc$dx=="neo_mixed"],
+  hpv8_typed=.h8_typed, hpv8_trace=.h8_trace, trace_libs=nrow(.tt_pre),
+  # Library chemistry (MODEL 2c)
+  chem_n=.cq("chem_n"), chem_pct=.cq("chem_pct"),
+  chem_total=.cq("chem_total"), chem_cdna_pct=.cq("chem_cdna_pct"),
+  chem_neo_ribo=.cq("chem_neo_ribo"), chem_skin_ribo=.cq("chem_skin_ribo"),
+  chem_ctrl_ribo=.cq("chem_ctrl_ribo"),
+  chem_neo_polya=.cq("chem_neo_polya"), chem_skin_polya=.cq("chem_skin_polya"),
+  chem_ribo_or=.cq("chem_ribo_or"), chem_ribo_lo=.cq("chem_ribo_lo"),
+  chem_ribo_hi=.cq("chem_ribo_hi"), chem_ribo_p=.cq("chem_ribo_p"),
+  chem_tenx_or=.cq("chem_tenx_or"), chem_smart_or=.cq("chem_smart_or"),
+  chem_rand_or=.cq("chem_rand_or"),
+  chem_ribo_or_all=.cq("chem_ribo_or_all"), chem_ribo_lo_all=.cq("chem_ribo_lo_all"),
+  chem_ribo_hi_all=.cq("chem_ribo_hi_all"),
+  m2a_or_chem=.cq("m2a_or_chem"), m2a_p_chem=.cq("m2a_p_chem"),
+  m2b_or_chem=.cq("m2b_or_chem"), m2b_p_chem=.cq("m2b_p_chem"),
+  ribo_n=.cq("ribo_n"), ribo_skin_n=.cq("ribo_skin_n"), ribo_neo_n=.cq("ribo_neo_n"),
+  ribo_neo_studies=.cq("ribo_neo_studies"), ribo_neo_medreads=.cq("ribo_neo_medreads"),
+  ribo_neo_maxreads=.cq("ribo_neo_maxreads"), ribo_floor=.cq("ribo_floor"),
+  ribo_or=.cq("ribo_or"), ribo_lo=.cq("ribo_lo"), ribo_hi=.cq("ribo_hi"), ribo_p=.cq("ribo_p")
 ), unname)
+
+## Cervical series: libraries that pass the viral-read filter (cxg_*_n) need not
+## have the 5 E1+E2 reads a ratio requires. Figure 1c plots ratios, so its n is
+## the second count (review R4-7).
+.cxl <- tryCatch(read_tsv(here("results_cervix_graded_e1e2/e1e2_by_library.tsv"), show_col_types=FALSE),
+                 error=function(e) NULL)
+.cxr <- function(grp) if (is.null(.cxl)) NA_integer_ else sum(!is.na(.cxl$log2_e1e2[.cxl$tier==grp]))
+stats$cxg_norm_nr <- .cxr("hpv16_normal_epithelium")
+stats$cxg_hsil_nr <- .cxr("hpv16_hsil"); stats$cxg_scc_nr <- .cxr("hpv16_scc")
+
+## Targeted lesion libraries that returned no screening result (review R4-6).
+## Counted from the Kraken2 reports as figure_cohort_flow.R does; cause and
+## diagnosis from the Supplementary Data table (bin/build_unscreened_table.py).
+.lesrep <- unlist(lapply(c("results_lesions_wide","results_lesions_csc"), function(d)
+  list.files(here(d,"aggregated"), "_kraken2_report\\.txt$", full.names=TRUE)))
+.unl <- read_tsv(here("manuscript/supplementary_data_unscreened_libraries.tsv"), show_col_types=FALSE) %>%
+  filter(cohort=="lesion")
+stopifnot(nrow(.unl) == sum(file.size(.lesrep)==0), all(.unl$cause=="length_filtered"))
+stats$les_submitted   <- length(.lesrep)
+stats$les_unscr       <- nrow(.unl)
+stats$les_unscr_r1lo  <- floor(min(.unl$read1_mean_length))
+stats$les_unscr_r1hi  <- floor(max(.unl$read1_mean_length))
+## Read geometry: both mates short (spatial profiling), a short barcode read
+## beside a cDNA read (droplet single-cell), or a short single-end read.
+.r2 <- coalesce(.unl$read2_mean_length, 0)
+stats$les_unscr_pe_short <- sum(.unl$layout=="PAIRED" & .r2 < 36)
+stats$les_unscr_bc       <- sum(.unl$layout=="PAIRED" & .r2 >= 36)
+stats$les_unscr_se       <- sum(.unl$layout=="SINGLE")
+stopifnot(stats$les_unscr_pe_short + stats$les_unscr_bc + stats$les_unscr_se == nrow(.unl))
+stats$les_unscr_dx    <- sum(str_detect(tolower(coalesce(.unl$diagnosis,"")),
+                             "wart|condyloma|papilloma|squamous|carcinoma|scc|keratos|bowen|verruciform"))
+
+# ── Effect of the override table on the sample groups ───────────────────────
+# The Supplementary Methods said the curated corrections "move 16 of the 11,282
+# libraries". That was typed when the table held three cases and went stale as
+# rows were added (TP, 2026-11-26). It is now the difference between the
+# corrected table and the same run with the override table disabled:
+#   TIER_OVERRIDES= bin/rebuild_reframe_fixed.sh results_reframe_nooverride
+.novr_f <- here("results_reframe_nooverride/hpv_rpm_per_sample.tsv")
+if (!file.exists(.novr_f)) stop("results_reframe_nooverride/ is missing; run\n",
+  "  TIER_OVERRIDES= bin/rebuild_reframe_fixed.sh results_reframe_nooverride")
+.novr <- read_tsv(.novr_f, show_col_types=FALSE)
+.cur  <- read_tsv(rpm_per_sample_tsv(), show_col_types=FALSE)
+stopifnot(all(.cur$srr_id %in% .novr$srr_id))
+.mv <- inner_join(.novr %>% select(srr_id, study, old=tier),
+                  .cur  %>% select(srr_id, new=tier), by="srr_id") %>% filter(old != new)
+.mvn <- function(f) sum(f); .mvs <- function(f) n_distinct(.mv$study[f])
+stats$ovr_before   <- nrow(.novr)
+stats$ovr_excluded <- nrow(.novr) - nrow(.cur)
+stats$ovr_moved    <- nrow(.mv)
+.site <- .mv$new=="unselected_skin"; .npt <- .mv$new=="non_permissive_tissue"
+stats$ovr_site_n <- .mvn(.site); stats$ovr_site_studies <- .mvs(.site)
+stats$ovr_npt_n  <- .mvn(.npt);  stats$ovr_npt_studies  <- .mvs(.npt)
+# The single-library corrections found by inspecting floor-level libraries come
+# from three studies; every other move to cell_line is a whole-study correction
+# (cutaneous SCC lines and organotypic cultures deposited as tissue).
+.insp <- .mv$study %in% c("SRP394058", "SRP451793", "SRP560153")
+stats$ovr_ev     <- .mvn(.insp & .mv$new=="EV")
+stats$ovr_cell   <- .mvn(.insp & .mv$new=="cell_line")
+stats$ovr_wart   <- .mvn(.insp & .mv$new=="control_productive")
+stats$ovr_other  <- stats$ovr_ev + stats$ovr_cell + stats$ovr_wart
+.cst <- !.insp & .mv$new=="cell_line"
+stats$ovr_cellstudy_n <- .mvn(.cst); stats$ovr_cellstudy_studies <- .mvs(.cst)
+stats$ovr_cellstudy_neo <- .mvn(.cst & .mv$old=="neoplasia")
+stats$ovr_cellstudy_uns <- .mvn(.cst & .mv$old=="unselected_skin")
+stopifnot(stats$ovr_site_n + stats$ovr_npt_n + stats$ovr_other + stats$ovr_cellstudy_n == stats$ovr_moved,
+          stats$ovr_cellstudy_neo + stats$ovr_cellstudy_uns == stats$ovr_cellstudy_n,
+          stats$ovr_npt_n == stats$npt_n, stats$ovr_other == sum(.insp))
+# Exclusions, by study.
+.excl <- anti_join(.novr, .cur, by="srr_id")
+stats$excl_amplicon <- sum(.excl$study == "SRP572392")
+stats$excl_adjacent <- sum(.excl$study %in% c("SRP314958", "SRP314961"))
+stats$excl_animal   <- sum(.excl$study == "SRP495320")
+stopifnot(stats$excl_amplicon + stats$excl_adjacent + stats$excl_animal == stats$ovr_excluded)
+
+
+# ---------------------------------------------------------------------------
+# Curation sensitivity (referee round 5, R5-3 and R5-9). Every figure the
+# Supplementary Methods quote about the two studies held out of the
+# non-permissive group, and about the curated reassignments, is computed here,
+# because the typed versions of two of them were wrong in draft f.
+.ho_ids <- c("SRP572742", "SRP565659")
+.ho <- rp %>% filter(study %in% .ho_ids)
+stopifnot(all(.ho$tier %in% c("other", "unselected_skin")), !any(.ho$detect))
+.hos <- function(s, t){ x <- .ho %>% filter(study == s, tier == t)
+  list(n = nrow(x), pct = 100 * mean(x$any_hpv), max = max(x$rpm)) }
+stats$ho1_non  <- .hos("SRP572742", "other");  stats$ho1_skin <- .hos("SRP572742", "unselected_skin")
+stats$ho2_non  <- .hos("SRP565659", "other");  stats$ho2_skin <- .hos("SRP565659", "unselected_skin")
+stats$ho_skin_n <- stats$ho1_skin$n + stats$ho2_skin$n
+stats$ho_non_n  <- stats$ho1_non$n  + stats$ho2_non$n
+.npt_max <- max(rp$rpm[rp$tier == "non_permissive_tissue"])
+stats$npt_max <- .npt_max
+# Non-permissive any-HPV rate with the held-out non-skin libraries pooled in.
+.np_pool <- rp %>% filter(tier == "non_permissive_tissue" | (study %in% .ho_ids & tier == "other"))
+stats$npp_n <- nrow(.np_pool); stats$npp_k <- sum(.np_pool$any_hpv)
+stats$npp_pct <- 100 * mean(.np_pool$any_hpv)
+# Depth-adjusted any-HPV, unselected skin against non-permissive tissue.
+.us <- rp %>% filter(tier == "unselected_skin")
+.bg <- function(np){ x <- bind_rows(mutate(np, g = "np"), mutate(.us, g = "us")) %>%
+  mutate(g = factor(g, levels = c("np", "us")))
+  o <- ortab(glm(any_hpv ~ g + l10, binomial, x)); o[o$term == "gus", ] }
+stats$bg_adj      <- .bg(rp %>% filter(tier == "non_permissive_tissue"))
+stats$bg_adj_pool <- .bg(.np_pool)
+stats$npt_medM <- median(rp$total_reads[rp$tier == "non_permissive_tissue"]) / 1e6
+stats$uns_medM <- median(.us$total_reads) / 1e6
+# Unselected skin without the libraries placed there by study description.
+.site_ids <- .mv$srr_id[.site]
+.us_site  <- .us %>% filter(srr_id %in% .site_ids); .us_rest <- .us %>% filter(!srr_id %in% .site_ids)
+stats$site_pctany <- 100 * mean(.us_site$any_hpv); stats$site_floor <- sum(.us_site$detect)
+stats$nosite_n <- nrow(.us_rest); stats$nosite_floor <- sum(.us_rest$detect)
+stats$nosite_pctfloor <- 100 * mean(.us_rest$detect); stats$nosite_pctany <- 100 * mean(.us_rest$any_hpv)
+# Unselected skin had the single-library reassignments out of it not been made.
+.back <- .mv[.insp, ] %>% filter(old == "unselected_skin") %>%
+  inner_join(rp %>% select(srr_id, detect), by = "srr_id")
+stats$undo_n     <- nrow(.back)
+stats$undo_tot   <- nrow(.us) + nrow(.back)
+stats$undo_floor <- sum(.us$detect) + sum(.back$detect)
+stats$undo_pct   <- 100 * stats$undo_floor / stats$undo_tot
+stats$uns_floor_n <- sum(.us$detect); stats$uns_floor_pct <- 100 * mean(.us$detect)
+stats$m2_n <- nrow(sub)
+cat("\nCuration sensitivity:\n"); str(stats[c("ho1_non","ho1_skin","ho2_non","ho2_skin","npp_pct","npt_max",
+  "site_pctany","nosite_n","nosite_floor","nosite_pctany","undo_n","undo_tot","undo_floor","undo_pct","m2_n",
+  "ovr_moved","ovr_excluded","ovr_site_n","ovr_cell","ovr_other","ovr_cellstudy_n","excl_animal")])
+print(stats$bg_adj); print(stats$bg_adj_pool)
 
 saveRDS(stats, here("manuscript/stats.rds"))
 cat("\nDONE: stats saved to manuscript/stats.rds\n")

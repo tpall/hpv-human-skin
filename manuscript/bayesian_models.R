@@ -38,7 +38,10 @@ d1 <- st %>% left_join(fl, by = "srr_id") %>%
   mutate(is_cell_line = coalesce(is_cell_line, FALSE), is_engineered = coalesce(is_engineered, FALSE),
          hpv_pos = hpv_status == "HPV+",
          sample_class = factor(ifelse(is_cell_line, "cell_line", ifelse(is_engineered, "engineered", "clinical")),
-                               levels = c("clinical", "engineered", "cell_line")))
+                               levels = c("clinical", "engineered", "cell_line"))) %>%
+  # same denominator as results_models.R: a library that returned no screening
+  # result is not a negative observation (see unscreened_ids() in _paths.R)
+  filter(!srr_id %in% unscreened_ids())
 rp <- read_tsv(rpm_per_sample_tsv(), show_col_types = FALSE) %>%
   filter(!is.na(total_reads), total_reads > 0)
 floor_rpm <- rp %>% filter(tier == "control_productive", !is_cell_line, rpm > 0) %>% pull(rpm) %>% quantile(.05, na.rm = TRUE)
@@ -49,14 +52,13 @@ get_prod <- function(dir){
   map_dfr(fs, ~ suppressMessages(read_tsv(.x, show_col_types = FALSE, col_types = cols(.default = "c")))) %>%
     filter(gene == "PRODUCTIVE_INFECTION") %>% transmute(srr_id = sample_id, productive = read_count == "yes")
 }
-ss <- read_csv(here("results_lesions_csc/lesions_samplesheet_full.csv"), show_col_types = FALSE) %>%
-  transmute(srr_id, diagnosis = tolower(coalesce(diagnosis, "")), is_cell_line = toupper(as.character(is_cell_line)) == "TRUE")
-prod <- bind_rows(
-  get_prod("results_lesions") %>% mutate(grp = "productive_controls"),
-  get_prod("results_lesions_csc") %>% left_join(ss, by = "srr_id") %>%
-    mutate(grp = case_when(is_cell_line ~ "cell_line",
-                           str_detect(diagnosis, "squamous|carcinoma|scc|keratos|bowen") ~ "neoplasia",
-                           TRUE ~ "other_lesion"))) %>%
+# Curated sample groups, as in results_models.R (model 3).
+prod <- bind_rows(lapply(c("results_lesions", "results_lesions_wide", "results_lesions_csc"), get_prod)) %>%
+  distinct(srr_id, .keep_all = TRUE) %>%
+  inner_join(rp %>% select(srr_id, tier), by = "srr_id") %>%
+  mutate(grp = case_when(tier %in% c("control_productive", "EV") ~ "productive_controls",
+                         tier == "neoplasia" ~ "neoplasia",
+                         TRUE ~ as.character(tier))) %>%
   select(srr_id, productive, grp)
 
 ## ── Fits ────────────────────────────────────────────────────────────────────
@@ -87,9 +89,12 @@ cat("\n================================================================\n")
 cat("BAYESIAN PREMISE CHECKS  (weakly-informative Normal(0,2.5) coef priors)\n")
 cat("================================================================\n")
 
+# The frequentist comparators below are display-only, read off results_models.R;
+# they moved on 2026-11-03 when the positivity denominator was corrected to the
+# libraries that actually returned a screening result (see _paths.R).
 cat("\nPREMISE 1: Cell-line / engineered libraries are enriched for HPV positivity:\n")
-line("engineered vs clinical", "4.7", or_summ(b1, "sample_classengineered"))
-line("cell_line vs clinical",  "5.3", or_summ(b1, "sample_classcell_line"))
+line("engineered vs clinical", "4.2", or_summ(b1, "sample_classengineered"))
+line("cell_line vs clinical",  "4.4", or_summ(b1, "sample_classcell_line"))
 
 cat("\nPREMISE 2: Productive controls hugely exceed skin at the detection floor, while\n")
 cat("            neoplasia is only marginally elevated over a near-zero skin baseline:\n")
@@ -104,7 +109,7 @@ line("neoplasia vs skin (any)",  "1.7", or_summ(b2a, "tierneoplasia"))
 line("depth /10x reads (any)",   "4.6", or_summ(b2a, "l10c"))
 
 cat("\nPREMISE 3: Productive infection is more frequent in warts/EV than in neoplasia:\n")
-line("controls vs neoplasia",    "3.8", or_summ(b3, "grpproductive_controls"))
+line("controls vs neoplasia",    "20", or_summ(b3, "grpproductive_controls"))
 
 ## ── Persist posterior OR summaries (so a robustness paragraph can cite them) ──
 grab <- function(fit, term, tag) tibble::tibble(model = tag, !!!or_summ(fit, term))

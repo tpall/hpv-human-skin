@@ -1,0 +1,12 @@
+metric,value
+n_typed,681
+n_hpv_pos,230
+pct_pos,34
+pct_pos_scc_studies,37
+pct_pos_tagged,18.9
+n_cell_lines,5
+cell_line_pos,0
+n_productive,161
+productive_alpha_pct,100
+hpv16_productive,91
+n_productive_types,22

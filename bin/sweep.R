@@ -43,10 +43,22 @@ flags_path <- if (file.exists(flags_curated_path)) {
   flags_heur_path
 }
 
+# Locate the shared override layer relative to this script.
+.ovr_src <- local({
+  f <- sub("^--file=", "", grep("^--file=", commandArgs(FALSE), value = TRUE))
+  d <- if (length(f)) dirname(f[1]) else "bin"
+  for (p in c(file.path(d, "_overrides.R"), "bin/_overrides.R"))
+    if (file.exists(p)) return(p)
+  stop("cannot locate bin/_overrides.R")
+})
+source(.ovr_src)
+
 samples <- if (file.exists(ss_path)) {
   ss <- read_csv(ss_path, show_col_types = FALSE) |>
     select(any_of(c("srr_id", "study", "tissue_category",
                     "diagnosis", "is_cell_line")))
+  # Curated corrections live in assets/tier_overrides.csv, not the samplesheet.
+  ss <- apply_overrides(ss, c("tissue_category", "is_cell_line")) |> drop_excluded()
   if (file.exists(flags_path)) {
     flags <- read_tsv(
       flags_path, show_col_types = FALSE,

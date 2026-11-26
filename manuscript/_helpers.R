@@ -1,5 +1,5 @@
 # Formatting helpers + reproducible table builders for the manuscript inline R.
-# Sourced by the setup chunk in manuscript.qmd after results_models.R (which
+# Sourced by the setup chunk in manuscript_short.qmd after results_models.R (which
 # provides `stats`). Keeps display conventions in one place so every quoted
 # number is computed, not hand-typed.
 suppressPackageStartupMessages({library(tidyverse); library(here)})
@@ -12,7 +12,8 @@ sup <- function(n) paste(.superscript[strsplit(as.character(n),"")[[1]]], collap
 # P-value: decimal (2 sig figs) at or above 0.001, else a×10^b with unicode superscript.
 fp <- function(p){
   if (is.na(p)) return("NA")
-  if (p >= 0.001) return(formatC(signif(p, 2), format = "g"))
+  # JID style: no leading zero on P values (P = .28)
+  if (p >= 0.001) return(sub("^0\\.", ".", formatC(signif(p, 2), format = "g", digits = 2, flag = "#")))
   e <- floor(log10(p)); m <- p / 10^e
   paste0(formatC(m, format = "f", digits = 1), "×10", sup(e))
 }
@@ -37,6 +38,12 @@ pp  <- function(x) sub("\\.0$", "", formatC(x, format = "f", digits = 1))
 p1  <- function(x) formatC(x, format = "f", digits = 1)      # always 1 decimal (floor, depth)
 comma <- function(x) formatC(round(x), format = "d", big.mark = ",")
 mreads <- function(x) paste0(p1(x), "M")                     # x already in millions
+# Small counts spelled out, so a computed value can sit in prose where house
+# style wants a word rather than a numeral (TP, 2026-11-04: the Abstract).
+# Anything above ten falls back to the grouped numeral.
+nword <- function(x){ i <- round(x)
+  w <- c("one","two","three","four","five","six","seven","eight","nine","ten")
+  if (i == 0) "zero" else if (i >= 1 && i <= 10) w[i] else comma(i) }
 
 ## ── Bayesian posterior formatting ───────────────────────────────────────────
 # Posterior OR with 95% credible interval, e.g. "1.9 [0.7, 4.3]".
@@ -55,7 +62,7 @@ build_bayes_table <- function(stats, bget){
     "Neoplasia vs unselected skin, floor (M2)",              stats$m2b_or,       stats$m2b_p,        "M2b_neoplasia_vs_skin_floor",
     "Sequencing depth, per 10× reads, floor (M2)",           stats$m2b_l10_or,   stats$m2b_l10_p,    "M2b_depth",
     "Sequencing depth within neoplasia, floor (M2)",         stats$neo_depth_or, stats$neo_depth_p,  "M2d_depth_within_neoplasia",
-    "Neoplasia vs unselected skin, any-HPV / trace (M2)",    stats$m2a_or,       stats$m2a_p,        "M2a_neoplasia_vs_skin_any",
+    "Neoplasia vs unselected skin, any-HPV (M2)",    stats$m2a_or,       stats$m2a_p,        "M2a_neoplasia_vs_skin_any",
     "Productive controls vs neoplasia, productive (M3)",     stats$m3_or,        stats$m3_p,         "M3_controls_vs_neoplasia")
   purrr::pmap_dfr(rows, function(contrast, freqor, freqp, bmodel){
     b <- bget(bmodel)
@@ -80,8 +87,14 @@ build_bayes_table <- function(stats, bget){
 })
 .type_cat <- read_tsv(type_catalogue_tsv(), show_col_types = FALSE)
 .tier_lab <- c(unselected_skin = "Unselected skin", control_productive = "Productive controls",
-               EV = "EV", peri_lesional = "Peri-lesional mucosa",
-               neoplasia = "Neoplasia", cell_line = "Cell line", other = "Other")
+               EV = "EV",
+               non_permissive_tissue = "Non-permissive tissue",
+               engineered = "Engineered cells",
+               # "other" is the residual tier: 99% of it carries no site keyword
+               # in its SRA metadata, so it is an absence of information rather
+               # than an identified non-cutaneous site. Keep the label short for
+               # table headers but do not call it a tissue.
+               neoplasia = "Neoplasia", cell_line = "Cell line", other = "Site not recorded")
 .hdr_N <- function(tc) paste0(.tier_lab[[tc]], " (N=", comma(.tier_N[[tc]]), ")")
 
 # Prevalence % formatting: ~2 sig figs, decimals scaled by magnitude.
@@ -115,7 +128,6 @@ build_type_table <- function(){
     mutate(!!.hdr_N("unselected_skin")    := .np(raw$unselected_skin,    "unselected_skin"),
            !!.hdr_N("control_productive") := .np(raw$control_productive, "control_productive"),
            !!.hdr_N("EV")                 := .np(raw$EV,                 "EV"),
-           !!.hdr_N("peri_lesional")      := .np(raw$peri_lesional,      "peri_lesional"),
            !!.hdr_N("neoplasia")          := .np(raw$neoplasia,          "neoplasia"),
            !!.hdr_N("cell_line")          := .np(raw$cell_line,          "cell_line"),
            !!.hdr_N("other")              := .np(raw$other,              "other"),
@@ -132,12 +144,17 @@ build_type_table <- function(){
 build_prod_table <- function(){
   curated <- tibble::tribble(
     ~sample,        ~tissue,                       ~type,
-    "ERR2274877",   "Other (carcinoma; CIN)",      "HPV96 (+HPV182)",
-    "ERR1971044",   "Other (actinic keratosis)",   "HPV96 (+HPV182)",
-    "SRR19520005",  "Skin (cSCC; CIN)",            "HPV12",
-    "SRR19520060",  "Skin (cSCC; CIN)",            "HPV16",
-    "SRR19520029",  "Skin (cSCC; CIN)",            "HPV16",
-    "SRR19520008",  "Skin (normal; CIN)",          "HPV105",
+    # Tissue/diagnosis strings track the enriched samplesheets. The "; CIN"
+    # tails present here previously were an artefact of bare-substring keyword
+    # matching ("cin" inside "carCINoma"); none of these libraries is cervical.
+    # ERR2274877/ERR1971044 are ERP106532/ERP022968, the two cutaneous AK/cSCC
+    # studies whose SRA records carry no tissue text (see assets/tier_overrides.csv).
+    "ERR2274877",   "Skin (carcinoma)",            "HPV96 (+HPV182)",
+    "ERR1971044",   "Skin (actinic keratosis)",    "HPV96 (+HPV182)",
+    "SRR19520005",  "Skin (cSCC)",                 "HPV12",
+    "SRR19520060",  "Skin (cSCC)",                 "HPV16",
+    "SRR19520029",  "Skin (cSCC)",                 "HPV16",
+    "SRR19520008",  "Skin (normal)",               "HPV105",
     "SRR24991592",  "Skin (unspecified)",          "HPV227")
   purrr::pmap_dfr(curated, function(sample, tissue, type){
     d   <- .prod_find(sample)
@@ -153,13 +170,11 @@ build_prod_table <- function(){
   })
 }
 
-## ── Table S5: detection-tier (trace) HPV type catalogue ─────────────────────
+## ── Table S6: detection-tier (trace) HPV type catalogue ─────────────────────
 # Best-hit type from STAR primary alignments (unique, MAPQ 255) for HPV-positive
 # but sub-threshold samples, i.e. below the breadth>=0.10 & depth>=2 assignment
 # cutoff. `trace_types.tsv` is a one-time BAM re-map; genus from the complete
 # PaVE lookup (`type_genus.csv`). Detection-tier, low-coverage, not productive.
-# Peri-lesional mucosa contributes no trace calls (all 15 libraries clear the
-# assignment threshold and therefore appear in Table S1), so it has no column here.
 .trace_tiers <- c("unselected_skin","neoplasia","control_productive","EV","other","cell_line")
 # Raw trace count matrix (type × tier), filtered to Total >= 2. Shared by the
 # display builder and the caption CrI lookups so both see identical counts.
@@ -182,7 +197,7 @@ build_prod_table <- function(){
   x %>% mutate(Total = rowSums(across(all_of(.trace_tiers)))) %>%
     filter(Total >= 2) %>% arrange(desc(Total), desc(unselected_skin))
 }
-build_trace_table <- function(){
+build_detection_table <- function(){
   x <- .trace_counts()
   tibble(`HPV type` = x$type, Genus = x$Genus) %>%
     mutate(!!.hdr_N("unselected_skin")    := .np(x$unselected_skin,    "unselected_skin"),
@@ -195,7 +210,7 @@ build_trace_table <- function(){
 }
 # Trace-eligible libraries per tier: HPV-positive but with no reference passing
 # the breadth/depth assignment criterion. These are the only libraries that can
-# appear in Table S5 at all, so the caption quotes them alongside the tier N
+# appear in Table S6 at all, so the caption quotes them alongside the tier N
 # (the denominator of the printed prevalences, which stays the tier N so that
 # Tables S1 and S5 remain on one scale).
 .trace_eligible_N <- local({
@@ -215,18 +230,18 @@ build_trace_table <- function(){
   rp %>% mutate(assigned = map_lgl(srr_id, ~ .x %in% assigned && has_call(.x))) %>%
     filter(!assigned) %>% count(tier) %>% { setNames(.$n, .$tier) }
 })
-trace_elig <- function(tc) unname(coalesce(.trace_eligible_N[tc], 0L))
+detection_elig <- function(tc) unname(coalesce(.trace_eligible_N[tc], 0L))
 # Human-readable "Unselected skin 196, Cell line 35, ..." for the caption, ordered
 # as the table columns are, and using the display labels rather than the raw keys.
-trace_elig_str <- function(tiers = .trace_tiers)
-  paste(sprintf("%s %d", .tier_lab[tiers], vapply(tiers, trace_elig, integer(1))),
+detection_elig_str <- function(tiers = .trace_tiers)
+  paste(sprintf("%s %d", .tier_lab[tiers], vapply(tiers, detection_elig, integer(1))),
         collapse = ", ")
 # Trace-count lookup for caption CrIs.
 kT  <- function(type, tc){ x <- .trace_counts(); v <- x[[tc]][x$type == type]
   if (length(v)) as.integer(v[1]) else 0L }
 ciT <- function(type, tc) prev_ci(kT(type, tc), tc)
 
-## ── Table S6: multi-type (co-infection) libraries ───────────────────────────
+## ── Table S7: multi-type (co-infection) libraries ───────────────────────────
 # Every library with two or more assigned references, i.e. two or more types
 # each clearing breadth >= 0.10 and depth >= 2. Coverage comes from
 # `samtools coverage -q 10`, so only uniquely-mapped reads (STAR MAPQ 255)
@@ -242,12 +257,16 @@ ciT <- function(type, tc) prev_ci(kT(type, tc), tc)
     mutate(coverage_breadth = as.double(coverage_breadth), mean_depth = as.double(mean_depth),
            type = gsub("(REF|nr)$", "", hpv_reference))
   rp <- read_tsv(rpm_per_sample_tsv(), show_col_types = FALSE) %>% select(srr_id, tier, study)
+  # The aggregated type calls exist for every library the pipeline ran, the ones
+  # excluded in bin/hpv_rpm_contrast.R included. Join inner, not left: an excluded
+  # library must contribute neither a row to Table S7 nor a denominator to `cf`.
+  ty <- ty %>% inner_join(rp, by = c("sample_id" = "srr_id"))
   k  <- ty %>% count(sample_id, name = "n_types")
-  list(types = ty %>% left_join(k, by = "sample_id") %>%
-                      left_join(rp, by = c("sample_id" = "srr_id")),
+  list(types = ty %>% left_join(k, by = "sample_id"),
        n_typed = nrow(k))
 })
-.coinf_tier_order <- c("control_productive", "EV", "peri_lesional", "neoplasia",
+.coinf_tier_order <- c("control_productive", "EV", "neoplasia",
+                       "non_permissive_tissue", "engineered",
                        "unselected_skin", "other", "cell_line")
 build_coinf_table <- function(){
   .coinf$types %>% filter(n_types >= 2) %>%
@@ -260,7 +279,7 @@ build_coinf_table <- function(){
               .groups = "drop") %>%
     mutate(tier = factor(tier, levels = .coinf_tier_order)) %>%
     arrange(tier, desc(dom_depth)) %>%
-    transmute(Library = sample_id, Tier = .tier_lab[as.character(tier)], Study = study,
+    transmute(Library = sample_id, `Sample group` = .tier_lab[as.character(tier)], Study = study,
               `Assigned types (coverage breadth, mean depth), ordered by depth` = types)
 }
 # Co-infection counts quoted in the caption and in the Results paragraph.
@@ -307,7 +326,7 @@ cf <- local({
        strict_libs = nrow(strict), strict_donors = n_distinct(strict$donor))
 })
 
-## ── Figure S2: genus prevalence by tier ─────────────────────────────────────
+## ── Figure 4: genus prevalence by tier ──────────────────────────────────────
 # manuscript/figure_genus.R plots the figure and writes the counts it plotted.
 # The caption reads that file, so figure and caption cannot drift apart.
 .genus_prev <- read_tsv(here("manuscript/genus_prevalence_by_tier.tsv"), show_col_types = FALSE)
@@ -324,3 +343,104 @@ kG  <- function(genus, tier, level = "Any detection"){
 ciG <- function(genus, tier, level = "Any detection"){
   r <- .gp_row(genus, tier, level)
   paste0(fpct(r$mean), "% [", fpct(r$lo), "–", fpct(r$hi), "]") }
+
+## ── E2 integrity in the DNA catalogue (Table S8) ────────────────────────────
+# The point of this table is NEGATIVE: it shows that asking a contig catalogue
+# whether E2 is intact cannot detect integration, because the only contigs on
+# which the question can be asked are the ones integration would have prevented
+# from assembling. Cervical carcinoma, where integration is the rule, returns
+# the same answer as skin once completeness is conditioned on.
+.E2_SITE_LABEL <- c(
+  skin              = "Skin (metagenome)",
+  vaginal           = "Vaginal (metagenome)",
+  gut               = "Gut (metagenome)",
+  anogenital_wart   = "Anogenital wart",
+  cervical_cin      = "Cervical CIN",
+  cervical_cancer   = "Cervical carcinoma")
+
+build_e2_table <- function(
+    path = here("dna_rna_triangulation/e2_integrity_by_site.tsv")){
+  raw <- readr::read_tsv(path, show_col_types = FALSE)
+  wide <- raw |>
+    dplyr::filter(contig_set %in% c("all", "ge7kb")) |>
+    dplyr::select(site, contig_set, n, n_E2_given_E1, pct_E2_given_E1) |>
+    tidyr::pivot_wider(names_from = contig_set,
+                       values_from = c(n, n_E2_given_E1, pct_E2_given_E1))
+  wide |>
+    dplyr::mutate(site_label = dplyr::coalesce(.E2_SITE_LABEL[site], site),
+                  .keep = "all") |>
+    dplyr::arrange(match(site, names(.E2_SITE_LABEL))) |>
+    dplyr::transmute(
+      `Body site / lesion`      = site_label,
+      `Contigs (n)`             = comma(n_all),
+      `E2 intact, all contigs`  = paste0(p1(pct_E2_given_E1_all), "%"),
+      `Contigs ≥7 kb (n)`  = comma(n_ge7kb),
+      `E2 intact, ≥7 kb`   = paste0(p1(pct_E2_given_E1_ge7kb), "%"))
+}
+
+## ── Figure 5: DNA reservoir numbers ─────────────────────────────────────────
+# manuscript/figure_reservoir.R persists every number its caption and Results
+# text quote, so the prose and the plotted bars cannot drift apart.
+.reservoir_nums <- readr::read_tsv(here("manuscript/reservoir_numbers.tsv"),
+                                   show_col_types = FALSE)
+rv  <- function(key) .reservoir_nums$value[.reservoir_nums$key == key]
+rvn <- function(key) as.numeric(rv(key))
+
+## ── Counts that may legitimately be zero ────────────────────────────────────
+# A rendered "0 of the 10,834 libraries" reads as a typo or a pipeline failure
+# rather than as a result, so a zero count is spelled out. Use for any inline
+# count that can fall to zero. `cap = TRUE` for sentence-initial position.
+n_or_none <- function(n, cap = FALSE) {
+  n <- as.numeric(n)
+  if (length(n) != 1 || is.na(n)) stop("n_or_none(): need one non-missing value")
+  if (n == 0) return(if (cap) "None" else "none")
+  comma(n)
+}
+
+## ── Ethics provenance counts ────────────────────────────────────────────────
+# supplementary_data_ethics_provenance.tsv is built by ethics_audit/*.py from the
+# public archive and Europe PMC records, one row per source study contributing a
+# library with a recorded lesion or neoplasia diagnosis. The Ethics Statement
+# quotes these counts, so they are derived from the table rather than typed and
+# cannot drift from it. Rebuild the table (see ethics_audit/) if the cohort changes.
+.ethics_prov <- readr::read_tsv(
+  here("manuscript/supplementary_data_ethics_provenance.tsv"),
+  show_col_types = FALSE)
+
+# Number of studies with a given status, or of libraries when libs = TRUE.
+.eth_status <- function(status, libs = FALSE) {
+  rows <- .ethics_prov[.ethics_prov$Status %in% status, ]
+  if (libs) sum(as.numeric(rows[["Libraries used"]])) else nrow(rows)
+}
+
+eth <- function(key) {
+  switch(
+    key,
+    n_studies    = comma(nrow(.ethics_prov)),
+    n_libs       = comma(sum(as.numeric(.ethics_prov[["Libraries used"]]))),
+    named        = comma(.eth_status("COMMITTEE NAMED")),
+    named_libs   = comma(.eth_status("COMMITTEE NAMED", libs = TRUE)),
+    byref        = comma(.eth_status("COMMITTEE NAMED BY REFERENCE ONLY")),
+    byref_libs   = comma(.eth_status("COMMITTEE NAMED BY REFERENCE ONLY", libs = TRUE)),
+    vague        = comma(.eth_status("COMMITTEE NOT NAMED SPECIFICALLY")),
+    nocommittee  = comma(.eth_status("PUBLICATION NAMES NO COMMITTEE")),
+    nocommittee_libs = comma(.eth_status("PUBLICATION NAMES NO COMMITTEE", libs = TRUE)),
+    nonpatient   = comma(.eth_status("NOT PATIENT MATERIAL")),
+    nonpatient_libs = comma(.eth_status("NOT PATIENT MATERIAL", libs = TRUE)),
+    nopub        = comma(.eth_status("ORIGINATING PUBLICATION NOT IDENTIFIED")),
+    nopub_libs   = comma(.eth_status("ORIGINATING PUBLICATION NOT IDENTIFIED", libs = TRUE)),
+    stop("eth(): unknown key ", key)
+  )
+}
+
+## ── Figure S4: sub-threshold trace decomposition ────────────────────────────
+# trace_decomposition/figure_trace_decomposition.R persists every number its
+# caption and the Results sentences quote, on the same principle as above.
+.trace_nums <- readr::read_tsv(here("trace_decomposition/trace_numbers.tsv"),
+                               show_col_types = FALSE)
+tr  <- function(key) .trace_nums$value[.trace_nums$key == key]
+
+# `tr()` reads the trace numbers as strings; `trn()` is the numeric form, used
+# where the supplement computes with one. The three build_trace_table/trace_elig
+# aliases that sat here went with the retired full version (deleted 2026-11-26).
+trn <- function(key) as.numeric(tr(key))

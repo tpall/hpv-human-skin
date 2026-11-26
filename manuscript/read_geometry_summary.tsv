@@ -1,0 +1,13 @@
+key	value
+droplet_n	410
+droplet_paired	403
+droplet_single	7
+droplet_r1_med	28
+droplet_r2_med	89
+droplet_r2_ge_min	307
+droplet_studies	32
+sweep_r1_below_min	410
+sweep_r1_below_min_unscreened	410
+screened_with_geometry	3193
+screened_r1_below_min	0
+screened_r1_min	36

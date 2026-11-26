@@ -1,0 +1,5 @@
+contig_set	n	n_E1	n_E2	n_E2_given_E1	pct_E2_given_E1
+all	242	118	126	108	91.5
+ge7kb	95	95	95	95	100.0
+ge4kb	136	117	123	108	92.3
+lt4kb	106	1	3	0	0.0

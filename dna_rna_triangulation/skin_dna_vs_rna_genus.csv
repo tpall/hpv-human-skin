@@ -1,0 +1,31 @@
+view,genus,n,prop
+"DNA skin
+(reservoir)",Alpha,135,0.057593856655290106
+"DNA skin
+(reservoir)",Beta,1479,0.6309726962457338
+"DNA skin
+(reservoir)",Gamma,715,0.3050341296928328
+"DNA skin
+(reservoir)",Mu,15,0.0063993174061433445
+"DNA skin
+(reservoir)",Unresolved,0,0
+"RNA productive
+(warts + EV)",Alpha,63,0.7974683544303798
+"RNA productive
+(warts + EV)",Beta,12,0.1518987341772152
+"RNA productive
+(warts + EV)",Gamma,2,0.02531645569620253
+"RNA productive
+(warts + EV)",Mu,0,0
+"RNA productive
+(warts + EV)",Unresolved,2,0.02531645569620253
+"RNA skin
+(present)",Alpha,1,0.1
+"RNA skin
+(present)",Beta,5,0.5
+"RNA skin
+(present)",Gamma,2,0.2
+"RNA skin
+(present)",Mu,0,0
+"RNA skin
+(present)",Unresolved,2,0.2

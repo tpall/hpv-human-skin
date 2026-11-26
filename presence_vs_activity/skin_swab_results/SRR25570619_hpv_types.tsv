@@ -1,0 +1,3 @@
+sample_id	hpv_reference	ref_length	read_count	covered_bases	coverage_breadth	mean_depth
+SRR25570619	HPV-mSK190nr	7309	240	5742	0.7856	4.73
+SRR25570619	HPV172REF	7203	254	5061	0.7026	5.15

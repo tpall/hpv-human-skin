@@ -1,0 +1,4 @@
+tier	n	median_log2	fold	n_ratio	n_e67	pct_integration_like
+hpv16_hsil	6	-0.36	0.78	2	0	33.3
+hpv16_scc	6	1.47	2.76	2	0	33.3
+hpv16_normal_epithelium	3	-1.48	0.36	0	0	0

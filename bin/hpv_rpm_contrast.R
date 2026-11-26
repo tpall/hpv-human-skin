@@ -28,6 +28,15 @@
 
 suppressPackageStartupMessages({ library(tidyverse); library(optparse) })
 
+# Sample-group colours, shared with manuscript/figure_orf.R so that a group is
+# the same colour in Figure 2, Figure S1 and Figure 3C. Resolved relative to this
+# script as well as to the working directory, since it is run both from the repo
+# root (bin/rebuild_reframe_fixed.sh) and standalone.
+.pal_candidates <- c("manuscript/_palette.R",
+  file.path(dirname(sub("^--file=", "",
+    c(grep("^--file=", commandArgs(), value = TRUE), "")[1])), "..", "manuscript", "_palette.R"))
+source(.pal_candidates[file.exists(.pal_candidates)][1])
+
 opt <- parse_args(OptionParser(option_list = list(
   make_option("--lesion-agg",   default = "results_lesions_wide/aggregated"),
   make_option("--lesion-sheet", default = "results_lesions_wide/lesions_samplesheet_full.csv"),
@@ -98,10 +107,10 @@ meta <- bind_rows(les, nullss)
 
 # ── 3. Tier assignment (cultures & contamination subtracted from the null) ───
 # Curated overrides (assets/tier_overrides.csv) correct the handful of studies
-# whose free-text SRA metadata is absent or actively misleading: a "Skin or
-# mucosa" source_name on peri-lesional mucosa, an EV biopsy cohort with no
-# diagnosis keyword, a cell line whose name never reaches the parsed fields, and
-# a wart whose `cell_line` attribute holds a sample label. Every row carries its
+# whose free-text SRA metadata is absent or actively misleading: an EV biopsy
+# cohort with no diagnosis keyword, a cell line whose name never reaches the
+# parsed fields, and a wart whose `cell_line` attribute holds a sample label.
+# The same table also carries the exclusions (see 3-pre). Every row carries its
 # evidence. is_cell_line overrides run BEFORE the tier rules (they feed the
 # precedence); tier overrides run after (they are the final word).
 ovr <- if (nzchar(opt$`tier-overrides`) && file.exists(opt$`tier-overrides`)) {
@@ -129,9 +138,37 @@ apply_override <- function(d, fld) {
 contam <- str_trim(str_split(opt$`contam-studies`, ",")[[1]])
 dat <- rpm %>% left_join(meta, by = c("srr_id", "cohort"))
 
+# 3-pre. Exclusions, before anything else. Two grounds, both narrow. First,
+# libraries whose assay cannot detect HPV at all (e.g. 16S rRNA amplicon), which
+# are structural zeros rather than negative observations and would deflate the
+# null background. Second, libraries whose sampling makes them uninterpretable
+# either way: the condyloma-adjacent mucosa of SRP314958/SRP314961, taken
+# millimetres from a productive lesion, which neither the null nor a productive
+# control describes (see tier_overrides.csv).
+# Biologically non-permissive *tissue* is NOT excluded -- it is a valid negative
+# control and gets its own tier.
+dat <- apply_override(dat, "exclude")
+n_excl <- sum(!is.na(dat$.new) & norm_bool(dat$.new))
+if (n_excl) {
+  ex_studies <- dat %>% filter(!is.na(.new), norm_bool(.new)) %>%
+    distinct(study) %>% pull(study)
+  message(sprintf("  excluded %d libraries from %d study/studies: %s",
+                  n_excl, length(ex_studies), paste(ex_studies, collapse = ", ")))
+}
+dat <- dat %>% filter(is.na(.new) | !norm_bool(.new)) %>% select(-.new)
+
 # 3a. is_cell_line overrides, before the tier rules consume the flag
 dat <- apply_override(dat, "is_cell_line") %>%
   mutate(is_cell_line = if_else(is.na(.new), coalesce(is_cell_line, FALSE), norm_bool(.new))) %>%
+  select(-.new)
+
+# 3a-bis. tissue_category overrides, before the tier rules consume `tc`.
+# A few studies carry no site text at all in SRA (titles like "AK_15" or
+# "Sample 20"), so keyword classification cannot reach them and they fall to
+# "muu" = site unknown. Where the study is unambiguous from its own diagnoses a
+# curated row restores the site; where it is not, it stays unclassified.
+dat <- apply_override(dat, "tissue_category") %>%
+  mutate(tissue_category = coalesce(.new, tissue_category)) %>%
   select(-.new)
 
 dat <- dat %>% mutate(
@@ -139,6 +176,13 @@ dat <- dat %>% mutate(
   tc = tolower(coalesce(tissue_category, "")),
   tier = case_when(
     coalesce(is_cell_line, FALSE)                 ~ "cell_line",
+    # Engineered material (shRNA/siRNA knockdowns, transgenes) is in-vitro
+    # manipulated cell culture, not clinical tissue, whatever its disease label:
+    # e.g. "A375 shNIPBL" and "SKMEL-5 shHOXD13" carry tissue_source "skin", and
+    # the UT-SCC cSCC lines carry a cutaneous-SCC diagnosis. The E1:E2 integration
+    # marker (bin/e1e2_integration_marker.R) shows they behave like cell lines,
+    # so they must not sit in the unselected-skin null or the neoplasia tier.
+    coalesce(is_engineered, FALSE)                ~ "engineered",
     str_detect(dx, "verruciform")                 ~ "EV",
     str_detect(dx, "wart|condyloma")              ~ "control_productive",
     str_detect(dx, "squamous|carcinoma|scc|keratos|bowen") ~ "neoplasia",
@@ -152,7 +196,8 @@ dat <- apply_override(dat, "tier") %>%
   mutate(tier = coalesce(.new, tier)) %>% select(-.new)
 
 tier_levels <- c("unselected_skin", "contamination_study", "cell_line",
-                 "control_productive", "EV", "neoplasia", "peri_lesional", "other")
+                 "control_productive", "EV", "neoplasia",
+                 "non_permissive_tissue", "engineered", "other")
 stopifnot(all(dat$tier %in% tier_levels))
 dat <- dat %>% mutate(tier = factor(tier, levels = tier_levels))
 
@@ -191,20 +236,35 @@ tier_display <- c(
   control_productive  = "Productive controls (warts/condyloma)",
   EV                  = "Epidermodysplasia verruciformis",
   neoplasia           = "Neoplasia (cSCC/AK)",
-  peri_lesional       = "Peri-lesional mucosa",
-  other               = "Other tissues")
+  # Tissue with no permissive compartment for papillomavirus replication
+  # (adipose): a negative control, not a candidate site of infection.
+  non_permissive_tissue = "Non-permissive tissue",
+  engineered          = "Engineered cells",
+  # 99% of this tier is tissue_category "muu", which means no site keyword was
+  # found in the SRA text -- not that a different site was identified. Labelling
+  # it "Other tissues" asserted something the metadata never established.
+  other               = "Site not recorded")
 pdat <- dat %>% filter(!is.na(tier)) %>%
   mutate(rpm_plot = pmax(rpm, 0) + 0.05)
 p <- ggplot(pdat, aes(tier, rpm_plot)) +
-  geom_jitter(aes(colour = tier), width = 0.25, height = 0, alpha = 0.4, size = 0.7) +
+  # One ink, no colour mapping. Colouring by sample group only restated the x
+  # axis, and colouring by genus is not available to this figure: a genus can be
+  # named for about 3% of these libraries (assigned plus trace-resolved), so 97%
+  # of the points would be a grey "unknown" class that reads as a finding.
+  # Genus by sample group is Figure 4, where it is modelled with intervals.
+  #
+  # Seeded jitter: without it the same data draws a visibly different figure on
+  # every rebuild, so the plot is not reproducible from the archived table.
+  geom_point(colour = "grey20", alpha = 0.35, size = 0.7,
+             position = position_jitter(width = 0.25, height = 0, seed = 1)) +
   geom_boxplot(outlier.shape = NA, fill = NA, width = 0.5) +
   { if (!is.na(floor_rpm)) geom_hline(yintercept = floor_rpm + 0.05,
         linetype = "dashed", colour = "red") } +
   scale_y_log10() +
   scale_x_discrete(labels = function(lv) str_wrap(tier_display[lv], width = 16)) +
-  labs(title = "Depth-normalised HPV transcript burden by population",
-       subtitle = sprintf("Papillomaviridae reads/M; red = control-calibrated detection floor (%.1f RPM)", floor_rpm),
-       x = NULL, y = "HPV reads per million (log10, +0.05)") +
+  # No in-plot title or subtitle: what the panel shows belongs in the figure
+  # legend, where it can be edited at proof and is not duplicated on the page.
+  labs(x = NULL, y = "HPV reads per million (log10, +0.05)") +
   theme_minimal() + theme(legend.position = "none",
         axis.text.x = element_text(angle = 0, hjust = 0.5))
 ggsave(file.path(opt$outdir, "hpv_rpm_contrast.pdf"), p, width = 9, height = 5.5)
@@ -225,17 +285,19 @@ dmatch <- dat %>%
             .groups = "drop")
 write_tsv(dmatch, file.path(opt$outdir, "depth_matched_detection.tsv"))
 
-key_tiers <- c("unselected_skin", "control_productive", "EV", "neoplasia", "peri_lesional")
+key_tiers <- c("unselected_skin", "control_productive", "EV", "neoplasia",
+               "non_permissive_tissue")
 pd <- dmatch %>% filter(tier %in% key_tiers, n >= 3)
 if (nrow(pd)) {
   pdepth <- ggplot(pd, aes(depth_bin, pct_ge_floor, colour = tier, group = tier)) +
     geom_line() + geom_point(aes(size = n)) +
     # Same tier labels as the x-axis of the main contrast plot, so the two
     # figures name the populations identically. Unwrapped: the legend has room.
-    scale_colour_discrete(name = "Tier", labels = function(lv) tier_display[lv]) +
-    labs(title = "Control-level HPV detection within matched sequencing-depth bins",
-         subtitle = sprintf("%% of samples >= %.1f RPM floor; flat-high controls vs flat-low skin = gap is not depth", floor_rpm),
-         x = "Total reads (Kraken2-screened)", y = "% at/above detection floor", size = "Libraries") +
+    scale_colour_manual(values = GROUP_COLS, name = "Sample group",
+                        labels = function(lv) tier_display[lv]) +
+    labs(x = "Total reads (Kraken2-screened)",
+         y = sprintf("%% of libraries at or above the %.1f RPM floor", floor_rpm),
+         size = "Libraries") +
     theme_minimal()
   ggsave(file.path(opt$outdir, "depth_matched_detection.pdf"), pdepth, width = 8, height = 5)
   ggsave(file.path(opt$outdir, "depth_matched_detection.png"), pdepth, width = 8, height = 5, dpi = 150)
@@ -256,6 +318,11 @@ types <- bind_rows(gather_types_multi(opt$`lesion-agg`, "lesion"),
   left_join(dat %>% select(srr_id, cohort, tier), by = c("sample_id" = "srr_id", "cohort"))
 
 type_catalogue <- types %>%
+  # Aggregated per-sample type calls exist for every library the pipeline ran,
+  # including the ones dropped at 3-pre, so the join above leaves those with a
+  # NA tier. Drop them: an excluded library must not contribute a column here
+  # (nor silently inflate `total`) any more than it contributes to a model.
+  filter(!is.na(tier)) %>%
   count(hpv_reference, tier, name = "n_samples") %>%
   pivot_wider(names_from = tier, values_from = n_samples, values_fill = 0) %>%
   mutate(total = rowSums(across(where(is.numeric)))) %>%

@@ -1,0 +1,4 @@
+tissue_category	sample_class	total_samples	hpv_positive	hpv_negative	pct_positive
+anogenitaal	tissue	122	23	99	18.9
+muu	cell_line	5	0	5	0
+muu	tissue	554	207	347	37.4
