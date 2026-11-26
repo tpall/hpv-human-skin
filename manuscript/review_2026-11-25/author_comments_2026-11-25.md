@@ -276,3 +276,14 @@ TP, on draft e: "a library with any papillomavirus read is any-HPV" read as circ
 defined label, so the sentence now introduces it as one: "Results counted at the level of a single
 papillomavirus read, whether or not the library reaches the 10-read positivity threshold, are
 termed any-HPV." Results 1,616 to 1,622; main text 3,694.
+
+TP, on draft e: the 10-read threshold was first specified in the any-HPV sentence, a paragraph
+after positivity is first used. It is now given at that first use ("HPV positivity (at least 10
+papillomavirus reads) concentrated in ...") and the any-HPV sentence says only "the positivity
+threshold". Four words added to the Results.
+
+TP, on draft e: the detection floor arrived straight after the positivity threshold with no reason
+given for a second cut-off. The paragraph now opens on the reason (a read-count threshold is
+crossed at a lower viral load by a deeper library, so groups sequenced at different depths need a
+depth-normalized measure), then gives the floor, trace and any-HPV in that order.
+Results 1,657; main text 3,729.
