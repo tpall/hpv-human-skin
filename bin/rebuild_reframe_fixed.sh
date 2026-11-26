@@ -11,6 +11,11 @@
 #
 #   bin/rebuild_reframe_fixed.sh [outdir]
 #
+# The uncorrected assignment, which the manuscript compares the curated one
+# against, is the same run with the override table disabled:
+#
+#   TIER_OVERRIDES= bin/rebuild_reframe_fixed.sh results_reframe_nooverride
+#
 # Acceptance check: 10,834 rows = 972 lesion + 9,862 null. (11,282 before the
 # two exclusions in tier_overrides.csv: 433 16S-amplicon libraries from
 # SRP572392, and the 15 condyloma-adjacent CON_* libraries of
@@ -48,6 +53,7 @@ PY
 Rscript bin/hpv_rpm_contrast.R \
   --lesion-agg   "$STAGE/aggregated" \
   --lesion-sheet "$STAGE/lesions_samplesheet_full.csv" \
+  --tier-overrides "${TIER_OVERRIDES-assets/tier_overrides.csv}" \
   --outdir       "$OUTDIR"
 
 n=$(( $(wc -l < "$OUTDIR/hpv_rpm_per_sample.tsv") - 1 ))

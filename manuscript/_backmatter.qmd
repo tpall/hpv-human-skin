@@ -104,7 +104,14 @@ The computations were performed on the High Performance Computing Center of the 
      author, and CRediT covers authors only. She is thanked in the Acknowledgments. -->
 Conceptualization: MP (lead), AP (equal), TP (equal); Data Curation: TP (lead); Formal Analysis: TP (lead); Investigation: TP (lead); Methodology: TP (lead); Project Administration: TP (lead); Software: TP (lead); Supervision: MP (lead), AP (supporting); Validation: AP (lead), TP (supporting); Visualization: TP (lead); Writing - Original Draft Preparation: TP (lead); Writing - Review and Editing: AP (equal), MP (equal), TP (equal).
 
-## Declaration of Generative AI Use {.unnumbered}
+## Declaration of Generative Artificial Intelligence (AI) or Large Language Models (LLMs) {.unnumbered}
 
-<!-- Draft 2026-10-13, required by the JID guide for authors. Check the wording before submission. -->
-During this work the authors used Claude (Anthropic) to assist with writing and debugging the analysis pipeline and statistical code, and with editing the manuscript text, and Microsoft Copilot to help draft review comments on the manuscript. The authors reviewed and edited all output and take full responsibility for the content of the publication.
+<!-- Required by the JID guide for authors. Rewritten 2026-11-26 against Elsevier's
+     generative-AI policy (JID is an Elsevier title): the writing declaration covers
+     the writing process, while AI assistance in the research process belongs in the
+     Methods, which _methods_brief.qmd now carries. Two recent published examples TP
+     supplied are narrower than ours because their use was narrower; the negative we
+     can honestly make is that no AI generated or interpreted results or touched an
+     image, not that it wrote no text. Confirm the exact heading in the JID guide
+     before submission: Elsevier's own pages give two variants. -->
+During the preparation of this work, the authors used Claude (Anthropic), between June and November 2026, to draft and edit manuscript text, to compile and verify literature citations against PubMed and publisher records, and to critique successive drafts in the authors' own revision rounds; Microsoft Copilot was used to help draft those internal review comments. No AI tool generated or interpreted results, and none created or altered any image: every quantity reported here is computed by the analysis code from the archived data, and the interpretation is the authors'. Use of AI assistance in writing that code is described in Materials and Methods. After using these tools, the authors reviewed and edited the content and take full responsibility for the resulting work.

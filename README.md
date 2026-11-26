@@ -114,7 +114,7 @@ SRR1234567,SRX123456,SRP123456,nahk,normal,PAIRED
 SRR2345678,SRX234567,SRP234567,nahk,wart,SINGLE
 ```
 
-Tissue categories (pipeline labels are Estonian keyword-table strings): `nahk` (skin), `anogenitaal` (anogenital), `suuoos` (oral), `muu` (other, the default)
+`tissue_category` takes one of four literal values, which the keyword classifier in `bin/parse_metadata.py` writes in Estonian: `nahk` (skin), `anogenitaal` (anogenital), `suuoos` (oral) and `muu` (other). `muu` is the default and means no site keyword was found, not a site outside the other three. Write the values exactly as shown, because the workflow and the analysis scripts match on these strings.
 
 ## Key Parameters
 
@@ -167,10 +167,6 @@ This matters because the **HPV+/− call is Kraken2-only** (`--hpv_min_reads`, d
 What host inclusion does **not** change: the depth-normalisation denominator (`total = unclassified + root` reads, which equals library size regardless of what is in the DB — dropping the host just moves human reads from the classified subtree into the unclassified bucket), and the typed/productive results, which pass a second specificity gate (STAR coverage breadth ≥ `hpv_min_coverage` **and** mean depth ≥ `hpv_min_depth`) that spurious host reads cannot clear.
 
 **The efficiency price is almost entirely the host genome.** The HPV panel is a few MB; GRCh38 is what drives the multi-hour, 64 GB `setup.sh` build, the multi-GB `.k2d`, and the per-task RAM that forces the `process_high` label and caps how many screens run in parallel. A leaner design is two-stage: a cheap host-free pre-filter to flag candidate viral reads, then pay the host-decoy cost only on that small candidate set.
-
-### Sibling surveillance screens run host-free (influenza A, HDV)
-
-Related One Health surveillance screens (influenza A, HDV) are deliberately run **without host removal**, trading the decoy's specificity for throughput at scale. That is a sound choice *provided* a downstream alignment/coverage step supplies the second specificity filter, as the HPV typing stage does here. The consequence to keep in mind: a host-free screen's raw positivity and read counts are **not** host-protected and should be read as a *candidate set to be confirmed by alignment*, not as final positivity calls. Where a screen lacks such a downstream gate, reintroduce the host decoy (or the two-stage pre-filter above) before trusting the counts.
 
 ## Original Description
 

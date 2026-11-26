@@ -663,5 +663,33 @@ stopifnot(stats$les_unscr_pe_short + stats$les_unscr_bc + stats$les_unscr_se == 
 stats$les_unscr_dx    <- sum(str_detect(tolower(coalesce(.unl$diagnosis,"")),
                              "wart|condyloma|papilloma|squamous|carcinoma|scc|keratos|bowen|verruciform"))
 
+# ── Effect of the override table on the sample groups ───────────────────────
+# The Supplementary Methods said the curated corrections "move 16 of the 11,282
+# libraries". That was typed when the table held three cases and went stale as
+# rows were added (TP, 2026-11-26). It is now the difference between the
+# corrected table and the same run with the override table disabled:
+#   TIER_OVERRIDES= bin/rebuild_reframe_fixed.sh results_reframe_nooverride
+.novr_f <- here("results_reframe_nooverride/hpv_rpm_per_sample.tsv")
+if (!file.exists(.novr_f)) stop("results_reframe_nooverride/ is missing; run\n",
+  "  TIER_OVERRIDES= bin/rebuild_reframe_fixed.sh results_reframe_nooverride")
+.novr <- read_tsv(.novr_f, show_col_types=FALSE)
+.cur  <- read_tsv(rpm_per_sample_tsv(), show_col_types=FALSE)
+stopifnot(all(.cur$srr_id %in% .novr$srr_id))
+.mv <- inner_join(.novr %>% select(srr_id, study, old=tier),
+                  .cur  %>% select(srr_id, new=tier), by="srr_id") %>% filter(old != new)
+.mvn <- function(f) sum(f); .mvs <- function(f) n_distinct(.mv$study[f])
+stats$ovr_before   <- nrow(.novr)
+stats$ovr_excluded <- nrow(.novr) - nrow(.cur)
+stats$ovr_moved    <- nrow(.mv)
+.site <- .mv$new=="unselected_skin"; .npt <- .mv$new=="non_permissive_tissue"
+stats$ovr_site_n <- .mvn(.site); stats$ovr_site_studies <- .mvs(.site)
+stats$ovr_npt_n  <- .mvn(.npt);  stats$ovr_npt_studies  <- .mvs(.npt)
+stats$ovr_ev     <- .mvn(.mv$new=="EV")
+stats$ovr_cell   <- .mvn(.mv$new=="cell_line")
+stats$ovr_wart   <- .mvn(.mv$new=="control_productive")
+stats$ovr_other  <- stats$ovr_ev + stats$ovr_cell + stats$ovr_wart
+stopifnot(stats$ovr_site_n + stats$ovr_npt_n + stats$ovr_other == stats$ovr_moved,
+          stats$ovr_npt_n == stats$npt_n)
+
 saveRDS(stats, here("manuscript/stats.rds"))
 cat("\nDONE: stats saved to manuscript/stats.rds\n")

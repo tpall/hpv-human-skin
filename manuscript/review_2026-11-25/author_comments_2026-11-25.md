@@ -356,3 +356,92 @@ since it included the live `_methods.qmd`, `_backmatter.qmd` and `_supplement.qm
 repointed at `manuscript_short.qmd` (`bin/rebuild_reframe_fixed.sh`, `_helpers.R`,
 `make_reference_docx.py`), and the three `build_trace_table`/`trace_elig` aliases kept only for the
 full version are gone; `trn()` stays, the supplement uses it. The short version still renders.
+
+## Declaration of Generative AI Use rewritten (2026-11-26)
+
+TP supplied two recently published declarations as models. Both are narrower than our case allows:
+one claims use "solely to check grammar", the other "not used to generate scientific content or
+interpret data". Neither is true of this work. Rewritten against Elsevier's generative-AI policy
+(JID is an Elsevier title), which puts writing-process use in the declaration and research-process
+use in the Methods:
+
+- Heading now "Declaration of Generative Artificial Intelligence (AI) or Large Language Models
+  (LLMs)". Elsevier's own pages give two variants; confirm against the JID guide before submission.
+- The declaration names drafting and editing of text, literature compilation and citation
+  verification, and critique of drafts in our own revision rounds (stated as such, so it cannot be
+  read as journal peer review), with the period June to November 2026.
+- The negative we can honestly make: no AI generated or interpreted results, and none created or
+  altered an image. Not: that it generated no text.
+- The code assistance moves to the main Methods, where the pipeline paragraph now says the Nextflow
+  workflow and R scripts were written and debugged with Claude's assistance, that the code is
+  public, and that every reported quantity is computed by it.
+
+Also ported from TP's tracked copy (saved 12:5x): "this constrains how the trace result should be
+read" cut; "the genus the cofactor debate concerns" cut; "The reservoir also differs" is now "The
+DNA reservoir also differs".
+
+TP's comment "improperly inserted symbol" on the struck-through R-hat equation was a defect in how
+the tracked copy marked a revision inside an equation (the whole <m:oMath> was wrapped in <w:del>,
+which is invalid). Each math run now carries the mark in its own run properties, and the comment is
+not carried forward since the cause is fixed.
+
+## Draft f: the supplement cut and restructured (2026-11-26)
+
+TP: the Supplementary Methods were "way too long and narrative", then, of the first cut, that the
+prose read like a business memo and needed academic writing. Three passes followed.
+
+**Supplementary Methods, about 3,000 to about 1,430 words.** Fifteen sections became eight. The
+pipeline steps (reference panel, download, QC, screen, alignment, typing, transcript classes,
+burden) are one table, new Table S1, so the other supplementary tables shift up by one. The DNA
+reservoir section is deleted whole, the main Methods carry its gist; its one unique item, the
+detection-level criteria (at least 5 best-hit reads, MAPQ >= 20, majority of primary alignments),
+moved into the note of the detection-level table. The prose was then rewritten in a conventional
+Methods register: past tense, topic sentences, one term per concept. TP's own edits to three
+paragraphs (cohort merged, metadata corrections shortened, exclusions folded in) are ported. The
+redundant "Methods" heading under "Supplementary Materials and Methods" is gone.
+
+**"Sample class" against "sample group"** (TP: what is the difference?). Two classifications for
+two models on two populations: three classes (clinical, engineered, cell line) on the 10,295
+screened libraries for the positivity model, eight groups on the 10,834 burden libraries for the
+detection model. The Statistical analysis paragraph now says so with both counts.
+
+**The override table reassigns 960 libraries, not 16.** The text said the curated corrections
+"move 16 of the 11,282 libraries", typed when the table held three cases. It is now computed:
+`TIER_OVERRIDES= bin/rebuild_reframe_fixed.sh results_reframe_nooverride` re-runs the grouping
+with the table disabled, and `results_models.R` diffs the two and stops the render if the pieces
+do not sum. Of the 960: 609 libraries from 14 studies with no site keyword moved from `other` to
+`unselected_skin` on their study descriptions, 334 from 7 studies were assigned to
+`non_permissive_tissue`, 10 EV biopsies, 6 HaCaT31 libraries, 1 wart. The main Methods no longer
+call the table "small" and now state the 960 and the 609 of 7,800.
+
+**Supplementary Figures and Tables hold exhibits only** (TP: this is results text, how to frame
+it?). JID's guide, read 2026-11-26, permits supplementary text ("Supplementary text, tables, and
+figures will be typeset") on the condition that the main text is complete without it. Hybrid
+applied: each of the nine prose sections was either folded into the legend or note of its exhibit
+in two to four sentences, or deleted as commentary (why only skin is in Figure 5, the HPV11/HPV42
+speculation, the index-hopping discussion). About 3,100 to about 2,160 words.
+
+**Two studies held out of the non-permissive group: stale rationale corrected.** The old text and
+the override file say SRP572742 and the blood fraction of SRP565659 were held out for "above-floor
+HPV" (3 libraries and 1 library). At the current 13.2 RPM floor none reach it (maxima 5.3 and 3.6
+RPM). The paragraph, now in the Supplementary Methods, states what the data show: 83% and 52%
+any-HPV against 28.7% in the other non-permissive studies, none of which exceeds 0.11 RPM, and no
+library at the floor. Open for TP: the Results use the non-permissive any-HPV rate as assay
+background, and these 96 libraries would raise it if included; the exclusion is now disclosed as a
+judgment, and the comment in `assets/tier_overrides.csv` still gives the old reason.
+
+**Counted words.** Introduction 617, Results 1,658, Discussion 937, Materials and Methods 571:
+3,783. The Methods grew by the AI-assistance sentence and the override sentence. An earlier note
+in this log that the AI sentence sits outside the counted sections was wrong: it is in the main
+Methods.
+
+**JID guide on the AI declaration heading** (same reading): the Original Article section list
+calls it "Declaration of Generative AI Use"; the example statement is titled "Declaration of
+generative AI and AI-assisted technologies in the manuscript preparation process"; our current
+heading, "Declaration of Generative Artificial Intelligence (AI) or Large Language Models (LLMs)",
+is the one the guide gives for the no-use statement. To settle before submission.
+
+**Tracked copy.** The generator now coalesces whitespace-separated changes into one deletion and
+one insertion, pairs paragraphs by similarity instead of position, inserts a new table whole,
+marks equation structures as well as runs, and keys figures by order. Each fixed a display defect
+TP reported (interleaved R-hat text, a heading in body style, a stray equation in a heading).
