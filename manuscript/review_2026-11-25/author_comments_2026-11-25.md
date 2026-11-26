@@ -445,3 +445,14 @@ is the one the guide gives for the no-use statement. To settle before submission
 one insertion, pairs paragraphs by similarity instead of position, inserts a new table whole,
 marks equation structures as well as runs, and keys figures by order. Each fixed a display defect
 TP reported (interleaved R-hat text, a heading in body style, a stray equation in a heading).
+
+## Draft g: referee round 5 (2026-11-26)
+
+Source: `referee_report_26f.md` and `review_issues_26f.csv` (13 items).
+
+- **R5-1, rerun.** `bin/rebuild_reframe_fixed.sh` rerun with the four November overrides. Burden analysis 10,826 libraries (was 10,834): neoplasia 377, unselected skin 7,788, cell line 730; 8 libraries of the animal study SRP495320 excluded. Figures 2 to 5 and S1 to S6, the Bayesian refit and the accession table rebuilt. The August table is not kept in the repository.
+- **R5-2.** Detection models described as fitted: neoplasia against unselected skin, 8,165 libraries.
+- **R5-3.** Held-out studies paragraph now computed in `results_models.R`. SRP572742 described with its 12 skin libraries; the pooled non-permissive rate (37.9%) and the depth-adjusted comparison (OR 1.5 held out, 1.0 pooled) reported; Results sentence softened to "of the same order as the background". The 38 skin libraries stay in unselected skin, and the text says so.
+- **R5-4 to R5-11.** Applied. Metadata corrections now list a third class (33 libraries from two cSCC cell-line studies) and give the two sensitivity figures (unselected skin without the 609; without the floor-inspected corrections, 17 of 7,800).
+- **Open.** R5-12 (the 34 of 53 clause, the Vandiver wording, citation order of supplementary tables) and R5-13 (cervical series chemistry) not applied.
+- **R5-12 and R5-13, applied later the same day.** The productivity contrast is now fitted on the curated sample groups: 49 of 54 wart, condyloma and EV libraries against 7 of 22 cSCC/AK (OR 20; Bayesian OR 18). Before, the control arm was the 53 typed libraries of the first targeted pull, 18 of which are cell lines. Discussion: "most lacked an unselected-skin denominator". Cervical series described as rRNA-depleted. Citation order of supplementary tables left as is.

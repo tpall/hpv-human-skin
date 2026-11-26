@@ -16,10 +16,10 @@
 #
 #   TIER_OVERRIDES= bin/rebuild_reframe_fixed.sh results_reframe_nooverride
 #
-# Acceptance check: 10,834 rows = 972 lesion + 9,862 null. (11,282 before the
-# two exclusions in tier_overrides.csv: 433 16S-amplicon libraries from
-# SRP572392, and the 15 condyloma-adjacent CON_* libraries of
-# SRP314958/SRP314961.)
+# Acceptance check: 10,826 rows = 964 lesion + 9,862 null. (11,282 before the
+# three exclusions in tier_overrides.csv: 433 16S-amplicon libraries from
+# SRP572392, the 15 condyloma-adjacent CON_* libraries of SRP314958/SRP314961,
+# and the 8 libraries of the animal study SRP495320.)
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
@@ -57,8 +57,8 @@ Rscript bin/hpv_rpm_contrast.R \
   --outdir       "$OUTDIR"
 
 n=$(( $(wc -l < "$OUTDIR/hpv_rpm_per_sample.tsv") - 1 ))
-echo "rows: $n (expected 10834)"
-[ "$n" -eq 10834 ] || echo "WARNING: row count differs from the published cohort" >&2
+echo "rows: $n (expected 10826)"
+[ "$n" -eq 10826 ] || echo "WARNING: row count differs from the published cohort" >&2
 
 # Everything downstream of the tier table. These are NOT rebuilt by the
 # manuscript render: figure2/figureS1 are copies of this script's plots,

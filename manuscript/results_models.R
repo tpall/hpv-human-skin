@@ -303,16 +303,17 @@ get_prod <- function(dir){
   map_dfr(fs, ~ suppressMessages(read_tsv(.x, show_col_types=FALSE, col_types=cols(.default="c")))) %>%
     filter(gene=="PRODUCTIVE_INFECTION") %>% transmute(srr_id=sample_id, productive=read_count=="yes")
 }
-ctrl <- get_prod("results_lesions") %>% mutate(grp="productive_controls (targeted warts/EV)")
-csc  <- get_prod("results_lesions_csc")
-ss   <- read_csv(here("results_lesions_csc/lesions_samplesheet_full.csv"), show_col_types=FALSE) %>%
-  transmute(srr_id, diagnosis=tolower(coalesce(diagnosis,"")),
-            is_cell_line=toupper(as.character(is_cell_line))=="TRUE")
-csc2 <- csc %>% left_join(ss, by="srr_id") %>%
-  mutate(grp=case_when(is_cell_line ~ "cell_line",
-                       str_detect(diagnosis,"squamous|carcinoma|scc|keratos|bowen") ~ "neoplasia (cSCC/AK)",
-                       TRUE ~ "other_lesion"))
-prod <- bind_rows(ctrl %>% select(srr_id,productive,grp), csc2 %>% select(srr_id,productive,grp))
+# Groups are the curated sample groups of the burden analysis, as everywhere
+# else in the paper. Until draft g the controls were every typed library of the
+# first targeted pull (results_lesions), 18 of which are cell lines by the
+# curated grouping, and the neoplasia arm was matched on diagnosis text.
+prod <- bind_rows(lapply(c("results_lesions", "results_lesions_wide", "results_lesions_csc"), get_prod)) %>%
+  distinct(srr_id, .keep_all=TRUE) %>%
+  inner_join(rp %>% select(srr_id, tier), by="srr_id") %>%
+  mutate(grp=case_when(tier %in% c("control_productive","EV") ~ "productive_controls (targeted warts/EV)",
+                       tier == "neoplasia" ~ "neoplasia (cSCC/AK)",
+                       TRUE ~ as.character(tier))) %>%
+  select(srr_id, productive, grp)
 cat("Productive (L1>=3) rate among HPV+ typed samples, by group:\n")
 psum <- prod %>% group_by(grp) %>% summarise(n=n(), prod=sum(productive), pct=round(100*mean(productive),1), .groups="drop")
 print(psum)
@@ -684,12 +685,77 @@ stats$ovr_moved    <- nrow(.mv)
 .site <- .mv$new=="unselected_skin"; .npt <- .mv$new=="non_permissive_tissue"
 stats$ovr_site_n <- .mvn(.site); stats$ovr_site_studies <- .mvs(.site)
 stats$ovr_npt_n  <- .mvn(.npt);  stats$ovr_npt_studies  <- .mvs(.npt)
-stats$ovr_ev     <- .mvn(.mv$new=="EV")
-stats$ovr_cell   <- .mvn(.mv$new=="cell_line")
-stats$ovr_wart   <- .mvn(.mv$new=="control_productive")
+# The single-library corrections found by inspecting floor-level libraries come
+# from three studies; every other move to cell_line is a whole-study correction
+# (cutaneous SCC lines and organotypic cultures deposited as tissue).
+.insp <- .mv$study %in% c("SRP394058", "SRP451793", "SRP560153")
+stats$ovr_ev     <- .mvn(.insp & .mv$new=="EV")
+stats$ovr_cell   <- .mvn(.insp & .mv$new=="cell_line")
+stats$ovr_wart   <- .mvn(.insp & .mv$new=="control_productive")
 stats$ovr_other  <- stats$ovr_ev + stats$ovr_cell + stats$ovr_wart
-stopifnot(stats$ovr_site_n + stats$ovr_npt_n + stats$ovr_other == stats$ovr_moved,
-          stats$ovr_npt_n == stats$npt_n)
+.cst <- !.insp & .mv$new=="cell_line"
+stats$ovr_cellstudy_n <- .mvn(.cst); stats$ovr_cellstudy_studies <- .mvs(.cst)
+stats$ovr_cellstudy_neo <- .mvn(.cst & .mv$old=="neoplasia")
+stats$ovr_cellstudy_uns <- .mvn(.cst & .mv$old=="unselected_skin")
+stopifnot(stats$ovr_site_n + stats$ovr_npt_n + stats$ovr_other + stats$ovr_cellstudy_n == stats$ovr_moved,
+          stats$ovr_cellstudy_neo + stats$ovr_cellstudy_uns == stats$ovr_cellstudy_n,
+          stats$ovr_npt_n == stats$npt_n, stats$ovr_other == sum(.insp))
+# Exclusions, by study.
+.excl <- anti_join(.novr, .cur, by="srr_id")
+stats$excl_amplicon <- sum(.excl$study == "SRP572392")
+stats$excl_adjacent <- sum(.excl$study %in% c("SRP314958", "SRP314961"))
+stats$excl_animal   <- sum(.excl$study == "SRP495320")
+stopifnot(stats$excl_amplicon + stats$excl_adjacent + stats$excl_animal == stats$ovr_excluded)
+
+
+# ---------------------------------------------------------------------------
+# Curation sensitivity (referee round 5, R5-3 and R5-9). Every figure the
+# Supplementary Methods quote about the two studies held out of the
+# non-permissive group, and about the curated reassignments, is computed here,
+# because the typed versions of two of them were wrong in draft f.
+.ho_ids <- c("SRP572742", "SRP565659")
+.ho <- rp %>% filter(study %in% .ho_ids)
+stopifnot(all(.ho$tier %in% c("other", "unselected_skin")), !any(.ho$detect))
+.hos <- function(s, t){ x <- .ho %>% filter(study == s, tier == t)
+  list(n = nrow(x), pct = 100 * mean(x$any_hpv), max = max(x$rpm)) }
+stats$ho1_non  <- .hos("SRP572742", "other");  stats$ho1_skin <- .hos("SRP572742", "unselected_skin")
+stats$ho2_non  <- .hos("SRP565659", "other");  stats$ho2_skin <- .hos("SRP565659", "unselected_skin")
+stats$ho_skin_n <- stats$ho1_skin$n + stats$ho2_skin$n
+stats$ho_non_n  <- stats$ho1_non$n  + stats$ho2_non$n
+.npt_max <- max(rp$rpm[rp$tier == "non_permissive_tissue"])
+stats$npt_max <- .npt_max
+# Non-permissive any-HPV rate with the held-out non-skin libraries pooled in.
+.np_pool <- rp %>% filter(tier == "non_permissive_tissue" | (study %in% .ho_ids & tier == "other"))
+stats$npp_n <- nrow(.np_pool); stats$npp_k <- sum(.np_pool$any_hpv)
+stats$npp_pct <- 100 * mean(.np_pool$any_hpv)
+# Depth-adjusted any-HPV, unselected skin against non-permissive tissue.
+.us <- rp %>% filter(tier == "unselected_skin")
+.bg <- function(np){ x <- bind_rows(mutate(np, g = "np"), mutate(.us, g = "us")) %>%
+  mutate(g = factor(g, levels = c("np", "us")))
+  o <- ortab(glm(any_hpv ~ g + l10, binomial, x)); o[o$term == "gus", ] }
+stats$bg_adj      <- .bg(rp %>% filter(tier == "non_permissive_tissue"))
+stats$bg_adj_pool <- .bg(.np_pool)
+stats$npt_medM <- median(rp$total_reads[rp$tier == "non_permissive_tissue"]) / 1e6
+stats$uns_medM <- median(.us$total_reads) / 1e6
+# Unselected skin without the libraries placed there by study description.
+.site_ids <- .mv$srr_id[.site]
+.us_site  <- .us %>% filter(srr_id %in% .site_ids); .us_rest <- .us %>% filter(!srr_id %in% .site_ids)
+stats$site_pctany <- 100 * mean(.us_site$any_hpv); stats$site_floor <- sum(.us_site$detect)
+stats$nosite_n <- nrow(.us_rest); stats$nosite_floor <- sum(.us_rest$detect)
+stats$nosite_pctfloor <- 100 * mean(.us_rest$detect); stats$nosite_pctany <- 100 * mean(.us_rest$any_hpv)
+# Unselected skin had the single-library reassignments out of it not been made.
+.back <- .mv[.insp, ] %>% filter(old == "unselected_skin") %>%
+  inner_join(rp %>% select(srr_id, detect), by = "srr_id")
+stats$undo_n     <- nrow(.back)
+stats$undo_tot   <- nrow(.us) + nrow(.back)
+stats$undo_floor <- sum(.us$detect) + sum(.back$detect)
+stats$undo_pct   <- 100 * stats$undo_floor / stats$undo_tot
+stats$uns_floor_n <- sum(.us$detect); stats$uns_floor_pct <- 100 * mean(.us$detect)
+stats$m2_n <- nrow(sub)
+cat("\nCuration sensitivity:\n"); str(stats[c("ho1_non","ho1_skin","ho2_non","ho2_skin","npp_pct","npt_max",
+  "site_pctany","nosite_n","nosite_floor","nosite_pctany","undo_n","undo_tot","undo_floor","undo_pct","m2_n",
+  "ovr_moved","ovr_excluded","ovr_site_n","ovr_cell","ovr_other","ovr_cellstudy_n","excl_animal")])
+print(stats$bg_adj); print(stats$bg_adj_pool)
 
 saveRDS(stats, here("manuscript/stats.rds"))
 cat("\nDONE: stats saved to manuscript/stats.rds\n")

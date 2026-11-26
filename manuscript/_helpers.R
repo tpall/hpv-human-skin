@@ -13,7 +13,7 @@ sup <- function(n) paste(.superscript[strsplit(as.character(n),"")[[1]]], collap
 fp <- function(p){
   if (is.na(p)) return("NA")
   # JID style: no leading zero on P values (P = .28)
-  if (p >= 0.001) return(sub("^0\\.", ".", formatC(signif(p, 2), format = "g")))
+  if (p >= 0.001) return(sub("^0\\.", ".", formatC(signif(p, 2), format = "g", digits = 2, flag = "#")))
   e <- floor(log10(p)); m <- p / 10^e
   paste0(formatC(m, format = "f", digits = 1), "×10", sup(e))
 }
